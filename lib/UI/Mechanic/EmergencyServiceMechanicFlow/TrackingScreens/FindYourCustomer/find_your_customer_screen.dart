@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicStartService/mechanic_start_service_screen.dart';
+import 'package:auto_fix/UI/chat/chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,6 +22,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../Constants/cust_colors.dart';
 import '../../../../../../Constants/styles.dart';
@@ -79,6 +81,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   String location ='';
   String Address = '';
   String authToken="", bookingId = "", carName = "", customerAddress = "", plateNumber = "", carColor = "";
+  String customerId = "", mechanicId = "", customerName = "";
   bool isArrived = false;
 
   @override
@@ -181,6 +184,9 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         customerAddress = event.get('customerAddress');
         plateNumber =  event.get('carPlateNumber');
         carColor = event.get('carColor');
+        customerId = event.get('customerID');
+        mechanicId = event.get('mechanicID');
+        customerName = event.get('customerName');
       });
     });
     /*Fluttertoast.showToast(
@@ -645,32 +651,52 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                       child: Row(
                         children: [
                           Expanded(
-                            child: Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.phone, color: Colors.white),
-                                  Text(
-                                    "Call",
-                                    style: Styles.popUPTextStyle,
-                                  ),
-                                ],
+                            child: InkWell(
+                              onTap: (){
+                                String callPhoneNumber = "90488878777";
+                                _callPhoneNumber(callPhoneNumber);
+                              },
+                              child: Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.phone, color: Colors.white),
+                                    Text(
+                                      "Call",
+                                      style: Styles.popUPTextStyle,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                           Expanded(
-                            child:  Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.chat, color: Colors.white),
-                                  Text(
-                                    "Chat",
-                                    style: Styles.popUPTextStyle,
-                                  ),
-                                ],
+                            child:  InkWell(
+                              onTap: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ChatScreen(
+                                          peerId: customerId,
+                                          bookingId: '$bookingId',
+                                          collectionName: 'ResolMech',
+                                          currentUserId: mechanicId,
+                                          peerName: customerName,
+                                        )));
+                              },
+                              child: Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.chat, color: Colors.white),
+                                    Text(
+                                      "Chat",
+                                      style: Styles.popUPTextStyle,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -751,6 +777,15 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         ),
       ),
     );
+  }
+
+  void _callPhoneNumber(String phoneNumber) async {
+    var url = 'tel://$phoneNumber';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Error Occurred';
+    }
   }
 
   @override

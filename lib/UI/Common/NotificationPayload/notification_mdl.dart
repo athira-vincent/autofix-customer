@@ -29,6 +29,9 @@ class NotificationPayloadMdl {
     required this.customerFcmToken,
     required this.mechanicName,
     required this.mechanicID,
+    required this.customerID,
+    required this.mechanicPhone,
+    required this.customerPhone,
     required this.mechanicAddress,
     required this.mechanicLatitude,
     required this.mechanicLongitude,
@@ -65,6 +68,9 @@ class NotificationPayloadMdl {
   String customerFcmToken;
   String mechanicName;
   String mechanicID;
+  String customerID;
+  String mechanicPhone;
+  String customerPhone;
   String mechanicAddress;
   String mechanicLatitude;
   String mechanicLongitude;
@@ -97,6 +103,9 @@ class NotificationPayloadMdl {
     customerFcmToken: json["customerFcmToken"] == null ? null : json["customerFcmToken"],
     mechanicName: json["mechanicName"] == null ? null : json["mechanicName"],
     mechanicID: json["mechanicID"] == null ? null : json["mechanicID"],
+    customerID: json["customerID"] == null ? null : json["customerID"],
+    mechanicPhone: json["mechanicPhone"] == null ? null : json["mechanicPhone"],
+    customerPhone: json["customerPhone"] == null ? null : json["customerPhone"],
     mechanicAddress: json["mechanicAddress"] == null ? null : json["mechanicAddress"],
     mechanicLatitude: json["mechanicLatitude"] == null ? null : json["mechanicLatitude"],
     mechanicLongitude: json["mechanicLongitude"] == null ? null : json["mechanicLongitude"],
@@ -132,6 +141,9 @@ class NotificationPayloadMdl {
     "customerFcmToken": customerFcmToken == null ? null : customerFcmToken,
     "mechanicName": mechanicName == null ? null : mechanicName,
     "mechanicID": mechanicID == null ? null : mechanicID,
+    "customerID": customerID == null ? null : customerID,
+    "mechanicPhone": mechanicPhone == null ? null : mechanicPhone,
+    "customerPhone": customerPhone == null ? null : customerPhone,
     "serviceTime": serviceTime == null ? null : serviceTime,
     "serviceCost": serviceCost == null ? null : serviceCost,
     "mechanicAddress": mechanicAddress == null ? null : mechanicAddress,

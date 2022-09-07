@@ -17,6 +17,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -245,7 +246,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     }
 
     return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best);
+        desiredAccuracy: LocationAccuracy.bestForNavigation);
   }
 
   Future<void> GetAddressFromLatLong(LatLng position) async {
@@ -497,28 +498,37 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                     setState(() {
                                       _getCurrentCustomerLocation(false);
 
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              contentPadding:
-                                                  const EdgeInsets.all(0.0),
-                                              content: StatefulBuilder(builder:
-                                                  (BuildContext context,
-                                                      StateSetter monthYear) {
-                                                return setupAlertDialogMonthAndYear(
-                                                  snapshot
-                                                      .data
-                                                      ?.data
-                                                      ?.categoryList?[0]
-                                                      .service?[index],
-                                                  snapshot.data?.data
-                                                      ?.categoryList![0],
-                                                  size,
-                                                );
-                                              }),
-                                            );
-                                          });
+                                      if(CurrentLatitude.isNotEmpty && CurrentLongitude.isNotEmpty){
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                contentPadding:
+                                                const EdgeInsets.all(0.0),
+                                                content: StatefulBuilder(builder:
+                                                    (BuildContext context,
+                                                    StateSetter monthYear) {
+                                                  return setupAlertDialogMonthAndYear(
+                                                    snapshot
+                                                        .data
+                                                        ?.data
+                                                        ?.categoryList?[0]
+                                                        .service?[index],
+                                                    snapshot.data?.data
+                                                        ?.categoryList![0],
+                                                    size,
+                                                  );
+                                                }),
+                                              );
+                                            });
+                                      }else{
+                                        _getCurrentCustomerLocation(false);
+                                        Fluttertoast.showToast(
+                                          msg: "Fetching Location..",
+                                          backgroundColor: CustColors.light_navy,
+                                          timeInSecForIosWeb: 1,
+                                        );
+                                      }
                                     });
                                   },
                                   child: Column(

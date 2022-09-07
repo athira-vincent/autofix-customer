@@ -30,10 +30,10 @@ class ChatProvider {
         .update(dataUpdate);
   }
 
-  Stream<QuerySnapshot> getChatMessage(String groupChatId, int limit) {
+  Stream<QuerySnapshot> getChatMessage(String collectionName,String groupChatId, int limit) {
     return firebaseFirestore
         //.collection(FirestoreConstants.pathMessageCollection)
-        .collection("ResolMech")
+        .collection("${collectionName}")
         //.doc(groupChatId)
         .doc(groupChatId)
         //.collection(groupChatId)
@@ -64,13 +64,13 @@ class ChatProvider {
     });
   }*/
 
-  void sendChatMessage(String content, int type, String groupChatId,
+  void sendChatMessage(String content, int type, String collection, String groupChatId,
       String currentUserId, String peerId) {
     print(">>>>02");
 
     FirebaseFirestore.instance
-        .collection('ResolMech')
-        .doc("1727")
+        .collection('${collection}')
+        .doc("${groupChatId}")
         .collection("messages")
         .add({
       'content': content,

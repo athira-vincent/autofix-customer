@@ -36,7 +36,10 @@ import 'dart:ui' as ui;
 
 class ChatScreen extends StatefulWidget {
   final String peerId;
-
+  final String peerName;
+  final String bookingId;
+  final String currentUserId;
+  final String collectionName;
   /*final String peerAvatar;
   final String peerNickname;
   final String userAvatar;*/
@@ -46,7 +49,10 @@ class ChatScreen extends StatefulWidget {
     // required this.peerNickname,
     // required this.peerAvatar,
     required this.peerId,
-    //required this.userAvatar
+    required this.peerName,
+    required this.bookingId,
+    required this.currentUserId,
+    required this.collectionName,
   }) : super(key: key);
 
   @override
@@ -56,7 +62,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  late String currentUserId = "123";
+  late String currentUserId = widget.currentUserId;
 
   List<QueryDocumentSnapshot> listMessages = [];
 
@@ -123,7 +129,7 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Icon(Icons.arrow_back)),
         backgroundColor: const Color(0xff173a8d),
         toolbarHeight: 60,
-        title: const Text('Athira',
+        title: Text('${widget.peerName}',
           style: TextStyle(
             fontFamily: 'SamsungSharpSans-Medium',
             fontSize: 16.7,
@@ -374,7 +380,7 @@ class _ChatScreenState extends State<ChatScreen> {
       child: groupChatId.isNotEmpty
           ? StreamBuilder<QuerySnapshot>(
               //stream: chatProvider.getChatMessage(groupChatId, _limit),
-              stream: chatProvider.getChatMessage("1727", _limit),
+              stream: chatProvider.getChatMessage('${widget.collectionName}',"${widget.bookingId}", _limit),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasData) {
@@ -413,7 +419,7 @@ class _ChatScreenState extends State<ChatScreen> {
       textEditingController.clear();
       print(">>>>01");
       chatProvider.sendChatMessage(
-          content, type, groupChatId, currentUserId, widget.peerId);
+          content, type,'${widget.collectionName}', widget.bookingId, currentUserId, widget.peerId);
       scrollController.animateTo(0,
           duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
     } else {
