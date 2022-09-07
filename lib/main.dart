@@ -152,7 +152,6 @@ class _MyAppState extends State<MyApp> {
               //home: WorkSelectionScreen(userType: "mechanic", userCategory: "individual"),
               home: SplashScreen(),
               //home: ChatScreen(peerId: "321"),
-
             ),
           );
         },
