@@ -80,6 +80,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   double per = .10;
 
+
   double _setValue(double value) {
     return value * per + value;
   }
@@ -129,6 +130,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           shdPre.getString(SharedPrefKeys.preferredLongitude).toString();
       preferredAddress =
           shdPre.getString(SharedPrefKeys.preferredAddress).toString();
+
+
+
+
 
       if ((preferredLatitude.toString() != "" &&
               preferredLatitude.toString() != "null") &&

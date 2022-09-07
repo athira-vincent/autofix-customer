@@ -1,5 +1,4 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Common/HelpAndSupport/help_and_support.dart';
@@ -7,18 +6,18 @@ import 'package:auto_fix/UI/Common/PrivacyPolicy/privacy_policy.dart';
 import 'package:auto_fix/UI/Common/TermsAndCondition/terms_and_conditions.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.dart';
-import 'package:auto_fix/UI/Customer/SideBar/BookNow/cust_book_now.dart';
-import 'package:auto_fix/UI/Customer/SideBar/EditProfile/cust_edit_profile.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyOrders/my_orders_list.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/Customer/SideBar/OrderDetails/cust_order_details.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomerNavigationDrawerScreen extends StatefulWidget {
+  const CustomerNavigationDrawerScreen({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _CustomerNavigationDrawerScreenState();
@@ -37,14 +36,12 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
   }
 
   Future<void> getSharedPrefData() async {
-    print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
       profileImageUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
-      print('authToken>>>>>>>>> ' + authToken.toString());
-      print('profileImageUrl>>>>>>>>> MechanicSideBarScreen' + profileImageUrl.toString());
+
     });
   }
 
@@ -153,29 +150,27 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
         )*/
         navigationBarHeader(size),
 
-        /*ListTile(
-          contentPadding: EdgeInsets.only(left: 20.4, top: 13),
-          visualDensity: VisualDensity(horizontal: 0, vertical: -3),
-          title: Align(
-            alignment: Alignment(-1.22, 0),
-            child: Text(
+        ListTile(
+          contentPadding: const EdgeInsets.only(left: 20.4, top: 13),
+          visualDensity: const VisualDensity(horizontal: 0, vertical: -3),
+          title: const Align(
+            alignment:  Alignment(-1.22, 0),
+            child:  Text(
               "Order details",
               style: Styles.navDrawerTextStyle02,
             ),
           ),
-          leading: Container(
-            child: Image.asset(
-              'assets/image/ic_order_details.png',
-              width: 14.28,
-              height: 18.76,
-            ),
+          leading: Image.asset(
+            'assets/image/ic_order_details.png',
+            width: 14.28,
+            height: 18.76,
           ),
           onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CustomerOrderDetailsScreen()));
+                MaterialPageRoute(builder: (context) => MyOrdersListScreen()));
           },
-        ),*/
+        ),
 
         /*ListTile(
           contentPadding: EdgeInsets.only(left: 20.4),
@@ -202,21 +197,19 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
         ),*/
 
         ListTile(
-          contentPadding: EdgeInsets.only(left: 20.4),
-          visualDensity: VisualDensity(horizontal: 0, vertical: -3),
-          title: Align(
+          contentPadding: const EdgeInsets.only(left: 20.4),
+          visualDensity: const VisualDensity(horizontal: 0, vertical: -3),
+          title: const Align(
             alignment: Alignment(-1.21, 0),
             child: Text(
               "My vehicles",
               style: Styles.navDrawerTextStyle02,
             ),
           ),
-          leading: Container(
-            child: SvgPicture.asset(
-              'assets/image/ic_my_vehicles.svg',
-              width: 14.28,
-              height: 18.76,
-            ),
+          leading: SvgPicture.asset(
+            'assets/image/ic_my_vehicles.svg',
+            width: 14.28,
+            height: 18.76,
           ),
           onTap: () {
             Navigator.pop(context);
@@ -226,21 +219,19 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
         ),
 
         ListTile(
-          contentPadding: EdgeInsets.only(left: 20.4),
-          visualDensity: VisualDensity(horizontal: 0, vertical: -3),
-          title: Align(
+          contentPadding: const EdgeInsets.only(left: 20.4),
+          visualDensity: const VisualDensity(horizontal: 0, vertical: -3),
+          title: const Align(
             alignment: Alignment(-1.22, 0),
             child: Text(
               "My Services",
               style: Styles.navDrawerTextStyle02,
             ),
           ),
-          leading: Container(
-            child: SvgPicture.asset(
-              'assets/image/ic_my_appointments.svg',
-              width: 14.28,
-              height: 18.76,
-            ),
+          leading: SvgPicture.asset(
+            'assets/image/ic_my_appointments.svg',
+            width: 14.28,
+            height: 18.76,
           ),
           onTap: () {
             Navigator.pop(context);
@@ -250,21 +241,19 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
         ),
 
         ListTile(
-          contentPadding: EdgeInsets.only(left: 20.4),
-          visualDensity: VisualDensity(horizontal: 0, vertical: -3),
-          title: Align(
-            alignment: Alignment(-1.21, 0),
-            child: Text(
+          contentPadding: const EdgeInsets.only(left: 20.4),
+          visualDensity: const VisualDensity(horizontal: 0, vertical: -3),
+          title: const Align(
+            alignment:  Alignment(-1.21, 0),
+            child:  Text(
               "Edit profile",
               style: Styles.navDrawerTextStyle02,
             ),
           ),
-          leading: Container(
-            child: SvgPicture.asset(
-              'assets/image/ic_edit_profile.svg',
-              width: 14.28,
-              height: 18.76,
-            ),
+          leading: SvgPicture.asset(
+            'assets/image/ic_edit_profile.svg',
+            width: 14.28,
+            height: 18.76,
           ),
           onTap: () {
             Navigator.pop(context);
@@ -302,21 +291,19 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
         ),*/
 
         ListTile(
-          contentPadding: EdgeInsets.only(left: 20.4),
-          visualDensity: VisualDensity(horizontal: 0, vertical: -3),
-          title: Align(
-            alignment: Alignment(-1.18, 0),
-            child: Text(
+          contentPadding: const EdgeInsets.only(left: 20.4),
+          visualDensity: const VisualDensity(horizontal: 0, vertical: -3),
+          title: const Align(
+            alignment:  Alignment(-1.18, 0),
+            child:  Text(
               "Logout",
               style: Styles.navDrawerTextStyle02,
             ),
           ),
-          leading: Container(
-            child: SvgPicture.asset(
-              'assets/image/ic_logout.svg',
-              width: 21.84,
-              height: 20.44,
-            ),
+          leading: SvgPicture.asset(
+            'assets/image/ic_logout.svg',
+            width: 21.84,
+            height: 20.44,
           ),
           onTap: () {
             showDialog(
@@ -328,21 +315,21 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           },
         ),
 
-        SizedBox(
+        const SizedBox(
             child: Divider(
               thickness: 1,
               height: 0,
             )),
 
-        SizedBox(
+        const SizedBox(
           height: 25,
             ),
 
         Container(
-          margin: EdgeInsets.only(left: 46, top: 10),
+          margin: const EdgeInsets.only(left: 46, top: 10),
           child: ListTile(
-            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-            title: Text(
+            visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+            title: const Text(
               "Privacy policy",
               style: Styles.navDrawerTextStyle02,
             ),
@@ -354,10 +341,10 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           ),
         ),
         Container(
-          margin: EdgeInsets.only(left: 46),
+          margin: const EdgeInsets.only(left: 46),
           child: ListTile(
-            visualDensity: VisualDensity(horizontal: 0, vertical: -3),
-            title: Text(
+            visualDensity: const VisualDensity(horizontal: 0, vertical: -3),
+            title: const Text(
               "Help & support Center",
               style: Styles.navDrawerTextStyle02,
             ),
@@ -369,10 +356,10 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           ),
         ),
         Container(
-          margin: EdgeInsets.only(left: 46),
+          margin: const EdgeInsets.only(left: 46),
           child: ListTile(
-            visualDensity: VisualDensity(horizontal: 0, vertical: -3),
-            title: Text(
+            visualDensity: const VisualDensity(horizontal: 0, vertical: -3),
+            title: const Text(
               "General Terms & Conditions",
               style: Styles.navDrawerTextStyle02,
             ),
@@ -394,9 +381,9 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
     return Container(
       width: double.infinity,
       height: size.height * 37 / 100,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: CustColors.light_navy,
-        borderRadius: BorderRadius.only(
+        borderRadius:  BorderRadius.only(
           bottomRight: Radius.circular(
             72,
           ),
@@ -416,11 +403,11 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
                   height: 20,
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 14.6, top: 4),
+                  margin: const EdgeInsets.only(left: 14.6, top: 4),
                   alignment: Alignment.center,
-                  child: Text(
+                  child: const Text(
                     'Home',
-                    style: TextStyle(
+                    style:  TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Corbel_Bold',
@@ -444,40 +431,39 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
                     alignment: Alignment.center,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(
+                        margin: const EdgeInsets.only(
                             right: 2
                         ),
                         width: 93,
                         height: 93,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.all(
+                          borderRadius:  BorderRadius.all(
                             Radius.circular(
                               72,
                             ),
                           ),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 88.0,
                         height: 88.0,
                         child: ClipRRect(
                             borderRadius: BorderRadius.circular(20.0),
-                            child:Container(
-                                child:CircleAvatar(
-                                    radius: 50,
-                                    backgroundColor: Colors.white,
-                                    child: ClipOval(
-                                        child: profileImageUrl != null && profileImageUrl != ""
-                                            ?
-                                        Image.network(profileImageUrl,
-                                          width: 150,
-                                          height: 150,
-                                          fit: BoxFit.cover,
-                                        )
-                                            :
-                                        SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
-                                    )))
+                            child:CircleAvatar(
+                                radius: 50,
+                                backgroundColor: Colors.white,
+                                child: ClipOval(
+                                    child: profileImageUrl != ""
+                                        ?
+                                    Image.network(profileImageUrl,
+                                      width: 150,
+                                      height: 150,
+                                      fit: BoxFit.cover,
+                                    )
+                                        :
+                                    SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
+                                ))
 
                         ),
                       ),
@@ -507,10 +493,10 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
                     margin: EdgeInsets.only(top: size.height * 1 / 100),
                     child: Text(
                       //_userName.toString(),
-                      "$userName",
+                      userName,
                       softWrap: true,
                       textAlign: TextAlign.right,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Corbel_Bold',
@@ -528,17 +514,17 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
 
   Widget deactivateDialog() {
     return CupertinoAlertDialog(
-      title: Text("Logout account?",
+      title: const Text("Logout account?",
           style: TextStyle(
             fontFamily: 'Formular',
             fontWeight: FontWeight.bold,
             fontSize: 18,
             color: CustColors.materialBlue,
           )),
-      content: Text("Are you sure you want to logout?"),
+      content: const Text("Are you sure you want to logout?"),
       actions: <Widget>[
         CupertinoDialogAction(
-            textStyle: TextStyle(
+            textStyle: const TextStyle(
               color: CustColors.rusty_red,
               fontWeight: FontWeight.normal,
             ),
@@ -546,9 +532,9 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text("Cancel")),
+            child: const Text("Cancel")),
         CupertinoDialogAction(
-            textStyle: TextStyle(
+            textStyle: const TextStyle(
               color: CustColors.rusty_red,
               fontWeight: FontWeight.normal,
             ),
@@ -559,11 +545,11 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => LoginScreen()),
+                        builder: (context) => const LoginScreen()),
                     ModalRoute.withName("/LoginScreen"));
               });
             },
-            child: Text("Logout")),
+            child: const Text("Logout")),
       ],
     );
   }

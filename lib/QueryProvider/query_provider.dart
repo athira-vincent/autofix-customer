@@ -3376,6 +3376,7 @@ class QueryProvider {
         brandName
         status
       }
+      inCart
       reviewCount
       avgRate
       salesCount
@@ -3430,6 +3431,7 @@ class QueryProvider {
         brandName
         status
       }
+      inCart
       reviewCount
       avgRate
       salesCount
@@ -3456,7 +3458,7 @@ class QueryProvider {
 
     """;
     } else {
-        print("display");
+      print("display");
       _query = """
        query
        {
@@ -3485,6 +3487,7 @@ class QueryProvider {
         brandName
         status
       }
+      inCart
       reviewCount
       avgRate
       salesCount
@@ -3792,27 +3795,141 @@ class QueryProvider {
     );
   }
 
-
   /// placeorder queryprovider
-  fetchServiceplaceorderlist(qty,totalprice,productid,addressid) async {
+  fetchServiceplaceorderlist(qty, totalprice, productid, addressid) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
-    String custid=shdPre.getString(SharedPrefKeys.userID).toString();
+    String custid = shdPre.getString(SharedPrefKeys.userID).toString();
     print("noel");
     print(authToken);
     String _query = """
                 
-mutation {
-  placeOrder(
-    qty: $qty
-    totalPrice: $totalprice
-    paymentType: null
-    vendorId: [1]
-    customerId: $custid
-    productId: $productid
-    addressId: $addressid
-  ) {
-    message
+  mutation {
+    placeOrder(
+      qty: $qty
+      totalPrice: $totalprice
+      paymentType: null
+      customerId: $custid
+      productId: $productid
+      addressId: $addressid
+    ) {
+      message
+    }
+  }
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  ///  order list queryprovider
+  fetchServiceorderdetailslist() async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String custid = shdPre.getString(SharedPrefKeys.userID).toString();
+
+    String _query = """
+   query      
+  {
+  orderList(vendorId:null,customerId: $custid) {
+    id
+    oderCode
+    qty
+    totalPrice
+    commision
+    tax
+    paymentType
+    status
+    vendorId
+    customerId
+    vendor {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      status
+      userTypeId
+      jwtToken
+      fcmToken
+      otpCode
+      isProfile
+      otpVerified
+      customer{
+        id
+      }
+      mechanic{
+        id
+      }
+      vendor{
+        id
+      }
+    }
+    customer {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      status
+      userTypeId
+      jwtToken
+      fcmToken
+      otpCode
+      isProfile
+      otpVerified
+      customer{
+        id
+      }
+      mechanic{
+        id
+      }
+      vendor{
+        id
+      }
+    }
+    product {
+      id
+      productCode
+      productName
+      price
+      shippingCharge
+      productImage
+      description
+      quantity
+      status
+      vehicleModelId
+      vendorId
+      user{
+        id
+      }
+      vehicleModel{
+        id
+      }
+      reviewCount
+      avgRate
+      salesCount
+      reviewData{
+        id
+      }
+    }
+    review {
+      id
+      transType
+      rating
+      feedback
+      bookingId
+      orderId
+      status
+    }
   }
 }
 
@@ -3824,6 +3941,28 @@ mutation {
       authToken,
       enableDebug: true,
       isTokenThere: false,
+    );
+  }
+
+  /// cancel order
+  fetchcacncelorder(
+    orderid
+  ) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String _query = """
+    mutation {
+    orderCancel(orderId: $orderid) {
+      message
+    }
+  }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: true,
     );
   }
 }

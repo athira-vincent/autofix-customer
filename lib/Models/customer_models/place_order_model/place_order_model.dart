@@ -26,6 +26,8 @@ class PlaceOrderModel {
   );
 
   Map<String, dynamic> toMap() => {
+    "status": status == null ? null : status,
+    "message": message == null ? null : message,
     "data": data!.toMap(),
   };
 }

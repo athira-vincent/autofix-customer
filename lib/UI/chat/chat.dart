@@ -123,18 +123,16 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Icon(Icons.arrow_back)),
         backgroundColor: const Color(0xff173a8d),
         toolbarHeight: 60,
-        title: Container(
-          child: Text('Athira',
-            style: TextStyle(
-              fontFamily: 'SamsungSharpSans-Medium',
-              fontSize: 16.7,
-            ),),
-        ),
+        title: const Text('Athira',
+          style: TextStyle(
+            fontFamily: 'SamsungSharpSans-Medium',
+            fontSize: 16.7,
+          ),),
         centerTitle: true,
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Column(
             children: [
               buildListMessage(),
@@ -382,16 +380,13 @@ class _ChatScreenState extends State<ChatScreen> {
                 if (snapshot.hasData) {
                   listMessages = snapshot.data!.docs;
                   if (listMessages.isNotEmpty) {
-                    return Container(
-                      // height: 70,
-                      child: ListView.builder(
-                          padding: const EdgeInsets.all(10),
-                          itemCount: snapshot.data?.docs.length,
-                          reverse: true,
-                          controller: scrollController,
-                          itemBuilder: (context, index) =>
-                              buildItem(index, snapshot.data?.docs[index])),
-                    );
+                    return ListView.builder(
+                        padding: const EdgeInsets.all(10),
+                        itemCount: snapshot.data?.docs.length,
+                        reverse: true,
+                        controller: scrollController,
+                        itemBuilder: (context, index) =>
+                            buildItem(index, snapshot.data?.docs[index]));
                   } else {
                     return const Center(
                       child: Text('No messages...'),
