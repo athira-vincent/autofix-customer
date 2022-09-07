@@ -5,6 +5,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_screen.dart';
+import 'package:auto_fix/UI/chat/chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
@@ -70,6 +71,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
   String bookingIdEmergency="";
+  String customerId = "", mechanicId = "", mechanicName = "";
 
   @override
   void initState() {
@@ -105,6 +107,9 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingIdEmergency}");
     reference.snapshots().listen((querySnapshot) {
       setState(() {
+        customerId = querySnapshot.get('customerID');
+        mechanicId = querySnapshot.get('mechanicID');
+        mechanicName = querySnapshot.get('mechanicName');
         mechanicArrivalState = querySnapshot.get("mechanicArrivalState");
         print('mechanicArrivalState ++++ $mechanicArrivalState');
         if(mechanicArrivalState =="1")
@@ -401,31 +406,22 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                           children: [
                             Expanded(
                               child: Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.phone, color: Colors.white),
-                                    Text(
-                                      "Call",
-                                      style: Styles.popUPTextStyle,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child:  Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.chat, color: Colors.white),
-                                    Text(
-                                      "Chat",
-                                      style: Styles.popUPTextStyle,
-                                    ),
-                                  ],
+                                child: InkWell(
+                                  onTap: (){
+                                    String callPhoneNumber = "90488878777";
+                                    _callPhoneNumber(callPhoneNumber);
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.phone, color: Colors.white),
+                                      Text(
+                                        "Call",
+                                        style: Styles.popUPTextStyle,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -433,13 +429,36 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                               child:  Container(
                                 child: InkWell(
                                   onTap: (){
-                                    /*ProfileProvider profileProvider;
-                                      profileProvider = context.read<ProfileProvider>();
-                                      String callPhoneNumber =
-                                          profileProvider.getPrefs(FirestoreConstants.phoneNumber) ??
-                                              "";*/
-                                    String callPhoneNumber = "90488878777";
-                                    _callPhoneNumber(callPhoneNumber);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ChatScreen(
+                                              peerId: mechanicId,
+                                              bookingId: '${bookingIdEmergency}',
+                                              collectionName: 'ResolMech',
+                                              currentUserId: customerId,
+                                              peerName: mechanicName,
+                                            )));
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.chat, color: Colors.white),
+                                      Text(
+                                        "Chat",
+                                        style: Styles.popUPTextStyle,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child:  Container(
+                                child: InkWell(
+                                  onTap: (){
+
                                   },
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,

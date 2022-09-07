@@ -187,7 +187,7 @@ class Mechanic {
   dynamic certificate1;
   dynamic certificate2;
   int status;
-  double rate;
+  dynamic rate;
   int reviewCount;
 
   factory Mechanic.fromJson(Map<String, dynamic> json) => Mechanic(

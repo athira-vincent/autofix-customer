@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/Models/customer_models/booking_details_model/bookingDetailsMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
 
@@ -219,7 +220,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           carColor = '${value.data?.bookingDetails?.vehicle?.color}';
 
 
-          callOnFcmApiSendPushNotifications(1);
+          callOnFcmApiSendPushNotifications(value);
           _showMechanicAcceptanceDialog(context);
           _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
               authToken, bookingIdEmergency, "1");
@@ -232,7 +233,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   }
 
-  Future<void> callOnFcmApiSendPushNotifications(int length) async {
+  Future<void> callOnFcmApiSendPushNotifications(BookingDetailsMdl? detailsMdl) async {
     String? token;
     await FirebaseMessaging.instance.getToken().then((value) {
      token = value;
@@ -274,6 +275,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "customerFcmToken" : "$token",
         "mechanicName" : "${widget.mechanicListData?.firstName}",
         "mechanicID" : widget.mechanicId,
+        "customerID" : "${detailsMdl!.data!.bookingDetails!.customerId}",
+        "mechanicPhone" :"${detailsMdl.data!.bookingDetails!.mechanic!.phoneNo}",
+        "customerPhone" : "${detailsMdl.data!.bookingDetails!.customer!.phoneNo}",
         "mechanicAddress" : "",
         "mechanicLatitude" : widget.latitude,
         "mechanicLongitude" : widget.longitude,
