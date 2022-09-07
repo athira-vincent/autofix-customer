@@ -3845,6 +3845,7 @@ class QueryProvider {
     commision
     tax
     paymentType
+    deliverDate
     status
     vendorId
     customerId

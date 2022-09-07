@@ -7,6 +7,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/order_list_bloc/order_list_s
 import 'package:auto_fix/UI/Customer/SideBar/MyOrders/my_orders_display_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class MyOrdersListScreen extends StatefulWidget {
   const MyOrdersListScreen({Key? key}) : super(key: key);
@@ -22,6 +23,7 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
 
   List<OrderList> orderlistsearch = [];
   List<OrderList> orderlist = [];
+  var formate1;
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +138,18 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
             itemBuilder: (context, index) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 orderlist = state.orderDetailsmodel.data!.orderList;
+
+
+
+
               });
+              if(state.orderDetailsmodel.data!.orderList[index].deliverDate!=null){
+                var dateTime = DateTime.parse(state.orderDetailsmodel.data!.orderList[index].deliverDate.toString());
+
+                formate1 = "${dateTime.day}-${dateTime.month}-${dateTime.year}";
+
+
+              }
 
               return InkWell(
                 onTap: () {
@@ -183,21 +196,32 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
                                             color: CustColors.whiteBlueish,
                                             borderRadius:
                                                 BorderRadius.circular(5)),
-                                        child: const Padding(
-                                          padding:
-                                              EdgeInsets.fromLTRB(8, 8, 8, 2),
-                                          child: Text(
-                                            "Delivered",
-                                            style: Styles
-                                                .sparePartNameSubTextBlack,
-                                          ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              8, 8, 8, 2),
+                                          child: state
+                                                      .orderDetailsmodel
+                                                      .data!
+                                                      .orderList[index]
+                                                      .status ==
+                                                  0
+                                              ? const Text(
+                                                  "Cancelled",
+                                                  style: Styles
+                                                      .sparePartNameSubTextBlack,
+                                                )
+                                              : const Text(
+                                                  "Delivered",
+                                                  style: Styles
+                                                      .sparePartNameSubTextBlack,
+                                                ),
                                         ),
                                       ),
-                                      const Padding(
+                                       Padding(
                                         padding:
-                                            EdgeInsets.fromLTRB(0, 8, 0, 0),
-                                        child: Text(
-                                          "Delivery on jan 20  5pm",
+                                            const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                                        child: state.orderDetailsmodel.data!.orderList[index].deliverDate==null?const Text(""):Text(
+                                          "Delivery on "+formate1,
                                           style:
                                               Styles.sparePartNameTextBlack17,
                                         ),

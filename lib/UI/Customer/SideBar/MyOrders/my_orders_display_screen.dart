@@ -30,11 +30,9 @@ class _My_Orders_DisplayState extends State<My_Orders_Display> {
                 if (state.cancelOrder.data!.orderCancel.message ==
                     "Order cancelled successfully!!!!") {
                   Fluttertoast.showToast(
-                    msg: "Order cancelled successfully!!!!",
+                    msg: "Order cancelled successfully!!",
                     timeInSecForIosWeb: 1,
                   );
-
-
                 }
               }
             },
@@ -101,10 +99,12 @@ class _My_Orders_DisplayState extends State<My_Orders_Display> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       const Padding(
-                                        padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 8, 0, 0),
                                         child: Text(
                                           "Delivery on jan 20  5pm",
-                                          style: Styles.sparePartNameTextBlack17,
+                                          style:
+                                              Styles.sparePartNameTextBlack17,
                                         ),
                                       ),
                                       const SizedBox(
@@ -189,7 +189,8 @@ class _My_Orders_DisplayState extends State<My_Orders_Display> {
                                         width: 23,
                                       ),
                                       Text(
-                                        widget.modeldetails.product.shippingCharge
+                                        widget
+                                            .modeldetails.product.shippingCharge
                                             .toString(),
                                         style: Styles.sparePartNameSubTextBlack,
                                       ),
@@ -229,13 +230,12 @@ class _My_Orders_DisplayState extends State<My_Orders_Display> {
                   padding: const EdgeInsets.fromLTRB(20, 5, 20, 10),
                   child: Container(
                     margin: const EdgeInsets.only(top: 5, bottom: 5),
-                    child:  MaterialButton(
+                    child: MaterialButton(
                       onPressed: () {
-                      print("cancelapi");
-                      final cacncelBloc =
-                      BlocProvider.of<CancelOrderBloc>(context);
-                      cacncelBloc.add(FetchCancelOrderEvent(widget.modeldetails.id.toString()));
-
+                        final cacncelBloc =
+                            BlocProvider.of<CancelOrderBloc>(context);
+                        cacncelBloc.add(FetchCancelOrderEvent(
+                            widget.modeldetails.id.toString()));
                       },
                       child: SizedBox(
                         height: 50,
@@ -244,7 +244,7 @@ class _My_Orders_DisplayState extends State<My_Orders_Display> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: const [
                             Text(
-                              'Cancel',
+                              'Cancel Order',
                               textAlign: TextAlign.center,
                               style: Styles.textButtonLabelSubTitle,
                             ),

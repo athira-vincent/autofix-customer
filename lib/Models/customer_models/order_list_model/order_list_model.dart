@@ -60,6 +60,7 @@ class OrderList {
     required this.commision,
     required this.tax,
     required this.paymentType,
+    required this.deliverDate,
     required this.status,
     required this.vendorId,
     required this.customerId,
@@ -74,6 +75,7 @@ class OrderList {
   double commision;
   double tax;
   int paymentType;
+  DateTime? deliverDate;
   int status;
   int vendorId;
   int customerId;
@@ -89,7 +91,9 @@ class OrderList {
         commision: json["commision"].toDouble(),
         tax: json["tax"].toDouble(),
         paymentType: json["paymentType"] == null ? null : json["paymentType"],
-        status: json["status"],
+    deliverDate: json["deliverDate"] == null ? null : DateTime.parse(json["deliverDate"]),
+
+    status: json["status"],
         vendorId: json["vendorId"],
         customerId: json["customerId"],
         product: Product.fromMap(json["product"]),
@@ -104,7 +108,9 @@ class OrderList {
         "commision": commision,
         "tax": tax,
         "paymentType": paymentType == null ? null : paymentType,
-        "status": status,
+    "deliverDate": deliverDate == null ? null : "${deliverDate!.year.toString().padLeft(4, '0')}-${deliverDate!.month.toString().padLeft(2, '0')}-${deliverDate!.day.toString().padLeft(2, '0')}",
+
+    "status": status,
         "vendorId": vendorId,
         "customerId": customerId,
         "product": product.toMap(),
