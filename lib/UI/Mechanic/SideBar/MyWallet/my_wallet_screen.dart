@@ -5,7 +5,9 @@ import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_mdl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicMyWalletScreen extends StatefulWidget {
@@ -213,6 +215,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
 
   Widget appBarCustomUi(Size size) {
     return Row(
+
       children: [
         IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -223,7 +226,71 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
           textAlign: TextAlign.center,
           style: Styles.appBarTextBlue,
         ),
-        const Spacer(),
+         const Spacer(),
+
+
+        InkWell(
+          onTap: ()async{
+            var datePicked = await DatePicker.showSimpleDatePicker(
+
+
+              context,
+              initialDate: DateTime(2022),
+              firstDate: DateTime(2022),
+              lastDate: DateTime(2050),
+              dateFormat: "dd-MMMM-yyyy",
+              locale: DateTimePickerLocale.en_us,
+              looping: true,
+              itemTextStyle: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                  fontFamily:'Samsung_SharpSans_Medium'
+              )
+            );
+
+           Fluttertoast.showToast(msg: datePicked.toString());
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: Container(
+              height:30,
+              width:  130,
+              decoration: BoxDecoration(
+                  color: CustColors.whiteBlueish,
+                  borderRadius:
+                  BorderRadius.circular(5)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text("Select date",
+                        style:
+                        Styles.sparePartNameSubTextBlack,
+
+                      ),
+                    ),
+                  ),
+                  Container(
+                      color: CustColors.blue,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 6, left: 6,bottom: 6,right: 4),
+                        child: SvgPicture.asset('assets/image/ic_calender.svg',
+                          height: 20,
+                          width: 20,
+                          color: Colors.white,),
+
+                      ),)
+                ],
+              ),
+
+            ),
+          ),
+        ),
+
+
       ],
     );
   }

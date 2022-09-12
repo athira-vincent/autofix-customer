@@ -3966,4 +3966,30 @@ class QueryProvider {
       isTokenThere: true,
     );
   }
+
+  /// cod approve
+  fetchcodapprove(
+      amount,orderid
+      ) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String _query = """
+   mutation {
+  cashOnDelivery(amount: $amount, orderId: $orderid, transData: "string") {
+    message
+  }
 }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+}
+
+
+
+

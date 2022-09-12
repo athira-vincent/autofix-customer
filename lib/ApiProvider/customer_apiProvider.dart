@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:auto_fix/Models/cod_model/cod_model.dart';
 import 'package:auto_fix/Models/customer_models/add_address_model/add_address_model.dart';
 import 'package:auto_fix/Models/customer_models/add_cart_model/add_cart_model.dart';
 import 'package:auto_fix/Models/customer_models/add_rating_model/addRatingMdl.dart';
@@ -645,6 +646,28 @@ class CustomerApiProvider {
       }
     } else {
       final errorMsg = CancelOrder(
+          status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+
+  /// cod
+  Future<Codmodel> fetchcodlist(amount,orderid
+      ) async {
+    Map<String, dynamic> _resp =
+    await _queryProvider.fetchcodapprove(amount,orderid);
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = Codmodel(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return Codmodel.fromMap(data);
+      }
+    } else {
+      final errorMsg = Codmodel(
           status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }

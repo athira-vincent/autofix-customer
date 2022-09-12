@@ -1,5 +1,6 @@
 import 'package:auto_fix/ApiProvider/customer_apiProvider.dart';
 import 'package:auto_fix/ApiProvider/mechanic_api_provider.dart';
+import 'package:auto_fix/Models/cod_model/cod_model.dart';
 import 'package:auto_fix/Models/customer_models/add_address_model/add_address_model.dart';
 import 'package:auto_fix/Models/customer_models/add_cart_model/add_cart_model.dart';
 import 'package:auto_fix/Models/customer_models/cancel_order_module/cancel_order_module.dart';
@@ -75,6 +76,7 @@ class Repository {
   final _placeorderprovider=CustomerApiProvider();
   final _orderlistprovider=CustomerApiProvider();
   final _cancelorderprovider=CustomerApiProvider();
+  final _codprovider=CustomerApiProvider();
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>
       _serviceListApiProvider.getServiceListRequest(
@@ -657,4 +659,7 @@ class Repository {
       _orderlistprovider.fetchServiceorderdetailslist();
   Future<CancelOrder> cancelorder(orderid) =>
       _cancelorderprovider.fetchcancelorderlist(orderid);
+
+  Future<Codmodel> Cod(amount,orderid) =>
+      _codprovider.fetchcodlist(amount,orderid);
 }
