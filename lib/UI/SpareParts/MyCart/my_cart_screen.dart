@@ -88,19 +88,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
               }
             },
           ),
-          BlocListener<PlaceOrderBloc, PlaceOrderState>(
-            listener: (context, state) {
-              if (state is PlaceOrderLoadedState) {
-                if (state.placeorderModel.data!.placeOrder.message ==
-                    "Success") {
-                  Fluttertoast.showToast(msg: "Placed order successfully");
-                  final addcartsBloc =
-                  BlocProvider.of<ShowCartPopBloc>(context);
-                  addcartsBloc.add(FetchShowCartPopEvent());
-                }
-              }
-            },
-          ),
+
         ],
         child: Scaffold(
             body: ScrollConfiguration(
@@ -556,11 +544,19 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                           const EdgeInsets.fromLTRB(0, 8, 0, 0),
                                       child: InkWell(
                                         onTap: (){
-                                          final placeorderBloc =
-                                          BlocProvider.of<PlaceOrderBloc>(context);
-                                          placeorderBloc.add(FetchPlaceOrderEvent(state.cartlistmodel.data!.cartList.data[index].quantity
-                                              .toString(),state.cartlistmodel.data!.cartList.data[index].product.price.toString(),state.cartlistmodel.data!.cartList.data[index].product.id.toString(),
-                                              "1"));
+
+
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChangeDeliveryAddressScreen(quantity:state.cartlistmodel.data!.cartList.data[index].quantity.toString(),
+                                                      productprice:state.cartlistmodel.data!.cartList.data[index].product.price.toString(),
+                                                        productid:state.cartlistmodel.data!.cartList.data[index].product.id.toString(),
+
+                                                      )
+
+                                              ));
                                         },
                                         child: Container(
                                           height: 20,
@@ -704,36 +700,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                           style: Styles.sparePartNameTextBlack17,
                         ),
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                      //   child: Row(
-                      //     children: [
-                      //       Flexible(
-                      //         child: Text(
-                      //           "Beside oando filling station.",
-                      //           style: Styles.sparePartNameTextBlack17,
-                      //         ),
-                      //       ),
-                      //       Padding(
-                      //         padding: const EdgeInsets.all(2),
-                      //         child: Container(
-                      //           height: 20,
-                      //           width: 45,
-                      //           decoration: BoxDecoration(
-                      //               color: CustColors.roseText1,
-                      //               borderRadius: BorderRadius.circular(10)),
-                      //           child: Padding(
-                      //             padding: const EdgeInsets.all(4),
-                      //             child: Text(
-                      //               "Work",
-                      //               style: Styles.sparePartNameTextBlack17,
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
+
                     ],
                   ),
                 ),
@@ -752,7 +719,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      ChangeDeliveryAddressScreen()
+                                      ChangeDeliveryAddressScreen(quantity: "",productprice: "",productid: "",)
 
                               ));
                         },
@@ -925,10 +892,15 @@ class _MyCartScreenState extends State<MyCartScreen> {
                   )
                 : MaterialButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
+
+
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Payment_Main_Screen()));
+                            builder: (context) =>
+                               const Payment_Main_Screen(amount:"",orderid:"")
+
+                        ));
                   },
                   child: SizedBox(
                     height: 50,

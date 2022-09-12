@@ -22,14 +22,14 @@ class MechanicMyWalletMdl {
 
   factory MechanicMyWalletMdl.fromJson(Map<String, dynamic> json) => MechanicMyWalletMdl(
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
-    status: json["status"] == null ? null : json["status"],
-    message: json["message"] == null ? null : json["message"],
+    status: json["status"] ?? null,
+    message: json["message"] ?? null,
   );
 
   Map<String, dynamic> toJson() => {
     "data": data == null ? null : data!.toJson(),
-    "status": status == null ? null : status,
-    "message": message == null ? null : message,
+    "status": status,
+    "message": message,
   };
 }
 
@@ -65,17 +65,17 @@ class MyWallet {
   List<PayArr>? payArr;
 
   factory MyWallet.fromJson(Map<String, dynamic> json) => MyWallet(
-    jobCount: json["jobCount"] == null ? null : json["jobCount"],
-    monthlySum: json["monthlySum"] == null ? null : json["monthlySum"],
-    totalPayment: json["totalPayment"] == null ? null : json["totalPayment"],
+    jobCount: json["jobCount"] ?? "",
+    monthlySum: json["monthlySum"] ?? "",
+    totalPayment: json["totalPayment"] ?? "",
     bookingData: json["bookingData"] == null ? null : List<BookingDatum>.from(json["bookingData"].map((x) => BookingDatum.fromJson(x))),
     payArr: json["payArr"] == null ? null : List<PayArr>.from(json["payArr"].map((x) => PayArr.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "jobCount": jobCount == null ? null : jobCount,
-    "monthlySum": monthlySum == null ? null : monthlySum,
-    "totalPayment": totalPayment == null ? null : totalPayment,
+    "jobCount": jobCount,
+    "monthlySum": monthlySum,
+    "totalPayment": totalPayment,
     "bookingData": bookingData == null ? null : List<dynamic>.from(bookingData!.map((x) => x.toJson())),
     "payArr": payArr == null ? null : List<dynamic>.from(payArr!.map((x) => x.toJson())),
   };
@@ -143,62 +143,62 @@ class BookingDatum {
   BookingDatumCustomer? customer;
 
   factory BookingDatum.fromJson(Map<String, dynamic> json) => BookingDatum(
-    id: json["id"] == null ? null : json["id"],
-    bookingCode: json["bookingCode"] == null ? null : json["bookingCode"],
-    reqType: json["reqType"] == null ? null : json["reqType"],
-    bookStatus: json["bookStatus"] == null ? null : json["bookStatus"],
-    totalPrice: json["totalPrice"] == null ? null : json["totalPrice"],
+    id: json["id"] ?? null,
+    bookingCode: json["bookingCode"] ?? "",
+    reqType: json["reqType"] ?? "",
+    bookStatus: json["bookStatus"] ?? "",
+    totalPrice: json["totalPrice"] ?? "",
     tax: json["tax"] == null ? null : json["tax"].toDouble(),
     commission: json["commission"] == null ? null : json["commission"].toDouble(),
-    serviceCharge: json["serviceCharge"] == null ? null : json["serviceCharge"],
+    serviceCharge: json["serviceCharge"] ?? "",
     totalTime: json["totalTime"],
     serviceTime: json["serviceTime"],
     latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
     longitude: json["longitude"] == null ? null : json["longitude"].toDouble(),
     extend: json["extend"] == null ? null : json["extend"].toDouble(),
     totalExt: json["totalExt"] == null ? null : json["totalExt"].toDouble(),
-    extendTime: json["extendTime"] == null ? null : json["extendTime"],
+    extendTime: json["extendTime"] ?? "",
     bookedDate: json["bookedDate"] == null ? null : DateTime.parse(json["bookedDate"]),
-    bookedTime: json["bookedTime"] == null ? null : json["bookedTime"],
-    isRated: json["isRated"] == null ? null : json["isRated"],
-    status: json["status"] == null ? null : json["status"],
+    bookedTime: json["bookedTime"] ?? "",
+    isRated: json["isRated"] ?? "",
+    status: json["status"] ?? "",
     regularType: json["regularType"],
     mechLatitude: json["mechLatitude"],
     mechLongitude: json["mechLongitude"],
     demoMechanicId: json["demoMechanicId"],
-    customerId: json["customerId"] == null ? null : json["customerId"],
-    vehicleId: json["vehicleId"] == null ? null : json["vehicleId"],
+    customerId: json["customerId"] ?? "",
+    vehicleId: json["vehicleId"] ?? "",
     serviceId: json["serviceId"],
     mechanic: json["mechanic"] == null ? null : Mechanic.fromJson(json["mechanic"]),
     customer: json["customer"] == null ? null : BookingDatumCustomer.fromJson(json["customer"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "bookingCode": bookingCode == null ? null : bookingCode,
-    "reqType": reqType == null ? null : reqType,
-    "bookStatus": bookStatus == null ? null : bookStatus,
-    "totalPrice": totalPrice == null ? null : totalPrice,
-    "tax": tax == null ? null : tax,
-    "commission": commission == null ? null : commission,
-    "serviceCharge": serviceCharge == null ? null : serviceCharge,
+    "id": id,
+    "bookingCode": bookingCode,
+    "reqType": reqType,
+    "bookStatus": bookStatus,
+    "totalPrice": totalPrice,
+    "tax": tax,
+    "commission": commission,
+    "serviceCharge": serviceCharge,
     "totalTime": totalTime,
     "serviceTime": serviceTime,
-    "latitude": latitude == null ? null : latitude,
-    "longitude": longitude == null ? null : longitude,
-    "extend": extend == null ? null : extend,
-    "totalExt": totalExt == null ? null : totalExt,
-    "extendTime": extendTime == null ? null : extendTime,
+    "latitude": latitude,
+    "longitude": longitude,
+    "extend": extend,
+    "totalExt": totalExt,
+    "extendTime": extendTime,
     "bookedDate": bookedDate == null ? null : bookedDate!.toIso8601String(),
-    "bookedTime": bookedTime == null ? null : bookedTime,
-    "isRated": isRated == null ? null : isRated,
-    "status": status == null ? null : status,
+    "bookedTime": bookedTime,
+    "isRated": isRated,
+    "status": status,
     "regularType": regularType,
     "mechLatitude": mechLatitude,
     "mechLongitude": mechLongitude,
     "demoMechanicId": demoMechanicId,
-    "customerId": customerId == null ? null : customerId,
-    "vehicleId": vehicleId == null ? null : vehicleId,
+    "customerId": customerId,
+    "vehicleId": vehicleId,
     "serviceId": serviceId,
     "mechanic": mechanic == null ? null : mechanic!.toJson(),
     "customer": customer == null ? null : customer!.toJson(),
@@ -217,14 +217,14 @@ class BookingDatumCustomer {
   List<CustomerElement>? customer;
 
   factory BookingDatumCustomer.fromJson(Map<String, dynamic> json) => BookingDatumCustomer(
-    id: json["id"] == null ? null : json["id"],
-    firstName: json["firstName"] == null ? null : json["firstName"],
+    id: json["id"] ?? "",
+    firstName: json["firstName"] ?? "",
     customer: json["customer"] == null ? null : List<CustomerElement>.from(json["customer"].map((x) => CustomerElement.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "firstName": firstName == null ? null : firstName,
+    "id": id,
+    "firstName": firstName,
     "customer": customer == null ? null : List<dynamic>.from(customer!.map((x) => x.toJson())),
   };
 }
@@ -237,11 +237,11 @@ class CustomerElement {
   String profilePic;
 
   factory CustomerElement.fromJson(Map<String, dynamic> json) => CustomerElement(
-    profilePic: json["profilePic"] == null ? null : json["profilePic"],
+    profilePic: json["profilePic"] ?? "",
   );
 
   Map<String, dynamic> toJson() => {
-    "profilePic": profilePic == null ? null : profilePic,
+    "profilePic": profilePic,
   };
 }
 
@@ -255,12 +255,12 @@ class Mechanic {
   List<CustomerElement>? mechanic;
 
   factory Mechanic.fromJson(Map<String, dynamic> json) => Mechanic(
-    id: json["id"] == null ? null : json["id"],
+    id: json["id"] ?? null,
     mechanic: json["mechanic"] == null ? null : List<CustomerElement>.from(json["mechanic"].map((x) => CustomerElement.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
+    "id": id ?? null,
     "mechanic": mechanic == null ? null : List<dynamic>.from(mechanic!.map((x) => x.toJson())),
   };
 }
@@ -291,28 +291,28 @@ class PayArr {
   dynamic orderId;
 
   factory PayArr.fromJson(Map<String, dynamic> json) => PayArr(
-    id: json["id"] == null ? null : json["id"],
-    transType: json["transType"] == null ? null : json["transType"],
-    amount: json["amount"] == null ? null : json["amount"],
-    paymentType: json["paymentType"] == null ? null : json["paymentType"],
-    transId: json["transId"] == null ? null : json["transId"],
-    status: json["status"] == null ? null : json["status"],
+    id: json["id"] ?? null,
+    transType: json["transType"] ?? null,
+    amount: json["amount"] ?? null,
+    paymentType: json["paymentType"] ?? null,
+    transId: json["transId"] ?? null,
+    status: json["status"] ?? null,
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
-    bookingId: json["bookingId"] == null ? null : json["bookingId"],
+    bookingId: json["bookingId"] ?? null,
     orderId: json["orderId"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "transType": transType == null ? null : transType,
-    "amount": amount == null ? null : amount,
-    "paymentType": paymentType == null ? null : paymentType,
-    "transId": transId == null ? null : transId,
-    "status": status == null ? null : status,
+    "id": id ?? null,
+    "transType": transType ?? null,
+    "amount": amount ?? null,
+    "paymentType": paymentType ?? null,
+    "transId": transId ?? null,
+    "status": status ?? null,
     "createdAt": createdAt == null ? null : createdAt!.toIso8601String(),
     "updatedAt": updatedAt == null ? null : updatedAt!.toIso8601String(),
-    "bookingId": bookingId == null ? null : bookingId,
+    "bookingId": bookingId ?? null,
     "orderId": orderId,
   };
 }

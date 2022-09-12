@@ -1,11 +1,15 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/payment_main_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/address_bloc/address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/address_bloc/address_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/address_bloc/address_state.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_address_bloc/delete_address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_address_bloc/delete_address_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_address_bloc/delete_address_state.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_oder_bloc.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_oder_state.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_order_event.dart';
 import 'package:auto_fix/UI/SpareParts/add_delivery_address_screen.dart';
 import 'package:auto_fix/UI/SpareParts/edit_delivery_address.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +19,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ChangeDeliveryAddressScreen extends StatefulWidget {
-  ChangeDeliveryAddressScreen();
+  final String quantity,productprice,productid;
+  ChangeDeliveryAddressScreen({Key? key, required this.quantity, required this.productprice, required this.productid}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -39,6 +44,8 @@ class _ChangeDeliveryAddressScreenState
     super.initState();
     isAddressSelected = false;
   }
+  int selectedindex=-1;
+ String addressid="";
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +67,25 @@ class _ChangeDeliveryAddressScreenState
                       "Success") {
                     final addcartsBloc = BlocProvider.of<AddressBloc>(context);
                     addcartsBloc.add(FetchAddressEvent());
+                  }
+                }
+              },
+            ),
+
+            BlocListener<PlaceOrderBloc, PlaceOrderState>(
+              listener: (context, state) {
+                if (state is PlaceOrderLoadedState) {
+                  if (state.placeorderModel.data!.placeOrder.message ==
+                      "Success") {
+                    Fluttertoast.showToast(msg: "Placed order successfully");
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                             Payment_Main_Screen(amount:widget.productprice,orderid:"1")
+
+                        ));
+
                   }
                 }
               },
@@ -128,7 +154,7 @@ class _ChangeDeliveryAddressScreenState
                                     .addressModel.data!.selectAddress.length,
                                 itemBuilder: (context, index) {
                                   return InkWell(
-                                    onTap: () {
+                                    onLongPress: (){
                                       Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
@@ -180,6 +206,16 @@ class _ChangeDeliveryAddressScreenState
                                                         .selectAddress[index].id,
                                                   )));
                                     },
+                                    onTap: () {
+                                      setState(() {
+                                        selectedindex = index++;
+                                        print("addressindex");
+                                        print(selectedindex);
+                                        print(state.addressModel.data!.selectAddress[index].id);
+                                        addressid=state.addressModel.data!.selectAddress[index].id;
+
+                                      });
+                                    },
                                     child: Container(
                                       margin: EdgeInsets.only(
                                           top: size.height * 2.8 / 100),
@@ -194,11 +230,11 @@ class _ChangeDeliveryAddressScreenState
                                             Radius.circular(8),
                                           ),
                                           border: Border.all(
-                                              color: isAddressSelected
+                                              color: selectedindex == index
                                                   ? CustColors.light_navy
                                                   : CustColors.greyish,
                                               width: 0.3),
-                                          color: isAddressSelected
+                                          color: selectedindex == index
                                               ? CustColors.pale_blue
                                               : Colors.transparent),
                                       child: Column(
@@ -500,19 +536,13 @@ class _ChangeDeliveryAddressScreenState
                               return Container();
                             }
                           }),
-                          // InkWell(
-                          //     onTap: (){
-                          //       setState(() {
-                          //         isAddressSelected = true;
-                          //       });
-                          //     },
-                          //     child: addressWidget(size,false,"assets/image/ic_home_blue.svg","Home")),
+
                           differentAddressWarning(size),
                         ],
                       ),
                     ),
                   )),
-                  saveChangeButton(size)
+                  saveChangeButton(size,)
                 ],
               ),
             ),
@@ -549,27 +579,36 @@ class _ChangeDeliveryAddressScreenState
   Widget saveChangeButton(Size size) {
     return Align(
       alignment: Alignment.topRight,
-      child: Container(
-        margin: EdgeInsets.only(
-            right: size.width * 5 / 100, bottom: size.height * 3 / 100),
-        decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(6),
+      child: InkWell(
+        onTap: (){
+          final placeorderBloc =
+          BlocProvider.of<PlaceOrderBloc>(context);
+          placeorderBloc.add(FetchPlaceOrderEvent(widget.quantity
+              .toString(),widget.productprice.toString(),widget.productid.toString(),
+              addressid));
+        },
+        child: Container(
+          margin: EdgeInsets.only(
+              right: size.width * 5 / 100, bottom: size.height * 3 / 100),
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(6),
+              ),
+              color: CustColors.light_navy),
+          padding: EdgeInsets.only(
+            left: size.width * 3 / 100,
+            right: size.width * 3 / 100,
+            top: size.height * 1 / 100,
+            bottom: size.height * 1 / 100,
+          ),
+          child: const Text(
+            "Save ",
+            style: TextStyle(
+              fontSize: 14.3,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Samsung_SharpSans_Medium",
+              color: Colors.white,
             ),
-            color: CustColors.light_navy),
-        padding: EdgeInsets.only(
-          left: size.width * 3 / 100,
-          right: size.width * 3 / 100,
-          top: size.height * 1 / 100,
-          bottom: size.height * 1 / 100,
-        ),
-        child: const Text(
-          "Save changes",
-          style: TextStyle(
-            fontSize: 14.3,
-            fontWeight: FontWeight.w600,
-            fontFamily: "Samsung_SharpSans_Medium",
-            color: Colors.white,
           ),
         ),
       ),
