@@ -140,16 +140,16 @@ class _ChangeDeliveryAddressScreenState
                                   width: _setValue(28),
                                   child: const CircularProgressIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(
-                                        CustColors.peaGreen),
+                                        CustColors.light_navy),
                                   ),
                                 ),
                               );
                             } else if (state is AddressLoadedState) {
                               return ListView.builder(
-                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                                 scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemCount: state
                                     .addressModel.data!.selectAddress.length,
                                 itemBuilder: (context, index) {
@@ -207,12 +207,13 @@ class _ChangeDeliveryAddressScreenState
                                                   )));
                                     },
                                     onTap: () {
+                                       addressid=state.addressModel.data!.selectAddress[index].id;
                                       setState(() {
                                         selectedindex = index++;
-                                        print("addressindex");
-                                        print(selectedindex);
-                                        print(state.addressModel.data!.selectAddress[index].id);
-                                        addressid=state.addressModel.data!.selectAddress[index].id;
+                                        // print("addressindex");
+                                        // print(selectedindex);
+                                        // print(state.addressModel.data!.selectAddress[index].id);
+
 
                                       });
                                     },

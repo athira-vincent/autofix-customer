@@ -39,7 +39,7 @@ class MyCartScreen extends StatefulWidget {
 
 class _MyCartScreenState extends State<MyCartScreen> {
   final FocusNode _emailFocusNode = FocusNode();
-  final TextStyle _labelStyleEmail =  const TextStyle();
+  final TextStyle _labelStyleEmail = const TextStyle();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final ForgotPasswordBloc _forgotPasswordBloc = ForgotPasswordBloc();
@@ -88,7 +88,6 @@ class _MyCartScreenState extends State<MyCartScreen> {
               }
             },
           ),
-
         ],
         child: Scaffold(
             body: ScrollConfiguration(
@@ -144,268 +143,252 @@ class _MyCartScreenState extends State<MyCartScreen> {
             height: _setValue(28),
             width: _setValue(28),
             child: const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(CustColors.peaGreen),
+              valueColor: AlwaysStoppedAnimation<Color>(CustColors.light_navy),
             ),
           ),
         );
       } else if (state is ShowCartPopLoadedState) {
-        return Column(
-          children: [
-            ListView.builder(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: state.cartlistmodel.data?.cartList.data.length??0,
-              itemBuilder: (context, index) {
-                // image = state.cartlistmodel.data!.cartList.data[index].product.productImage
-                //     .replaceAll("[", "")
-                //     .replaceAll("]", "")
-                //     .split(",");
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  print("WidgetsBinding");
-                  states = state.cartlistmodel.data!.cartList.data[index]
-                      .customer.address.first.state;
-                  city = state.cartlistmodel.data!.cartList.data[index].customer
-                      .address.first.city;
-                  pincode = state.cartlistmodel.data!.cartList.data[index]
-                      .customer.address.first.pincode;
-                });
+        return state.cartlistmodel.data!.cartList.data.isNotEmpty
+            ? Column(
+                children: [
+                  ListView.builder(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount:
+                        state.cartlistmodel.data?.cartList.data.length ?? 0,
+                    itemBuilder: (context, index) {
+                      // image = state.cartlistmodel.data!.cartList.data[index].product.productImage
+                      //     .replaceAll("[", "")
+                      //     .replaceAll("]", "")
+                      //     .split(",");
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        print("WidgetsBinding");
+                        states = state.cartlistmodel.data!.cartList.data[index]
+                            .customer.address.first.state;
+                        city = state.cartlistmodel.data!.cartList.data[index]
+                            .customer.address.first.city;
+                        pincode = state.cartlistmodel.data!.cartList.data[index]
+                            .customer.address.first.pincode;
+                      });
 
-                print("nocunter");
-                print(states);
-                print(city);
-                print(pincode);
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: SizedBox(
-                          width: double.infinity,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                                child: SizedBox(
-                                  height: 60,
-                                  width: 90,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(5),
-                                    child: state
+                      print("nocunter");
+                      print(states);
+                      print(city);
+                      print(pincode);
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: SizedBox(
+                                width: double.infinity,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                                      child: SizedBox(
+                                        height: 60,
+                                        width: 90,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          child: state
+                                                          .cartlistmodel
+                                                          .data!
+                                                          .cartList
+                                                          .data[index]
+                                                          .product
+                                                          .productImage ==
+                                                      "null" ||
+                                                  state
+                                                      .cartlistmodel
+                                                      .data!
+                                                      .cartList
+                                                      .data[index]
+                                                      .product
+                                                      .productImage
+                                                      .isEmpty
+                                              ? Container(
+                                                  color: Colors.white,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            25),
+                                                    child: SvgPicture.asset(
+                                                      'assets/image/CustomerType/dummyCar00.svg',
+                                                      fit: BoxFit.contain,
+                                                    ),
+                                                  ),
+                                                )
+                                              : Image.network(
+                                                  state
+                                                      .cartlistmodel
+                                                      .data!
+                                                      .cartList
+                                                      .data[index]
+                                                      .product
+                                                      .productImage,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 8, 0, 0),
+                                              child: Text(
+                                                state
                                                     .cartlistmodel
                                                     .data!
                                                     .cartList
                                                     .data[index]
                                                     .product
-                                                    .productImage ==
-                                                "null" ||
-                                            state
-                                                .cartlistmodel
-                                                .data!
-                                                .cartList
-                                                .data[index]
-                                                .product
-                                                .productImage
-                                                .isEmpty
-                                        ? Container(
-                                            color: Colors.white,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(25),
-                                              child: SvgPicture.asset(
-                                                'assets/image/CustomerType/dummyCar00.svg',
-                                                fit: BoxFit.contain,
+                                                    .vehicleModel
+                                                    .brandName,
+                                                style: Styles
+                                                    .sparePartNameSubTextBlack,
                                               ),
                                             ),
-                                          )
-                                        : Image.network(
-                                            state
-                                                .cartlistmodel
-                                                .data!
-                                                .cartList
-                                                .data[index]
-                                                .product
-                                                .productImage,
-                                            fit: BoxFit.cover,
-                                          ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 8, 0, 0),
-                                        child: Text(
-                                          state
-                                              .cartlistmodel
-                                              .data!
-                                              .cartList
-                                              .data[index]
-                                              .product
-                                              .vehicleModel
-                                              .brandName,
-                                          style:
-                                              Styles.sparePartNameSubTextBlack,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 8, 0, 0),
-                                        child: Text(
-                                          state.cartlistmodel.data!.cartList
-                                              .data[index].product.productName,
-                                          style:
-                                              Styles.sparePartNameTextBlack17,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 8, 0, 10),
-                                        child: Text(
-                                          state
-                                              .cartlistmodel
-                                              .data!
-                                              .cartList
-                                              .data[index]
-                                              .product
-                                              .vehicleModel
-                                              .modelName,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style:
-                                              Styles.sparePartNameSubTextBlack,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 0, 5, 0),
-                                        child: InkWell(
-                                          onTap: () {},
-                                          child: Container(
-                                            height: 20,
-                                            width: 70,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                border: Border.all(
-                                                    color:
-                                                        CustColors.greyText3),
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                InkWell(
-                                                  onTap: () {
-                                                    if (state
-                                                            .cartlistmodel
-                                                            .data!
-                                                            .cartList
-                                                            .data[index]
-                                                            .quantity >
-                                                        1) {
-                                                      setState(() {
-                                                        state
-                                                            .cartlistmodel
-                                                            .data!
-                                                            .cartList
-                                                            .data[index]
-                                                            .quantity--;
-                                                      });
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 8, 0, 0),
+                                              child: Text(
+                                                state
+                                                    .cartlistmodel
+                                                    .data!
+                                                    .cartList
+                                                    .data[index]
+                                                    .product
+                                                    .productName,
+                                                style: Styles
+                                                    .sparePartNameTextBlack17,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 8, 0, 10),
+                                              child: Text(
+                                                state
+                                                    .cartlistmodel
+                                                    .data!
+                                                    .cartList
+                                                    .data[index]
+                                                    .product
+                                                    .vehicleModel
+                                                    .modelName,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: Styles
+                                                    .sparePartNameSubTextBlack,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 0, 5, 0),
+                                              child: InkWell(
+                                                onTap: () {},
+                                                child: Container(
+                                                  height: 20,
+                                                  width: 70,
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      border: Border.all(
+                                                          color: CustColors
+                                                              .greyText3),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4)),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () {
+                                                          if (state
+                                                                  .cartlistmodel
+                                                                  .data!
+                                                                  .cartList
+                                                                  .data[index]
+                                                                  .quantity >
+                                                              1) {
+                                                            setState(() {
+                                                              state
+                                                                  .cartlistmodel
+                                                                  .data!
+                                                                  .cartList
+                                                                  .data[index]
+                                                                  .quantity--;
+                                                            });
 
-                                                      final deletcartBloc =
-                                                          BlocProvider.of<
-                                                                  DeleteCartBloc>(
-                                                              context);
-                                                      deletcartBloc.add(
-                                                          FetchDeleteCartEvent(
-                                                              state
-                                                                  .cartlistmodel
-                                                                  .data!
-                                                                  .cartList
-                                                                  .data[index]
-                                                                  .product
-                                                                  .id
-                                                                  .toString(),
-                                                              state
-                                                                  .cartlistmodel
-                                                                  .data!
-                                                                  .cartList
-                                                                  .data[index]
-                                                                  .quantity
-                                                                  .toString(),
-                                                              "1"));
-                                                    }
-                                                  },
-                                                  child: Container(
-                                                    height: 20,
-                                                    width: 25,
-                                                    color: Colors.transparent,
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(0, 0, 0, 0),
-                                                    alignment:
-                                                        Alignment.topCenter,
-                                                    child: const Text(
-                                                      "-",
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: Styles
-                                                          .homeNameTextStyle,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    child: Text(
-                                                      state
-                                                          .cartlistmodel
-                                                          .data!
-                                                          .cartList
-                                                          .data[index]
-                                                          .quantity
-                                                          .toString(),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: Styles
-                                                          .homeActiveTextStyle,
-                                                    ),
-                                                  ),
-                                                ),
-                                                InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      state
-                                                          .cartlistmodel
-                                                          .data!
-                                                          .cartList
-                                                          .data[index]
-                                                          .quantity++;
-                                                    });
-                                                    final deletcartBloc =
-                                                        BlocProvider.of<
-                                                                DeleteCartBloc>(
-                                                            context);
-                                                    deletcartBloc.add(
-                                                        FetchDeleteCartEvent(
-                                                            state
-                                                                .cartlistmodel
-                                                                .data!
-                                                                .cartList
-                                                                .data[index]
-                                                                .product
-                                                                .id
-                                                                .toString(),
+                                                            final deletcartBloc =
+                                                                BlocProvider.of<
+                                                                        DeleteCartBloc>(
+                                                                    context);
+                                                            deletcartBloc.add(FetchDeleteCartEvent(
+                                                                state
+                                                                    .cartlistmodel
+                                                                    .data!
+                                                                    .cartList
+                                                                    .data[index]
+                                                                    .product
+                                                                    .id
+                                                                    .toString(),
+                                                                state
+                                                                    .cartlistmodel
+                                                                    .data!
+                                                                    .cartList
+                                                                    .data[index]
+                                                                    .quantity
+                                                                    .toString(),
+                                                                "1"));
+                                                          }
+                                                        },
+                                                        child: Container(
+                                                          height: 20,
+                                                          width: 25,
+                                                          color: Colors
+                                                              .transparent,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .fromLTRB(
+                                                                  0, 0, 0, 0),
+                                                          alignment: Alignment
+                                                              .topCenter,
+                                                          child: const Text(
+                                                            "-",
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: Styles
+                                                                .homeNameTextStyle,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
                                                             state
                                                                 .cartlistmodel
                                                                 .data!
@@ -413,81 +396,23 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                                 .data[index]
                                                                 .quantity
                                                                 .toString(),
-                                                            "1"));
-                                                  },
-                                                  child: Container(
-                                                    height: 20,
-                                                    width: 25,
-                                                    color: Colors.transparent,
-                                                    alignment: Alignment.center,
-                                                    child: const Text(
-                                                      "+",
-                                                      style: Styles
-                                                          .homeNameTextStyle,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                                      child: InkWell(
-                                        onTap: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return CupertinoAlertDialog(
-                                                  title: const Text("Confirm",
-                                                      style: TextStyle(
-                                                        fontFamily: 'Formular',
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18,
-                                                        color: CustColors
-                                                            .materialBlue,
-                                                      )),
-                                                  content: const Text(
-                                                      "Are you sure you want to delete?"),
-                                                  actions: <Widget>[
-                                                    CupertinoDialogAction(
-                                                        textStyle:
-                                                            const TextStyle(
-                                                          color: CustColors
-                                                              .rusty_red,
-                                                          fontWeight:
-                                                              FontWeight.normal,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: Styles
+                                                                .homeActiveTextStyle,
+                                                          ),
                                                         ),
-                                                        isDefaultAction: true,
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child:
-                                                            const Text("No")),
-                                                    CupertinoDialogAction(
-                                                        textStyle:
-                                                            const TextStyle(
-                                                          color: CustColors
-                                                              .rusty_red,
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                        ),
-                                                        isDefaultAction: true,
-                                                        onPressed: () async {
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            state
+                                                                .cartlistmodel
+                                                                .data!
+                                                                .cartList
+                                                                .data[index]
+                                                                .quantity++;
+                                                          });
                                                           final deletcartBloc =
                                                               BlocProvider.of<
                                                                       DeleteCartBloc>(
@@ -503,96 +428,264 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                                       .product
                                                                       .id
                                                                       .toString(),
-                                                                  "1",
-                                                                  "0"));
-                                                          Navigator.pop(
-                                                              context);
-                                                          Fluttertoast
-                                                              .showToast(
-                                                            msg:
-                                                                "Removed from cart successfully!!",
-                                                            timeInSecForIosWeb:
-                                                                1,
-                                                          );
+                                                                  state
+                                                                      .cartlistmodel
+                                                                      .data!
+                                                                      .cartList
+                                                                      .data[
+                                                                          index]
+                                                                      .quantity
+                                                                      .toString(),
+                                                                  "1"));
                                                         },
-                                                        child:
-                                                            const Text("Yes")),
-                                                  ],
-                                                );
-                                              });
-                                        },
-                                        child: SvgPicture.asset(
-                                          'assets/image/home_customer/deleteMyCart.svg',
-                                          height: 20,
-                                          width: 20,
+                                                        child: Container(
+                                                          height: 20,
+                                                          width: 25,
+                                                          color: Colors
+                                                              .transparent,
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: const Text(
+                                                            "+",
+                                                            style: Styles
+                                                                .homeNameTextStyle,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                                      child: Text(
-                                        "\$ " +
-                                            state.cartlistmodel.data!.cartList
-                                                .data[index].product.price
-                                                .toString(),
-                                        style: Styles.sparePartNameTextBlack17,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                                      child: InkWell(
-                                        onTap: (){
-
-
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ChangeDeliveryAddressScreen(quantity:state.cartlistmodel.data!.cartList.data[index].quantity.toString(),
-                                                      productprice:state.cartlistmodel.data!.cartList.data[index].product.price.toString(),
-                                                        productid:state.cartlistmodel.data!.cartList.data[index].product.id.toString(),
-
-                                                      )
-
-                                              ));
-                                        },
-                                        child: Container(
-                                          height: 20,
-                                          width: 70,
-                                          alignment: Alignment.center,
-                                          color: CustColors.light_navy,
-                                          child: const Text(
-                                            "Place order",
-                                            style: Styles.badgeTextStyle1,
+                                      padding: const EdgeInsets.all(8),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 8, 0, 0),
+                                            child: InkWell(
+                                              onTap: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return CupertinoAlertDialog(
+                                                        title: const Text(
+                                                            "Confirm",
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'Formular',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 18,
+                                                              color: CustColors
+                                                                  .materialBlue,
+                                                            )),
+                                                        content: const Text(
+                                                            "Are you sure you want to delete?"),
+                                                        actions: <Widget>[
+                                                          CupertinoDialogAction(
+                                                              textStyle:
+                                                                  const TextStyle(
+                                                                color: CustColors
+                                                                    .rusty_red,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                              ),
+                                                              isDefaultAction:
+                                                                  true,
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child: const Text(
+                                                                  "No")),
+                                                          CupertinoDialogAction(
+                                                              textStyle:
+                                                                  const TextStyle(
+                                                                color: CustColors
+                                                                    .rusty_red,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                              ),
+                                                              isDefaultAction:
+                                                                  true,
+                                                              onPressed:
+                                                                  () async {
+                                                                final deletcartBloc =
+                                                                    BlocProvider.of<
+                                                                            DeleteCartBloc>(
+                                                                        context);
+                                                                deletcartBloc.add(FetchDeleteCartEvent(
+                                                                    state
+                                                                        .cartlistmodel
+                                                                        .data!
+                                                                        .cartList
+                                                                        .data[
+                                                                            index]
+                                                                        .product
+                                                                        .id
+                                                                        .toString(),
+                                                                    "1",
+                                                                    "0"));
+                                                                Navigator.pop(
+                                                                    context);
+                                                                Fluttertoast
+                                                                    .showToast(
+                                                                  msg:
+                                                                      "Removed from cart successfully!!",
+                                                                  timeInSecForIosWeb:
+                                                                      1,
+                                                                );
+                                                              },
+                                                              child: const Text(
+                                                                  "Yes")),
+                                                        ],
+                                                      );
+                                                    });
+                                              },
+                                              child: SvgPicture.asset(
+                                                'assets/image/home_customer/deleteMyCart.svg',
+                                                height: 20,
+                                                width: 20,
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 8, 0, 0),
+                                            child: Text(
+                                              "\$ " +
+                                                  state
+                                                      .cartlistmodel
+                                                      .data!
+                                                      .cartList
+                                                      .data[index]
+                                                      .product
+                                                      .price
+                                                      .toString(),
+                                              style: Styles
+                                                  .sparePartNameTextBlack17,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 8, 0, 0),
+                                            child: InkWell(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ChangeDeliveryAddressScreen(
+                                                              quantity: state
+                                                                  .cartlistmodel
+                                                                  .data!
+                                                                  .cartList
+                                                                  .data[index]
+                                                                  .quantity
+                                                                  .toString(),
+                                                              productprice: state
+                                                                  .cartlistmodel
+                                                                  .data!
+                                                                  .cartList
+                                                                  .data[index]
+                                                                  .product
+                                                                  .price
+                                                                  .toString(),
+                                                              productid: state
+                                                                  .cartlistmodel
+                                                                  .data!
+                                                                  .cartList
+                                                                  .data[index]
+                                                                  .product
+                                                                  .id
+                                                                  .toString(),
+                                                            )));
+                                              },
+                                              child: Container(
+                                                height: 20,
+                                                width: 70,
+                                                alignment: Alignment.center,
+                                                color: CustColors.light_navy,
+                                                child: const Text(
+                                                  "Place order",
+                                                  style: Styles.badgeTextStyle1,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
-                                ),
-                              ),
-                            ],
-                          )),
-                    ),
-                   const Divider(),
-                  ],
-                );
-              },
-            ),
-            //placeOrderUi(state.cartlistmodel.data!.cartList.totalPrice),
-            const Divider(),
-            changeAddressUi(),
-            const Divider(),
-            // selectedBillDetailsUi(
-            //     state.cartlistmodel.data!.cartList.totalPrice,
-            //     state.cartlistmodel.data!.cartList.totalItems,
-            //     state.cartlistmodel.data!.cartList.deliveryCharge),
-            const Divider(),
-            continueButtonUi(),
-          ],
-        );
+                                )),
+                          ),
+                          const Divider(),
+                        ],
+                      );
+                    },
+                  ),
+                  //placeOrderUi(state.cartlistmodel.data!.cartList.totalPrice),
+                  const Divider(),
+                  changeAddressUi(),
+                  const Divider(),
+                  // selectedBillDetailsUi(
+                  //     state.cartlistmodel.data!.cartList.totalPrice,
+                  //     state.cartlistmodel.data!.cartList.totalItems,
+                  //     state.cartlistmodel.data!.cartList.deliveryCharge),
+                  const Divider(),
+                  continueButtonUi(),
+                ],
+              )
+            : Center(
+                child: Column(
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.2,
+                  ),
+                  Image.asset(
+                    "assets/image/ic_cart_empty.png",
+                    width: MediaQuery.of(context).size.width * 0.6,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
+                  const Text(
+                    "Cart Empty",
+                    style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Samsung_SharpSans_Medium'),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  const Text(
+                    "Your cart is empty",
+                    style: Styles.sparePartNameTextBlack17,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.014,
+                  ),
+                  const Text(
+                    "Go to product section and add product to cart",
+                    style: Styles.sparePartNameTextBlack17,
+                  ),
+                ],
+              ));
       } else {
         return Container();
       }
@@ -602,67 +695,65 @@ class _MyCartScreenState extends State<MyCartScreen> {
   Widget placeOrderUi(int totalPrices) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: Container(
+      child: SizedBox(
           width: double.infinity,
-          child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/image/home_customer/mycartSucessflag.svg',
-                  height: 35,
-                  width: 35,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: Text(
-                            "Buy all the  products in the cart",
-                            style: Styles.sparePartNameTextBlack17,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                'assets/image/home_customer/mycartSucessflag.svg',
+                height: 35,
+                width: 35,
+              ),
+              Expanded(
+                child: Padding(
                   padding: const EdgeInsets.all(8),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                         child: Text(
-                          "\$ " + totalPrices.toString(),
+                          "Buy all the  products in the cart",
                           style: Styles.sparePartNameTextBlack17,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                        child: Container(
-                          height: 20,
-                          width: 70,
-                          alignment: Alignment.center,
-                          color: CustColors.light_navy,
-                          child: Text(
-                            "Place order",
-                            style: Styles.badgeTextStyle1,
-                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                      child: Text(
+                        "\$ " + totalPrices.toString(),
+                        style: Styles.sparePartNameTextBlack17,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                      child: Container(
+                        height: 20,
+                        width: 70,
+                        alignment: Alignment.center,
+                        color: CustColors.light_navy,
+                        child: Text(
+                          "Place order",
+                          style: Styles.badgeTextStyle1,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           )),
     );
   }
@@ -700,7 +791,6 @@ class _MyCartScreenState extends State<MyCartScreen> {
                           style: Styles.sparePartNameTextBlack17,
                         ),
                       ),
-
                     ],
                   ),
                 ),
@@ -719,9 +809,11 @@ class _MyCartScreenState extends State<MyCartScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      ChangeDeliveryAddressScreen(quantity: "",productprice: "",productid: "",)
-
-                              ));
+                                      ChangeDeliveryAddressScreen(
+                                        quantity: "",
+                                        productprice: "",
+                                        productid: "",
+                                      )));
                         },
                         child: Container(
                           height: 25,
@@ -885,41 +977,37 @@ class _MyCartScreenState extends State<MyCartScreen> {
                       height: _setValue(28),
                       width: _setValue(28),
                       child: const CircularProgressIndicator(
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(CustColors.light_navy),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            CustColors.light_navy),
                       ),
                     ),
                   )
                 : MaterialButton(
-                  onPressed: () {
-
-
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                               const Payment_Main_Screen(amount:"",orderid:"")
-
-                        ));
-                  },
-                  child: SizedBox(
-                    height: 50,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
-                        Text(
-                          'Continue',
-                          textAlign: TextAlign.center,
-                          style: Styles.textButtonLabelSubTitle,
-                        ),
-                      ],
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Payment_Main_Screen(
+                                  amount: "", orderid: "")));
+                    },
+                    child: SizedBox(
+                      height: 50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const [
+                          Text(
+                            'Continue',
+                            textAlign: TextAlign.center,
+                            style: Styles.textButtonLabelSubTitle,
+                          ),
+                        ],
+                      ),
                     ),
+                    color: CustColors.materialBlue,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(_setValue(10))),
                   ),
-                  color: CustColors.materialBlue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(_setValue(10))),
-                ),
           ),
         ),
       ],

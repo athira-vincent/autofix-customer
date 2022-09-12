@@ -8,6 +8,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dar
 import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyOrders/my_orders_list.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyWallet/my_wallet.dart';
 import 'package:auto_fix/UI/Customer/SideBar/OrderDetails/cust_order_details.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -150,6 +151,9 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
         )*/
         navigationBarHeader(size),
 
+
+
+
         ListTile(
           contentPadding: const EdgeInsets.only(left: 20.4, top: 13),
           visualDensity: const VisualDensity(horizontal: 0, vertical: -3),
@@ -195,6 +199,27 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
                 MaterialPageRoute(builder: (context) => CustomerBookNowScreen()));
           },
         ),*/
+        ListTile(
+          contentPadding: const EdgeInsets.only(left: 20.4),
+          visualDensity: const VisualDensity(horizontal: 0, vertical: -3),
+          title: const Align(
+            alignment: Alignment(-1.21, 0),
+            child: Text(
+              "My wallet",
+              style: Styles.navDrawerTextStyle02,
+            ),
+          ),
+          leading: Image.asset(
+            'assets/image/ic_my_wallet.png',
+            width: 14.28,
+            height: 18.76,
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const CustomerWalletScreen()));
+          },
+        ),
 
         ListTile(
           contentPadding: const EdgeInsets.only(left: 20.4),
