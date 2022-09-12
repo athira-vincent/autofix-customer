@@ -3988,6 +3988,38 @@ class QueryProvider {
       isTokenThere: true,
     );
   }
+
+  ///  wallethistory queryprovider
+  fetchwallethistory(date) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+
+    String _query = """
+   query      
+ {
+  walletHistory(date: "$date") {
+    id
+    type
+    amount
+    balance
+    recordDate
+    reference
+    paymentMode
+    status
+    customerId
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
 }
 
 

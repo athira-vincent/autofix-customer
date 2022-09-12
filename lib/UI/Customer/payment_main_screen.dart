@@ -1,4 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Paymentsuccessscreen.dart';
+import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/cod_bloc/cod_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/cod_bloc/cod_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/cod_bloc/cod_state.dart';
@@ -33,6 +35,12 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
                 if (state.codmodel.data!.cashOnDelivery.message ==
                     "Cash on Delivery is successfully completed!!!") {
                   Fluttertoast.showToast(msg: "Payment recieved");
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Payment_Success_Screen()));
+
                 }
               }
             },
