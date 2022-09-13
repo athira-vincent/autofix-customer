@@ -3805,17 +3805,107 @@ class QueryProvider {
     String _query = """
                 
   mutation {
-    placeOrder(
-      qty: $qty
-      totalPrice: $totalprice
-      paymentType: null
-      customerId: $custid
-      productId: $productid
-      addressId: $addressid
-    ) {
-      message
+  placeOrder(
+    qty: $qty
+    totalPrice: $totalprice
+    paymentType: null
+    customerId: $custid
+    productId: $productid
+    addressId: $addressid
+  ) {
+    id
+    oderCode
+    qty
+    totalPrice
+    commision
+    tax
+    paymentType
+    deliverDate
+    status
+    vendorId
+    customerId
+    vendor {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      status
+      userTypeId
+      jwtToken
+      fcmToken
+      otpCode
+      isProfile
+      otpVerified
+      customer{
+        id
+      }
+      mechanic{
+        id
+      }
+      vendor{
+         id
+      }
+    }
+    customer {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      status
+      userTypeId
+      jwtToken
+      fcmToken
+      otpCode
+      isProfile
+      otpVerified
+      customer{
+        id
+      }
+      mechanic{
+        id
+      }
+      vendor{
+        id
+      }
+    }
+    product {
+      id
+      productCode
+      productName
+      price
+      shippingCharge
+      productImage
+      description
+      quantity
+      status
+      vehicleModelId
+      vendorId
+      user{id}
+      vehicleModel{
+        id
+      }
+      reviewCount
+      avgRate
+      salesCount
+      reviewData{
+        id
+      }
+    }
+    review {
+      id
+      transType
+      rating
+      feedback
+      bookingId
+      orderId
+      status
     }
   }
+}
 
 
     """;
@@ -3845,6 +3935,7 @@ class QueryProvider {
     commision
     tax
     paymentType
+    paymentStatus
     deliverDate
     status
     vendorId
@@ -3946,9 +4037,7 @@ class QueryProvider {
   }
 
   /// cancel order
-  fetchcacncelorder(
-    orderid
-  ) async {
+  fetchcacncelorder(orderid) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
     String _query = """
@@ -3968,9 +4057,7 @@ class QueryProvider {
   }
 
   /// cod approve
-  fetchcodapprove(
-      amount,orderid
-      ) async {
+  fetchcodapprove(amount, orderid) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
     String _query = """
@@ -4020,8 +4107,32 @@ class QueryProvider {
       isTokenThere: false,
     );
   }
+
+  /// customer rating
+  fetchcustrating(rating, orderid, productid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String _query = """
+  mutation {
+  review_Create(
+    transType: 2
+    rating: $rating
+    feedback: "string"
+    bookingId: 1
+    orderId: $orderid
+    mechanicId: 1
+    productId: $productid
+  ) {
+    message
+  }
 }
-
-
-
-
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+}

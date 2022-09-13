@@ -9,8 +9,11 @@ class GqlClient {
   static GqlClient get instance => _instance;
   static GqlClient get I => _instance;
 
+  // final HttpLink httpLink = HttpLink(
+  //   "https://api-gateway.techlabz.in/autoconnect-be",
+  // );
   final HttpLink httpLink = HttpLink(
-    "https://api-gateway.techlabz.in/autoconnect-be",
+    "http://athiras-82.workspace.techwarelab.com/graphql",
   );
 
   GraphQLClient clientToQuery() {
@@ -24,7 +27,7 @@ class GqlClient {
   GraphQLClient _graphClient = GraphQLClient(
       cache: GraphQLCache(store: HiveStore()),
       link: HttpLink(
-        "https://api-gateway.techlabz.in/autoconnect-be",
+        "http://athiras-82.workspace.techwarelab.com/graphql",
         defaultHeaders: <String, String>{
           'x-token': "",
         },
@@ -35,12 +38,12 @@ class GqlClient {
   /// Methods
   Future<void> config({required String token}) async {
     if (token == "") {
-      HttpClient _httpClient = new HttpClient();
+      HttpClient _httpClient = HttpClient();
       _httpClient.badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
-      IOClient _ioClient = new IOClient(_httpClient);
+      IOClient _ioClient = IOClient(_httpClient);
       final HttpLink httpLink = HttpLink(
-        "https://api-gateway.techlabz.in/autoconnect-be",
+        "http://athiras-82.workspace.techwarelab.com/graphql",
         defaultHeaders: <String, String>{
           'x-token': token,
         },
@@ -53,12 +56,12 @@ class GqlClient {
       final AuthLink authLink = AuthLink(
         getToken: () async => '{x-token: $token"}',
       );
-      HttpClient _httpClient = new HttpClient();
+      HttpClient _httpClient = HttpClient();
       _httpClient.badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
-      IOClient _ioClient = new IOClient(_httpClient);
+      IOClient _ioClient = IOClient(_httpClient);
       final HttpLink httpLink = HttpLink(
-        "https://api-gateway.techlabz.in/autoconnect-be",
+        "http://athiras-82.workspace.techwarelab.com/graphql",
         defaultHeaders: <String, String>{
           'x-token': token,
         },
@@ -77,14 +80,14 @@ class GqlClient {
       if (enableDebug) {
         print('Query ===========> $query');
       }
-      HttpClient _httpClient = new HttpClient();
+      HttpClient _httpClient = HttpClient();
       _httpClient.badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
-      IOClient _ioClient = new IOClient(_httpClient);
+      IOClient _ioClient = IOClient(_httpClient);
 
       GraphQLClient _graphClient = GraphQLClient(
           cache: GraphQLCache(store: HiveStore()),
-          link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
+          link: HttpLink("http://athiras-82.workspace.techwarelab.com/graphql",
               defaultHeaders: <String, String>{
                 'x-token': "",
               },
@@ -141,14 +144,14 @@ class GqlClient {
       if (enableDebug) {
         print('Query ===========> $query');
       }
-      HttpClient _httpClient = new HttpClient();
+      HttpClient _httpClient = HttpClient();
       _httpClient.badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
-      IOClient _ioClient = new IOClient(_httpClient);
+      IOClient _ioClient = IOClient(_httpClient);
 
       GraphQLClient _graphClient = GraphQLClient(
           cache: GraphQLCache(store: HiveStore()),
-          link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
+          link: HttpLink("http://athiras-82.workspace.techwarelab.com/graphql",
               defaultHeaders: <String, String>{
                 'x-token': token,
               },
@@ -215,14 +218,14 @@ class GqlClient {
 
       // print("variables==========$variables");
 
-      HttpClient _httpClient = new HttpClient();
+      HttpClient _httpClient = HttpClient();
       _httpClient.badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
-      IOClient _ioClient = new IOClient(_httpClient);
+      IOClient _ioClient = IOClient(_httpClient);
 
       GraphQLClient _graphClient = GraphQLClient(
           cache: GraphQLCache(store: HiveStore()),
-          link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
+          link: HttpLink("http://athiras-82.workspace.techwarelab.com/graphql",
               defaultHeaders: <String, String>{
                 'x-token': "",
               },
@@ -297,14 +300,14 @@ class GqlClient {
 
       // print("variables==========$variables");
 
-      HttpClient _httpClient = new HttpClient();
+      HttpClient _httpClient = HttpClient();
       _httpClient.badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
-      IOClient _ioClient = new IOClient(_httpClient);
+      IOClient _ioClient = IOClient(_httpClient);
 
       GraphQLClient _graphClient = GraphQLClient(
           cache: GraphQLCache(store: HiveStore()),
-          link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
+          link: HttpLink("http://athiras-82.workspace.techwarelab.com/graphql",
               defaultHeaders: <String, String>{
                 'x-token': token,
               },

@@ -197,8 +197,8 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                           borderRadius: BorderRadius.circular(20.0),
                           child: Padding(
                             padding: const EdgeInsets.only(left: 100.0),
-                            child: Row(children: [
-                              const Text(
+                            child: Row(children: const [
+                              Text(
                                 "₦ ",
                                 style: Styles.myWalletCardText01,
                               ),

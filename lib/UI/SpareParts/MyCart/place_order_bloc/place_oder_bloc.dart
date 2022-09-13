@@ -9,7 +9,7 @@ class PlaceOrderBloc extends Bloc<PlaceOrderEvent, PlaceOrderState> {
       emit(PlaceOrderLoadingState());
       try {
         if (event is FetchPlaceOrderEvent) {
-          var placeorderscreen = await Repository().placeorder(event.qty,event.totalprice,event.productid,event.addressid);
+          var placeorderscreen = await Repository().placeorder(event.qty,event.totalprice,event.productid,event.addressid,);
           emit(PlaceOrderLoadedState(placeorderModel: placeorderscreen));
         }
       } catch (e) {

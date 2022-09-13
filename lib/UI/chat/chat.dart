@@ -1,38 +1,24 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
-import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:auto_fix/Constants/firestore_constants.dart';
-import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_field_constants.dart';
 import 'package:auto_fix/Models/chat_messages.dart';
 
 import 'package:auto_fix/Provider/chat_provider.dart';
 import 'package:chat_bubbles/bubbles/bubble_special_one.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fdottedline/fdottedline.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../Constants/cust_colors.dart';
-import '../../../../../../Constants/styles.dart';
-import 'dart:ui' as ui;
 
 class ChatScreen extends StatefulWidget {
   final String peerId;
@@ -66,7 +52,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   List<QueryDocumentSnapshot> listMessages = [];
 
-  int _limit = 20;
+ final  int _limit = 20;
   final int _limitIncrement = 20;
   String groupChatId = 'messages';
 
@@ -129,8 +115,8 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Icon(Icons.arrow_back)),
         backgroundColor: const Color(0xff173a8d),
         toolbarHeight: 60,
-        title: Text('${widget.peerName}',
-          style: TextStyle(
+        title: Text(widget.peerName,
+          style: const TextStyle(
             fontFamily: 'SamsungSharpSans-Medium',
             fontSize: 16.7,
           ),),
@@ -157,7 +143,7 @@ class _ChatScreenState extends State<ChatScreen> {
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.only(right: 5),
+            margin: const EdgeInsets.only(right: 5),
             decoration: BoxDecoration(
               color: CustColors.white_05,
               borderRadius: BorderRadius.circular(30),
@@ -185,7 +171,7 @@ class _ChatScreenState extends State<ChatScreen> {
             },
           )),
           Container(
-            margin: EdgeInsets.only(left: 4),
+            margin: const EdgeInsets.only(left: 4),
             decoration: BoxDecoration(
               color: CustColors.light_navy,
               borderRadius: BorderRadius.circular(30),
@@ -380,7 +366,7 @@ class _ChatScreenState extends State<ChatScreen> {
       child: groupChatId.isNotEmpty
           ? StreamBuilder<QuerySnapshot>(
               //stream: chatProvider.getChatMessage(groupChatId, _limit),
-              stream: chatProvider.getChatMessage('${widget.collectionName}',"${widget.bookingId}", _limit),
+              stream: chatProvider.getChatMessage(widget.collectionName,widget.bookingId, _limit),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasData) {
@@ -419,7 +405,7 @@ class _ChatScreenState extends State<ChatScreen> {
       textEditingController.clear();
       print(">>>>01");
       chatProvider.sendChatMessage(
-          content, type,'${widget.collectionName}', widget.bookingId, currentUserId, widget.peerId);
+          content, type,widget.collectionName, widget.bookingId, currentUserId, widget.peerId);
       scrollController.animateTo(0,
           duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
     } else {
@@ -553,8 +539,8 @@ class _ChatScreenState extends State<ChatScreen> {
         text: chatContent,
         isSender: false,
         tail: true,
-        color: CustColors.white_02,
-        textStyle: TextStyle(
+        color: CustColors.chatcolor,
+        textStyle: const TextStyle(
             fontSize: 10,
             color: CustColors.almost_black,
             fontStyle: FontStyle.normal,
@@ -574,7 +560,7 @@ class _ChatScreenState extends State<ChatScreen> {
           text: chatContent,
           isSender: true,
           color: CustColors.light_navy05,
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             fontSize: 10,
             color: CustColors.almost_black,
             fontStyle: FontStyle.normal,

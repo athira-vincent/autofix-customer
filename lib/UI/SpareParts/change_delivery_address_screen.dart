@@ -75,16 +75,17 @@ class _ChangeDeliveryAddressScreenState
             BlocListener<PlaceOrderBloc, PlaceOrderState>(
               listener: (context, state) {
                 if (state is PlaceOrderLoadedState) {
-                  if (state.placeorderModel.data!.placeOrder.message ==
-                      "Success") {
+                  if (state.placeorderModel.data!.placeOrder.isNotEmpty) {
                     Fluttertoast.showToast(msg: "Placed order successfully");
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                             Payment_Main_Screen(amount:widget.productprice,orderid:"1")
+                             Payment_Main_Screen(amount:widget.productprice,orderid:state.placeorderModel.data!.placeOrder.first.id.toString())
 
                         ));
+
+
 
                   }
                 }
@@ -587,6 +588,7 @@ class _ChangeDeliveryAddressScreenState
           placeorderBloc.add(FetchPlaceOrderEvent(widget.quantity
               .toString(),widget.productprice.toString(),widget.productid.toString(),
               addressid));
+
         },
         child: Container(
           margin: EdgeInsets.only(

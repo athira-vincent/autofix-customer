@@ -584,6 +584,20 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                 0, 8, 0, 0),
                                             child: InkWell(
                                               onTap: () {
+
+                                                int totalprice= state
+                                                    .cartlistmodel
+                                                    .data!
+                                                    .cartList
+                                                    .data[index]
+                                                    .quantity*state
+                                                    .cartlistmodel
+                                                    .data!
+                                                    .cartList
+                                                    .data[index]
+                                                    .product
+                                                    .price;
+
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -596,14 +610,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                                   .data[index]
                                                                   .quantity
                                                                   .toString(),
-                                                              productprice: state
-                                                                  .cartlistmodel
-                                                                  .data!
-                                                                  .cartList
-                                                                  .data[index]
-                                                                  .product
-                                                                  .price
-                                                                  .toString(),
+                                                              productprice: totalprice.toString(),
                                                               productid: state
                                                                   .cartlistmodel
                                                                   .data!
@@ -612,6 +619,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                                   .product
                                                                   .id
                                                                   .toString(),
+
                                                             )));
                                               },
                                               child: Container(

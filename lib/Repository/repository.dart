@@ -11,6 +11,7 @@ import 'package:auto_fix/Models/customer_models/order_list_model/order_list_mode
 import 'package:auto_fix/Models/customer_models/place_order_model/place_order_model.dart';
 import 'package:auto_fix/Models/customer_models/spare_parts_list_model/spare_parts_list_model.dart';
 import 'package:auto_fix/Models/customer_models/spare_parts_model/spare_parts_model.dart';
+import 'package:auto_fix/Models/customer_rating_model/customer_rating_model.dart';
 import 'package:auto_fix/Models/delete_cart_model/delete_cart_model.dart';
 import 'package:auto_fix/Models/wallet_history_model/wallet_history_model.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
@@ -79,6 +80,7 @@ class Repository {
   final _cancelorderprovider=CustomerApiProvider();
   final _codprovider=CustomerApiProvider();
   final _wallethistoryprovider=CustomerApiProvider();
+  final _customerratingprovider=CustomerApiProvider();
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>
       _serviceListApiProvider.getServiceListRequest(
@@ -667,4 +669,7 @@ class Repository {
 
   Future<WalletistoryModel> wallethistory(date) =>
       _wallethistoryprovider.fetchwallethistory(date);
+
+  Future<CustomerRatingModel> custrating(rating, orderid, productid) =>
+      _customerratingprovider.fetchcustrating(rating, orderid, productid);
 }
