@@ -138,27 +138,24 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
             itemBuilder: (context, index) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 orderlist = state.orderDetailsmodel.data!.orderList;
-
-
-
-
               });
-              if(state.orderDetailsmodel.data!.orderList[index].deliverDate!=null){
-                var dateTime = DateTime.parse(state.orderDetailsmodel.data!.orderList[index].deliverDate.toString());
+              if (state.orderDetailsmodel.data!.orderList[index].deliverDate !=
+                  null) {
+                var dateTime = DateTime.parse(state
+                    .orderDetailsmodel.data!.orderList[index].deliverDate
+                    .toString());
 
                 formate1 = "${dateTime.day}-${dateTime.month}-${dateTime.year}";
-
-
               }
 
               return InkWell(
                 onTap: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => My_Orders_Display(
                               modeldetails: state
-                                  .orderDetailsmodel.data!.orderList[index])));
+                                  .orderDetailsmodel.data!.orderList[index],deliverydate:formate1)));
                 },
                 child: SizedBox(
                     width: double.infinity,
@@ -191,40 +188,95 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            color: CustColors.whiteBlueish,
-                                            borderRadius:
-                                                BorderRadius.circular(5)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              8, 8, 8, 2),
-                                          child: state
-                                                      .orderDetailsmodel
-                                                      .data!
-                                                      .orderList[index]
-                                                      .status ==
-                                                  0
-                                              ? const Text(
-                                                  "Cancelled",
-                                                  style: Styles
-                                                      .sparePartNameSubTextBlack,
-                                                )
-                                              : const Text(
-                                                  "Delivered",
+                                      state
+                                                  .orderDetailsmodel
+                                                  .data!
+                                                  .orderList[index]
+                                                  .paymentStatus !=
+                                              0
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                  color:
+                                                      CustColors.whiteBlueish,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
+                                              child: const Padding(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    8, 8, 8, 2),
+                                                child: Text(
+                                                  "Payment Completed",
                                                   style: Styles
                                                       .sparePartNameSubTextBlack,
                                                 ),
-                                        ),
-                                      ),
-                                       Padding(
-                                        padding:
-                                            const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                                        child: state.orderDetailsmodel.data!.orderList[index].deliverDate==null?const Text(""):Text(
-                                          "Delivery on "+formate1,
-                                          style:
-                                              Styles.sparePartNameTextBlack17,
-                                        ),
+                                              ),
+                                            )
+                                          : Container(
+                                              decoration: BoxDecoration(
+                                                  color:
+                                                      CustColors.whiteBlueish,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        8, 8, 8, 2),
+                                                child: state
+                                                            .orderDetailsmodel
+                                                            .data!
+                                                            .orderList[index]
+                                                            .status ==
+                                                        1
+                                                    ? const Text(
+                                                        "Order created",
+                                                        style: Styles
+                                                            .sparePartNameSubTextBlack,
+                                                      )
+                                                    : state
+                                                                .orderDetailsmodel
+                                                                .data!
+                                                                .orderList[
+                                                                    index]
+                                                                .status ==
+                                                            2
+                                                        ? const Text(
+                                                            "Dispatched",
+                                                            style: Styles
+                                                                .sparePartNameSubTextBlack,
+                                                          )
+                                                        : state
+                                                                    .orderDetailsmodel
+                                                                    .data!
+                                                                    .orderList[
+                                                                        index]
+                                                                    .status ==
+                                                                3
+                                                            ? const Text(
+                                                                "Delivered",
+                                                                style: Styles
+                                                                    .sparePartNameSubTextBlack,
+                                                              )
+                                                            : const Text(
+                                                                "Cancelled",
+                                                                style: Styles
+                                                                    .sparePartNameSubTextBlack,
+                                                              ),
+                                              ),
+                                            ),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 8, 0, 0),
+                                        child: state
+                                                    .orderDetailsmodel
+                                                    .data!
+                                                    .orderList[index]
+                                                    .deliverDate ==
+                                                null
+                                            ? const Text("")
+                                            : Text(
+                                                "Delivery on " + formate1,
+                                                style: Styles
+                                                    .sparePartNameTextBlack17,
+                                              ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(
@@ -281,12 +333,12 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => My_Orders_Display(
-                              modeldetails: state
-                                  .orderDetailsmodel.data!.orderList[index])));
+                            modeldetails: state
+                                .orderDetailsmodel.data!.orderList[index],deliverydate: formate1,)));
                 },
                 child: SizedBox(
                     width: double.infinity,

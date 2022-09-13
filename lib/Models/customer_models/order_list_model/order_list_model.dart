@@ -57,47 +57,44 @@ class OrderList {
     required this.oderCode,
     required this.qty,
     required this.totalPrice,
-    required this.commision,
-    required this.tax,
+
     required this.paymentType,
+    required this.paymentStatus,
     required this.deliverDate,
     required this.status,
-    required this.vendorId,
-    required this.customerId,
+
     required this.product,
-    required this.review,
   });
 
   int id;
   String oderCode;
   int qty;
   double totalPrice;
-  double commision;
-  double tax;
+
   int paymentType;
+  int paymentStatus;
   DateTime? deliverDate;
   int status;
-  int vendorId;
-  int customerId;
+
 
   Product product;
-  List<dynamic> review;
+
 
   factory OrderList.fromMap(Map<String, dynamic> json) => OrderList(
         id: json["id"],
         oderCode: json["oderCode"],
         qty: json["qty"],
         totalPrice: json["totalPrice"].toDouble(),
-        commision: json["commision"].toDouble(),
-        tax: json["tax"].toDouble(),
-        paymentType: json["paymentType"] == null ? null : json["paymentType"],
-    deliverDate: json["deliverDate"] == null ? null : DateTime.parse(json["deliverDate"]),
 
-    status: json["status"],
-        vendorId: json["vendorId"],
-        customerId: json["customerId"],
+    paymentType: json["paymentType"] == null ? null : json["paymentType"],
+
+    paymentStatus: json["paymentStatus"],
+        deliverDate: json["deliverDate"] == null
+            ? null
+            : DateTime.parse(json["deliverDate"]),
+        status: json["status"],
+
         product: Product.fromMap(json["product"]),
-        review: List<dynamic>.from(json["review"].map((x) => x)),
       );
 
   Map<String, dynamic> toMap() => {
@@ -105,16 +102,15 @@ class OrderList {
         "oderCode": oderCode,
         "qty": qty,
         "totalPrice": totalPrice,
-        "commision": commision,
-        "tax": tax,
-        "paymentType": paymentType == null ? null : paymentType,
-    "deliverDate": deliverDate == null ? null : "${deliverDate!.year.toString().padLeft(4, '0')}-${deliverDate!.month.toString().padLeft(2, '0')}-${deliverDate!.day.toString().padLeft(2, '0')}",
 
-    "status": status,
-        "vendorId": vendorId,
-        "customerId": customerId,
+        "paymentType":  paymentType == null ? null : paymentType,
+        "paymentStatus": paymentStatus,
+        "deliverDate": deliverDate == null
+            ? null
+            : "${deliverDate!.year.toString().padLeft(4, '0')}-${deliverDate!.month.toString().padLeft(2, '0')}-${deliverDate!.day.toString().padLeft(2, '0')}",
+        "status": status,
+
         "product": product.toMap(),
-        "review": List<dynamic>.from(review.map((x) => x)),
       };
 }
 
@@ -125,18 +121,12 @@ class Product {
     required this.productName,
     required this.price,
     required this.shippingCharge,
-    required this.productImage,
-    required this.description,
+   // required this.productImage,
+
     required this.quantity,
-    required this.status,
-    required this.vehicleModelId,
-    required this.vendorId,
-    required this.user,
-    required this.vehicleModel,
-    required this.reviewCount,
-    required this.avgRate,
-    required this.salesCount,
-    required this.reviewData,
+
+    //required this.avgRate,
+
   });
 
   int id;
@@ -144,18 +134,12 @@ class Product {
   String productName;
   int price;
   int shippingCharge;
-  dynamic productImage;
-  String description;
+ // dynamic productImage;
+
   int quantity;
-  int status;
-  int vehicleModelId;
-  int vendorId;
-  dynamic user;
-  dynamic vehicleModel;
-  int reviewCount;
-  double avgRate;
-  dynamic salesCount;
-  dynamic reviewData;
+
+  //double avgRate;
+
 
   factory Product.fromMap(Map<String, dynamic> json) => Product(
         id: json["id"],
@@ -163,18 +147,11 @@ class Product {
         productName: json["productName"],
         price: json["price"],
         shippingCharge: json["shippingCharge"],
-        productImage: json["productImage"],
-        description: json["description"],
+       // productImage: json["productImage"],
         quantity: json["quantity"],
-        status: json["status"],
-        vehicleModelId: json["vehicleModelId"],
-        vendorId: json["vendorId"],
-        user: json["user"],
-        vehicleModel: json["vehicleModel"],
-        reviewCount: json["reviewCount"],
-        avgRate: json["avgRate"].toDouble(),
-        salesCount: json["salesCount"],
-        reviewData: json["reviewData"],
+
+        //avgRate: json["avgRate"].toDouble(),
+
       );
 
   Map<String, dynamic> toMap() => {
@@ -183,17 +160,11 @@ class Product {
         "productName": productName,
         "price": price,
         "shippingCharge": shippingCharge,
-        "productImage": productImage,
-        "description": description,
+        //"productImage": productImage,
+
         "quantity": quantity,
-        "status": status,
-        "vehicleModelId": vehicleModelId,
-        "vendorId": vendorId,
-        "user": user,
-        "vehicleModel": vehicleModel,
-        "reviewCount": reviewCount,
-        "avgRate": avgRate,
-        "salesCount": salesCount,
-        "reviewData": reviewData,
+
+        //"avgRate": avgRate,
+
       };
 }

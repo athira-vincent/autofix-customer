@@ -27,7 +27,7 @@ class GqlClient {
   GraphQLClient _graphClient = GraphQLClient(
       cache: GraphQLCache(store: HiveStore()),
       link: HttpLink(
-        "https://api-gateway.techlabz.in/autoconnect-be",
+        "http://athiras-82.workspace.techwarelab.com/graphql",
         defaultHeaders: <String, String>{
           'x-token': "",
         },
@@ -43,7 +43,7 @@ class GqlClient {
           (X509Certificate cert, String host, int port) => true;
       IOClient _ioClient = IOClient(_httpClient);
       final HttpLink httpLink = HttpLink(
-        "https://api-gateway.techlabz.in/autoconnect-be",
+        "http://athiras-82.workspace.techwarelab.com/graphql",
         defaultHeaders: <String, String>{
           'x-token': token,
         },
@@ -61,7 +61,7 @@ class GqlClient {
           (X509Certificate cert, String host, int port) => true;
       IOClient _ioClient = IOClient(_httpClient);
       final HttpLink httpLink = HttpLink(
-        "https://api-gateway.techlabz.in/autoconnect-be",
+        "http://athiras-82.workspace.techwarelab.com/graphql",
         defaultHeaders: <String, String>{
           'x-token': token,
         },
@@ -87,7 +87,7 @@ class GqlClient {
 
       GraphQLClient _graphClient = GraphQLClient(
           cache: GraphQLCache(store: HiveStore()),
-          link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
+          link: HttpLink("http://athiras-82.workspace.techwarelab.com/graphql",
               defaultHeaders: <String, String>{
                 'x-token': "",
               },
@@ -151,7 +151,7 @@ class GqlClient {
 
       GraphQLClient _graphClient = GraphQLClient(
           cache: GraphQLCache(store: HiveStore()),
-          link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
+          link: HttpLink("http://athiras-82.workspace.techwarelab.com/graphql",
               defaultHeaders: <String, String>{
                 'x-token': token,
               },
@@ -225,7 +225,7 @@ class GqlClient {
 
       GraphQLClient _graphClient = GraphQLClient(
           cache: GraphQLCache(store: HiveStore()),
-          link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
+          link: HttpLink("http://athiras-82.workspace.techwarelab.com/graphql",
               defaultHeaders: <String, String>{
                 'x-token': "",
               },
@@ -307,7 +307,7 @@ class GqlClient {
 
       GraphQLClient _graphClient = GraphQLClient(
           cache: GraphQLCache(store: HiveStore()),
-          link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
+          link: HttpLink("http://athiras-82.workspace.techwarelab.com/graphql",
               defaultHeaders: <String, String>{
                 'x-token': token,
               },
