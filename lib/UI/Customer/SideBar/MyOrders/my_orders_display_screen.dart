@@ -30,7 +30,9 @@ class _My_Orders_DisplayState extends State<My_Orders_Display> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return SafeArea(
       child: MultiBlocListener(
         listeners: [
@@ -121,15 +123,15 @@ class _My_Orders_DisplayState extends State<My_Orders_Display> {
                                   ), //SizedBox
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Padding(
                                         padding:
-                                            EdgeInsets.fromLTRB(0, 8, 0, 0),
+                                        EdgeInsets.fromLTRB(0, 8, 0, 0),
                                         child: Text(
                                           "Delivery on " + widget.deliverydate,
                                           style:
-                                              Styles.sparePartNameTextBlack17,
+                                          Styles.sparePartNameTextBlack17,
                                         ),
                                       ),
                                       const SizedBox(
@@ -137,62 +139,62 @@ class _My_Orders_DisplayState extends State<My_Orders_Display> {
                                       ),
                                       widget.modeldetails.paymentStatus != 0
                                           ? Container(
-                                              decoration: BoxDecoration(
-                                                  color:
-                                                      CustColors.whiteBlueish,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5)),
-                                              child: const Padding(
-                                                padding: EdgeInsets.fromLTRB(
-                                                    8, 10, 8, 2),
-                                                child: Text(
-                                                  "Payment Completed",
-                                                  style: Styles
-                                                      .sparePartNameSubTextBlack,
-                                                ),
-                                              ),
-                                            )
+                                        decoration: BoxDecoration(
+                                            color:
+                                            CustColors.whiteBlueish,
+                                            borderRadius:
+                                            BorderRadius.circular(5)),
+                                        child: const Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                              8, 10, 8, 2),
+                                          child: Text(
+                                            "Payment Completed",
+                                            style: Styles
+                                                .sparePartNameSubTextBlack,
+                                          ),
+                                        ),
+                                      )
                                           : Container(
-                                              decoration: BoxDecoration(
-                                                  color:
-                                                      CustColors.whiteBlueish,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        8, 10, 8, 2),
-                                                child: widget.modeldetails
-                                                            .status ==
-                                                        1
-                                                    ? const Text(
-                                                        "Order created",
-                                                        style: Styles
-                                                            .sparePartNameSubTextBlack,
-                                                      )
-                                                    : widget.modeldetails
-                                                                .status ==
-                                                            2
-                                                        ? const Text(
-                                                            "Dispatched",
-                                                            style: Styles
-                                                                .sparePartNameSubTextBlack,
-                                                          )
-                                                        : widget.modeldetails
-                                                                    .status ==
-                                                                3
-                                                            ? const Text(
-                                                                "Delivered",
-                                                                style: Styles
-                                                                    .sparePartNameSubTextBlack,
-                                                              )
-                                                            : const Text(
-                                                                "Cancelled",
-                                                                style: Styles
-                                                                    .sparePartNameTextBlack17,
-                                                              ),
-                                              ),
-                                            ),
+                                        decoration: BoxDecoration(
+                                            color:
+                                            CustColors.whiteBlueish,
+                                            borderRadius:
+                                            BorderRadius.circular(5)),
+                                        child: Padding(
+                                          padding:
+                                          const EdgeInsets.fromLTRB(
+                                              8, 10, 8, 2),
+                                          child: widget.modeldetails
+                                              .status ==
+                                              1
+                                              ? const Text(
+                                            "Order created",
+                                            style: Styles
+                                                .sparePartNameSubTextBlack,
+                                          )
+                                              : widget.modeldetails
+                                              .status ==
+                                              2
+                                              ? const Text(
+                                            "Dispatched",
+                                            style: Styles
+                                                .sparePartNameSubTextBlack,
+                                          )
+                                              : widget.modeldetails
+                                              .status ==
+                                              3
+                                              ? const Text(
+                                            "Delivered",
+                                            style: Styles
+                                                .sparePartNameSubTextBlack,
+                                          )
+                                              : const Text(
+                                            "Cancelled",
+                                            style: Styles
+                                                .sparePartNameTextBlack17,
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ), //Text
                                   const SizedBox(
@@ -285,10 +287,12 @@ class _My_Orders_DisplayState extends State<My_Orders_Display> {
                                     ],
                                   ),
                                   const Divider(color: Colors.grey), //
-                                   Center(
-                                    child:  Visibility(
-                                      visible: widget.modeldetails.status==3?true:false,
-                                      child: Text(
+                                  Center(
+                                    child: Visibility(
+                                      visible: widget.modeldetails.status == 3
+                                          ? true
+                                          : false,
+                                      child: const Text(
                                         "Rate your product !",
                                         style: TextStyle(
                                             fontSize: 10.7,
@@ -302,9 +306,11 @@ class _My_Orders_DisplayState extends State<My_Orders_Display> {
                                     height: 20,
                                   ),
                                   Visibility(
-                                    visible: widget.modeldetails.status==3?true:false,
+                                    visible: widget.modeldetails.status == 3
+                                        ? true
+                                        : false,
                                     child: SizedBox(
-                                     height: 60,
+                                      height: 60,
                                       child: RatingBar(
                                         initialRating: _initialRating,
                                         direction: Axis.horizontal,
@@ -319,7 +325,8 @@ class _My_Orders_DisplayState extends State<My_Orders_Display> {
                                               'assets/image/IconsRatingBar/star_inactive.png'),
                                         ),
                                         itemPadding:
-                                        const EdgeInsets.symmetric(horizontal: 8.1),
+                                        const EdgeInsets.symmetric(
+                                            horizontal: 8.1),
                                         onRatingUpdate: (rating) {
                                           setState(() {
                                             _rating = rating;
@@ -328,37 +335,49 @@ class _My_Orders_DisplayState extends State<My_Orders_Display> {
                                         updateOnDrag: true,
                                       ),
                                     ),
-                                  ),//
+                                  ), //
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .spaceBetween,
                                     children: [
                                       const Text(""),
                                       InkWell(
-                                        onTap: (){
+                                        onTap: () {
                                           final custratingBloc =
-                                          BlocProvider.of<CustRatingBloc>(context);
-                                          custratingBloc.add(FetchCustRatingEvent(_rating.toString(),
-                                              widget.modeldetails.id.toString(),widget.modeldetails.product.id.toString()));
+                                          BlocProvider.of<CustRatingBloc>(
+                                              context);
+                                          custratingBloc.add(
+                                              FetchCustRatingEvent(
+                                                  _rating.toString(),
+                                                  widget.modeldetails.id
+                                                      .toString(),
+                                                  widget.modeldetails.product.id
+                                                      .toString()));
                                         },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color:
-                                              CustColors.whiteBlueish,
-                                              borderRadius:
-                                              BorderRadius.circular(5)),
-                                          child: const Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                12, 10, 12, 5),
-                                            child: Text(
-                                              "Submit",
-                                              style: Styles
-                                                  .sparePartNameSubTextBlack,
+                                        child: Visibility(
+                                          visible: widget.modeldetails.status == 3
+                                              ? true
+                                              : false,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                color:
+                                                CustColors.whiteBlueish,
+                                                borderRadius:
+                                                BorderRadius.circular(5)),
+                                            child: const Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  12, 10, 12, 5),
+                                              child: Text(
+                                                "Submit",
+                                                style: Styles
+                                                    .sparePartNameSubTextBlack,
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ],
-                                  )// SizedBox
+                                  ) // SizedBox
                                   //SizedBox
                                 ],
                               ), //Column
@@ -379,7 +398,7 @@ class _My_Orders_DisplayState extends State<My_Orders_Display> {
                       child: MaterialButton(
                         onPressed: () {
                           final cacncelBloc =
-                              BlocProvider.of<CancelOrderBloc>(context);
+                          BlocProvider.of<CancelOrderBloc>(context);
                           cacncelBloc.add(FetchCancelOrderEvent(
                               widget.modeldetails.id.toString()));
                         },
