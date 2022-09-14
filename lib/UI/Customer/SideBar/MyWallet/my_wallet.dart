@@ -11,23 +11,16 @@ class CustomerWalletScreen extends StatefulWidget {
 }
 
 class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
-  bool _isLoadingPage = true;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: _isLoadingPage == true
-            ? const Center(
-          child: CircularProgressIndicator(
-            color: CustColors.light_navy,
-          ),
-        )
-            : SizedBox(
+        body: SizedBox(
           height: size.height,
           width: size.width,
-          //color: Colors.blue,
           child: SingleChildScrollView(
             child: Stack(
               children: [
