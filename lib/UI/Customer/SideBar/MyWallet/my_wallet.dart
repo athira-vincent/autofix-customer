@@ -1,6 +1,9 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:coupon_uikit/coupon_uikit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomerWalletScreen extends StatefulWidget {
@@ -11,6 +14,10 @@ class CustomerWalletScreen extends StatefulWidget {
 }
 
 class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
+
+  TextEditingController _phoneController = TextEditingController();
+  FocusNode _phoneFocusNode = FocusNode();
+
 
   @override
   Widget build(BuildContext context) {
@@ -24,77 +31,11 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
           child: SingleChildScrollView(
             child: Stack(
               children: [
-                BottomLightBackground(size),
+                BottomLightBackground01(size),
                 Column(
                   children: [
                     appBarCustomUi(size),
                     profileImageAndWalletTotal(),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
-                      child: Container(
-                        height: 120,
-                        margin: EdgeInsets.only(
-                          left: size.width * 9 / 100,
-                          right: size.width * 9 / 100,
-                        ),
-                        child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                          children: [
-                            SubTitleTextRound(
-                                size,
-                                "Total job done",
-                                 "0"),
-                            SubTitleTextRound(
-                                size,
-                                "All payments",
-                                 "0"),
-                            SubTitleTextRound(
-                                size,
-                                "Monthly collection",
-                                 "0"),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(
-                        //top: size.height * .2 / 100,
-                        bottom: size.width * .2 / 100,
-                      ),
-                      child: Row(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Container(
-                                margin: EdgeInsets.only(
-                                  top: size.height * 1.5 / 100,
-                                  left: size.width * 9 / 100,
-                                  right: size.width * 9 / 100,
-                                ),
-                                child: const Text(
-                                  "Todays payments",
-                                  style: Styles.myWalletTitleText03,
-                                )),
-                          ),
-                          const Spacer(),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Container(
-                                margin: EdgeInsets.only(
-                                  top: size.height * 1.5 / 100,
-                                  //left: size.width * 9 / 100,
-                                  right: size.width * 10.5 / 100,
-                                ),
-                                child: Text(
-                                  "100",
-                                  //"- ₦ 15000",
-                                  style: Styles.myWalletTitleText04,
-                                )),
-                          ),
-                        ],
-                      ),
-                    ),
 
                   ],
                 ),
@@ -102,8 +43,6 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
             ),
           ),
         ),
-
-
       ),
     );
   }
@@ -196,8 +135,7 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                                 style: Styles.myWalletCardText01,
                               ),
                               Text(
-
-                                    "0",
+                                "0",
                                 style: Styles.myWalletCardText01,
                               )
                             ]),
@@ -236,6 +174,188 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
               color: CustColors.whiteBlueish,
             ),
           )),
+    );
+  }
+
+  Widget BottomLightBackground01(Size size) {
+    return Container(
+      height: MediaQuery.of(context).size.height * .50,
+      margin: EdgeInsets.only(
+        top: MediaQuery.of(context).size.height * .45,
+        left: size.width * 4 / 100,
+        right: size.width * 4 / 100,
+      ),
+      child: Padding(
+          padding: EdgeInsets.only(bottom: size.height * 3 / 100),
+          child: Container(
+            height: size.height * 70 / 100,
+            //height: MediaQuery.of(context).size.height * double.parse(widget.percentage.toString()),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+              //color: CustColors.blackishgrey,
+            ),
+            child: CouponCard(
+              curveRadius: 70.0,
+              firstChild: Container(
+                height: size.height * 5 / 100,
+                color: CustColors.whiteBlueish,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: Container(
+                    height: 100,
+                    margin: EdgeInsets.only(
+                      left: size.width * 9 / 100,
+                      right: size.width * 9 / 100,
+                    ),
+                    child: Row(
+                      mainAxisAlignment:
+                      MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SubTitleTextRound(
+                            size,
+                            "Total spent",
+                            "0"),
+                        SubTitleTextRound(
+                            size,
+                            "Total balance",
+                            "0"),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              secondChild: Container(
+                height: size.height * 5 / 100,
+                color: CustColors.whiteBlueish,
+                child: addMoneyWidget(size),
+              ),
+            ),
+          )
+      ),
+    );
+  }
+
+  Widget addMoneyWidget(Size size){
+    return  Container(
+      margin: EdgeInsets.only(
+        //top: size.height * .2 / 100,
+        bottom: size.width * .2 / 100,
+      ),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+                margin: EdgeInsets.only(
+                  top: size.height * 2 / 100,
+                  left: size.width * 9 / 100,
+                  right: size.width * 9 / 100,
+                ),
+                child: const Text(
+                  "Add money to wallet",
+                  style: Styles.myWalletTitleText05,
+                )),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+                margin: EdgeInsets.only(
+                  top: size.height * 2 / 100,
+                  left: size.width * 9 / 100,
+                  right: size.width * 9 / 100,
+                ),
+                child: const Text(
+                  "Enter amount ",
+                  style: Styles.myWalletListTileTitle01,
+                )),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+                margin: EdgeInsets.only(
+                  top: size.height * 2 / 100,
+                  left: size.width * 9 / 100,
+                  right: size.width * 9 / 100,
+                ),
+                child: TextFormField(
+                  textAlignVertical: TextAlignVertical.center,
+                  maxLines: 1,
+                  style: Styles.textLabelSubTitle01,
+                  focusNode: _phoneFocusNode,
+                  keyboardType:
+                  TextInputType.number,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(
+                        15),
+                  ],
+                  validator: InputValidator(
+                    ch: 'Amount',
+                  ).phoneNumChecking,
+                  controller: _phoneController,
+                  cursorColor: CustColors.materialBlue,
+                  decoration: InputDecoration(
+                    errorStyle: TextStyle(color: Colors.red),
+                    isDense: true,
+                    hintText:
+                    'Enter Amount',
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: CustColors.white_02,
+                            width: .5,
+                          ),
+                        ),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: CustColors.white_02,
+                          width: .5,
+                        )
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                    color: CustColors.white_02,
+                    width: .5,
+                  )
+                ),
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 12.8,
+                      horizontal: 8.0,
+                    ),
+                    hintStyle: Styles.textLabelSubTitle,
+                  ),
+                ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              width: double.infinity,
+              margin: EdgeInsets.only(
+                top: size.height * 2 / 100,
+                left: size.width * 9 / 100,
+                right: size.width * 9 / 100,
+              ),
+              padding: EdgeInsets.only(
+                top: size.height * 1.5 / 100,
+                bottom: size.height * 1.5 / 100,
+              ),
+              color: CustColors.light_navy,
+              child: Center(
+                child: Text("Add Money", 
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontFamily: 'Samsung_SharpSans_Bold'
+                ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
