@@ -31,18 +31,8 @@ class SparePartsListScreen extends StatefulWidget {
 }
 
 class _SparePartsListScreenState extends State<SparePartsListScreen> {
-  static ValueNotifier<String> incart = ValueNotifier('');
-
   double per = .10;
   double perfont = .10;
-
-  double _setValue(double value) {
-    return value * per + value;
-  }
-
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
 
   bool addToCart = false;
 
@@ -55,15 +45,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
   bool _isSearching = false;
   bool ischanged = false;
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -289,7 +271,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
                             child: Text(
-                              "\$ " +
+                              "₦ " +
                                   state.sparePartslistModel.data!
                                       .sparePartsList[index].price
                                       .toString(),
@@ -301,7 +283,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                             child: Row(
                               children: [
                                 Text(
-                                  "\$ " +
+                                  "₦" +
                                       state.sparePartslistModel.data!
                                           .sparePartsList[index].price
                                           .toString(),
@@ -512,12 +494,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                   "null"));
             });
 
-            String status =
-                shdPre.getString(SharedPrefKeys.isMechanicLoggedIn).toString();
-            String newstatus =
-                shdPre.getString(SharedPrefKeys.isUserLoggedIn).toString();
-            print(status);
-            print(newstatus);
+
 
             Navigator.pushReplacement(
                 context,
@@ -548,7 +525,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
     );
   }
 
-  ChangeCartStatus() {}
+
 }
 
 class MyBehavior extends ScrollBehavior {
