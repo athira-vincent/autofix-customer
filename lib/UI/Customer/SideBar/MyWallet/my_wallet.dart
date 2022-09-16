@@ -64,9 +64,14 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                 builder: (context, snapshot) {
 
                   if(snapshot is CustomerWalletLoadingState){
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: CustColors.light_navy,
+                    return Container(
+                      margin: EdgeInsets.only(
+                        top: size.height * .40
+                      ),
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: CustColors.light_navy,
+                        ),
                       ),
                     );
                   }else if(snapshot is CustomerWalletLoadedState){
