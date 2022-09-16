@@ -4108,6 +4108,60 @@ class QueryProvider {
     );
   }
 
+  ///  customer my wallet queryprovider
+  fetchcustomerwallet(/*date*/) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String userID = shdPre.getString(SharedPrefKeys.userID).toString();
+
+    String _query = """
+      {
+    walletDetails(customerId: $userID) {
+      id
+      type
+      amount
+      balance
+      recordDate
+      reference
+      paymentMode
+      status
+      customerId
+      customer {
+        id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        status
+        userTypeId
+        jwtToken
+        fcmToken
+        otpCode
+        isProfile
+        otpVerified
+        customer{
+          id
+        }
+        mechanic{
+          id
+        }
+        vendor{
+          id
+        }
+      }
+    }
+  }
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
   /// customer rating
   fetchcustrating(rating, orderid, productid) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();

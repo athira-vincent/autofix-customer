@@ -12,15 +12,23 @@ String customerWalletDetailModelToMap(CustomerWalletDetailModel data) => json.en
 class CustomerWalletDetailModel {
   CustomerWalletDetailModel({
     required this.data,
+    required this.status,
+    required this.message,
   });
 
+  String status;
+  String message;
   Data? data;
 
   factory CustomerWalletDetailModel.fromMap(Map<String, dynamic> json) => CustomerWalletDetailModel(
+    status: json["status"] == null ? null : json["status"],
+    message: json["message"] == null ? null : json["message"],
     data: Data.fromMap(json["data"]),
   );
 
   Map<String, dynamic> toMap() => {
+    "status": status == null ? null : status,
+    "message": message == null ? null : message,
     "data": data!.toMap(),
   };
 }
@@ -70,7 +78,7 @@ class WalletDetails {
     id: json["id"],
     type: json["type"],
     amount: json["amount"],
-    balance: json["balance"],
+    balance: json["balance"]??"",
     recordDate: DateTime.parse(json["recordDate"]),
     reference: json["reference"],
     paymentMode: json["paymentMode"],
