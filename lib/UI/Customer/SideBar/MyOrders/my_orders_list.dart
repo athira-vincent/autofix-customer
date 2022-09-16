@@ -24,6 +24,7 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
   List<OrderList> orderlistsearch = [];
   List<OrderList> orderlist = [];
   var formate1;
+  late List<String> image;
 
   @override
   Widget build(BuildContext context) {
@@ -147,6 +148,13 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
 
                 formate1 = "${dateTime.day}-${dateTime.month}-${dateTime.year}";
               }
+              image = state
+                  .orderDetailsmodel.data!.orderList[index].product.productImage
+                  .replaceAll("[", "")
+                  .replaceAll("]", "")
+                  .split(",");
+              print("imagesss");
+              print(image);
 
               return InkWell(
                 onTap: () {
@@ -173,7 +181,16 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
                                   width: 90,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(5),
-                                    child: Image.network(
+                                    child:
+
+                                    image != null
+                                        ?
+                                    Image.network(
+                                      image[0].toString(),
+                                      fit: BoxFit.cover,
+                                    )
+                                        :
+                                    Image.network(
                                       "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
                                       fit: BoxFit.cover,
                                     ),

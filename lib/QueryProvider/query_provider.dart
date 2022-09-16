@@ -4000,6 +4000,7 @@ class QueryProvider {
       status
       vehicleModelId
       vendorId
+      productImage
       user{
         id
       }

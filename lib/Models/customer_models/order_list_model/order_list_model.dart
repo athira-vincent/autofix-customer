@@ -124,8 +124,7 @@ class Product {
    // required this.productImage,
 
     required this.quantity,
-
-    //required this.avgRate,
+    required this.productImage,
 
   });
 
@@ -134,6 +133,7 @@ class Product {
   String productName;
   int price;
   int shippingCharge;
+  String productImage;
  // dynamic productImage;
 
   int quantity;
@@ -149,7 +149,7 @@ class Product {
         shippingCharge: json["shippingCharge"],
        // productImage: json["productImage"],
         quantity: json["quantity"],
-
+        productImage: json["productImage"],
         //avgRate: json["avgRate"].toDouble(),
 
       );
@@ -161,10 +161,8 @@ class Product {
         "price": price,
         "shippingCharge": shippingCharge,
         //"productImage": productImage,
-
+        "productImage": productImage,
         "quantity": quantity,
-
-        //"avgRate": avgRate,
 
       };
 }
