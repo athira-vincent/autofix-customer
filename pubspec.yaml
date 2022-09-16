@@ -90,10 +90,11 @@ dependencies:
   equatable: ^2.0.3
   fluttertoast: ^8.0.9
   badges: ^2.0.3
-  isw_mobile_sdk: ^1.0.8
+  isw_mobile_sdk: ^1.1.1
   device_info_plus: ^3.0.0
   chat_bubbles: ^1.3.1
   flutter_holo_date_picker: ^1.0.6
+
 
 
 
