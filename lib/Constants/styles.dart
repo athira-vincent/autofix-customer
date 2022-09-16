@@ -25,6 +25,13 @@ class Styles {
     fontSize: 11,
   );
 
+  static const textLabelSubTitle01 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w500,
+    color: CustColors.blackishgrey,
+    fontSize: 11,
+  );
+
   static const textLabelSubTitle05 = TextStyle(
     fontFamily: 'Samsung_SharpSans_Regular',
     fontWeight: FontWeight.w500,
@@ -682,6 +689,14 @@ class Styles {
     color: CustColors.light_navy,
     fontWeight: FontWeight.w500,
   );
+
+  static const myWalletTitleText05 = TextStyle(
+    fontSize: 15,
+    fontFamily: "Samsung_SharpSans_Bold",
+    color: CustColors.light_navy,
+    fontWeight: FontWeight.w600,
+  );
+
   static const myWalletTitleText04 = TextStyle(
     fontSize: 15,
     fontFamily: "Samsung_SharpSans_Medium",

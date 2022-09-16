@@ -21,6 +21,7 @@ import 'package:auto_fix/Models/customer_models/spare_parts_list_model/spare_par
 import 'package:auto_fix/Models/customer_models/spare_parts_model/spare_parts_model.dart';
 import 'package:auto_fix/Models/customer_models/update_mechanic_booking_model/updateMechanicBookingMdl.dart';
 import 'package:auto_fix/Models/customer_rating_model/customer_rating_model.dart';
+import 'package:auto_fix/Models/customer_wallet_detail_model/customer_wallet_detail_model.dart';
 import 'package:auto_fix/Models/delete_cart_model/delete_cart_model.dart';
 import 'package:auto_fix/Models/wallet_history_model/wallet_history_model.dart';
 import 'package:auto_fix/QueryProvider/query_provider.dart';
@@ -714,6 +715,28 @@ class CustomerApiProvider {
       }
     } else {
       final errorMsg = CustomerRatingModel(
+          status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+  /// =============== Customer My Wallet ================== ///
+
+  Future<CustomerWalletDetailModel> fetchcustomerwallet(/*date*/
+      ) async {
+    Map<String, dynamic> _resp =
+    await _queryProvider.fetchcustomerwallet(/*date*/);
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = CustomerWalletDetailModel(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return CustomerWalletDetailModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = CustomerWalletDetailModel(
           status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
