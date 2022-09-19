@@ -676,4 +676,8 @@ class Repository {
 
   Future<CustomerRatingModel> custrating(rating, orderid, productid) =>
       _customerratingprovider.fetchcustrating(rating, orderid, productid);
+
+
+  Future<PlaceOrderModel> placeorderallitem(addressid) =>
+      _placeorderprovider.placeorderallitem(addressid);
 }

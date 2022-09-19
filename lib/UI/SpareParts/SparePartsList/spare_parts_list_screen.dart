@@ -384,7 +384,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
                       child: Text(
-                        "\$" + totalamount,
+                        " ₦" + totalamount,
                         style: Styles.addToCartItemText02,
                       ),
                     ),

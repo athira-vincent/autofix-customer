@@ -18,9 +18,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'MyCart/placeallorderbloc/place_oder_all_bloc.dart';
+import 'MyCart/placeallorderbloc/place_oder_all_state.dart';
+import 'MyCart/placeallorderbloc/place_order_all_event.dart';
+
 class ChangeDeliveryAddressScreen extends StatefulWidget {
   final String quantity,productprice,productid;
-  ChangeDeliveryAddressScreen({Key? key, required this.quantity, required this.productprice, required this.productid}) : super(key: key);
+  final bool allitems;
+  ChangeDeliveryAddressScreen({Key? key, required this.quantity, required this.productprice, required this.productid,required this.allitems}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -82,6 +87,27 @@ class _ChangeDeliveryAddressScreenState
                         MaterialPageRoute(
                             builder: (context) =>
                              Payment_Main_Screen(amount:widget.productprice,orderid:state.placeorderModel.data!.placeOrder.first.id.toString())
+
+                        ));
+
+
+
+                  }
+                }
+              },
+            ),
+
+
+            BlocListener<PlaceOrderAllBloc, PlaceOrderAllState>(
+              listener: (context, state) {
+                if (state is PlaceOrderAllLoadedState) {
+                  if (state.placeorderModel.data!.placeOrder.isNotEmpty) {
+                    Fluttertoast.showToast(msg: "Placed order successfully");
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                Payment_Main_Screen(amount:"",orderid:"")
 
                         ));
 
@@ -583,11 +609,20 @@ class _ChangeDeliveryAddressScreenState
       alignment: Alignment.topRight,
       child: InkWell(
         onTap: (){
-          final placeorderBloc =
-          BlocProvider.of<PlaceOrderBloc>(context);
-          placeorderBloc.add(FetchPlaceOrderEvent(widget.quantity
-              .toString(),widget.productprice.toString(),widget.productid.toString(),
-              addressid));
+          if(widget.allitems==true){
+            final placeorderallBloc =
+            BlocProvider.of<PlaceOrderAllBloc>(context);
+            placeorderallBloc.add(FetchPlaceOrderAllEvent(
+                addressid));
+          }
+          else{
+            final placeorderBloc =
+            BlocProvider.of<PlaceOrderBloc>(context);
+            placeorderBloc.add(FetchPlaceOrderEvent(widget.quantity
+                .toString(),widget.productprice.toString(),widget.productid.toString(),
+                addressid));
+          }
+
 
         },
         child: Container(

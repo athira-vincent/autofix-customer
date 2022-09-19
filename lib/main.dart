@@ -25,6 +25,7 @@ import 'package:auto_fix/UI/SpareParts/MyCart/delete_address_bloc/delete_address
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/edit_address_bloc/edit_address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_oder_bloc.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/placeallorderbloc/place_oder_all_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_event.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
@@ -160,6 +161,9 @@ class _MyAppState extends State<MyApp> {
               ),
               BlocProvider<CustomerWalletBloc>(
                 create: (context) => CustomerWalletBloc(),
+              ),
+              BlocProvider<PlaceOrderAllBloc>(
+                create: (context) => PlaceOrderAllBloc(),
               ),
             ],
             child: MaterialApp(

@@ -741,6 +741,28 @@ class CustomerApiProvider {
       return errorMsg;
     }
   }
+
+
+  /// placeorderallitem
+  Future<PlaceOrderModel> placeorderallitem(
+      addressid) async {
+    Map<String, dynamic> _resp =
+    await _queryProvider.fetchServiceplaceorderallitemlist(addressid);
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = PlaceOrderModel(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return PlaceOrderModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = PlaceOrderModel(
+          status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
 }
 
 

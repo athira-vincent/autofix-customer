@@ -46,6 +46,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
   bool _isLoading = false;
   double per = .10;
   double perfont = .10;
+  bool allitems=false;
 
   double _setValue(double value) {
     return value * per + value;
@@ -566,7 +567,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                             padding: const EdgeInsets.fromLTRB(
                                                 0, 8, 0, 0),
                                             child: Text(
-                                              "\$ " +
+                                              " ₦" +
                                                   state
                                                       .cartlistmodel
                                                       .data!
@@ -619,6 +620,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                                   .product
                                                                   .id
                                                                   .toString(),
+                                                                allitems:false
 
                                                             )));
                                               },
@@ -821,6 +823,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                         quantity: "",
                                         productprice: "",
                                         productid: "",
+                                          allitems:false
                                       )));
                         },
                         child: Container(
@@ -992,11 +995,30 @@ class _MyCartScreenState extends State<MyCartScreen> {
                   )
                 : MaterialButton(
                     onPressed: () {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => const Payment_Main_Screen(
+                      //             amount: "", orderid: "")));
+
+
+
+
+
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Payment_Main_Screen(
-                                  amount: "", orderid: "")));
+                              builder: (context) =>
+                                  ChangeDeliveryAddressScreen(
+                                    quantity: "",
+                                    productprice: "",
+                                    productid: "",
+                                    allitems:true
+                                  )));
+
+                      Fluttertoast.showToast(msg: "Confirm Address");
+
                     },
                     child: SizedBox(
                       height: 50,
