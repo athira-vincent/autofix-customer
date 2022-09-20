@@ -78,7 +78,6 @@ class _NotificationHandlerState extends State<NotificationHandler> {
       String bookingId = message.data['bookingId'];
       print("bookingId >>>>> " + bookingId );
       print("nhjdkjhjk $context1");
-
       _navigator.pushReplacement(
           MaterialPageRoute(builder: (context) => IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)),
         );
