@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../SpareParts/purchase_response_screen.dart';
+
 class Payment_Main_Screen extends StatefulWidget {
   final String amount, orderid;
 
@@ -39,7 +41,7 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const Payment_Success_Screen()));
+                          builder: (context) =>  PurchaseResponseScreen(isSuccess: true,)));
 
                 }
               }
