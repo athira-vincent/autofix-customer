@@ -35,6 +35,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_s
 
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:auto_fix/UI/chat/chat.dart';
+import 'package:auto_fix/notification_handler_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -43,6 +44,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sizer/sizer.dart';
@@ -70,11 +72,24 @@ void main() async {
 
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     runApp(MyApp());
   }, (error, stackTrace) {
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
 }
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   @override
@@ -102,81 +117,89 @@ class _MyAppState extends State<MyApp> {
       statusBarColor:
           CustColors.light_navy, //or set color with: Color(0xFF0000FF)
     ));
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(
-          value: LocaleProvider(),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
+      /*routes: {
+        '/custNotificationList' : (_) => CustNotificationList(),
+        '/vendorNotificationList' : (_) => VendorNotificationList()
+      },*/
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(
+            value: LocaleProvider(),
+          ),
+          ChangeNotifierProvider.value(
+            value: ProfileDataProvider(),
+          ),
+          ChangeNotifierProvider.value(
+            value: JobRequestNotifyProvider(),
+          ),
+        ],
+        child: Sizer(
+          builder: (context, orientation, deviceType) {
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider<AddCartBloc>(
+                  create: (context) => AddCartBloc(),
+                ),
+                BlocProvider<SparePartListBloc>(
+                  create: (context) => SparePartListBloc(),
+                ),
+                BlocProvider(
+                  create: (context) =>
+                      ShowCartPopBloc()..add(FetchShowCartPopEvent()),
+                ),
+                BlocProvider<DeleteCartBloc>(
+                  create: (context) => DeleteCartBloc(),
+                ),
+                BlocProvider<AddressBloc>(
+                  create: (context) => AddressBloc(),
+                ),
+                BlocProvider<AddAddressBloc>(
+                  create: (context) => AddAddressBloc(),
+                ),
+                BlocProvider<EditAddressBloc>(
+                  create: (context) => EditAddressBloc(),
+                ),
+                BlocProvider<DeleteAddressBloc>(
+                  create: (context) => DeleteAddressBloc(),
+                ),
+                BlocProvider<PlaceOrderBloc>(
+                  create: (context) => PlaceOrderBloc(),
+                ),
+                BlocProvider<OrderListBloc>(
+                  create: (context) => OrderListBloc(),
+                ),
+                BlocProvider<CancelOrderBloc>(
+                  create: (context) => CancelOrderBloc(),
+                ),
+                BlocProvider<CodBloc>(
+                  create: (context) => CodBloc(),
+                ),
+                BlocProvider<CustRatingBloc>(
+                  create: (context) => CustRatingBloc(),
+                ),
+                BlocProvider<CustomerWalletBloc>(
+                  create: (context) => CustomerWalletBloc(),
+                ),
+              ],
+              child: MaterialApp(
+                debugShowCheckedModeBanner: false,
+                locale: _locale,
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                title: 'ResolMech',
+                theme: ThemeData(
+                  primaryColor: Colors.white,
+                  primarySwatch: CustColors.materialBlue,
+                ),
+                home: SplashScreen(),
+                //home: ChatScreen(peerId: "123"),
+              ),
+            );
+          },
         ),
-        ChangeNotifierProvider.value(
-          value: ProfileDataProvider(),
-        ),
-        ChangeNotifierProvider.value(
-          value: JobRequestNotifyProvider(),
-        ),
-      ],
-      child: Sizer(
-        builder: (context, orientation, deviceType) {
-          return MultiBlocProvider(
-            providers: [
-              BlocProvider<AddCartBloc>(
-                create: (context) => AddCartBloc(),
-              ),
-              BlocProvider<SparePartListBloc>(
-                create: (context) => SparePartListBloc(),
-              ),
-              BlocProvider(
-                create: (context) =>
-                    ShowCartPopBloc()..add(FetchShowCartPopEvent()),
-              ),
-              BlocProvider<DeleteCartBloc>(
-                create: (context) => DeleteCartBloc(),
-              ),
-              BlocProvider<AddressBloc>(
-                create: (context) => AddressBloc(),
-              ),
-              BlocProvider<AddAddressBloc>(
-                create: (context) => AddAddressBloc(),
-              ),
-              BlocProvider<EditAddressBloc>(
-                create: (context) => EditAddressBloc(),
-              ),
-              BlocProvider<DeleteAddressBloc>(
-                create: (context) => DeleteAddressBloc(),
-              ),
-              BlocProvider<PlaceOrderBloc>(
-                create: (context) => PlaceOrderBloc(),
-              ),
-              BlocProvider<OrderListBloc>(
-                create: (context) => OrderListBloc(),
-              ),
-              BlocProvider<CancelOrderBloc>(
-                create: (context) => CancelOrderBloc(),
-              ),
-              BlocProvider<CodBloc>(
-                create: (context) => CodBloc(),
-              ),
-              BlocProvider<CustRatingBloc>(
-                create: (context) => CustRatingBloc(),
-              ),
-              BlocProvider<CustomerWalletBloc>(
-                create: (context) => CustomerWalletBloc(),
-              ),
-            ],
-            child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              locale: _locale,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
-              title: 'ResolMech',
-              theme: ThemeData(
-                primaryColor: Colors.white,
-                primarySwatch: CustColors.materialBlue,
-              ),
-              home: SplashScreen(),
-              //home: ChatScreen(peerId: "123"),
-            ),
-          );
-        },
       ),
     );
   }
