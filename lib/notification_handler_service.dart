@@ -151,7 +151,6 @@ Future<void> goToNextScreen(Map<String, dynamic> data) async {
     }else{
       navigatorKey.currentState!.pushNamed('/custNotificationList',);
     }*/
-
     /*switch (data['click_action']) {
       case "first_screen":
         navigatorKey.currentState.pushNamed(FirstScreen.routeName,);
