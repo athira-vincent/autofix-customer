@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -17,25 +18,21 @@ class EmergencyServices extends StatefulWidget{
   State<StatefulWidget> createState() {
     return _EmergencyServices();
   }
-
 }
 
 class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliveClientMixin{
 
   String authToken = "", mechanicId = "",
       search="" ;
-  int page=0,size=10;
+  int page=0,size=100;
   bool saveloading = false;
   bool _isLoadingPage = false;
   List<bool> _selectionList=[];
   AddPriceFaultReviewBloc _addPriceFaultReviewBloc=AddPriceFaultReviewBloc();
-  MechanicDetails? _mechanicDetails;
   MechanicServiceAdd? _MechanicServiceAdd;
-  UpdateTimeFees? _updateTimeFees;
    AddPriceServiceList? _AddPriceServiceList;
   List<String>? _timeList=[];
   List<String>? _priceList=[];
-  List<String>? _serviceIdList=[];
 
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   int checkID=0;
@@ -51,7 +48,6 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
     super.initState();
     getSharedPrefData();
     _listenApiResponse();
-
   }
 
   Future<void> getSharedPrefData() async {
@@ -65,6 +61,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
       /*_addPriceFaultReviewBloc.postAddFetchPriceFaultReviewRequest(
           authToken,
           mechanicId);*/
+      _selectionList.clear();
       _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
           authToken,
           page,
@@ -94,27 +91,23 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
           _isLoadingPage = true;
           _AddPriceServiceList = value.data!.addPriceServiceList!;
           _selectionList=[];
+          _timeList = [];
+          _priceList = [];
           for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
             //if(_AddPriceServiceList!.data![i].status==1) {
             if(_AddPriceServiceList!.data![i].mechanicService!.length>0){
               _selectionList.add(true);
-            }
-            else{
-              _selectionList.add(false);
-            }
-            print("fddfds ${_timeList}");
-            if(_AddPriceServiceList!.data![i].mechanicService!.length>0) {
               _timeList!.add(_AddPriceServiceList!.data![i].mechanicService![0].time.toString());
-            }else{
-              _timeList!.add("12:00");
-            }
-            print("ewqr ${_priceList}");
-            if(_AddPriceServiceList!.data![i].mechanicService!.length>0) {
               _priceList!.add(_AddPriceServiceList!.data![i].mechanicService![0].fee.toString());
             }
             else{
+              _selectionList.add(false);
+              _timeList!.add("10:00");
               _priceList!.add(_AddPriceServiceList!.data![i].minPrice);
+
             }
+            print("fddfds ${_timeList}");
+            print("ewqr ${_priceList}");
           };
           print("vhvhfhjfh 01 ${_AddPriceServiceList!.data!.length}");
         });
@@ -175,15 +168,25 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                 backgroundColor: CustColors.light_navy,
               ));
           }
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          ));
         });
       }else{
         setState(() {
           print('abcdefg01');
-          getSharedPrefData();
-
+          _isLoadingPage = false;
           saveloading = false;
           tempCounter = 0;
           _lodingIdList = [];
+          _serviceIdEmergency = [];
+          _timeListEmergency = [] ;
+          _priceListEmergency = [];
+          getSharedPrefData();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Service Added',
                 style: const TextStyle(
@@ -191,7 +194,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
             duration: const Duration(seconds: 2),
             backgroundColor: CustColors.light_navy,
           ));
-          _isLoadingPage = true;
+          //_isLoadingPage = true;
           _MechanicServiceAdd = value.data!.mechanicServiceAdd as MechanicServiceAdd?;
         });
       }
@@ -219,17 +222,28 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                     ),
                     child: TextField(
                       onChanged: (value){
-                        if(value.length!=0)
-                        _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
-                            authToken,
-                            page,
-                            size,
-                            value,
-                            mechanicId,
-                            1);
+                        if(value.length!=0){
+                          _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
+                              authToken,
+                              page,
+                              size,
+                              value,
+                              mechanicId,
+                              1);
+                        }else{
+                          _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
+                              authToken,
+                              page,
+                              size,
+                              search,
+                              mechanicId,
+                              1);
+                        }
+
                       },
+                      cursorColor: CustColors.light_navy,
                       decoration:
-                      InputDecoration(
+                     const InputDecoration(
                         // border: OutlineInputBorder(
                         //   borderRadius: BorderRadius.circular(10),
                         //   borderSide: BorderSide(color: Colors.white)
@@ -237,7 +251,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Colors.white,
-                        prefixIcon: Icon(Icons.search),
+                        prefixIcon: Icon(Icons.search, color: CustColors.light_navy),
                         hintText: 'Search Your  Service',
                         contentPadding: EdgeInsets.only(top: 1),
                       ),
@@ -279,14 +293,14 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                       InkWell(
                                         onTap:(){
                                           setState(() {
-                                            bool s=!_selectionList[index];
+                                            bool s = _selectionList[index];
                                             _selectionList.removeAt(index);
-                                            _selectionList.insert(index,s );
+                                            _selectionList.insert(index,!s );
+                                            print(_selectionList[index].toString());
                                             if(!_selectionList[index]){
-                                              _textEditContoller.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].time:"12:00";
+                                              _textEditContoller.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].time:"10:00";
                                               _textEditContoller01.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].fee:"1000";
                                               setState(() {
-
 
                                               });
                                             }
@@ -325,7 +339,6 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                           ),
                                         ),
                                       ),
-
                                     ],
                                   ),
                                 ),
@@ -361,22 +374,49 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                       child: Padding(
                                         padding: const EdgeInsets.only(left:15.0,bottom: 4),
                                         child:
-                                        TextFormField(
-                                          keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(
-                                              border: InputBorder.none
-                                          ),
-                                          enabled: _selectionList[index],
-                                          controller: _textEditContoller,
-                                          inputFormatters: [
-                                            LengthLimitingTextInputFormatter(4),
-                                            FilteringTextInputFormatter.allow(
-                                                RegExp('[0-9 :]')),
-                                          ],
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500,
+                                        InkWell(
+                                          onTap: ()async {
+                                            if(_selectionList[index]){
+                                              print(" _timeController.text >>> ${_textEditContoller.text}" );
+                                              Duration? _durationResult = await showDurationPicker(
+                                                  snapToMins: 5.0,
+                                                  context: context,
+                                                  initialTime: Duration(
+                                                    //hours: 2,
+                                                      minutes: int.parse(_textEditContoller.text.toString().replaceAll(":00", "")),
+                                                      seconds: 00,
+                                                      milliseconds: 0)
+                                              );
+                                              print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
+                                              print(" _timeController.text02 >>> ${_textEditContoller.text}" );
+                                              if(_durationResult != null){
+                                                setState(() {
+                                                  _textEditContoller.text = "";
+                                                  _textEditContoller.text = _durationResult.inMinutes.toString() + ":00";
+                                                  print(" _timeController.text03 >>> ${_textEditContoller.text}" );
+                                                });
+                                              }
+                                            }
+                                          },
+                                          child: TextFormField(
+                                            cursorColor: CustColors.light_navy,
+                                            keyboardType: TextInputType.datetime,
+                                            decoration: InputDecoration(
+                                                border: InputBorder.none
+                                            ),
+                                            enabled: false,
+                                            showCursor: false,
+                                            controller: _textEditContoller,
+                                            /*inputFormatters: [
+                                              LengthLimitingTextInputFormatter(4),
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp('[0-9 :]')),
+                                            ],*/
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -404,24 +444,32 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                         padding: const EdgeInsets.only(left:15.0,bottom: 4),
                                         child:
                                         TextFormField(
-                                          // validator: (value){
-                                          //   if(int.parse(value!) < int.parse(_AddPriceServiceList!.data![0].minPrice) ||
-                                          //       int.parse(value) > int.parse(_AddPriceServiceList!.data![0].maxPrice)){
-                                          //     return _AddPriceServiceList!.data![0].minPrice +"_" + _AddPriceServiceList!.data![0].maxPrice;
-                                          //   }
-                                          //   else {
-                                          //     return null;
-                                          //   }
-                                          // },
+                                          validator: (value){
+                                            if(value!.trim().isEmpty){
+                                              return "Fill field";
+                                            }
+                                            else if(int.parse(value) < int.parse(_AddPriceServiceList!.data![0].minPrice) ||
+                                                int.parse(value) > int.parse(_AddPriceServiceList!.data![0].maxPrice)){
+                                              return _AddPriceServiceList!.data![0].minPrice +"-" + _AddPriceServiceList!.data![0].maxPrice;
+                                            }
+                                            else {
+                                              return null;
+                                            }
+                                          },
                                           keyboardType: TextInputType.number,
-
+                                          cursorColor: CustColors.light_navy,
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,
                                           decoration: InputDecoration(
-                                              border: InputBorder.none
+                                              border: InputBorder.none,
+                                              errorStyle: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 9,
+                                              )
                                           ),
                                           enabled: _selectionList[index],
                                           controller: _textEditContoller01,
                                           inputFormatters: [
-                                            LengthLimitingTextInputFormatter(4),
+                                            LengthLimitingTextInputFormatter(10),
                                             FilteringTextInputFormatter.allow(
                                                 RegExp('[0-9]')),
                                           ],
@@ -521,7 +569,6 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                       SharedPreferences shdPre = await SharedPreferences.getInstance();
                       setState(() {
 
-                        int temp=0;
                         for(int i =0;i<_selectionList.length;i++)
                         {
                           if(_selectionList[i])
@@ -537,8 +584,6 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                         print('$_priceListEmergency >>>>_priceListEmergency ');
                         print('$_serviceIdEmergency >>>>_serviceIdEmergency ');
 
-
-
                         if(_lodingIdList.length == 0)
                           {
                             saveloading = false;
@@ -553,22 +598,21 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                         //     "${_timeListEmergency}",
                         //     "${_priceListEmergency}",
                         //     "${_serviceIdEmergency}",
-                        String s="[";
+                        String time = "[";
                         for(int i=0;i<_timeListEmergency!.length;i++){
-                          s=s+"""\"${_timeListEmergency![i]}\", """;
+                          time = time + """\"${_timeListEmergency![i]}\", """;
                         }
-                        s=s+"]";
-                        String v="[";
+                        time = time + "]";
+                        String fee = "[";
                         for(int i=0;i<_priceListEmergency!.length;i++){
-                          v=v+"""\"${_priceListEmergency![i]}\", """;
+                          fee = fee + """\"${_priceListEmergency![i]}\", """;
                         }
-                        v=v+"]";
-                        print("hdgjdv 001 $s");
+                        fee = fee + "]";
+                        //print("hdgjdv 001 $s");
                          _addPriceFaultReviewBloc.postTimeServicePriceAddReviewRequest(
                            authToken,
                            _serviceIdEmergency.toString().replaceAll("[", "").replaceAll("]", ""),
-                           s,
-                           v,
+                             fee, time, 1
                         );
                       });
                     },

@@ -1,9 +1,11 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/Models/customer_models/booking_details_model/bookingDetailsMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
-import 'package:auto_fix/Provider/locale_provider.dart';
+
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mechanic_tracking_Screen.dart';
@@ -12,7 +14,7 @@ import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/Mobil
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
-import 'package:auto_fix/listeners/NotificationListener.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -27,8 +29,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert' as json;
 
-import '../../../Common/NotificationPayload/mechanicServicesListMdl.dart';
-
 
 class MechanicProfileViewScreen extends StatefulWidget {
 
@@ -41,9 +41,6 @@ class MechanicProfileViewScreen extends StatefulWidget {
   final String longitude;
   final String serviceIds;
   final String customerAddress;
-
-
-
 
   MechanicProfileViewScreen({
     required this.mechanicId,
@@ -66,8 +63,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   MechanicDetailsMdl? _mechanicDetailsMdl;
 
-  String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
-  late final FirebaseMessaging    _messaging = FirebaseMessaging.instance;
+  String serverToken = TextStrings.firebase_serverToken;
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   var initializationSettingsAndroid;
@@ -76,15 +72,11 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
 
 
-  final NotificationListenerCall _notificationListener = NotificationListenerCall();
-
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   List yourItemList = [];
 
   int? reviewLength = 0;
-
-
 
   double per = .10;
   double perfont = .10;
@@ -104,34 +96,23 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   String carNameBrand="";
   String carNameModel="";
 
-  String carPlateNumber="";
+  String carPlateNumber="", carColor = "";
 
   late StateSetter mechanicAcceptance;
-
-
-  double _setValue(double value) {
-    return value * per + value;
-  }
-
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     yourItemList.add({
-      "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-      "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
-      "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
-      "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
+      "serviceName" : "${widget.mechanicListData?.mechanicService[0].service?.serviceName}",
+      "serviceTime" : "${widget.mechanicListData?.mechanicService[0].time.split(':').first}",
+      "serviceCost" :"${widget.mechanicListData?.mechanicService[0].service?.minPrice}",
+      "serviceId" : "${widget.mechanicListData?.mechanicService[0].service?.id}",
       "isDefault":  '1',
     });
     getSharedPrefData();
     _listen();
-
-
 
     _listenNotification(context);
   }
@@ -154,7 +135,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
       print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
       print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
 
-      totalFees = totalFees + double.parse('${widget.mechanicListData?.mechanicService?[0].fee.toString()}');
+      totalFees = totalFees + double.parse('${widget.mechanicListData?.mechanicService[0].fee.toString()}');
       _homeCustomerBloc.fetchMechanicProfileDetails(
           authToken,
           '${widget.mechanicListData?.id}',
@@ -185,24 +166,20 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     _homeCustomerBloc.mechanicsEmergencyBookingIDResponse.listen((value) async {
       if (value.status == "error") {
         setState(() {
-          print("message postServiceList >>>>>>>  ${value.message}");
-          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+          print("message mechanicsEmergencyBookingIDResponse >>>>>>>  ${value.message}");
+          print("errrrorr mechanicsEmergencyBookingIDResponse  >>>>>>>  ${value.status}");
         });
       } else {
 
         SharedPreferences shdPre = await SharedPreferences.getInstance();
-
         setState(() {
-
-          shdPre.setString(SharedPrefKeys.serviceIdEmergency, "${widget.serviceIds}");
-          shdPre.setString(SharedPrefKeys.mechanicIdEmergency, "${widget.mechanicId}");
+          shdPre.setString(SharedPrefKeys.serviceIdEmergency, widget.serviceIds);
+          shdPre.setString(SharedPrefKeys.mechanicIdEmergency, widget.mechanicId);
           shdPre.setString(SharedPrefKeys.bookingIdEmergency, "${value.data?.emergencyBooking?.id}");
-
           bookingIdEmergency = "${value.data?.emergencyBooking?.id}";
           _homeCustomerBloc.postBookingDetailsRequest(authToken, "${value.data?.emergencyBooking?.id}",);
-
-          print("message postServiceList >>>>>>>  ${value.message}");
-          print("success postServiceList >>>>>>>  ${value.status}");
+          print("message mechanicsEmergencyBookingIDResponse >>>>>>>  ${value.message}");
+          print("success mechanicsEmergencyBookingIDResponse >>>>>>>  ${value.status}");
 
         });
       }
@@ -210,20 +187,17 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     _homeCustomerBloc.mechanicsUpdateBookingIDResponse.listen((value) async {
       if (value.status == "error") {
         setState(() {
-          print("message postServiceList >>>>>>>  ${value.message}");
-          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+          print("message mechanicsUpdateBookingIDResponse >>>>>>>  ${value.message}");
+          print("errrrorr mechanicsUpdateBookingIDResponse >>>>>>>  ${value.status}");
         });
       } else {
 
         SharedPreferences shdPre = await SharedPreferences.getInstance();
 
         setState(() {
-
-          _homeCustomerBloc.postBookingDetailsRequest(authToken, "$bookingIdEmergency",);
-
-          print("message postServiceList >>>>>>>  ${value.message}");
-          print("success postServiceList >>>>>>>  ${value.status}");
-
+          _homeCustomerBloc.postBookingDetailsRequest(authToken, bookingIdEmergency,);
+          print("message mechanicsUpdateBookingIDResponse >>>>>>>  ${value.message}");
+          print("success mechanicsUpdateBookingIDResponse >>>>>>>  ${value.status}");
         });
       }
     });
@@ -243,12 +217,13 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           carNameBrand = '${value.data?.bookingDetails?.vehicle?.brand}';
           carNameModel = '${value.data?.bookingDetails?.vehicle?.model}';
           carPlateNumber = '${value.data?.bookingDetails?.vehicle?.plateNo}';
+          carColor = '${value.data?.bookingDetails?.vehicle?.color}';
 
 
-          callOnFcmApiSendPushNotifications(1);
+          callOnFcmApiSendPushNotifications(value);
           _showMechanicAcceptanceDialog(context);
           _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-              authToken, "$bookingIdEmergency", "1");
+              authToken, bookingIdEmergency, "1");
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
 
@@ -258,7 +233,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   }
 
-  Future<void> callOnFcmApiSendPushNotifications(int length) async {
+  Future<void> callOnFcmApiSendPushNotifications(BookingDetailsMdl? detailsMdl) async {
     String? token;
     await FirebaseMessaging.instance.getToken().then((value) {
      token = value;
@@ -274,37 +249,40 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
     final data = {
       'notification': {
-        'body': 'You have $length new booking',
-        'title': 'Maria',
+        'body': 'You have new Emergency booking',
+        'title': 'Notification',
         'sound': 'alarmw.wav',
       },
-
       'priority': 'high',
       'data': {
         "click_action": "FLUTTER_NOTIFICATION_CLICK",
         "id": "1",
         "status": "done",
         "screen": "IncomingJobOfferScreen",
-        "bookingId" : "$bookingIdEmergency",
-        "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-        "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
-        "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
-        "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
-        "serviceList" : "${yourItemList.toString()}",
+        "bookingId" : bookingIdEmergency,
+        "serviceName" : "${widget.mechanicListData?.mechanicService[0].service?.serviceName}",
+        "serviceTime" : "${widget.mechanicListData?.mechanicService[0].time.split(':').first}",
+        "serviceCost" :"${widget.mechanicListData?.mechanicService[0].service?.minPrice}",
+        "serviceId" : "${widget.mechanicListData?.mechanicService[0].service?.id}",
+        "serviceList" : yourItemList.toString(),
         "carName" : "$carNameBrand [$carNameModel]",
-        "carPlateNumber" : "$carPlateNumber",
-        "customerName" : "$userName",
-        "customerAddress" : "${widget.customerAddress}",
-        "customerLatitude" : "${widget.latitude}",
-        "customerLongitude" : "${widget.longitude}",
+        "carPlateNumber" : carPlateNumber,
+        "carColor" : carColor,
+        "customerName" : userName,
+        "customerAddress" : widget.customerAddress,
+        "customerLatitude" : widget.latitude,
+        "customerLongitude" : widget.longitude,
         "customerFcmToken" : "$token",
         "mechanicName" : "${widget.mechanicListData?.firstName}",
-        "mechanicID" : "${widget.mechanicId}",
+        "mechanicID" : widget.mechanicId,
+        "customerID" : "${detailsMdl!.data!.bookingDetails!.customerId}",
+        "mechanicPhone" :"${detailsMdl.data!.bookingDetails!.mechanic!.phoneNo}",
+        "customerPhone" : "${detailsMdl.data!.bookingDetails!.customer!.phoneNo}",
         "mechanicAddress" : "",
-        "mechanicLatitude" : "${widget.latitude}",
-        "mechanicLongitude" : "${widget.longitude}",
-        "latitude" : "${widget.latitude}",
-        "longitude" : "${widget.longitude}",
+        "mechanicLatitude" : widget.latitude,
+        "mechanicLongitude" : widget.longitude,
+        "latitude" : widget.latitude,
+        "longitude" : widget.longitude,
         "mechanicFcmToken" :  "${widget.mechanicListData?.fcmToken}",
         "mechanicArrivalState": "0",
         "mechanicDiagonsisState": "0",
@@ -317,9 +295,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "extendedTime" : "0",
         "customerFromPage" : "0",
         "mechanicFromPage" : "0",
-        "updatedServiceCost" : "${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
+        "updatedServiceCost" : "${widget.mechanicListData?.mechanicService[0].service?.minPrice}",
         "updatedServiceList" : "",
-        "updatedServiceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
+        "updatedServiceTime" : "${widget.mechanicListData?.mechanicService[0].time.split(':').first}",
         "isWorkStarted" : "0",
         "isWorkCompleted" : "0",
         "message": "ACTION"
@@ -330,7 +308,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
-     'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
+     //'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
+      'to':'${widget.mechanicListData?.fcmToken}'
       //'to':'$token'
       // 'to': 'ctsKmrE-QDmMJKTC_3w9IJ:APA91bEiYGvfKDstMKwYh927f76Gy0w88LY7E1K2vszl2Cg7XkBIaGOXZeSkhYpx8Oqh4ws2AvAVfdif89YvDZNFUondjMEj48bvQE3jXmZFy1ioHauybD6qJPeo7VRcJdUzHfMHCiij',
     };
@@ -375,26 +354,27 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   Future<void> updateToCloudFirestoreDB() async {
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>. $yourItemList');
      yourItemList.add({
-      "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-      "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
-      "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
-      "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
+      "serviceName" : "${widget.mechanicListData?.mechanicService[0].service?.serviceName}",
+      "serviceTime" : "${widget.mechanicListData?.mechanicService[0].time.split(':').first}",
+      "serviceCost" :"${widget.mechanicListData?.mechanicService[0].service?.minPrice}",
+      "serviceId" : "${widget.mechanicListData?.mechanicService[0].service?.id}",
       "isDefault":  '1',
     });
 
      _firestore
         .collection("ResolMech")
-        .doc('$bookingIdEmergency')
+        .doc(bookingIdEmergency)
         .update({
-          "serviceModel" : FieldValue.arrayUnion([{
-            "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-            "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
-            "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
-            "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
+            "serviceModel" : FieldValue.arrayUnion([{
+            "serviceName" : "${widget.mechanicListData?.mechanicService[0].service?.serviceName}",
+            "serviceTime" : "${widget.mechanicListData?.mechanicService[0].time.split(':').first}",
+            "serviceCost" :"${widget.mechanicListData?.mechanicService[0].service?.minPrice}",
+            "serviceId" : "${widget.mechanicListData?.mechanicService[0].service?.id}",
             "isDefault":  '1',
           }]),
           "updatedServiceList": FieldValue.arrayUnion(yourItemList),
-         "customerFromPage": "MechanicTrackingScreen",
+          "customerAddress": widget.customerAddress,
+          "customerFromPage": "MechanicTrackingScreen",
 
     })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
@@ -406,20 +386,22 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   _listenNotification(BuildContext context){
     FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
-
       print("onMessage recieved from onMessage");
       print("onMessage event.notification!.data " + event.data.toString());
 
-      NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
-      print('${notificationPayloadMdl.id.toString()} >>>>>>>>onMessage');
+      String screen = event.data['screen'];
+      if(screen.toString() == "MechanicTrackingScreen"){
 
-      //final provider = Provider.of<LocaleProvider>(context,listen: false);
+        NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
+        print('${notificationPayloadMdl.id.toString()} >>>>>>>>onMessage');
 
-      //provider.setPayload(notificationPayloadMdl);
+        //final provider = Provider.of<LocaleProvider>(context,listen: false);
 
-      //Navigator.pop(context);
+        //provider.setPayload(notificationPayloadMdl);
 
-      if(notificationPayloadMdl.requestFromApp == "0")
+        //Navigator.pop(context);
+
+        if(notificationPayloadMdl.requestFromApp == "0")
         {
           print("requestFromApp ${notificationPayloadMdl.requestFromApp}");
           setState(() {
@@ -427,23 +409,25 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             Navigator.of(context).pop();
           });
         }
-      else
+        else
         {
           print("requestFromApp ${notificationPayloadMdl.requestFromApp}");
           await updateToCloudFirestoreDB();
           setState(() {
-             updateToCloudFirestoreDB();
+            updateToCloudFirestoreDB();
             Navigator.of(context, rootNavigator: true).pop();
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>   MechanicTrackingScreen(latitude: "${widget.latitude}", longitude:  "${widget.longitude}",)
+                    builder: (context) =>   MechanicTrackingScreen(latitude: widget.latitude, longitude:  widget.longitude,)
                 )).then((value){
             });
           });
         }
+      }else{
+        print("Notification onMessage catch at MechanicProfileViewScreen");
+      }
     });
-
   }
 
 
@@ -453,6 +437,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     //_notificationListener.listenNotification(context);
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -512,7 +497,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                     child: Stack(
                       alignment: Alignment.topCenter,
                       children: [
-
                         Container(
                           height: 60,
                           width: 60,
@@ -590,7 +574,18 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                   radius: 50,
                                   backgroundColor: Colors.white,
                                   child: ClipOval(
-                                    child:  SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
+                                      child:
+                                      widget.mechanicListData?.mechanic[0].profilePic != null
+                                          && widget.mechanicListData?.mechanic[0].profilePic != ""
+                                          ?
+                                      Image.network(
+                                        '${widget.mechanicListData?.mechanic[0].profilePic.toString()}',
+                                        width: 150,
+                                        height: 150,
+                                        fit: BoxFit.cover,
+                                      )
+                                          :
+                                      SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
                                   )))
 
                       ),
@@ -617,7 +612,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(155,110,10,0),
                         child: RatingBar.builder(
-                          initialRating: 0,
+                          ignoreGestures: true,
+                          initialRating: double.parse('${widget.mechanicListData!.mechanicReview}'),
                           minRating: 1,
                           direction: Axis.horizontal,
                           allowHalfRating: true,
@@ -678,7 +674,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                   width: 70,
                   child: Column(
                     children: [
-                      Text('${widget.mechanicListData?.mechanic?[0].address}',
+                      Text('${widget.mechanicListData?.mechanic[0].address}',
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.visible,
@@ -751,7 +747,19 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                                 radius: 50,
                                                 backgroundColor: Colors.white,
                                                 child: ClipOval(
-                                                  child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                                  child:
+                                                  _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer?[0].profilePic != null
+                                                      &&
+                                                      _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer?[0].profilePic != ""
+                                                      ?
+                                                  Image.network(
+                                                    '${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer?[0].profilePic.toString()}',
+                                                    width: 100,
+                                                    height: 100,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                      :
+                                                  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
                                                 )))
 
                                     ),
@@ -780,7 +788,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                             textAlign: TextAlign.start,
                                             overflow: TextOverflow.visible,),
                                         ),
-
                                       ],
                                     ),
                                   ),
@@ -813,8 +820,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                     width: 110,
                     color: CustColors.greyText,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Text('Load more',
                       maxLines: 2,
                       textAlign: TextAlign.start,
@@ -827,8 +834,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                     width: 110,
                     color: CustColors.greyText,
                   ),
-
-
                 ],
               ),
             )
@@ -860,7 +865,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             ),
             Container(
               child: ListView.builder(
-                itemCount:widget.mechanicListData?.mechanicService?.length,
+                itemCount:widget.mechanicListData?.mechanicService.length,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context,index,) {
@@ -877,7 +882,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                             children: [
                               Row(
                                 children: [
-                                  Text('${widget.mechanicListData?.mechanicService?[index].service?.serviceName}',
+                                  Text('${widget.mechanicListData?.mechanicService[index].service?.serviceName}',
                                     maxLines: 2,
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.visible,
@@ -910,7 +915,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
               child: Row(
                 children: [
                   Row(
-                    children: [
+                    children: const [
                       Text('Total Amount',
                         maxLines: 2,
                         textAlign: TextAlign.start,
@@ -919,7 +924,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                       ),
                     ],
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Row(
                     children: [
                       Text('${widget.mechanicListData?.totalAmount}',
@@ -948,13 +953,13 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
         print(">>>>>>>>>> ServiceId  ${widget.serviceIds}");
 
-        if(serviceIdEmergency.toString().trim() == '${widget.serviceIds}' )
+        if(serviceIdEmergency.toString().trim() == widget.serviceIds )
         {
           print('serviceIdEmergency>>>>>>>>000000  ' + serviceIdEmergency.toString());
           _homeCustomerBloc.postUpdateMechanicsBookingIDRequest(
               authToken,
-              '$bookingIdEmergency',
-              '$mechanicIdEmergency');
+              bookingIdEmergency,
+              mechanicIdEmergency);
         }
         else
         {
@@ -964,19 +969,15 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             authToken,
             '${_homeCustomerBloc.dateConvert(DateTime.now())}',
             '${_homeCustomerBloc.timeConvert(DateTime.now())}',
-            '${widget.latitude}',
-            '${widget.longitude}',
-            '${widget.serviceIds}',
+            widget.latitude,
+            widget.longitude,
+            widget.serviceIds,
             '${widget.mechanicListData?.id}',
-            '2',
+            '1',
             '${widget.mechanicListData?.totalAmount}',
             '1',
             '${_homeCustomerBloc.timeConvertWithoutAmPm(DateTime.now())}',);
-
         }
-
-
-
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
@@ -1047,7 +1048,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
               height: 45,
               width:200,
               alignment: Alignment.center,
-              margin: EdgeInsets.only(top: 8, bottom: 6,left: 20,right: 20),
+              margin: const EdgeInsets.only(top: 8, bottom: 6,left: 20,right: 20),
               //padding: EdgeInsets.only(left: 20, right: 20),
               decoration: BoxDecoration(
                 color: CustColors.light_navy,
@@ -1111,7 +1112,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            "Wait few minutes !",
+                            "Wait for few minutes !",
                             style: Styles.waitingTextBlack17,
                           ),
                           Text(

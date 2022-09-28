@@ -196,7 +196,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                 children: [
                                   Container(
                                     child: Text(
-                                      'Enter your code',    //'Enter your code',
+                                      'Enter code send to your phone',    //'Enter your code',
                                       style: Styles.textHeadLogin,
                                     ),
                                   ),
@@ -269,7 +269,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                               : Container(
                                                   child: MaterialButton(
                                                     onPressed: () {
-                                                      setState(() {
+                                                      setState(() async {
                                                         print(widget.fromPage.toString() + '>>>>>>>>>>>>>>>>widget.fromPage');
 
                                                         if(widget.fromPage=="3")
@@ -320,6 +320,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                           print(textEditingController.text);
                                                           print(authToken.toString());
                                                           _isLoading = false;
+                                                          SharedPreferences _shdPre = await SharedPreferences.getInstance();
                                                           if( widget.fromPage == "3")
                                                           {
                                                             Navigator.pushReplacement(
@@ -352,6 +353,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                           }
                                                           else if( widget.userType == TextStrings.user_customer)
                                                           {
+                                                            _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 2);
                                                             Navigator.pushReplacement(
                                                               context,
                                                               new MaterialPageRoute(
@@ -361,6 +363,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                           }
                                                           else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_corporate)
                                                           {
+                                                            _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 2);
                                                             Navigator.pushReplacement(
                                                               context,
                                                               new MaterialPageRoute(
@@ -370,6 +373,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                           }
                                                           else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_individual)
                                                           {
+                                                            _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 2);
                                                             Navigator.pushReplacement(
                                                               context,
                                                               new MaterialPageRoute(

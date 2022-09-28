@@ -26,12 +26,12 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
   final vehicleSpecializationBloc _specializationBloc = vehicleSpecializationBloc();
 
 
-  List<VehicleSpecialization> _countryData = [];
+  //List<VehicleSpecialization> _countryData = [];
   String? countryCode;
   String selectedState = "",authToken = "", bookingId = "";
   bool isloading = false;
   //List<String> vehicleSpecialisationList =[];
-  List<VehicleSpecialization> vehicleSpecialisationList = [];
+  //List<VehicleSpecialization> vehicleSpecialisationList = [];
 
   List<Datum>? _brandListData = [];
   List<Datum> vehicleSpecialisationbrandList = [];
@@ -45,9 +45,9 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
 
     getSharedPrefData();
 
-
-    vehicleSpecialisationList.clear();
-    _specializationBloc.dialvehicleSpecializationListRequest();
+    //vehicleSpecialisationList.clear();
+    vehicleSpecialisationbrandList.clear();
+    //_specializationBloc.dialvehicleSpecializationListRequest();
     _populateCountryList();
   }
 
@@ -66,11 +66,11 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
 
 
   _populateCountryList() {
-    _specializationBloc.vehicleSpecializationCode.listen((value) {
+    /*_specializationBloc.vehicleSpecializationCode.listen((value) {
       setState(() {
         _countryData = value.cast<VehicleSpecialization>();
       });
-    });
+    });*/
     _specializationBloc.postBrandListResponse.listen((value) {
       if (value.status == "error") {
 
@@ -81,6 +81,9 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
 
         setState(() {
           _brandListData = value.data?.brandList?.data;
+          print(">>>>>>>>>" + _brandListData.toString());
+          print(">>>>>>>>>" + _brandListData!.length.toString());
+          //print(">>>>>>>>>" + _brandListData![23].brandName);
           isloading=false;
         });
       }
@@ -95,7 +98,7 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
         centerTitle: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context,vehicleSpecialisationList),
+          onPressed: () => Navigator.pop(context,vehicleSpecialisationbrandList),
         ),
         backgroundColor: Colors.white,
         title: Text(
@@ -239,8 +242,8 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                                       if(_brandListData![index].value=="1")
                                       {
                                         _brandListData![index].value="0";
-                                        if (vehicleSpecialisationList.contains(_brandListData![index])) {
-                                          vehicleSpecialisationList.remove(_countryData[index]);
+                                        if (vehicleSpecialisationbrandList.contains(_brandListData![index])) {
+                                          vehicleSpecialisationbrandList.remove(_brandListData![index]);
                                         }
                                       }
                                       else
@@ -259,10 +262,9 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                                         Stack(
                                           alignment: Alignment.topRight,
                                           children: [
-
                                             Container(
                                               decoration: BoxDecoration(
-                                                  color:  _countryData[index].value=="0"?Colors.white:CustColors.whiteBlueish,
+                                                  color:  _brandListData![index].value == "0" ? Colors.white : CustColors.whiteBlueish,
                                                   borderRadius: BorderRadius.circular(11.0)
                                               ),
                                               height: 50,
@@ -280,7 +282,7 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                                               child: Align(
                                                 alignment: Alignment.topRight,
                                                 child: Container(
-                                                  child: _brandListData![index].value=="1"
+                                                  child: _brandListData![index].value == "1"
                                                       ? Icon( Icons.check_circle,size: 20,color: CustColors.light_navy,)
                                                       : Container(),
                                                 ),

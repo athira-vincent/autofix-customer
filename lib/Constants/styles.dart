@@ -25,6 +25,13 @@ class Styles {
     fontSize: 11,
   );
 
+  static const textLabelSubTitle01 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w500,
+    color: CustColors.blackishgrey,
+    fontSize: 11,
+  );
+
   static const textLabelSubTitle05 = TextStyle(
     fontFamily: 'Samsung_SharpSans_Regular',
     fontWeight: FontWeight.w500,
@@ -88,6 +95,12 @@ class Styles {
     fontSize: 11,
   );
 
+  static const textLabelSubTitlegrey12 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w600,
+    color: CustColors.warm_grey03,
+    fontSize: 9,
+  );
 
   static const textLabelTitle_10 = TextStyle(
     fontFamily: 'Samsung_SharpSans_Medium',
@@ -394,12 +407,12 @@ class Styles {
 
   static const textSuccessfulTitleStyle01 = TextStyle(
       color: CustColors.light_navy,
-      fontSize: 24,
+      fontSize: 22,
       fontWeight: FontWeight.w600,
       fontFamily: 'Corbel_Bold');
   static const textSuccessfulTitleStyle02 = TextStyle(
       color: CustColors.azure,
-      fontSize: 24,
+      fontSize: 22,
       fontWeight: FontWeight.w600,
       fontFamily: 'Corbel_Bold');
 
@@ -412,13 +425,13 @@ class Styles {
 
   static const textSuccessfulTitle02Style = TextStyle(
       color: CustColors.brownish_grey,
-      fontSize: 14,
+      fontSize: 13,
       fontWeight: FontWeight.w600,
       fontFamily: 'Samsung_SharpSans_Medium');
 
   static const textSuccessfulTitle03Style = TextStyle(
       color: Colors.black,
-      fontSize: 15.3,
+      fontSize: 15,
       fontWeight: FontWeight.w600,
       fontFamily: 'Samsung_SharpSans_Medium');
 
@@ -676,6 +689,14 @@ class Styles {
     color: CustColors.light_navy,
     fontWeight: FontWeight.w500,
   );
+
+  static const myWalletTitleText05 = TextStyle(
+    fontSize: 15,
+    fontFamily: "Samsung_SharpSans_Bold",
+    color: CustColors.light_navy,
+    fontWeight: FontWeight.w600,
+  );
+
   static const myWalletTitleText04 = TextStyle(
     fontSize: 15,
     fontFamily: "Samsung_SharpSans_Medium",

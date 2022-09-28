@@ -22,10 +22,10 @@ class IncomingJobRequestScreen extends StatefulWidget {
 
   final NotificationPayloadMdl notificationPayloadMdl;
 
-   IncomingJobRequestScreen(
-       {
-         required this.notificationPayloadMdl
-       });
+  IncomingJobRequestScreen(
+      {
+        required this.notificationPayloadMdl
+      });
 
   @override
   State<StatefulWidget> createState() {
@@ -136,6 +136,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         "serviceList" : "${widget.notificationPayloadMdl.serviceList}",
         "carName" : "${widget.notificationPayloadMdl.carName}",
         "carPlateNumber" : "${widget.notificationPayloadMdl.carPlateNumber}",
+        "carColor" : "${widget.notificationPayloadMdl.carColor}",
         "customerName" : "${widget.notificationPayloadMdl.customerName}",
         "customerAddress" : "${widget.notificationPayloadMdl.customerAddress}",
         "customerLatitude" : "${widget.notificationPayloadMdl.customerLatitude}",
@@ -143,6 +144,9 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         "customerFcmToken" : "${widget.notificationPayloadMdl.customerFcmToken}",
         "mechanicName" : "${widget.notificationPayloadMdl.mechanicName}",
         "mechanicID" : "${widget.notificationPayloadMdl.mechanicID}",
+        "customerID" : "${widget.notificationPayloadMdl.customerID}",
+        "mechanicPhone" : "${widget.notificationPayloadMdl.mechanicPhone}",
+        "customerPhone" : "${widget.notificationPayloadMdl.customerPhone}",
         "mechanicAddress" : "${widget.notificationPayloadMdl.mechanicAddress}",
         "mechanicLatitude" : "${widget.notificationPayloadMdl.mechanicLatitude}",
         "mechanicLongitude" : "${widget.notificationPayloadMdl.mechanicLongitude}",
@@ -203,12 +207,12 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
 
         }else*/
 
-          if(isAccepted == 1){
+        if(isAccepted == 1){
 
           SharedPreferences shdPre = await SharedPreferences.getInstance();
           shdPre.setString(SharedPrefKeys.bookingIdEmergency, widget.notificationPayloadMdl.bookingId);
 
-           updateToCloudFirestoreDB();
+          updateToCloudFirestoreDB();
 
           Navigator.pushReplacement(
               context,
@@ -250,6 +254,9 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "serviceList" : "${widget.notificationPayloadMdl.serviceList}",
       "carName" : "${widget.notificationPayloadMdl.carName}",
       "carPlateNumber" : "${widget.notificationPayloadMdl.carPlateNumber}",
+      "carColor" : "${widget.notificationPayloadMdl.carColor}",
+      "customerID" : "${widget.notificationPayloadMdl.customerID}",
+      "customerPhone" : "${widget.notificationPayloadMdl.customerPhone}",
       "customerName" : "${widget.notificationPayloadMdl.customerName}",
       "customerAddress" : "${widget.notificationPayloadMdl.customerAddress}",
       "customerLatitude" : "${widget.notificationPayloadMdl.customerLatitude}",
@@ -257,6 +264,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "customerFcmToken" : "${widget.notificationPayloadMdl.customerFcmToken}",
       "mechanicName" : "${widget.notificationPayloadMdl.mechanicName}",
       "mechanicID" : "${widget.notificationPayloadMdl.mechanicID}",
+      "mechanicPhone" : "${widget.notificationPayloadMdl.mechanicPhone}",
       "mechanicAddress" :"${widget.notificationPayloadMdl.mechanicAddress}",
       "mechanicLatitude" : "${widget.notificationPayloadMdl.mechanicLatitude}",
       "mechanicLongitude" : "${widget.notificationPayloadMdl.mechanicLongitude}",
@@ -296,7 +304,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "mechanicArrivalState": "0",
       "mechanicDiagonsisState": "0",
       "customerDiagonsisApproval": "0",
-      })
+    })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>
         print("Failed to add row: $error"));
@@ -349,7 +357,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
             duration: const Duration(seconds: 2),
             backgroundColor: CustColors.peaGreen,
           ));
-         // Navigator.pop(context);
+          // Navigator.pop(context);
         });
       } else {
         setState(() {

@@ -87,29 +87,27 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
         // drawerHeader,
         navigationBarHeader(size),
 
-        /*ListTile(
+        ListTile(
           contentPadding: EdgeInsets.only(left: 20.4, top: 13),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
-          title: Align(
+          title: const Align(
             alignment: Alignment(-1.21, 0),
             child: Text(
               "My wallet",
               style: Styles.navDrawerTextStyle02,
             ),
           ),
-          leading: Container(
-            child: Image.asset(
-              'assets/image/ic_my_wallet.png',
-              width: 19.28,
-              height: 21.76,
-            ),
+          leading: Image.asset(
+            'assets/image/ic_my_wallet.png',
+            width: 19.28,
+            height: 21.76,
           ),
           onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => MechanicMyWalletScreen()));
           },
-        ),*/
+        ),
 
         /*ListTile(
           contentPadding: EdgeInsets.only(left: 20.4,),
@@ -329,7 +327,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           child: ListTile(
             visualDensity: VisualDensity(horizontal: 0, vertical: -3),
             title: Text(
-              "Legal",
+              "General Terms & Conditions",
               style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {

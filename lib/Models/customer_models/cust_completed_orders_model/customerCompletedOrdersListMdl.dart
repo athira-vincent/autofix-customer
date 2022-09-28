@@ -50,6 +50,7 @@ class CustCompletedOrder {
     required this.id,
     required this.bookingCode,
     required this.reqType,
+    required this.regularType,
     required this.bookStatus,
     required this.totalPrice,
     required this.tax,
@@ -65,6 +66,7 @@ class CustCompletedOrder {
     required this.totalExt,
     required this.extendTime,
     required this.bookedDate,
+    required this.bookedTime,
     required this.isRated,
     required this.status,
     required this.customerId,
@@ -79,6 +81,7 @@ class CustCompletedOrder {
   int id;
   String bookingCode;
   int reqType;
+  int regularType;
   int bookStatus;
   int totalPrice;
   var tax;
@@ -94,6 +97,7 @@ class CustCompletedOrder {
   dynamic totalExt;
   dynamic extendTime;
   DateTime? bookedDate;
+  String bookedTime;
   int isRated;
   int status;
   int customerId;
@@ -108,6 +112,7 @@ class CustCompletedOrder {
     id: json["id"] == null ? null : json["id"],
     bookingCode: json["bookingCode"] == null ? null : json["bookingCode"],
     reqType: json["reqType"] == null ? null : json["reqType"],
+    regularType: json["regularType"] == null ? null : json["regularType"],
     bookStatus: json["bookStatus"] == null ? null : json["bookStatus"],
     totalPrice: json["totalPrice"] == null ? null : json["totalPrice"],
     tax: json["tax"] == null ? null : json["tax"],
@@ -123,6 +128,7 @@ class CustCompletedOrder {
     totalExt: json["totalExt"],
     extendTime: json["extendTime"],
     bookedDate: json["bookedDate"] == null ? null : DateTime.parse(json["bookedDate"]),
+    bookedTime: json["bookedTime"] == null ? null : json["bookedTime"],
     isRated: json["isRated"] == null ? null : json["isRated"],
     status: json["status"] == null ? null : json["status"],
     customerId: json["customerId"] == null ? null : json["customerId"],
@@ -138,6 +144,7 @@ class CustCompletedOrder {
     "id": id == null ? null : id,
     "bookingCode": bookingCode == null ? null : bookingCode,
     "reqType": reqType == null ? null : reqType,
+    "regularType": regularType == null ? null : regularType,
     "bookStatus": bookStatus == null ? null : bookStatus,
     "totalPrice": totalPrice == null ? null : totalPrice,
     "tax": tax == null ? null : tax,
@@ -153,6 +160,7 @@ class CustCompletedOrder {
     "totalExt": totalExt,
     "extendTime": extendTime,
     "bookedDate": bookedDate == null ? null : bookedDate?.toIso8601String(),
+    "bookedTime": bookedTime == null ? null : bookedTime,
     "isRated": isRated == null ? null : isRated,
     "status": status == null ? null : status,
     "customerId": customerId == null ? null : customerId,

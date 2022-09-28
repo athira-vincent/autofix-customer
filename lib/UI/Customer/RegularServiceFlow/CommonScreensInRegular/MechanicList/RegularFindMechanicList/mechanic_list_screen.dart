@@ -149,7 +149,6 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
       } else {
 
         setState(() {
-
           if(value.data?.mechanicList?.data?.length==0)
           {
             waitingMechanic = "0";
@@ -161,11 +160,9 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
 
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
-
         });
       }
     });
-
   }
 
 
@@ -209,36 +206,36 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
 
                         waitingMechanic=="-1"
                             ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: 70,
-                            width: 200,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                              color: CustColors.pale_grey,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("Wait a minute!!",
-                                  style: TextStyle(
-                                      color: CustColors.light_navy,
-                                      fontFamily: "Samsung_SharpSans_Medium",
-                                      fontSize: 13.3
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                height: 70,
+                                width: 200,
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
                                   ),
+                                  color: CustColors.pale_grey,
                                 ),
-                                Text("Finding mechanic near you \n Almost  there…..",
-                                  style: TextStyle(
-                                      color: CustColors.warm_grey03,
-                                      fontFamily: "Samsung_SharpSans_Regular",
-                                      fontSize: 10
-                                  ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("Wait a minute!!",
+                                      style: TextStyle(
+                                          color: CustColors.light_navy,
+                                          fontFamily: "Samsung_SharpSans_Medium",
+                                          fontSize: 13.3
+                                      ),
+                                    ),
+                                    Text("Finding mechanic near you \n Almost  there…..",
+                                      style: TextStyle(
+                                          color: CustColors.warm_grey03,
+                                          fontFamily: "Samsung_SharpSans_Regular",
+                                          fontSize: 10
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
                           ),
                         )
                             : Container(),
@@ -249,25 +246,25 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                               waitingMechanic=="0" ||  waitingMechanic=="-1"
                                   ? Container()
                                   : Padding(
-                                padding: const EdgeInsets.all(20),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Container(
-                                    child: Text("Mechanic found",
-                                      style: TextStyle(
-                                        fontFamily: "Samsung_SharpSans_Medium",
-                                        fontSize: 16.7,
-                                        color: CustColors.black_04,
-                                      ),),
-                                  ),
-                                ),
+                                    padding: const EdgeInsets.all(20),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        child: Text("Mechanic found",
+                                          style: TextStyle(
+                                            fontFamily: "Samsung_SharpSans_Medium",
+                                            fontSize: 16.7,
+                                            color: CustColors.black_04,
+                                          ),),
+                                      ),
+                                    ),
                               ),
 
                               waitingMechanic=="0"
                                   ? Padding(
-                                padding: const EdgeInsets.fromLTRB(15,20,15,15),
-                                child: Container(
-                                  child: Column(
+                                    padding: const EdgeInsets.fromLTRB(15,20,15,15),
+                                    child: Container(
+                                      child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
@@ -325,10 +322,10 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                 ),
                               )
                                   : SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      child: StreamBuilder(
+                                      child: Column(
+                                      children: [
+                                        Container(
+                                        child: StreamBuilder(
                                           stream:  _homeCustomerBloc.findMechanicsListEmergencyResponse,
                                           builder: (context, AsyncSnapshot<MechanicListMdl> snapshot) {
                                             print("${snapshot.hasData}");
@@ -340,225 +337,224 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                                 return
                                                   snapshot.data?.data?.mechanicList?.data?.length != 0 && snapshot.data?.data?.mechanicList?.data?.length != null
                                                       ? ListView.builder(
-                                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                                    scrollDirection: Axis.vertical,
-                                                    shrinkWrap: true,
-                                                    physics: NeverScrollableScrollPhysics(),
-                                                    itemCount:snapshot.data?.data?.mechanicList?.data?.length,
-                                                    itemBuilder: (context, index) {
-                                                      return InkWell(
-                                                        onTap: (){
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (context) =>  RegularMechanicProfileViewScreen(
-                                                                    mechanicId: "${snapshot.data?.data?.mechanicList?.data![index].id.toString()}",
-                                                                    authToken: '$authToken',
-                                                                    customerAddress: "${widget.address}",
-                                                                    mechanicListData: snapshot.data?.data?.mechanicList?.data![index],
-                                                                    isEmergency: true,
-                                                                    //serviceModel: "",
-                                                                    serviceIds: widget.serviceIds,
-                                                                    longitude: widget.longitude,
-                                                                    latitude: widget.latitude,
-                                                                    serviceType : widget.serviceType,
-                                                                    serviceDate : widget.serviceDate,
-                                                                    serviceTime : widget.serviceTime,
-                                                                    regularServiceType : widget.regularServiceType,
-                                                                    selectedService: widget.selectedService!,
-                                                                  )));
-                                                        },
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.fromLTRB(10,5,10,0),
-                                                          child: Container(
-                                                            width: double.infinity,
-                                                            decoration: BoxDecoration(
-                                                                color: CustColors.whiteBlueish,
-                                                                borderRadius: BorderRadius.circular(11.0)
-                                                            ),
+                                                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                                        scrollDirection: Axis.vertical,
+                                                        shrinkWrap: true,
+                                                        physics: NeverScrollableScrollPhysics(),
+                                                        itemCount:snapshot.data?.data?.mechanicList?.data?.length,
+                                                        itemBuilder: (context, index) {
+                                                          return InkWell(
+                                                            onTap: (){
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) =>  RegularMechanicProfileViewScreen(
+                                                                        mechanicId: "${snapshot.data?.data?.mechanicList?.data![index].id.toString()}",
+                                                                        authToken: '$authToken',
+                                                                        customerAddress: "${widget.address}",
+                                                                        mechanicListData: snapshot.data?.data?.mechanicList?.data![index],
+                                                                        isEmergency: true,
+                                                                        //serviceModel: "",
+                                                                        serviceIds: widget.serviceIds,
+                                                                        longitude: widget.longitude,
+                                                                        latitude: widget.latitude,
+                                                                        serviceType : widget.serviceType,
+                                                                        serviceDate : widget.serviceDate,
+                                                                        serviceTime : widget.serviceTime,
+                                                                        regularServiceType : widget.regularServiceType,
+                                                                        selectedService: widget.selectedService!,
+                                                                      )));
+                                                            },
                                                             child: Padding(
-                                                              padding: const EdgeInsets.all(0),
-                                                              child: Row(
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                                                                    child: Container(
-                                                                      width: 80.0,
-                                                                      height: 80.0,
-                                                                      child: ClipRRect(
-                                                                          borderRadius: BorderRadius.circular(20.0),
-                                                                          child:Container(
-                                                                              child:CircleAvatar(
-                                                                                  radius: 50,
-                                                                                  backgroundColor: Colors.white,
-                                                                                  child: ClipOval(
-                                                                                    child:
-                                                                                      snapshot.data?.data?.mechanicList?.data?[index].mechanic[0].profilePic != null
-                                                                                          && snapshot.data?.data?.mechanicList?.data?[index].mechanic[0].profilePic != ""
-                                                                                          ?
-                                                                                      Image.network(
-                                                                                        '${snapshot.data?.data?.mechanicList?.data?[index].mechanic[0].profilePic.toString()}',
-                                                                                        width: 150,
-                                                                                        height: 150,
-                                                                                        fit: BoxFit.cover,
-                                                                                      )
-                                                                                          :
-                                                                                      SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                                                                  )))
+                                                              padding: const EdgeInsets.fromLTRB(10,5,10,0),
+                                                              child: Container(
+                                                                width: double.infinity,
+                                                                decoration: BoxDecoration(
+                                                                    color: CustColors.whiteBlueish,
+                                                                    borderRadius: BorderRadius.circular(11.0)
+                                                                ),
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets.all(0),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                                                                        child: Container(
+                                                                          width: 80.0,
+                                                                          height: 80.0,
+                                                                          child: ClipRRect(
+                                                                              borderRadius: BorderRadius.circular(20.0),
+                                                                              child:Container(
+                                                                                  child:CircleAvatar(
+                                                                                      radius: 50,
+                                                                                      backgroundColor: Colors.white,
+                                                                                      child: ClipOval(
+                                                                                        child:
+                                                                                          snapshot.data?.data?.mechanicList?.data?[index].mechanic[0].profilePic != null
+                                                                                              && snapshot.data?.data?.mechanicList?.data?[index].mechanic[0].profilePic != ""
+                                                                                              ?
+                                                                                          Image.network(
+                                                                                            '${snapshot.data?.data?.mechanicList?.data?[index].mechanic[0].profilePic.toString()}',
+                                                                                            width: 150,
+                                                                                            height: 150,
+                                                                                            fit: BoxFit.cover,
+                                                                                          )
+                                                                                              :
+                                                                                          SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                                                                      )))
 
+                                                                          ),
+                                                                        ),
                                                                       ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    child: Padding(
-                                                                      padding: const EdgeInsets.all(8.0),
-                                                                      child: Column(
-                                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                                        children: [
-                                                                          Padding(
-                                                                            padding: const EdgeInsets.all(2),
-                                                                            child: Text(
-                                                                              '${snapshot.data?.data?.mechanicList?.data?[index].firstName}',
-                                                                              style: Styles.mechanicNameStyle,
-                                                                              maxLines: 1,
-                                                                              textAlign: TextAlign.start,
-                                                                              overflow: TextOverflow.visible,),
-                                                                          ),
+                                                                      Expanded(
+                                                                        child: Padding(
+                                                                          padding: const EdgeInsets.all(8.0),
+                                                                          child: Column(
+                                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                                            children: [
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.all(2),
+                                                                                child: Text(
+                                                                                  '${snapshot.data?.data?.mechanicList?.data?[index].firstName}',
+                                                                                  style: Styles.mechanicNameStyle,
+                                                                                  maxLines: 1,
+                                                                                  textAlign: TextAlign.start,
+                                                                                  overflow: TextOverflow.visible,),
+                                                                              ),
 
-                                                                          Container(
-                                                                            child: Column(
-                                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                                              children: [
-
-                                                                                Padding(
-                                                                                  padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                                                                  child: RatingBar.builder(
-                                                                                    updateOnDrag: false,
-                                                                                    ignoreGestures: true,
-                                                                                    initialRating: double.parse('${snapshot.data?.data?.mechanicList?.data?[index].mechanicReview}'),
-                                                                                    //initialRating: 3.075,
-                                                                                    //minRating: 1,
-                                                                                    direction: Axis.horizontal,
-                                                                                    allowHalfRating: true,
-                                                                                    itemCount: 5,
-                                                                                    itemSize: 12,
-                                                                                    itemPadding: EdgeInsets.symmetric(horizontal: 1),
-                                                                                    itemBuilder: (context, _) => Icon(
-                                                                                      Icons.star,
-                                                                                      color: CustColors.blue,
+                                                                              Container(
+                                                                                child: Column(
+                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                  children: [
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                                                                      child: RatingBar.builder(
+                                                                                        updateOnDrag: false,
+                                                                                        ignoreGestures: true,
+                                                                                        initialRating: double.parse('${snapshot.data?.data?.mechanicList?.data?[index].mechanicReview}'),
+                                                                                        //initialRating: 3.075,
+                                                                                        //minRating: 1,
+                                                                                        direction: Axis.horizontal,
+                                                                                        allowHalfRating: true,
+                                                                                        itemCount: 5,
+                                                                                        itemSize: 12,
+                                                                                        itemPadding: EdgeInsets.symmetric(horizontal: 1),
+                                                                                        itemBuilder: (context, _) => Icon(
+                                                                                          Icons.star,
+                                                                                          color: CustColors.blue,
+                                                                                        ),
+                                                                                        onRatingUpdate: (rating) {
+                                                                                          print(rating);
+                                                                                        },
+                                                                                      ),
                                                                                     ),
-                                                                                    onRatingUpdate: (rating) {
-                                                                                      print(rating);
-                                                                                    },
-                                                                                  ),
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                                                                      child: Text('${snapshot.data?.data?.mechanicList?.data?[index].reviewCount} Reviews',
+                                                                                        style: Styles.smallTitleStyle1,),
+                                                                                    ),
+                                                                                  ],
                                                                                 ),
-                                                                                Padding(
-                                                                                  padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                                                                  child: Text('${snapshot.data?.data?.mechanicList?.data?[index].reviewCount} Reviews',
-                                                                                    style: Styles.smallTitleStyle1,),
-                                                                                ),
-                                                                              ],
-                                                                            ),
+                                                                              ),
+                                                                            ],
                                                                           ),
-                                                                        ],
+                                                                        ),
+                                                                      ),
+                                                                      Container(
+                                                                        width: 100,
+                                                                        child: Padding(
+                                                                          padding: const EdgeInsets.all(8.0),
+                                                                          child: Column(
+                                                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                                                            children: [
+                                                                              Column(
+                                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                children: [
+                                                                                  Padding(
+                                                                                    padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                                                                    child: Text('${snapshot.data?.data?.mechanicList?.data?[index].distance}',
+                                                                                      style: Styles.smallTitleStyle1,),
+                                                                                  ),
+                                                                                  Padding(
+                                                                                    padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                                                                    child: Text('${snapshot.data?.data?.mechanicList?.data?[index].duration}',
+                                                                                      style: Styles.smallTitleStyle1,),
+                                                                                  ),
+                                                                                  Padding(
+                                                                                    padding: const EdgeInsets.fromLTRB(0,3,0,3),
+                                                                                    child: Text('₦ ${snapshot.data?.data?.mechanicList?.data?[index].totalAmount}',
+                                                                                      style: Styles.totalAmountStyle,),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                  )
+                                                      : Padding(
+                                                        padding: const EdgeInsets.fromLTRB(15,0,15,15),
+                                                        child: Container(
+                                                          child: Column(
+                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: <Widget>[
+                                                              Column(
+                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                                children: <Widget>[
+                                                                  Align(
+                                                                    alignment: Alignment.center,
+                                                                    child: Padding(
+                                                                      padding: const EdgeInsets.fromLTRB(15,0,15,15),
+                                                                      child: Container(
+                                                                        height: 100,
+                                                                        width: 260,
+                                                                        decoration: const BoxDecoration(
+                                                                          borderRadius: BorderRadius.all(
+                                                                            Radius.circular(10),
+                                                                          ),
+                                                                          color: CustColors.pale_grey,
+                                                                        ),
+                                                                        child: Padding(
+                                                                          padding: const EdgeInsets.all(10),
+                                                                          child: Column(
+                                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                                            children: [
+                                                                              Text("Oops!! Mechanic not found!",
+                                                                                style: Styles.oopsmechanicNotFoundStyle,
+                                                                              ),
+                                                                              Text("No mechanic in your region",
+                                                                                style: Styles.smallTitleStyle1,
+                                                                              ),
+                                                                              Text("Try after sometime!",
+                                                                                style: Styles.TryAfterSomeTimetyle,
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                   ),
                                                                   Container(
-                                                                    width: 100,
-                                                                    child: Padding(
-                                                                      padding: const EdgeInsets.all(8.0),
-                                                                      child: Column(
-                                                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                                                        children: [
-                                                                          Column(
-                                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                                            children: [
-                                                                              Padding(
-                                                                                padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                                                                child: Text('${snapshot.data?.data?.mechanicList?.data?[index].distance}',
-                                                                                  style: Styles.smallTitleStyle1,),
-                                                                              ),
-                                                                              Padding(
-                                                                                padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                                                                child: Text('${snapshot.data?.data?.mechanicList?.data?[index].duration}',
-                                                                                  style: Styles.smallTitleStyle1,),
-                                                                              ),
-                                                                              Padding(
-                                                                                padding: const EdgeInsets.fromLTRB(0,3,0,3),
-                                                                                child: Text('₦ ${snapshot.data?.data?.mechanicList?.data?[index].totalAmount}',
-                                                                                  style: Styles.totalAmountStyle,),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
+                                                                      height: 120,
+                                                                      child: SvgPicture.asset(
+                                                                        'assets/image/mechanicProfileView/mechanicNotFound.svg',
+                                                                        height: 120,
+                                                                        fit: BoxFit.cover,
+                                                                      )
                                                                   ),
                                                                 ],
                                                               ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                  )
-                                                      : Padding(
-                                                    padding: const EdgeInsets.fromLTRB(15,0,15,15),
-                                                    child: Container(
-                                                      child: Column(
-                                                        mainAxisAlignment: MainAxisAlignment.start,
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        mainAxisSize: MainAxisSize.min,
-                                                        children: <Widget>[
-                                                          Column(
-                                                            mainAxisAlignment: MainAxisAlignment.start,
-                                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                                            children: <Widget>[
-                                                              Align(
-                                                                alignment: Alignment.center,
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.fromLTRB(15,0,15,15),
-                                                                  child: Container(
-                                                                    height: 100,
-                                                                    width: 260,
-                                                                    decoration: const BoxDecoration(
-                                                                      borderRadius: BorderRadius.all(
-                                                                        Radius.circular(10),
-                                                                      ),
-                                                                      color: CustColors.pale_grey,
-                                                                    ),
-                                                                    child: Padding(
-                                                                      padding: const EdgeInsets.all(10),
-                                                                      child: Column(
-                                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                                        children: [
-                                                                          Text("Oops!! Mechanic not found!",
-                                                                            style: Styles.oopsmechanicNotFoundStyle,
-                                                                          ),
-                                                                          Text("No mechanic in your region",
-                                                                            style: Styles.smallTitleStyle1,
-                                                                          ),
-                                                                          Text("Try after sometime!",
-                                                                            style: Styles.TryAfterSomeTimetyle,
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                  height: 120,
-                                                                  child: SvgPicture.asset(
-                                                                    'assets/image/mechanicProfileView/mechanicNotFound.svg',
-                                                                    height: 120,
-                                                                    fit: BoxFit.cover,
-                                                                  )
-                                                              ),
-                                                            ],
-                                                          ),
                                                         ],
                                                       ),
                                                     ),

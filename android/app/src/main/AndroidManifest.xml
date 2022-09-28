@@ -14,6 +14,7 @@
         </intent>
         </queries>
    <application
+       android:name="${applicationName}"
         android:label="ResolMech"
         android:usesCleartextTraffic="true"
        android:requestLegacyExternalStorage="true"

@@ -21,6 +21,7 @@ class NotificationPayloadMdl {
     required this.serviceList,
     required this.carName,
     required this.carPlateNumber,
+    required this.carColor,
     required this.customerName,
     required this.customerAddress,
     required this.customerLatitude,
@@ -28,6 +29,9 @@ class NotificationPayloadMdl {
     required this.customerFcmToken,
     required this.mechanicName,
     required this.mechanicID,
+    required this.customerID,
+    required this.mechanicPhone,
+    required this.customerPhone,
     required this.mechanicAddress,
     required this.mechanicLatitude,
     required this.mechanicLongitude,
@@ -54,6 +58,7 @@ class NotificationPayloadMdl {
   String serviceList;
   String carName;
   String carPlateNumber;
+  String carColor;
   String customerName;
   String serviceTime;
   String serviceCost;
@@ -63,6 +68,9 @@ class NotificationPayloadMdl {
   String customerFcmToken;
   String mechanicName;
   String mechanicID;
+  String customerID;
+  String mechanicPhone;
+  String customerPhone;
   String mechanicAddress;
   String mechanicLatitude;
   String mechanicLongitude;
@@ -87,6 +95,7 @@ class NotificationPayloadMdl {
     serviceList: json["serviceList"] == null ? null : json["serviceList"],
     carName: json["carName"] == null ? null : json["carName"],
     carPlateNumber: json["carPlateNumber"] == null ? null : json["carPlateNumber"],
+    carColor: json["carColor"] == null ? null : json["carColor"],
     customerName: json["customerName"] == null ? null : json["customerName"],
     customerAddress: json["customerAddress"] == null ? null : json["customerAddress"],
     customerLatitude: json["customerLatitude"] == null ? null : json["customerLatitude"],
@@ -94,6 +103,9 @@ class NotificationPayloadMdl {
     customerFcmToken: json["customerFcmToken"] == null ? null : json["customerFcmToken"],
     mechanicName: json["mechanicName"] == null ? null : json["mechanicName"],
     mechanicID: json["mechanicID"] == null ? null : json["mechanicID"],
+    customerID: json["customerID"] == null ? null : json["customerID"],
+    mechanicPhone: json["mechanicPhone"] == null ? null : json["mechanicPhone"],
+    customerPhone: json["customerPhone"] == null ? null : json["customerPhone"],
     mechanicAddress: json["mechanicAddress"] == null ? null : json["mechanicAddress"],
     mechanicLatitude: json["mechanicLatitude"] == null ? null : json["mechanicLatitude"],
     mechanicLongitude: json["mechanicLongitude"] == null ? null : json["mechanicLongitude"],
@@ -121,6 +133,7 @@ class NotificationPayloadMdl {
     "serviceList": serviceList == null ? null : serviceList,
     "carName": carName == null ? null : carName,
     "carPlateNumber": carPlateNumber == null ? null : carPlateNumber,
+    "carColor": carColor == null ? null : carColor,
     "customerName": customerName == null ? null : customerName,
     "customerAddress": customerAddress == null ? null : customerAddress,
     "customerLatitude": customerLatitude == null ? null : customerLatitude,
@@ -128,6 +141,9 @@ class NotificationPayloadMdl {
     "customerFcmToken": customerFcmToken == null ? null : customerFcmToken,
     "mechanicName": mechanicName == null ? null : mechanicName,
     "mechanicID": mechanicID == null ? null : mechanicID,
+    "customerID": customerID == null ? null : customerID,
+    "mechanicPhone": mechanicPhone == null ? null : mechanicPhone,
+    "customerPhone": customerPhone == null ? null : customerPhone,
     "serviceTime": serviceTime == null ? null : serviceTime,
     "serviceCost": serviceCost == null ? null : serviceCost,
     "mechanicAddress": mechanicAddress == null ? null : mechanicAddress,

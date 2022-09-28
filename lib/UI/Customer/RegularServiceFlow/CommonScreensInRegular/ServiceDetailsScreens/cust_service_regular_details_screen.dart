@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/cust_mobile_mech_service_track_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/cust_pick_up_track_service_screen.dart';
@@ -7,10 +8,13 @@ import 'package:auto_fix/UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_bloc.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,8 +23,10 @@ import '../../../../Mechanic/mechanic_home_screen.dart';
 class CustServiceRegularDetailsScreen extends StatefulWidget {
 
   final String bookingId;
+  final String firebaseCollection;
   CustServiceRegularDetailsScreen({
     required this.bookingId,
+    required this.firebaseCollection,
 });
 
   @override
@@ -31,21 +37,24 @@ class CustServiceRegularDetailsScreen extends StatefulWidget {
 
 class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsScreen> {
 
-  String authToken = "", type = "",bookingId = "", userId = "";
+  String authToken = "", type = "",bookingId = "", userId = "", bookingDate = "";
   MechServiceDetailsReviewBloc _mechServiceDetailsReviewBloc = MechServiceDetailsReviewBloc();
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
-
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   DateTime selectedDate = DateTime.now();
 
   bool isLoading = true;
   BookingDetails? _BookingDetails;
+  String firebaseCollection = "";
 
   @override
   void initState() {
     super.initState();
+    firebaseCollection = widget.firebaseCollection;
     bookingId = widget.bookingId;
     getSharedPrefData();
     _listenApiResponse();
+    //_getLocation();
   }
 
   Future<void> getSharedPrefData()async{
@@ -76,9 +85,58 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
         setState(() {
           isLoading = false;
           _BookingDetails = value.data!.bookingDetails;
+          /*if(_BookingDetails!.regularType.toString() == "1"){
+            firebaseCollection = TextStrings.firebase_pick_up;
+          }else if(_BookingDetails!.regularType.toString() == "2"){
+            firebaseCollection = TextStrings.firebase_mobile_mech;
+          }else if(_BookingDetails!.regularType.toString() == "3"){
+            firebaseCollection = TextStrings.firebase_take_vehicle;
+          }*/
+          listenToCloudFirestoreDB();
         });
       }
     });
+  }
+
+  void listenToCloudFirestoreDB() {
+    //_firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
+    _firestore.collection("${firebaseCollection}").doc('${widget.bookingId}').snapshots().listen((event) {
+
+      setState(() {
+        bookingDate = event.get("bookingDate");
+      });
+    });
+  }
+
+  _getLocation() async {
+    Position position = await
+    Geolocator.getCurrentPosition(desiredAccuracy:
+    LocationAccuracy.high);
+    debugPrint('location: ${position.latitude}');
+    List<Placemark> addresses = await
+    placemarkFromCoordinates(position.latitude,position.longitude);
+
+    var first = addresses.first;
+    print("${first.name} : ${first..administrativeArea}");
+
+    String address = '${first.street}, ${first.subLocality}, ${first.locality}';
+
+    if(addresses.isNotEmpty){
+      updateToCloudFirestoreDB(address);
+    }
+
+  }
+
+  void updateToCloudFirestoreDB(String address) {
+    _firestore
+        .collection("${firebaseCollection}")
+        .doc('${widget.bookingId}')
+        .update({
+      "customerAddress" : "$address",
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
   }
 
   @override
@@ -154,7 +212,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                             children:[
                                               Padding(
                                                 padding: const EdgeInsets.only(top: 10.0),
-                                                child: Text('Total estimated time',
+                                                child: Text('Service Type',
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     fontFamily: 'SamsungSharpSans-Medium',
@@ -164,30 +222,39 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                               ),
                                               Row(
                                                 children: [
-                                                  Padding(
+                                                  /*Padding(
                                                     padding: const EdgeInsets.only(left: 15.0,top: 15),
                                                     child:  Container(
                                                         height: 20,
                                                         width: 20,
                                                         child: Image.asset('assets/image/ic_clock.png')),
+                                                  ),*/
+                                                  Center(
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                                      child: Text(
+                                                        //_BookingDetails!.serviceTime.toString(),
+                                                        _BookingDetails!.regularType.toString() == "1"
+                                                            ? "Pick Up & Drop Off"
+                                                            : _BookingDetails!.regularType.toString() == "2"
+                                                            ? "Mobile Mechanic"
+                                                            : _BookingDetails!.regularType.toString() == "3"
+                                                            ? "Take My Vehicle" : "Emergency Service",
+                                                        maxLines: 2,
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            color: Colors.white
+                                                        ),),
+                                                    ),
                                                   ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                                    child: Text(
-                                                      _BookingDetails!.serviceTime.toString(),
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: Colors.white
-                                                      ),),
-                                                  ),
-                                                  Padding(
+                                                  /*Padding(
                                                     padding: const EdgeInsets.only(left: 05.0,top: 15.0),
                                                     child: Text('Min',
                                                       style: TextStyle(
                                                           fontSize: 14,
                                                           color: Colors.white
                                                       ),),
-                                                  ),
+                                                  ),*/
                                                 ],
                                               )
                                             ],
@@ -261,14 +328,6 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                 ),
                               ),
                               Container(
-                                //   decoration: BoxDecoration(
-                                //     borderRadius: BorderRadius.only(
-                                //   topLeft: Radius.circular(10),
-                                //     topRight: Radius.circular(20),
-                                //     bottomLeft:Radius.circular(80),
-                                //     bottomRight:Radius.circular(80)
-                                // ),
-                                //   ),
                                 height: 95,
                                 child: Row(
                                     children:[
@@ -422,13 +481,15 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => CustPickUpTrackScreen(
-                                        bookedId: "1134",
-                                        bookedDate: 'Mar 7,2022',
-                                        latitude: "",
-                                        longitude: "",
-                                        mechanicAddress: "Elenjikkal House,Empyreal Garden Anchery p.o, Thrissur",
-                                        mechanicName: "Minnu Kurian",
-                                        pickingDate: 'Mar 8,2022',
+                                        bookedId: "${widget.bookingId}",
+                                        //bookedDate: '${_BookingDetails!.bookedDate}',
+                                        //bookedDate: _homeCustomerBloc.dateMonthConverter(DateFormat().parse('${_BookingDetails!.bookedDate}')),
+                                        bookedDate: bookingDate,
+                                        latitude: '${_BookingDetails!.latitude}',
+                                        longitude:'${_BookingDetails!.longitude}',
+                                        //mechanicAddress: '${_BookingDetails!.mechanic!.firstName}',
+                                        mechanicName:  '${_BookingDetails!.mechanic!.firstName}',
+                                        pickingDate: bookingDate,
                                       ),
                                     ));
                               }else if(_BookingDetails!.regularType.toString() == "2"){       //mobile Mechanic
@@ -437,6 +498,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                     MaterialPageRoute(
                                       builder: (context) => CustMobileTrackScreen(
                                         bookingId: _BookingDetails!.id.toString(),
+                                        bookingDate: bookingDate,
                                       ),
                                     ));
                               }
@@ -445,13 +507,15 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => CustTakeVehicleTrackScreen(
-                                        bookingId: _BookingDetails!.id.toString(),
-                                        reachTime: '',
-                                        bookedDate: '',
-                                        latitude: "",
-                                        longitude: "",
-                                        goTime: "",
-                                        mechanicName: "",
+                                        //reachTime: '${_BookingDetails!.bookedTime}',
+                                        bookedDate: bookingDate,
+                                        latitude: '${_BookingDetails!.latitude}',
+                                        longitude: '${_BookingDetails!.longitude}',
+                                        goTime: '${_BookingDetails!.bookedTime}',
+                                        bookedId: '${_BookingDetails!.id.toString()}',
+                                        //mechanicAddress: "${_BookingDetails!.mechanic!.firstName.toString()}",
+                                        //mechanicName: "${_BookingDetails!.mechanic!.firstName.toString()}",
+                                        //pickingDate: 'Mar 8,2022',
                                       ),
                                     ));
                               }

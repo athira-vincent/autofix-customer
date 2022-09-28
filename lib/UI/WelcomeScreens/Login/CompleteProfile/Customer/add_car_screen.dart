@@ -70,6 +70,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
   TextEditingController _plateNumberController = TextEditingController();
   FocusNode _plateNumberFocusNode = FocusNode();
+
+  TextEditingController _vehicleColorController = TextEditingController();
+  FocusNode _vehicleColorFocusNode = FocusNode();
   File? _images;
   bool isloading = false;
   String? countryCode;
@@ -98,13 +101,16 @@ class _AddCarScreenState extends State<AddCarScreen> {
   DateTime? selectedYear;
   DateTime selectedDate = DateTime.now();
 
+  DateTime now = DateTime.now();
+
   StateSetter? monthYear1;
   int? selectedyearIndex = 0 ;
   int? selectedmonthIndex = 0 ;
-  String? selectedMonthText= 'Jan' ;
-  String? selectedYearText= '2018';
-  List<String> monthList = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  List<String> yearList = [for(int i=2018; i<2023; i+=1) i.toString()];
+  String? selectedMonthText = 'Jan' ;
+  String? selectedYearText = '2018';
+  List<String> allMonthList = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  List<String> monthList = [];
+  List<String> yearList = [];
 
   List<String> brandList = [];
   String? selectedBrand = '' ;
@@ -136,10 +142,18 @@ class _AddCarScreenState extends State<AddCarScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getCurrentCustomerLocation();
-    getSharedPrefData();
-    _listenAddCarResponse();
+    for(int i = 0; i <= 11; i++ ){
+      monthList.add(allMonthList[i]);
+    }
+    for(int i = now.year-12; i <= now.year; i+=1){
+      yearList.add(i.toString());
+      i.toString();
+    }
+      _getCurrentCustomerLocation();
+      getSharedPrefData();
+      _listenAddCarResponse();
   }
+
 
   Future<void> _getCurrentCustomerLocation() async {
     Position position = await _getGeoLocationPosition();
@@ -217,7 +231,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
             }
           }
 
-
       }
     });
     _addCarBloc.addCarResponse.listen((value) {
@@ -233,9 +246,10 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
       } else {
 
-        setState(() {
+        setState(() async {
           print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
+          SharedPreferences _shdPre = await SharedPreferences.getInstance();
            if(_isAddMore==true)
              {
                  _formKey.currentState?.reset();
@@ -258,6 +272,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
                  }
                else
                  {
+                   _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 3);
+                   _shdPre.setString(SharedPrefKeys.defaultBrandID, value.data!.vehicleCreate!.brand.toString());
                    Navigator.pushReplacement(
                        context,
                        MaterialPageRoute(
@@ -315,6 +331,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                         modelTextSelection(),
                                         engineTypeTextSelection(),
                                         yearTypeTextSelection(),
+                                        vehicleColorText(),
                                         plateNumberTextSelection(),
                                         lastMaintenanceTextSelection(),
                                         approximateMilageSelection(),
@@ -341,7 +358,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Container(
-        child: Text(
+        child: const Text(
           'Complete your profile',
           style: Styles.textCompleteYourProfile,
         ),
@@ -351,7 +368,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
   Widget uploadVechicleImage(Size size) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
       child: Container(
         color: Colors.white,
         child: Row(
@@ -380,7 +397,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   children: [
                     Container(
                       width: 150,
-                      child: Text(
+                      child: const Text(
                         'Upload your vehicle photo',
                         textAlign: TextAlign.center,
                         style: Styles.textUploadYourProfilePic,
@@ -391,20 +408,19 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       child: Column(
                         children: [
                           Center(
-                            child: Container(
+                            child: SizedBox(
                               width: 100.0,
                               height: 100.0,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(20.0),
                                 child: _images == null
-                                    ? Container(
-                                        child:CircleAvatar(
-                                        radius: 50,
-                                        backgroundColor: Colors.white,
-                                        child: ClipOval(
-                                          child:  SvgPicture.asset('assets/image/CustomerType/upload_car_avathar.svg'),
-                                        )))
-                                    : Container(
+                                    ? CircleAvatar(
+                                    radius: 50,
+                                    backgroundColor: Colors.white,
+                                    child: ClipOval(
+                                      child:  SvgPicture.asset('assets/image/CustomerType/upload_car_avathar.svg'),
+                                    ))
+                                    : SizedBox(
                                       height: 100,
                                       width: 100,
                                       child: CircleAvatar(
@@ -464,12 +480,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Brand",
                     style: Styles.textLabelTitle,
                   ),
-                  Spacer(),
-                  Icon(
+                  const Spacer(),
+                  const Icon(
                     Icons.keyboard_arrow_down_sharp,
                     color: Colors.white,
                     size: 28.0,
@@ -494,7 +510,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               controller: _brandController,
               cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
-                suffixIconConstraints: BoxConstraints(
+                suffixIconConstraints: const BoxConstraints(
                   minWidth: 25,
                   minHeight: 25,
                 ),
@@ -505,7 +521,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   child: IconButton(
                     iconSize: 22,
                     padding: EdgeInsets.zero,
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.keyboard_arrow_down_sharp,
                       color: Colors.grey,
                     ),
@@ -516,25 +532,25 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 isDense: true,
                 hintText:
                 "Select your vehicle brand",
-                border: UnderlineInputBorder(
+                border: const UnderlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
                     width: .5,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                contentPadding: EdgeInsets.symmetric(
+                contentPadding: const EdgeInsets.symmetric(
                   vertical: 12.8,
                   horizontal: 0.0,
                 ),
@@ -571,12 +587,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Model",
                     style: Styles.textLabelTitle,
                   ),
-                  Spacer(),
-                  Icon(
+                  const Spacer(),
+                  const Icon(
                     Icons.keyboard_arrow_down_sharp,
                     color: Colors.white,
                     size: 28.0,
@@ -602,7 +618,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               controller: _modelController,
               cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
-                suffixIconConstraints: BoxConstraints(
+                suffixIconConstraints: const BoxConstraints(
                   minWidth: 25,
                   minHeight: 25,
                 ),
@@ -613,7 +629,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   child: IconButton(
                     iconSize: 22,
                     padding: EdgeInsets.zero,
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.keyboard_arrow_down_sharp,
                       color: Colors.grey,
                     ),
@@ -624,25 +640,25 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 isDense: true,
                 hintText:
                 "Select your car variant",
-                border: UnderlineInputBorder(
+                border: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
                     width: .5,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
                     width: .5,
                   ),
                 ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
+                enabledBorder: const UnderlineInputBorder(
+                  borderSide: const BorderSide(
                     color: CustColors.greyish,
                     width: .5,
                   ),
                 ),
-                contentPadding: EdgeInsets.symmetric(
+                contentPadding: const EdgeInsets.symmetric(
                   vertical: 12.8,
                   horizontal: 0.0,
                 ),
@@ -672,7 +688,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
 
               "Engine Type",
               style: Styles.textLabelTitle,
@@ -693,7 +709,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   'Engine Type' ).nameCheckingWithNumericAndBracket,
               controller: _engineTypeController,
               cursorColor: CustColors.light_navy,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                /* suffixIconConstraints: BoxConstraints(
                   minWidth: 25,
                   minHeight: 25,
@@ -716,25 +732,25 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 isDense: true,
                 hintText:
                 "Select your engine model",
-                border: UnderlineInputBorder(
+                border:  UnderlineInputBorder(
+                  borderSide:  BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                focusedBorder:  UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
                     width: .5,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
+                enabledBorder:  UnderlineInputBorder(
+                  borderSide:  BorderSide(
                     color: CustColors.greyish,
                     width: .5,
                   ),
                 ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                contentPadding: EdgeInsets.symmetric(
+                contentPadding:  EdgeInsets.symmetric(
                   vertical: 12.8,
                   horizontal: 0.0,
                 ),
@@ -765,7 +781,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               "Year",
               style: Styles.textLabelTitle,
             ),
@@ -785,7 +801,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   'Year' ).nameCheckingWithNumeric,
               controller: _yearController,
               cursorColor: CustColors.light_navy,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 /*suffixIconConstraints: BoxConstraints(
                   minWidth: 25,
                   minHeight: 25,
@@ -808,25 +824,25 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 isDense: true,
                 hintText:
                 "Select your vehicle manufacture date",
-                border: UnderlineInputBorder(
+                border: const UnderlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
                     width: .5,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
+                enabledBorder: const UnderlineInputBorder(
+                  borderSide: const BorderSide(
                     color: CustColors.greyish,
                     width: .5,
                   ),
                 ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                contentPadding: EdgeInsets.symmetric(
+                contentPadding: const EdgeInsets.symmetric(
                   vertical: 12.8,
                   horizontal: 0.0,
                 ),
@@ -839,13 +855,79 @@ class _AddCarScreenState extends State<AddCarScreen> {
     );
   }
 
+  Widget vehicleColorText() {
+    return   Container(
+      margin: EdgeInsets.only(top: _setValue(15.5)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+
+            "Color",
+            style: Styles.textLabelTitle,
+          ),
+          TextFormField(
+            textAlignVertical: TextAlignVertical.center,
+            maxLines: 1,
+            style: Styles.textLabelSubTitle,
+            focusNode: _vehicleColorFocusNode,
+            keyboardType: TextInputType.name,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                  RegExp('[a-zA-Z0-9 ]')),
+            ],
+            validator: InputValidator(
+                ch :'Vehicle color').emptyChecking,
+            controller: _vehicleColorController,
+            onChanged: (value){
+              setState(() {
+                if (_formKey.currentState!.validate()) {
+                } else {
+                }
+              });
+            },
+            cursorColor: CustColors.light_navy,
+            decoration: const InputDecoration(
+              isDense: true,
+              hintText:
+              "Enter your Vehicle color",
+              border: const UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              enabledBorder: const UnderlineInputBorder(
+                borderSide: const BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 12.8,
+                horizontal: 0.0,
+              ),
+              errorStyle: Styles.textLabelSubTitleRed,
+              hintStyle: Styles.textLabelSubTitle,),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget plateNumberTextSelection() {
     return   Container(
       margin: EdgeInsets.only(top: _setValue(15.5)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
 
             "Plate number",
             style: Styles.textLabelTitle,
@@ -871,7 +953,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               });
             },
             cursorColor: CustColors.light_navy,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               isDense: true,
               hintText:
               "Enter your Plate number",
@@ -887,7 +969,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   width: .5,
                 ),
               ),
-              enabledBorder: UnderlineInputBorder(
+              enabledBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: CustColors.greyish,
                   width: .5,
@@ -912,7 +994,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                contentPadding: EdgeInsets.all(0.0),
+                contentPadding: const EdgeInsets.all(0.0),
                 content: StatefulBuilder(
                     builder: (BuildContext context, StateSetter monthYear) {
                       monthYear1 = monthYear;
@@ -927,7 +1009,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               "Last maintenance",
               style: Styles.textLabelTitle,
             ),
@@ -957,7 +1039,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               decoration: InputDecoration(
                 isDense: true,
                 hintText: "Select your last service date ",
-                suffixIconConstraints: BoxConstraints(
+                suffixIconConstraints: const BoxConstraints(
                   minWidth: 25,
                   minHeight: 25,
                 ),
@@ -968,7 +1050,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   child: IconButton(
                     iconSize: 22,
                     padding: EdgeInsets.zero,
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.keyboard_arrow_down_sharp,
                       color: Colors.grey,
                     ),
@@ -976,25 +1058,25 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     },
                   ),
                 ),
-                border: UnderlineInputBorder(
+                border: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
                     width: .5,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
                     width: .5,
                   ),
                 ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                contentPadding: EdgeInsets.symmetric(
+                contentPadding: const EdgeInsets.symmetric(
                   vertical: 12.8,
                   horizontal: 0.0,
                 ),
@@ -1016,7 +1098,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            child: Text(
+            child: const Text(
               "Approximate mileage",
               style: Styles.textLabelTitle,
             ),
@@ -1024,7 +1106,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Container(
-              child: Text(
+              child: const Text(
                 "Select your vehicle total kilometres",
                 style: Styles.textLabelSubTitle,
               ),
@@ -1070,8 +1152,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                 borderRadius: BorderRadius.circular(20),
                                 color: CustColors.blue
                             ),
-                            padding: EdgeInsets.all(5),
-                            child: Icon(
+                            padding: const EdgeInsets.all(5),
+                            child: const Icon(
                               Icons.pause,
                               color: Colors.white,
                               size: 20,
@@ -1101,7 +1183,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         children: [
           Container(
             child: Container(
-              margin: EdgeInsets.only(top: 20.8),
+              margin: const EdgeInsets.only(top: 20.8),
               child: _isAddMore
                   ? Container(
                      height: 45,
@@ -1115,7 +1197,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                         child: Container(
                           height: _setValue(25),
                           width: _setValue(25),
-                          child: CircularProgressIndicator(
+                          child: const CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
                                 Colors.white),
                           ),
@@ -1145,6 +1227,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                   _lastMaintenanceController.text,
                                   _lowerValue.toString(),
                                   imageFirebaseUrl,
+                                  _vehicleColorController.text,
                                   latitude,
                                   longitude
                               );
@@ -1159,13 +1242,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
 
                         },
-                        child: Container(
+                        child: SizedBox(
                           height: 45,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
+                            children: const[
+                               Text(
                                 'Add more vehicles',
                                 textAlign: TextAlign.center,
                                 style: Styles.textButtonLabelSubTitle12,
@@ -1181,10 +1264,10 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     ),
             ),
           ),
-          Spacer(),
+          const Spacer(),
           Container(
             child: Container(
-              margin: EdgeInsets.only(top: 20.8),
+              margin: const EdgeInsets.only(top: 20.8),
               child: _isLoading
                   ? Container(
                       height: 45,
@@ -1195,17 +1278,17 @@ class _AddCarScreenState extends State<AddCarScreen> {
                         color: CustColors.materialBlue,
                       ),
                       child: Center(
-                        child: Container(
+                        child: SizedBox(
                           height: _setValue(25),
                           width: _setValue(25),
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
+                          child: const CircularProgressIndicator(
+                            valueColor:  AlwaysStoppedAnimation<Color>(
                                 Colors.white),
                           ),
                         ),
                       ),
                     )
-                  : Container(
+                  : SizedBox(
                     height: 45,
                     width: 80,
                     child: MaterialButton(
@@ -1237,6 +1320,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                               _lastMaintenanceController.text,
                               _lowerValue.toString(),
                               imageFirebaseUrl,
+                              _vehicleColorController.text,
                               latitude,
                               longitude
                             );
@@ -1254,7 +1338,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
+                            const Text(
                               'Finish',
                               textAlign: TextAlign.center,
                               style: Styles.textButtonLabelSubTitle12,
@@ -1275,14 +1359,10 @@ class _AddCarScreenState extends State<AddCarScreen> {
     ) ;
   }
 
-
-
-
-
   _showDialogSelectPhoto() async {
     showModalBottomSheet(
         context: context,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(20), topLeft: Radius.circular(20))),
         builder: (builder) {
@@ -1291,11 +1371,11 @@ class _AddCarScreenState extends State<AddCarScreen> {
               child: ListView(
                 children: [
                   ListTile(
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.camera_alt,
                       color: CustColors.blue,
                     ),
-                    title: Text("Camera",
+                    title: const Text("Camera",
                         style: TextStyle(
                             fontFamily: 'Corbel_Regular',
                             fontWeight: FontWeight.normal,
@@ -1317,11 +1397,11 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     },
                   ),
                   ListTile(
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.image,
                       color: CustColors.blue,
                     ),
-                    title: Text("Gallery",
+                    title: const Text("Gallery",
                         style: TextStyle(
                             fontFamily: 'Corbel_Regular',
                             fontWeight: FontWeight.normal,
@@ -1367,13 +1447,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
     });
   }
 
-
   _showDialogForBrands() async {
     showModalBottomSheet(
         context: context,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+        shape: const RoundedRectangleBorder(
+            borderRadius: const BorderRadius.only(
+                topRight: const Radius.circular(20), topLeft: Radius.circular(20))),
         builder: (builder) {
           return Container(
               child: Padding(
@@ -1388,12 +1467,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
                         switch (snapshot.connectionState) {
                           case ConnectionState.waiting:
-                            return Center(child: CircularProgressIndicator());
+                            return const Center(child: const CircularProgressIndicator());
                           default:
                             return
                               snapshot.data?.data?.modelDetails?.length != 0 && snapshot.data?.data?.modelDetails?.length != null
                                   ? ListView.builder(
-                                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                                         scrollDirection: Axis.vertical,
                                         shrinkWrap: true,
                                         itemCount: brandList.length,
@@ -1425,50 +1504,17 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                               });
 
                                             },
-                                            child: Container(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.all(13),
-                                                    child: Text("${brandList[index]}",
-                                                        style: TextStyle(
-                                                            fontFamily: 'Corbel_Regular',
-                                                            fontWeight: FontWeight.normal,
-                                                            fontSize: 15,
-                                                            color: Colors.black)),
-                                                  ),
-                                                ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(13),
+                                              child: Text("${brandList[index]}",
+                                                  style: const TextStyle(
+                                                      fontFamily: 'Corbel_Regular',
+                                                      fontWeight: FontWeight.normal,
+                                                      fontSize: 15,
+                                                      color: Colors.black)),
+                                            ),
                                           );
 
-                                           /* ListTile(
-                                            title: Text("${snapshot.data?.data!.modelDetails![index].brandName}",
-                                                style: TextStyle(
-                                                    fontFamily: 'Corbel_Regular',
-                                                    fontWeight: FontWeight.normal,
-                                                    fontSize: 15,
-                                                    color: Colors.black)),
-                                            onTap: () async {
-                                              Navigator.pop(context);
-
-                                              setState(() {
-                                                selectedmodel='';
-                                                modelList = [];
-                                                _modelController.text ='';
-                                                engineList=[];_engineTypeController.text='';
-                                                yearTypeList=[];_yearController.text='';
-                                                selectedBrand=snapshot.data?.data!.modelDetails![index].id;
-                                                _brandController.text = "${snapshot.data?.data!.modelDetails![index].brandName}";
-                                                final modelName= "${snapshot.data?.data!.modelDetails![index].modelName}";
-                                                final splitNames= modelName.split(',');
-                                                for (int i = 0; i < splitNames.length; i++){
-                                                  modelList.add(splitNames[i]);
-                                                }
-
-                                                if (_formKey.currentState!.validate()) {
-                                                } else {
-                                                }
-                                              });
-
-                                            },
-                                          );*/
                                         },
                                       )
                                   : Container();
@@ -1482,88 +1528,85 @@ class _AddCarScreenState extends State<AddCarScreen> {
   _showDialogForModel1() async {
     showModalBottomSheet(
         context: context,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+        shape: const RoundedRectangleBorder(
+            borderRadius: const BorderRadius.only(
+                topRight: const Radius.circular(20), topLeft: const Radius.circular(20))),
         builder: (builder) {
-          return Container(
-            child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child:
+          return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child:
 
-                Container(
-                  child: StreamBuilder(
-                      stream:  _addCarBloc.ModelDetailResponse,
-                      builder: (context, AsyncSnapshot<ModelDetailsMdl> snapshot) {
-                        print("${snapshot.hasData}");
-                        print("${snapshot.connectionState}");
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return Center(child: CircularProgressIndicator());
-                          default:
-                            return
-                              snapshot.data?.data?.modelDetails?.length != 0 && snapshot.data?.data?.modelDetails?.length != null
-                                  ? ListView.builder(
-                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                      scrollDirection: Axis.vertical,
-                                      shrinkWrap: true,
-                                      itemCount: snapshot.data?.data?.modelDetails?.length,
-                                      itemBuilder: (context, index) {
+              StreamBuilder(
+                  stream:  _addCarBloc.ModelDetailResponse,
+                  builder: (context, AsyncSnapshot<ModelDetailsMdl> snapshot) {
+                    print("${snapshot.hasData}");
+                    print("${snapshot.connectionState}");
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return const Center(child: const CircularProgressIndicator());
+                      default:
+                        return
+                          snapshot.data?.data?.modelDetails?.length != 0 && snapshot.data?.data?.modelDetails?.length != null
+                              ? ListView.builder(
+                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  itemCount: snapshot.data?.data?.modelDetails?.length,
+                                  itemBuilder: (context, index) {
 
 
-                                        return '${snapshot.data?.data!.modelDetails![index].brandName}' == selectedBrandName
-                                            ?  InkWell(
-                                                onTap: () async {
-                                                  Navigator.pop(context);
-                                                  setState(() {
-                                                    engineList=[];
-                                                    _engineTypeController.text='';
-                                                    yearTypeList=[];
-                                                    _yearController.text='';
+                                    return '${snapshot.data?.data!.modelDetails![index].brandName}' == selectedBrandName
+                                        ?  InkWell(
+                                            onTap: () async {
+                                              Navigator.pop(context);
+                                              setState(() {
+                                                engineList=[];
+                                                _engineTypeController.text='';
+                                                yearTypeList=[];
+                                                _yearController.text='';
 
-                                                    selectedmodel=snapshot.data?.data!.modelDetails![index].id;
-                                                    selectedModelName = snapshot.data?.data!.modelDetails![index].modelName;
-                                                    _modelController.text = "${snapshot.data?.data!.modelDetails![index].modelName}";
-                                                    _engineTypeController.text = "${snapshot.data?.data!.modelDetails![index].engineName}";
-                                                    _yearController.text = "${snapshot.data?.data!.modelDetails![index].years}";
+                                                selectedmodel=snapshot.data?.data!.modelDetails![index].id;
+                                                selectedModelName = snapshot.data?.data!.modelDetails![index].modelName;
+                                                _modelController.text = "${snapshot.data?.data!.modelDetails![index].modelName}";
+                                                _engineTypeController.text = "${snapshot.data?.data!.modelDetails![index].engineName}";
+                                                _yearController.text = "${snapshot.data?.data!.modelDetails![index].years}";
 
-                                                    final engineName= "${snapshot.data?.data!.modelDetails![index].engineName}";
-                                                    final splitNames= engineName.split(',');
-                                                    for (int i = 0; i < splitNames.length; i++){
-                                                      engineList.add(splitNames[i]);
-                                                    }
+                                                final engineName= "${snapshot.data?.data!.modelDetails![index].engineName}";
+                                                final splitNames= engineName.split(',');
+                                                for (int i = 0; i < splitNames.length; i++){
+                                                  engineList.add(splitNames[i]);
+                                                }
 
-                                                    final yearsNames= "${snapshot.data?.data!.modelDetails![index].years}";
-                                                    final splityearsNames= yearsNames.split(',');
-                                                    for (int i = 0; i < splityearsNames.length; i++){
-                                                      yearTypeList.add(splityearsNames[i]);
-                                                    }
-                                                    if (_formKey.currentState!.validate()) {
-                                                    } else {
-                                                    }
-                                                  });
+                                                final yearsNames= "${snapshot.data?.data!.modelDetails![index].years}";
+                                                final splityearsNames= yearsNames.split(',');
+                                                for (int i = 0; i < splityearsNames.length; i++){
+                                                  yearTypeList.add(splityearsNames[i]);
+                                                }
+                                                if (_formKey.currentState!.validate()) {
+                                                } else {
+                                                }
+                                              });
 
-                                                },
-                                              child: Container(
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.all(13),
-                                                      child: Text("${snapshot.data?.data!.modelDetails![index].modelName}",
-                                                          style: TextStyle(
-                                                              fontFamily: 'Corbel_Regular',
-                                                              fontWeight: FontWeight.normal,
-                                                              fontSize: 15,
-                                                              color: Colors.black)),
-                                                    ),
-                                                  ),
-                                            )
-                                            :  Container();
-                                      },
-                                    )
-                                  : Container();
-                        }
-                      }),
-                )
-            ),);
+                                            },
+                                          child: Container(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(13),
+                                                  child: Text("${snapshot.data?.data!.modelDetails![index].modelName}",
+                                                      style: const TextStyle(
+                                                          fontFamily: 'Corbel_Regular',
+                                                          fontWeight: FontWeight.normal,
+                                                          fontSize: 15,
+                                                          color: Colors.black)),
+                                                ),
+                                              ),
+                                        )
+                                        :  Container();
+                                  },
+                                )
+                              : Container();
+                    }
+                  })
+          );
         });
   }
 
@@ -1577,7 +1620,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               height: 50,
               color: CustColors.blue,
               alignment: Alignment.center,
-              child: Text('Select Date',
+              child: const Text('Select Date',
                 style: Styles.textButtonLabelSubTitle,)
           ),
           Expanded(
@@ -1586,8 +1629,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 Expanded(
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 8.0),
                         child: Text('Month',
                           style: Styles.textLabelTitle14,),
                       ),
@@ -1610,7 +1653,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                     selectedmonthIndex==index
                                         ? Container(
                                             color: CustColors.pale_grey,
-                                            margin: EdgeInsets.only(left: 20, right: 20),
+                                            margin: const EdgeInsets.only(left: 20, right: 20),
                                             alignment: Alignment.center,
                                             child: Text(
                                                 '${monthList[index]}',
@@ -1618,7 +1661,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                             ),
                                           )
                                         : Container(
-                                            margin: EdgeInsets.only(left: 20, right: 20),
+                                            margin: const EdgeInsets.only(left: 20, right: 20),
                                             alignment: Alignment.center,
                                             child: Text('${monthList[index]}'),
                                           );
@@ -1633,8 +1676,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 Expanded(
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 8.0),
                         child: Text('Year',
                           style: Styles.textLabelTitle14,),
                       ),
@@ -1646,9 +1689,24 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             useMagnifier: true,
                             onSelectedItemChanged: (index) {
                               print(index);
+                              print(">>>selectedYearText + $selectedYearText" );
                               monthYear1!(() {
                                 selectedyearIndex = index;
                                 selectedYearText = yearList[index];
+                                //if(selectedYearText == now.year){
+                                  if(index == 12){
+                                  print(">>>selectedYearText true + $selectedYearText" );
+                                  monthList.clear();
+                                  for(int i = 0; i <= now.month-1; i++ ){
+                                    monthList.add(allMonthList[i]);
+                                  }
+                                }else{
+                                  print(">>>selectedYearText false + $selectedYearText" );
+                                  monthList.clear();
+                                  for(int i = 0; i <= 11; i++ ){
+                                    monthList.add(allMonthList[i]);
+                                  }
+                                }
                               });
                             },
                             childDelegate: ListWheelChildBuilderDelegate(
@@ -1657,7 +1715,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                     selectedyearIndex==index
                                         ? Container(
                                             color: CustColors.pale_grey,
-                                            margin: EdgeInsets.only(left: 20, right: 20),
+                                            margin: const EdgeInsets.only(left: 20, right: 20),
                                             alignment: Alignment.center,
                                             child: Text(
                                                 '${yearList[index]}',
@@ -1665,7 +1723,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                             ),
                                           )
                                         : Container(
-                                            margin: EdgeInsets.only(left: 20, right: 20),
+                                            margin: const EdgeInsets.only(left: 20, right: 20),
                                             alignment: Alignment.center,
                                             child: Text('${yearList[index]}'),
                                           );
@@ -1681,13 +1739,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 15.8,bottom: 15),
+            margin: const EdgeInsets.only(top: 15.8,bottom: 15),
             child: _isLoading
                 ? Center(
               child: Container(
                 height: _setValue(28),
                 width: _setValue(28),
-                child: CircularProgressIndicator(
+                child: const CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(
                       CustColors.light_navy),
                 ),
@@ -1707,14 +1765,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   });
 
                 },
-                child: Container(
+                child: SizedBox(
                   height: 45,
                   width: 100,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
+                    children: const[
+                       Text(
                         'Done',
                         textAlign: TextAlign.center,
                         style: Styles.textButtonLabelSubTitle,
@@ -1734,9 +1792,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
     );
   }
 
-
   Widget progressBarDarkBlue() {
-    return Container(
+    return SizedBox(
       height: 60.0,
       child: new Center(
           child: CircularProgressIndicator(
@@ -1746,21 +1803,21 @@ class _AddCarScreenState extends State<AddCarScreen> {
   }
 
   Widget progressBarLightRose() {
-    return Container(
+    return const SizedBox(
       height: 60.0,
-      child: new Center(
+      child:  Center(
           child: CircularProgressIndicator(
-            valueColor: new AlwaysStoppedAnimation<Color>(CustColors.blue),
+            valueColor:  AlwaysStoppedAnimation<Color>(CustColors.blue),
           )),
     );
   }
 
   Widget progressBarTransparent() {
-    return Container(
+    return const SizedBox(
       height: 60.0,
-      child: new Center(
+      child:  Center(
           child: CircularProgressIndicator(
-            valueColor: new AlwaysStoppedAnimation<Color>(Colors.transparent),
+            valueColor:  AlwaysStoppedAnimation<Color>(Colors.transparent),
           )),
     );
   }

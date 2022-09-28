@@ -3,14 +3,16 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_mdl.dart';
-import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class MechanicMyWalletScreen extends StatefulWidget {
+import 'wallet_history.dart';
 
+class MechanicMyWalletScreen extends StatefulWidget {
   MechanicMyWalletScreen();
 
   @override
@@ -20,11 +22,14 @@ class MechanicMyWalletScreen extends StatefulWidget {
 }
 
 class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
+  String authToken = "", mechanicId = "", profileUrl = "";
 
-  String authToken = "" ;
   MechanicMyWalletBloc _mechanicWalletBloc = MechanicMyWalletBloc();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late MechanicMyWalletMdl mechanicMyWalletMdl;
+  List<BookingDatum>? _BookingDatum = [];
+  MyWallet? _MyWallet;
+  bool _isLoadingPage = true;
 
   @override
   void initState() {
@@ -39,123 +44,197 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      mechanicId = shdPre.getString(SharedPrefKeys.userID).toString();
+      profileUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
       print('userFamilyId ' + authToken.toString());
-     //print('userId ' + userId.toString());
-      _mechanicWalletBloc.postMechanicFetchMyWalletRequest(authToken, "");
+      print('userId ' + mechanicId.toString());
+      _mechanicWalletBloc.postMechanicFetchMyWalletRequest(
+          authToken, mechanicId /*"8"*/);
     });
   }
 
   _listenApiResponse() {
     _mechanicWalletBloc.postMechanicMyWallet.listen((value) {
-      if(value.status == "error"){
+      if (value.status == "error") {
         setState(() {
-          //_isLoading = false;
-          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+          _isLoadingPage = false;
+          // SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
-      }else{
+      } else {
         setState(() {
-          mechanicMyWalletMdl = value;
+          _isLoadingPage = false;
+          _BookingDatum = value.data!.myWallet!.bookingData;
+          _MyWallet = value.data!.myWallet;
+          //mechanicMyWalletMdl = value;
           //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
           /*_isLoading = false;
           _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*/
         });
       }
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: Colors.white,
-        body: SafeArea(
-          child: Container(
-            height: size.height,
-            width: size.width,
-            //color: Colors.blue,
-            child: SingleChildScrollView(
-              child: Container(
-                child: Stack(
-                  children: [
-                    BottomLightBackground(size),
-                    
-                    Column(
-                      children: [
-                        appBarCustomUi(size),
-                        profileImageAndWalletTotal(),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0,12,0,0),
-                          child: Container(
-                            height: 120,
+        body: _isLoadingPage == true
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: CustColors.light_navy,
+                ),
+              )
+            : SizedBox(
+                height: size.height,
+                width: size.width,
+                //color: Colors.blue,
+                child: SingleChildScrollView(
+                  child: Stack(
+                    children: [
+                      BottomLightBackground(size),
+                      Column(
+                        children: [
+                          appBarCustomUi(size),
+                          profileImageAndWalletTotal(),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+                            child: Container(
+                              height: 120,
+                              margin: EdgeInsets.only(
+                                left: size.width * 9 / 100,
+                                right: size.width * 9 / 100,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SubTitleTextRound(
+                                      size,
+                                      "Total job done",
+                                      _MyWallet!.jobCount > 0
+                                          ? _MyWallet!.jobCount.toString()
+                                          : "0"),
+                                  SubTitleTextRound(
+                                      size,
+                                      "All payments",
+                                      _MyWallet!.totalPayment! > 0
+                                          ? _MyWallet!.totalPayment.toString()
+                                          : "0"),
+                                  SubTitleTextRound(
+                                      size,
+                                      "Monthly collection",
+                                      _MyWallet!.monthlySum > 0
+                                          ? _MyWallet!.monthlySum.toString()
+                                          : "0"),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
                             margin: EdgeInsets.only(
-                              left: size.width * 9 / 100,
-                              right: size.width * 9 / 100,
+                              //top: size.height * .2 / 100,
+                              bottom: size.width * .2 / 100,
                             ),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SubTitleTextRound(size,"Total job done","135"),
-                                SubTitleTextRound(size,"All payments","5000"),
-                                SubTitleTextRound(size,"Monthly collection","2000"),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                      margin: EdgeInsets.only(
+                                        top: size.height * 1.5 / 100,
+                                        left: size.width * 9 / 100,
+                                        right: size.width * 9 / 100,
+                                      ),
+                                      child: const Text(
+                                        "Todays payments",
+                                        style: Styles.myWalletTitleText03,
+                                      )),
+                                ),
+                                const Spacer(),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Container(
+                                      margin: EdgeInsets.only(
+                                        top: size.height * 1.5 / 100,
+                                        //left: size.width * 9 / 100,
+                                        right: size.width * 10.5 / 100,
+                                      ),
+                                      child: Text(
+                                        _MyWallet!.totalPayment.toString(),
+                                        //"- ₦ 15000",
+                                        style: Styles.myWalletTitleText04,
+                                      )),
+                                ),
                               ],
                             ),
                           ),
-                        ),
-
-                        Container(
-                          margin: EdgeInsets.only(
-                           //top: size.height * .2 / 100,
-                            bottom: size.width * .2 / 100,
-                          ),
-                          child: Row(
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Container(
-                                    margin: EdgeInsets.only(
-                                      top: size.height * 1.5 / 100,
-                                      left: size.width * 9 / 100,
-                                      right: size.width * 9 / 100,
+                          _BookingDatum!.length != 0
+                              ? ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: _BookingDatum!.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Container(
+                                      child: listTileItem(
+                                          size,
+                                          _BookingDatum![index]
+                                              .customer!
+                                              .firstName,
+                                          _BookingDatum![index].bookedTime,
+                                          _BookingDatum![index]
+                                              .serviceCharge
+                                              .toString()),
+                                    );
+                                  })
+                              : Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 25.0, right: 25.0, top: 16.0),
+                                  child: Container(
+                                    height: 80,
+                                    width: double.infinity,
+                                    //color: Colors.white,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white,
                                     ),
-                                    child: Text("Todays payments",
-                                      style: Styles.myWalletTitleText03,)
-                                ),
-                              ),
-                              Spacer(),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Container(
-                                    margin: EdgeInsets.only(
-                                      top: size.height * 1.5 / 100,
-                                     //left: size.width * 9 / 100,
-                                      right: size.width * 10.5 / 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15.0, top: 10),
+                                      child: Column(
+                                        children: [
+                                          SvgPicture.asset(
+                                              "assets/image/ic_walletnotify.svg",
+                                              width: 40,
+                                              height: 40),
+                                          const Expanded(
+                                            flex: 1,
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 12.0, top: 10),
+                                              child: Text(
+                                                "You have no payments to show",
+                                                style: TextStyle(
+                                                  fontFamily:
+                                                      'SamsungSharpSans-Regular',
+                                                  color: CustColors.light_navy,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                    child: Text("- ₦ 15000",
-                                      style: Styles.myWalletTitleText04,)
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        listTileItem(size,"John Carlo","11:30","₦ 5000"),
-                        //Spacer(),
-                        listTileItem(size,"John Carlo","11:30","₦ 5000"),
-
-                        listTileItem(size,"John Carlo","11:30","₦ 5000"),
-
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -164,15 +243,82 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
     return Row(
       children: [
         IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        Text(
+        const Text(
           'My Wallet',
           textAlign: TextAlign.center,
           style: Styles.appBarTextBlue,
         ),
-        Spacer(),
+        const Spacer(),
+        InkWell(
+          onTap: () async {
+            var datePicked = await DatePicker.showSimpleDatePicker(context,
+                    initialDate: DateTime(2022),
+                    firstDate: DateTime(2022),
+                    lastDate: DateTime(2050),
+                    dateFormat: "dd-MMMM-yyyy",
+                    locale: DateTimePickerLocale.en_us,
+                    looping: true,
+                    itemTextStyle: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Samsung_SharpSans_Medium'))
+                .then((datePicked) {
+              if (datePicked != null) {
+                var dateTime = DateTime.parse(datePicked.toString());
+
+                var formate1 =
+                    "${dateTime.year}-${dateTime.month}-${dateTime.day}";
+
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            Wallet_History(wallatdate: formate1)));
+              }
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: Container(
+              height: 30,
+              width: 130,
+              decoration: BoxDecoration(
+                  color: CustColors.whiteBlueish,
+                  borderRadius: BorderRadius.circular(5)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: Text(
+                        "Select date",
+                        style: Styles.sparePartNameSubTextBlack,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    color: CustColors.blue,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          top: 6, left: 6, bottom: 6, right: 4),
+                      child: SvgPicture.asset(
+                        'assets/image/ic_calender.svg',
+                        height: 20,
+                        width: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -180,78 +326,85 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
   Widget profileImageAndWalletTotal() {
     return Wrap(
       children: [
-        Container(
+        SizedBox(
           height: 292,
           width: 500,
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(8,26,8,0),
-                child: Container(
-                  child: ClipRRect(
-                    //borderRadius: BorderRadius.circular(20.0),
-                    child:Container(
-                        child:Image.asset('assets/image/bg_wallet.png')),
-                  ),
+                padding: const EdgeInsets.fromLTRB(8, 26, 8, 0),
+                child: ClipRRect(
+                  //borderRadius: BorderRadius.circular(20.0),
+                  child: Image.asset('assets/image/bg_wallet.png'),
                 ),
               ),
-
               Padding(
-                padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: Wrap(
                   children: [
                     Center(
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                        child: Container(
-                          width: 120.0,
-                          height: 120.0,
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: SizedBox(
+                          width: 110.0,
+                          height: 110.0,
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(20.0),
-                              child:Container(
-                                  child:CircleAvatar(
-                                      radius: 75,
-                                      backgroundColor: Colors.white,
-                                      child: ClipOval(
-                                        child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                      )))
-                          ),
+                              child: CircleAvatar(
+                                  radius: 75,
+                                  // child:Image.network(
+                                  //         _BookingDatum![0].mechanic!.mechanic![0].profilePic,
+                                  //     fit: BoxFit.fill,
+                                  //     ),
+                                  backgroundColor: Colors.white,
+                                  child: SizedBox(
+                                    height: 106.0,
+                                    width: 106.0,
+                                    child: ClipOval(
+                                      child: profileUrl != null &&
+                                              profileUrl != ""
+                                          ? Image.network(
+                                              profileUrl,
+                                              fit: BoxFit.fill,
+                                            )
+                                          : SvgPicture.asset(
+                                              'assets/image/MechanicType/work_selection_avathar.svg'),
+                                    ),
+                                  ))),
                         ),
                       ),
                     ),
                     Center(
                       child: Padding(
-                        padding: EdgeInsets.only(
-                            top: 29,
-                            right: 33
-                        ),
-                        child: Container(
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20.0),
-                              child:Container(
-                                child:Container(
-                                    child: Text("Your balance ",
-                                      style: Styles.myWalletCardText02,)
-                                ),
-                              )
-
-                          ),
-                        ),
+                        padding: const EdgeInsets.only(top: 29, right: 33),
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20.0),
+                            child: const Text(
+                              "Your balance ",
+                              style: Styles.myWalletCardText02,
+                            )),
                       ),
                     ),
                     Center(
                       child: Container(
-                        margin: EdgeInsets.only(
-                            top: 16,
-                            right: 33
-                        ),
+                        margin: const EdgeInsets.only(top: 16, right: 33),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20.0),
-                          child:Container(
-                            child:Container(
-                                child: Text("₦ 5000",style: Styles.myWalletCardText01,)
-                            ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 100.0),
+                            child: Row(children: [
+                              const Text(
+                                "₦ ",
+                                style: Styles.myWalletCardText01,
+                              ),
+                              Text(
+                                _MyWallet!.totalPayment > 0
+                                    ? '${_MyWallet!.totalPayment}'
+                                    : "0",
+                                style: Styles.myWalletCardText01,
+                              )
+                            ]),
                           ),
                         ),
                       ),
@@ -268,50 +421,46 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
 
   Widget BottomLightBackground(Size size) {
     return Container(
-      height: MediaQuery.of(context).size.height*.70,
+      height: MediaQuery.of(context).size.height * .70,
       margin: EdgeInsets.only(
-          top: MediaQuery.of(context).size.height*.28,
+        top: MediaQuery.of(context).size.height * .28,
         left: size.width * 4 / 100,
         right: size.width * 4 / 100,
       ),
       child: Padding(
-          padding: EdgeInsets.only(bottom: size.height * 3 / 100 ),
+          padding: EdgeInsets.only(bottom: size.height * 3 / 100),
           child: Container(
-            height: size.height * 70 /100,
+            height: size.height * 70 / 100,
             //height: MediaQuery.of(context).size.height * double.parse(widget.percentage.toString()),
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(
-               Radius.circular(10),
+                Radius.circular(10),
               ),
               //color: CustColors.blackishgrey,
               color: CustColors.whiteBlueish,
             ),
-          )
-      ),
+          )),
     );
   }
 
-  Widget SubTitleTextRound(Size size,String titleText,String circleText) {
-    return  Container(
+  Widget SubTitleTextRound(Size size, String titleText, String circleText) {
+    return SizedBox(
       height: size.height * 20 / 100,
       width: size.width * 20 / 100,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-              margin : EdgeInsets.only(
-                  top: 2,
-                  left: 2,
-                  right: 2,
-                  bottom: 0
-              ),
-              child: Text(titleText,
-              textAlign: TextAlign.center,
-              style: Styles.myWalletSubTitleTextRoundText01,)),
-
+              margin:
+                  const EdgeInsets.only(top: 2, left: 2, right: 2, bottom: 0),
+              child: Text(
+                titleText,
+                textAlign: TextAlign.center,
+                style: Styles.myWalletSubTitleTextRoundText01,
+              )),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(0,5,0,0),
+              padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
               child: CircleAvatar(
                 radius: 60,
                 backgroundColor: Colors.white,
@@ -328,11 +477,12 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
     );
   }
 
-  Widget listTileItem(Size size, String customerName, String time, String amount){
+  Widget listTileItem(
+      Size size, String customerName, String time, String amount) {
     return Container(
       padding: EdgeInsets.only(
-          top: size.height * 1 / 100,
-          bottom: size.height * 1 / 100,
+        top: size.height * 1 / 100,
+        bottom: size.height * 1 / 100,
       ),
       margin: EdgeInsets.only(
         left: size.width * 8 / 100,
@@ -343,54 +493,57 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
             top: size.height * 1.8 / 100,
             bottom: size.height * 1.8 / 100,
             right: size.width * 2.5 / 100,
-            left: size.width * 2.5 / 100
-        ),
+            left: size.width * 2.5 / 100),
         margin: EdgeInsets.only(
           left: size.width * 1.2 / 100,
           right: size.width * 1.2 / 100,
         ),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(
               Radius.circular(6),
             ),
-            color: Colors.white
-        ),
+            color: Colors.white),
         //color: CustColors.white_02,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
               children: [
-                Text("Customer",style: Styles.myWalletListTileTitle01,),
+                const Text(
+                  "Customer",
+                  style: Styles.myWalletListTileTitle01,
+                ),
                 SizedBox(
                   height: size.height * .7 / 100,
                 ),
-                Text(customerName,style: Styles.myWalletListTileTitle02,),
+                Text(
+                  customerName,
+                  style: Styles.myWalletListTileTitle02,
+                ),
               ],
             ),
-
             Column(
               children: [
-                Text("Time",style: Styles.myWalletListTileTitle01,),
+                const Text(
+                  "Time",
+                  style: Styles.myWalletListTileTitle01,
+                ),
                 SizedBox(
                   height: size.height * .7 / 100,
                 ),
-                Text(time,style: Styles.myWalletListTileTitle02,),
+                Text(
+                  time,
+                  style: Styles.myWalletListTileTitle02,
+                ),
               ],
             ),
-
-            Container(
-              child: Text(
-                amount,style: Styles.myWalletListTileTitle03,
-              ),
+            Text(
+              amount,
+              style: Styles.myWalletListTileTitle03,
             )
-
           ],
         ),
       ),
-
     );
-
   }
-
 }

@@ -5,6 +5,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_screen.dart';
+import 'package:auto_fix/UI/chat/chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +20,7 @@ import 'package:location/location.dart' as loc;
 import 'dart:math' show cos, sqrt, asin;
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class MechanicTrackingScreen extends StatefulWidget {
@@ -69,6 +71,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
   String bookingIdEmergency="";
+  String customerId = "", mechanicId = "", mechanicName = "";
 
   @override
   void initState() {
@@ -104,6 +107,9 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingIdEmergency}");
     reference.snapshots().listen((querySnapshot) {
       setState(() {
+        customerId = querySnapshot.get('customerID');
+        mechanicId = querySnapshot.get('mechanicID');
+        mechanicName = querySnapshot.get('mechanicName');
         mechanicArrivalState = querySnapshot.get("mechanicArrivalState");
         print('mechanicArrivalState ++++ $mechanicArrivalState');
         if(mechanicArrivalState =="1")
@@ -159,7 +165,8 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     getBytesFromAsset('assets/image/mechanicTracking/mechanicMapIcon.png', 150).then((onValue) {
       print("getBytesFromAsset 001");
       mechanicIcon =BitmapDescriptor.fromBytes(onValue);
-      markers.add(Marker( //add start location marker
+      markers.add(Marker(
+        visible: true,//add start location marker
         markerId: MarkerId('mechanicMarkerId'),
         position: latLng, //position of marker
         infoWindow: InfoWindow( //popup info
@@ -218,10 +225,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
     addPolyLine(polylineCoordinates);
 
-
-
-
-
   }
 
   addPolyLine(List<LatLng> polylineCoordinates) {
@@ -256,6 +259,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                   if (snapshot.hasData) {
 
                     Timer(const Duration(seconds: 15), () {
+                      print(">>> Firebase lat " + snapshot.data?.data()!['latitude']);
                       if(updatingLat != double.parse('${snapshot.data?.data()!['latitude']}'))
                       {
                         setState(() {
@@ -267,7 +271,9 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                       }
                     });
 
-                    return GoogleMap( //Map widget from google_maps_flutter package
+                    return GoogleMap(
+
+                      //Map widget from google_maps_flutter package
 
                       zoomGesturesEnabled: true, //enable Zoom in, out on map
                       initialCameraPosition: _kGooglePlex!,
@@ -400,46 +406,71 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                           children: [
                             Expanded(
                               child: Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.phone, color: Colors.white),
-                                    Text(
-                                      "Call",
-                                      style: Styles.popUPTextStyle,
-                                    ),
-                                  ],
+                                child: InkWell(
+                                  onTap: (){
+                                    String callPhoneNumber = "90488878777";
+                                    _callPhoneNumber(callPhoneNumber);
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.phone, color: Colors.white),
+                                      Text(
+                                        "Call",
+                                        style: Styles.popUPTextStyle,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                             Expanded(
                               child:  Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.chat, color: Colors.white),
-                                    Text(
-                                      "Chat",
-                                      style: Styles.popUPTextStyle,
-                                    ),
-                                  ],
+                                child: InkWell(
+                                  onTap: (){
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ChatScreen(
+                                              peerId: mechanicId,
+                                              bookingId: '${bookingIdEmergency}',
+                                              collectionName: 'ResolMech',
+                                              currentUserId: customerId,
+                                              peerName: mechanicName,
+                                            )));
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.chat, color: Colors.white),
+                                      Text(
+                                        "Chat",
+                                        style: Styles.popUPTextStyle,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                             Expanded(
                               child:  Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.smartphone_sharp, color: Colors.white),
-                                    Text(
-                                      "Call via ResolMech",
-                                      style: Styles.popUPTextStyle,
-                                    ),
-                                  ],
+                                child: InkWell(
+                                  onTap: (){
+
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.smartphone_sharp, color: Colors.white),
+                                      Text(
+                                        "Call via ResolMech",
+                                        style: Styles.popUPTextStyle,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -488,7 +519,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "Mechanic on the way",
+                                          "Mechanic is on his way",
                                           textAlign: TextAlign.start,
                                           style: Styles.waitingTextBlack17,
                                         ),
@@ -512,6 +543,14 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         ),
       ),
     );
+  }
+  void _callPhoneNumber(String phoneNumber) async {
+    var url = 'tel://$phoneNumber';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Error Occurred';
+    }
   }
 
   @override

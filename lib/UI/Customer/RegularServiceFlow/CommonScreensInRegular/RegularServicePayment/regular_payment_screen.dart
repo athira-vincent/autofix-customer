@@ -38,10 +38,6 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
   String authToken="";
   String userName="";
 
-
-  String serviceIdEmergency="";
-  String mechanicIdEmergency="";
-  //String bookingIdEmergency="";
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
 
@@ -58,8 +54,6 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
-      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
-      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       //bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('PaymentScreen authToken>>>>>>>>> ' + authToken.toString());
       //print('PaymentScreen bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
@@ -67,13 +61,13 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     });
   }
 
-  void updateToCloudFirestoreDB() {
+  void updateToCloudFirestoreDB(String paymentOption) {
 
     _firestore
         .collection("${widget.firebaseCollection}")
         .doc('${widget.bookingId}')
         .update({
-          'isPayment': "0",
+          'isPayment': "$paymentOption",
         })
         .then((value) => print("Location Added"))
         .catchError((error) =>
@@ -274,12 +268,12 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     print(selectedOptionValue);
     if( selectedOptionValue == 1)
       {
-        updateToCloudFirestoreDB();
+        updateToCloudFirestoreDB("1");
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => RegularDirectPaymentScreen(
-                  isMechanicApp: false,isPaymentFailed: false,
+                  //isMechanicApp: false,isPaymentFailed: false,
                   firebaseCollection: widget.firebaseCollection,
                   bookingId: widget.bookingId,
                 )));

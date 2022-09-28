@@ -168,7 +168,7 @@ class Customer {
     required this.accountType,
     required this.status,
     required this.jwtToken,
-    required this.fcmToke,
+    required this.fcmToken,
     required this.otpCode,
   });
 
@@ -181,7 +181,7 @@ class Customer {
   dynamic accountType;
   int status;
   String jwtToken;
-  dynamic fcmToke;
+  dynamic fcmToken;
   String otpCode;
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
@@ -194,7 +194,7 @@ class Customer {
     accountType: json["accountType"],
     status: json["status"] == null ? null : json["status"],
     jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
-    fcmToke: json["fcmToke"],
+    fcmToken: json["fcmToken"],
     otpCode: json["otpCode"] == null ? null : json["otpCode"],
   );
 
@@ -208,7 +208,7 @@ class Customer {
     "accountType": accountType,
     "status": status == null ? null : status,
     "jwtToken": jwtToken == null ? null : jwtToken,
-    "fcmToke": fcmToke,
+    "fcmToken": fcmToken,
     "otpCode": otpCode == null ? null : otpCode,
   };
 }
@@ -221,6 +221,7 @@ class Vehicle {
     required this.engine,
     required this.year,
     required this.plateNo,
+    required this.color,
     required this.lastMaintenance,
     required this.milege,
     required this.vehiclePic,
@@ -236,6 +237,7 @@ class Vehicle {
   String engine;
   String year;
   String plateNo;
+  String color;
   String lastMaintenance;
   String milege;
   String vehiclePic;
@@ -251,6 +253,7 @@ class Vehicle {
     engine: json["engine"] == null ? null : json["engine"],
     year: json["year"] == null ? null : json["year"],
     plateNo: json["plateNo"] == null ? null : json["plateNo"],
+    color: json["color"] == null ? null : json["color"],
     lastMaintenance: json["lastMaintenance"] == null ? null : json["lastMaintenance"],
     milege: json["milege"] == null ? null : json["milege"],
     vehiclePic: json["vehiclePic"] == null ? null : json["vehiclePic"],
@@ -267,6 +270,7 @@ class Vehicle {
     "engine": engine == null ? null : engine,
     "year": year == null ? null : year,
     "plateNo": plateNo == null ? null : plateNo,
+    "color": color == null ? null : color,
     "lastMaintenance": lastMaintenance == null ? null : lastMaintenance,
     "milege": milege == null ? null : milege,
     "vehiclePic": vehiclePic == null ? null : vehiclePic,

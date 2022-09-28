@@ -64,12 +64,12 @@ class AddPriceFaultApiProvider{
     }
  }
  Future<TimePriceServiceDetailsMdl> postTimePriceServiceDetailsRequest(
-     token,services,fee,time)async{
+     token,services,fee,time, catType)async{
     Map<String, dynamic> _resp = await _queryProvider.postTimePriceServiceDetailsRequest(
-        token,services,fee,time);
+        token,services,fee,time, catType);
     if(_resp != null){
       if(_resp['status']=="error"){
-        final errormsg = TimePriceServiceDetailsMdl(data: null);
+        final errormsg = TimePriceServiceDetailsMdl(status: "error", message: _resp['message'], data: null);
         return errormsg;
       }else{
         var data = {"data":_resp};
@@ -77,7 +77,7 @@ class AddPriceFaultApiProvider{
         return TimePriceServiceDetailsMdl.fromJson(data);
       }
     }else{
-      final errorMsg = TimePriceServiceDetailsMdl(data: null);
+      final errorMsg = TimePriceServiceDetailsMdl(status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
  }

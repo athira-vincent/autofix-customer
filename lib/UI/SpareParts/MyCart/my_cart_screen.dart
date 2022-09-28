@@ -1,5 +1,14 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/payment_main_screen.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_bloc.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_event.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_state.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_oder_bloc.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_oder_state.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_order_event.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_state.dart';
 import 'package:auto_fix/UI/SpareParts/change_delivery_address_screen.dart';
 import 'package:auto_fix/UI/SpareParts/purchase_response_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
@@ -8,11 +17,16 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:auto_fix/Widgets/show_pop_up_widget.dart';
 import 'package:auto_fix/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import 'showcartpopbloc/show_cart_pop_event.dart';
 
 class MyCartScreen extends StatefulWidget {
   const MyCartScreen({Key? key}) : super(key: key);
@@ -24,112 +38,91 @@ class MyCartScreen extends StatefulWidget {
 }
 
 class _MyCartScreenState extends State<MyCartScreen> {
-  FocusNode _emailFocusNode = FocusNode();
-  TextStyle _labelStyleEmail = const TextStyle();
+  final FocusNode _emailFocusNode = FocusNode();
+  final TextStyle _labelStyleEmail = const TextStyle();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final ForgotPasswordBloc _forgotPasswordBloc = ForgotPasswordBloc();
   bool _isLoading = false;
   double per = .10;
   double perfont = .10;
+
   double _setValue(double value) {
     return value * per + value;
   }
+
   double _setValueFont(double value) {
     return value * perfont + value;
   }
-  bool language_en_ar=true;
 
+  bool language_en_ar = true;
+
+  ShowCartPopBloc? showpop;
+  late List<String> image;
+
+  String states = "";
+  String city = "";
+  String pincode = "";
 
   @override
   void initState() {
+    final addcartsBloc = BlocProvider.of<ShowCartPopBloc>(context);
+    addcartsBloc.add(FetchShowCartPopEvent());
     super.initState();
-    _getForgotPwd();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _emailFocusNode.removeListener(onFocusChange);
-    _forgotPasswordBloc.dispose();
-  }
-
-  _getForgotPwd() {
-    _forgotPasswordBloc.postForgotPassword.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          _isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.message.toString(),
-                style: const TextStyle(
-                    fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Password Reset Enabled.\nCheck Your mail",
-                style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
-
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()));
-          FocusScope.of(context).unfocus();
-        });
-      }
-    });
-  }
-
-  void onFocusChange() {
-    setState(() {
-      _labelStyleEmail = _emailFocusNode.hasFocus
-          ? const TextStyle(color: CustColors.peaGreen)
-          : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          backgroundColor: Colors.white,
-          body: ScrollConfiguration(
-            behavior: MyBehavior(),
+    return SafeArea(
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<DeleteCartBloc, DeleteCartState>(
+            listener: (context, state) {
+              if (state is DeleteCartLoadedState) {
+                if (state.deleteCartModel.data!.updateCart.status ==
+                    "Success") {
+                  final addcartsBloc =
+                      BlocProvider.of<ShowCartPopBloc>(context);
+                  addcartsBloc.add(FetchShowCartPopEvent());
+                }
+              }
+            },
+          ),
+        ],
+        child: Scaffold(
+            body: ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: RefreshIndicator(
+            color: CustColors.light_navy,
+            onRefresh: () async {
+              final addcartsBloc = BlocProvider.of<ShowCartPopBloc>(context);
+              addcartsBloc.add(FetchShowCartPopEvent());
+            },
             child: SingleChildScrollView(
-              // ignore: avoid_unnecessary_containers
               child: Column(
                 children: [
                   appBarCustomUi(),
                   productsListUi(),
-                  placeOrderUi(),
-                  Divider(),
-                  changeAddressUi(),
-                  Divider(),
-                  selectedBillDetailsUi(),
-                  Divider(),
-                  continueButtonUi(),
+                  // placeOrderUi(),
+                  // Divider(),
+                  // changeAddressUi(),
+                  // Divider(),
+                  // selectedBillDetailsUi(),
+                  // Divider(),
                 ],
               ),
             ),
-          )),
+          ),
+        )),
+      ),
     );
   }
 
   Widget appBarCustomUi() {
     return Row(
-      children: [
-        /*IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),*/
+      children: const [
         Padding(
-          padding: const EdgeInsets.all(15),
+          padding: EdgeInsets.all(15),
           child: Text(
             'My Cart',
             textAlign: TextAlign.center,
@@ -142,294 +135,597 @@ class _MyCartScreenState extends State<MyCartScreen> {
   }
 
   Widget productsListUi() {
-    return  ListView.builder(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount:2,
-      itemBuilder: (context, index) {
-        return Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10,0,10,0),
-              child: Container(
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment:MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0,8,0,8),
-                      child: Container(
-                        height: 60,
-                        width: 90,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: Image.network(
-                            "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                              child: Text(
-                                "Ford fiesta",
-                                style: Styles.sparePartNameSubTextBlack,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                              child: Text(
-                                "Clutch assembly",
-                                style: Styles.sparePartNameTextBlack17,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0,8,0,10),
-                              child: Text(
-                                "A2137635123. | Ford fiesta fort",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: Styles.sparePartNameSubTextBlack,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0,0,5,0),
-                              child: InkWell(
-                                onTap: (){
-
-                                },
-                                child: Container(
-                                  height: 20,
-                                  width: 70,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border.all(color: CustColors.greyText3),
-                                      borderRadius: BorderRadius.circular(4)
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        height: 20,
-                                        width: 25,
-                                        color: Colors.transparent,
-                                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                        alignment: Alignment.topCenter,
-                                        child: Text(
-                                          "-",
-                                          textAlign: TextAlign.start,
-                                          style: Styles.homeNameTextStyle,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            "12",
-                                            textAlign: TextAlign.center,
-                                            style: Styles.homeActiveTextStyle,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        height: 20,
-                                        width: 25,
-                                        color: Colors.transparent,
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "+",
-                                          style: Styles.homeNameTextStyle,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                            child: SvgPicture.asset('assets/image/home_customer/deleteMyCart.svg',height: 20,width: 20,),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                            child: Text(
-                              "\$ 3000",
-                              style: Styles.sparePartNameTextBlack17,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                            child: Container(
-                              height: 20,
-                              width: 70,
-                              alignment: Alignment.center,
-                              color: CustColors.light_navy,
-                              child: Text(
-                                "Place order",
-                                style: Styles.badgeTextStyle1,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )
-              ),
+    return BlocBuilder<ShowCartPopBloc, ShowCartPopState>(
+        builder: (context, state) {
+      if (state is ShowCartPopLoadingState) {
+        return Center(
+          child: SizedBox(
+            height: _setValue(28),
+            width: _setValue(28),
+            child: const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(CustColors.light_navy),
             ),
-            Divider(),
-
-          ],
+          ),
         );
-      },
-    );
+      } else if (state is ShowCartPopLoadedState) {
+        return state.cartlistmodel.data!.cartList.data.isNotEmpty
+            ? Column(
+                children: [
+                  ListView.builder(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount:
+                        state.cartlistmodel.data?.cartList.data.length ?? 0,
+                    itemBuilder: (context, index) {
+                      // image = state.cartlistmodel.data!.cartList.data[index].product.productImage
+                      //     .replaceAll("[", "")
+                      //     .replaceAll("]", "")
+                      //     .split(",");
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        print("WidgetsBinding");
+                        states = state.cartlistmodel.data!.cartList.data[index]
+                            .customer.address.first.state;
+                        city = state.cartlistmodel.data!.cartList.data[index]
+                            .customer.address.first.city;
+                        pincode = state.cartlistmodel.data!.cartList.data[index]
+                            .customer.address.first.pincode;
+                      });
+
+                      print("nocunter");
+                      print(states);
+                      print(city);
+                      print(pincode);
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: SizedBox(
+                                width: double.infinity,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                                      child: SizedBox(
+                                        height: 60,
+                                        width: 90,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          child: state
+                                                          .cartlistmodel
+                                                          .data!
+                                                          .cartList
+                                                          .data[index]
+                                                          .product
+                                                          .productImage ==
+                                                      "null" ||
+                                                  state
+                                                      .cartlistmodel
+                                                      .data!
+                                                      .cartList
+                                                      .data[index]
+                                                      .product
+                                                      .productImage
+                                                      .isEmpty
+                                              ? Container(
+                                                  color: Colors.white,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            25),
+                                                    child: SvgPicture.asset(
+                                                      'assets/image/CustomerType/dummyCar00.svg',
+                                                      fit: BoxFit.contain,
+                                                    ),
+                                                  ),
+                                                )
+                                              : Image.network(
+                                                  state
+                                                      .cartlistmodel
+                                                      .data!
+                                                      .cartList
+                                                      .data[index]
+                                                      .product
+                                                      .productImage,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 8, 0, 0),
+                                              child: Text(
+                                                state
+                                                    .cartlistmodel
+                                                    .data!
+                                                    .cartList
+                                                    .data[index]
+                                                    .product
+                                                    .vehicleModel
+                                                    .brandName,
+                                                style: Styles
+                                                    .sparePartNameSubTextBlack,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 8, 0, 0),
+                                              child: Text(
+                                                state
+                                                    .cartlistmodel
+                                                    .data!
+                                                    .cartList
+                                                    .data[index]
+                                                    .product
+                                                    .productName,
+                                                style: Styles
+                                                    .sparePartNameTextBlack17,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 8, 0, 10),
+                                              child: Text(
+                                                state
+                                                    .cartlistmodel
+                                                    .data!
+                                                    .cartList
+                                                    .data[index]
+                                                    .product
+                                                    .vehicleModel
+                                                    .modelName,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: Styles
+                                                    .sparePartNameSubTextBlack,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 0, 5, 0),
+                                              child: InkWell(
+                                                onTap: () {},
+                                                child: Container(
+                                                  height: 20,
+                                                  width: 70,
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      border: Border.all(
+                                                          color: CustColors
+                                                              .greyText3),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4)),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () {
+                                                          if (state
+                                                                  .cartlistmodel
+                                                                  .data!
+                                                                  .cartList
+                                                                  .data[index]
+                                                                  .quantity >
+                                                              1) {
+                                                            setState(() {
+                                                              state
+                                                                  .cartlistmodel
+                                                                  .data!
+                                                                  .cartList
+                                                                  .data[index]
+                                                                  .quantity--;
+                                                            });
+
+                                                            final deletcartBloc =
+                                                                BlocProvider.of<
+                                                                        DeleteCartBloc>(
+                                                                    context);
+                                                            deletcartBloc.add(FetchDeleteCartEvent(
+                                                                state
+                                                                    .cartlistmodel
+                                                                    .data!
+                                                                    .cartList
+                                                                    .data[index]
+                                                                    .product
+                                                                    .id
+                                                                    .toString(),
+                                                                state
+                                                                    .cartlistmodel
+                                                                    .data!
+                                                                    .cartList
+                                                                    .data[index]
+                                                                    .quantity
+                                                                    .toString(),
+                                                                "1"));
+                                                          }
+                                                        },
+                                                        child: Container(
+                                                          height: 20,
+                                                          width: 25,
+                                                          color: Colors
+                                                              .transparent,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .fromLTRB(
+                                                                  0, 0, 0, 0),
+                                                          alignment: Alignment
+                                                              .topCenter,
+                                                          child: const Text(
+                                                            "-",
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: Styles
+                                                                .homeNameTextStyle,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                            state
+                                                                .cartlistmodel
+                                                                .data!
+                                                                .cartList
+                                                                .data[index]
+                                                                .quantity
+                                                                .toString(),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: Styles
+                                                                .homeActiveTextStyle,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            state
+                                                                .cartlistmodel
+                                                                .data!
+                                                                .cartList
+                                                                .data[index]
+                                                                .quantity++;
+                                                          });
+                                                          final deletcartBloc =
+                                                              BlocProvider.of<
+                                                                      DeleteCartBloc>(
+                                                                  context);
+                                                          deletcartBloc.add(
+                                                              FetchDeleteCartEvent(
+                                                                  state
+                                                                      .cartlistmodel
+                                                                      .data!
+                                                                      .cartList
+                                                                      .data[
+                                                                          index]
+                                                                      .product
+                                                                      .id
+                                                                      .toString(),
+                                                                  state
+                                                                      .cartlistmodel
+                                                                      .data!
+                                                                      .cartList
+                                                                      .data[
+                                                                          index]
+                                                                      .quantity
+                                                                      .toString(),
+                                                                  "1"));
+                                                        },
+                                                        child: Container(
+                                                          height: 20,
+                                                          width: 25,
+                                                          color: Colors
+                                                              .transparent,
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: const Text(
+                                                            "+",
+                                                            style: Styles
+                                                                .homeNameTextStyle,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 8, 0, 0),
+                                            child: InkWell(
+                                              onTap: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return CupertinoAlertDialog(
+                                                        title: const Text(
+                                                            "Confirm",
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'Formular',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 18,
+                                                              color: CustColors
+                                                                  .materialBlue,
+                                                            )),
+                                                        content: const Text(
+                                                            "Are you sure you want to delete?"),
+                                                        actions: <Widget>[
+                                                          CupertinoDialogAction(
+                                                              textStyle:
+                                                                  const TextStyle(
+                                                                color: CustColors
+                                                                    .rusty_red,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                              ),
+                                                              isDefaultAction:
+                                                                  true,
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child: const Text(
+                                                                  "No")),
+                                                          CupertinoDialogAction(
+                                                              textStyle:
+                                                                  const TextStyle(
+                                                                color: CustColors
+                                                                    .rusty_red,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                              ),
+                                                              isDefaultAction:
+                                                                  true,
+                                                              onPressed:
+                                                                  () async {
+                                                                final deletcartBloc =
+                                                                    BlocProvider.of<
+                                                                            DeleteCartBloc>(
+                                                                        context);
+                                                                deletcartBloc.add(FetchDeleteCartEvent(
+                                                                    state
+                                                                        .cartlistmodel
+                                                                        .data!
+                                                                        .cartList
+                                                                        .data[
+                                                                            index]
+                                                                        .product
+                                                                        .id
+                                                                        .toString(),
+                                                                    "1",
+                                                                    "0"));
+                                                                Navigator.pop(
+                                                                    context);
+                                                                Fluttertoast
+                                                                    .showToast(
+                                                                  msg:
+                                                                      "Removed from cart successfully!!",
+                                                                  timeInSecForIosWeb:
+                                                                      1,
+                                                                );
+                                                              },
+                                                              child: const Text(
+                                                                  "Yes")),
+                                                        ],
+                                                      );
+                                                    });
+                                              },
+                                              child: SvgPicture.asset(
+                                                'assets/image/home_customer/deleteMyCart.svg',
+                                                height: 20,
+                                                width: 20,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 8, 0, 0),
+                                            child: Text(
+                                              "\$ " +
+                                                  state
+                                                      .cartlistmodel
+                                                      .data!
+                                                      .cartList
+                                                      .data[index]
+                                                      .product
+                                                      .price
+                                                      .toString(),
+                                              style: Styles
+                                                  .sparePartNameTextBlack17,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 8, 0, 0),
+                                            child: InkWell(
+                                              onTap: () {
+
+                                                int totalprice= state
+                                                    .cartlistmodel
+                                                    .data!
+                                                    .cartList
+                                                    .data[index]
+                                                    .quantity*state
+                                                    .cartlistmodel
+                                                    .data!
+                                                    .cartList
+                                                    .data[index]
+                                                    .product
+                                                    .price;
+
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ChangeDeliveryAddressScreen(
+                                                              quantity: state
+                                                                  .cartlistmodel
+                                                                  .data!
+                                                                  .cartList
+                                                                  .data[index]
+                                                                  .quantity
+                                                                  .toString(),
+                                                              productprice: totalprice.toString(),
+                                                              productid: state
+                                                                  .cartlistmodel
+                                                                  .data!
+                                                                  .cartList
+                                                                  .data[index]
+                                                                  .product
+                                                                  .id
+                                                                  .toString(),
+
+                                                            )));
+                                              },
+                                              child: Container(
+                                                height: 20,
+                                                width: 70,
+                                                alignment: Alignment.center,
+                                                color: CustColors.light_navy,
+                                                child: const Text(
+                                                  "Place order",
+                                                  style: Styles.badgeTextStyle1,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                          ),
+                          const Divider(),
+                        ],
+                      );
+                    },
+                  ),
+                  //placeOrderUi(state.cartlistmodel.data!.cartList.totalPrice),
+                  const Divider(),
+                  changeAddressUi(),
+                  const Divider(),
+                  // selectedBillDetailsUi(
+                  //     state.cartlistmodel.data!.cartList.totalPrice,
+                  //     state.cartlistmodel.data!.cartList.totalItems,
+                  //     state.cartlistmodel.data!.cartList.deliveryCharge),
+                  const Divider(),
+                  continueButtonUi(),
+                ],
+              )
+            : Center(
+                child: Column(
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.2,
+                  ),
+                  Image.asset(
+                    "assets/image/ic_cart_empty.png",
+                    width: MediaQuery.of(context).size.width * 0.6,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
+                  const Text(
+                    "Cart Empty",
+                    style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Samsung_SharpSans_Medium'),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  const Text(
+                    "Your cart is empty",
+                    style: Styles.sparePartNameTextBlack17,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.014,
+                  ),
+                  const Text(
+                    "Go to product section and add product to cart",
+                    style: Styles.sparePartNameTextBlack17,
+                  ),
+                ],
+              ));
+      } else {
+        return Container();
+      }
+    });
   }
 
-  Widget placeOrderUi() {
-    return  Padding(
-      padding: const EdgeInsets.fromLTRB(10,0,10,0),
-      child: Container(
-          width: double.infinity,
-          child: Container(
-            child: Row(
-              mainAxisAlignment:MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/image/home_customer/mycartSucessflag.svg',height: 35,width: 35,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      mainAxisAlignment:MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                          child: Text(
-                            "Buy all the  products in the cart",
-                            style: Styles.sparePartNameTextBlack17,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                        child: Text(
-                          "\$ 3000",
-                          style: Styles.sparePartNameTextBlack17,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                        child: Container(
-                          height: 20,
-                          width: 70,
-                          alignment: Alignment.center,
-                          color: CustColors.light_navy,
-                          child: Text(
-                            "Place order",
-                            style: Styles.badgeTextStyle1,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )
-      ),
-    );
-  }
-
-  Widget changeAddressUi() {
-    return  Padding(
-      padding: const EdgeInsets.fromLTRB(10,10,10,10),
-      child: Container(
+  Widget placeOrderUi(int totalPrices) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: SizedBox(
           width: double.infinity,
           child: Row(
-            mainAxisAlignment:MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SvgPicture.asset(
-                'assets/image/home_customer/myCartLocation.svg',height: 30,width: 30,
+                'assets/image/home_customer/mycartSucessflag.svg',
+                height: 35,
+                width: 35,
               ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                         child: Text(
-                          "Delivering To: Savannah estate,plot 176",
-                          maxLines: 1,
+                          "Buy all the  products in the cart",
                           style: Styles.sparePartNameTextBlack17,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                        child: Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                "Beside oando filling station.",
-                                style: Styles.sparePartNameTextBlack17,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(2),
-                              child: Container(
-                                height: 20,
-                                width: 45,
-                                decoration: BoxDecoration(
-                                    color: CustColors.roseText1,
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4),
-                                  child: Text(
-                                    "Work",
-                                    style: Styles.sparePartNameTextBlack17,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
                         ),
                       ),
                     ],
@@ -443,13 +739,89 @@ class _MyCartScreenState extends State<MyCartScreen> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0,0,5,0),
+                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                      child: Text(
+                        "\$ " + totalPrices.toString(),
+                        style: Styles.sparePartNameTextBlack17,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                      child: Container(
+                        height: 20,
+                        width: 70,
+                        alignment: Alignment.center,
+                        color: CustColors.light_navy,
+                        child: Text(
+                          "Place order",
+                          style: Styles.badgeTextStyle1,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )),
+    );
+  }
+
+  Widget changeAddressUi() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: SizedBox(
+          width: double.infinity,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SvgPicture.asset(
+                'assets/image/home_customer/myCartLocation.svg',
+                height: 30,
+                width: 30,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                        child: Text(
+                          "Delivering to : " " " +
+                              states +
+                              " , " +
+                              city +
+                              " ," +
+                              pincode,
+                          maxLines: 2,
+                          style: Styles.sparePartNameTextBlack17,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                       child: InkWell(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ChangeDeliveryAddressScreen()));
+                                  builder: (context) =>
+                                      ChangeDeliveryAddressScreen(
+                                        quantity: "",
+                                        productprice: "",
+                                        productid: "",
+                                      )));
                         },
                         child: Container(
                           height: 25,
@@ -458,9 +830,8 @@ class _MyCartScreenState extends State<MyCartScreen> {
                           decoration: BoxDecoration(
                               color: Colors.white,
                               border: Border.all(color: CustColors.light_navy),
-                              borderRadius: BorderRadius.circular(4)
-                          ),
-                          child: Text(
+                              borderRadius: BorderRadius.circular(4)),
+                          child: const Text(
                             "Change",
                             style: Styles.homeActiveTextStyle,
                           ),
@@ -471,91 +842,107 @@ class _MyCartScreenState extends State<MyCartScreen> {
                 ),
               ),
             ],
-          )
-      ),
+          )),
     );
   }
 
-  Widget selectedBillDetailsUi() {
+  Widget selectedBillDetailsUi(
+      int totalPrices, int totalItems, int deliveryCharge) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10,10,10,10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(0.0)
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(0.0)),
         alignment: Alignment.center,
-        child:Padding(
-          padding: const EdgeInsets.fromLTRB(0,5,0,5),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                child: Text(
+                  'Bill Details',
+                  maxLines: 2,
+                  textAlign: TextAlign.start,
+                  overflow: TextOverflow.visible,
+                  style: Styles.appBarTextBlack17,
+                ),
+              ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(10,5,10,5),
+                padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                 child: Container(
-                  child: Text('Bill Details',
-                    maxLines: 2,
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.visible,
-                    style: Styles.appBarTextBlack17,
+                  alignment: Alignment.center,
+                  child: Row(
+                    children: [
+                      Row(
+                        children: const [
+                          Text(
+                            'Items in cart',
+                            maxLines: 2,
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.visible,
+                            style: Styles.textLabelTitle_12,
+                          ),
+                        ],
+                      ),
+                      Spacer(),
+                      Row(
+                        children: [
+                          Text(
+                            totalItems.toString(),
+                            maxLines: 2,
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.visible,
+                            style: Styles.textLabelTitle_10,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
-              Container(
-                child: ListView.builder(
-                  itemCount:2,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context,index,) {
-
-
-
-                    return InkWell(
-                      onTap:(){
-
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10,5,10,5),
-                        child: Container(
-                          alignment: Alignment.center,
-                          child:Row(
-                            children: [
-                              Row(
-                                children: [
-                                  Text('Timing belt replacement',
-                                    maxLines: 2,
-                                    textAlign: TextAlign.start,
-                                    overflow: TextOverflow.visible,
-                                    style: Styles.textLabelTitle_12,
-                                  ),
-                                ],
-                              ),
-                              Spacer(),
-                              Row(
-                                children: [
-                                  Text('200',
-                                    maxLines: 2,
-                                    textAlign: TextAlign.start,
-                                    overflow: TextOverflow.visible,
-                                    style: Styles.textLabelTitle_10,
-                                  ),
-                                ],
-                              ),
-                            ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Row(
+                    children: [
+                      Row(
+                        children: const [
+                          Text(
+                            'Delivery Fee',
+                            maxLines: 2,
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.visible,
+                            style: Styles.textLabelTitle_12,
                           ),
-                        ),
+                        ],
                       ),
-                    );
-                  },
+                      Spacer(),
+                      Row(
+                        children: [
+                          Text(
+                            deliveryCharge.toString(),
+                            maxLines: 2,
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.visible,
+                            style: Styles.textLabelTitle_10,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(10,5,10,5),
+                padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                 child: Row(
                   children: [
                     Row(
-                      children: [
-                        Text('Total price including tax',
+                      children: const [
+                        Text(
+                          'Total price including tax',
                           maxLines: 2,
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.visible,
@@ -566,7 +953,8 @@ class _MyCartScreenState extends State<MyCartScreen> {
                     Spacer(),
                     Row(
                       children: [
-                        Text('200',
+                        Text(
+                          totalPrices.toString(),
                           maxLines: 2,
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.visible,
@@ -588,40 +976,34 @@ class _MyCartScreenState extends State<MyCartScreen> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20,5,20,10),
+          padding: const EdgeInsets.fromLTRB(20, 5, 20, 10),
           child: Container(
-            margin: EdgeInsets.only(top: 5,bottom: 5),
+            margin: const EdgeInsets.only(top: 5, bottom: 5),
             child: _isLoading
                 ? Center(
-              child: Container(
-                height: _setValue(28),
-                width: _setValue(28),
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      CustColors.peaGreen),
-                ),
-              ),
-            )
-                : Container(
-
-                  child: MaterialButton(
+                    child: SizedBox(
+                      height: _setValue(28),
+                      width: _setValue(28),
+                      child: const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            CustColors.light_navy),
+                      ),
+                    ),
+                  )
+                : MaterialButton(
                     onPressed: () {
-
-                      setState(() {
-
-                      });
-                      Navigator.pushReplacement(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => PurchaseResponseScreen(isSuccess: false,)));
-
+                              builder: (context) => const Payment_Main_Screen(
+                                  amount: "", orderid: "")));
                     },
-                    child: Container(
+                    child: SizedBox(
                       height: 50,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
+                        children: const [
                           Text(
                             'Continue',
                             textAlign: TextAlign.center,
@@ -632,17 +1014,13 @@ class _MyCartScreenState extends State<MyCartScreen> {
                     ),
                     color: CustColors.materialBlue,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            _setValue(10))),
+                        borderRadius: BorderRadius.circular(_setValue(10))),
                   ),
-                ),
           ),
         ),
       ],
     );
   }
-
-
 }
 
 class MyBehavior extends ScrollBehavior {
@@ -652,4 +1030,3 @@ class MyBehavior extends ScrollBehavior {
     return child;
   }
 }
-

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
@@ -14,9 +16,11 @@ import 'package:intl/intl.dart';
 class CustMobileTrackScreen extends StatefulWidget{
 
   final String bookingId;
+  final String bookingDate;
 
   CustMobileTrackScreen({
-    required this.bookingId
+    required this.bookingId,
+    required this.bookingDate
   });
 
   @override
@@ -31,52 +35,77 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
   HomeCustomerBloc _mechanicHomeBloc = HomeCustomerBloc();
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  String isBookedDate = "", scheduledDate = "", isDriveStarted = "", isArrived = "", isWorkStarted = "", isWorkFinished = "",isPayment = "";
+  String isBookedDate = "", scheduledDate = "",
+      scheduledTime = "", isDriveStarted = "",
+      isArrived = "", isWorkStarted = "",
+      isWorkFinished = "", isPayment = "";
   String bookingDate = "", customerName = "", mechanicName = "";
   DateTime dateToday = DateTime.now();
   String isDriveStartedTime = "", isArrivedTime = "", isWorkStartedTime = "", isWorkFinishedTime = "", isPaymentTime = "";
+  String customerAddress = "", mechanicAddress = "";
+  String isCompleted = "-1";
+  bool isLoading = true;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    Timer(const Duration(seconds: 2), () {
+      setState(() {
+        isLoading = false;
+      });
+    });
     listenToCloudFirestoreDB();
+    bookingDate = widget.bookingDate;
   }
 
-  void listenToCloudFirestoreDB() {
+  Future<void> listenToCloudFirestoreDB() async {
    // _firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
-    _firestore.collection("${TextStrings.firebase_mobile_mech}").doc('${widget.bookingId}').snapshots().listen((event) {
-      //bookingDate = _mechanicHomeBloc.dateMonthConverter(event.get("bookingDate"));
-      bookingDate = event.get("bookingDate");
-      customerName = event.get("customerName");
-      mechanicName = event.get("mechanicName");
-      isBookedDate = event.get("isBookedDate");
-      scheduledDate = event.get("scheduledDate");
-      isDriveStarted = event.get("isDriveStarted");
-      isDriveStartedTime = event.get("isDriveStartedTime");
-      isArrived = event.get("isArrived");
-      isArrivedTime = event.get("isArrivedTime");
-      isWorkStarted = event.get("isWorkStarted");
-      isWorkStartedTime = event.get("isWorkStartedTime");
-      isWorkFinished = event.get("isWorkFinished");
-      isWorkFinishedTime = event.get("isWorkFinishedTime");
-      isPayment = event.get("isPayment");
-      isPaymentTime = event.get("isPaymentTime");
+   await _firestore.collection("${TextStrings.firebase_mobile_mech}").doc('${widget.bookingId}').snapshots().listen((event) {
 
-      DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(scheduledDate);
+      setState(() {
+        //bookingDate = event.get("bookingDate");
+        customerName = event.get("customerName");
+        customerAddress = event.get("customerAddress");
+        scheduledTime = event.get("scheduledTime");
+        mechanicName = event.get("mechanicName");
+        mechanicAddress = event.get("mechanicAddress");
+        isBookedDate = event.get("isBookedDate");
+        scheduledDate = event.get("scheduledDate");
+        scheduledDate = event.get("scheduledDate");
+        isDriveStarted = event.get("isDriveStarted");
+        isDriveStartedTime = event.get("isDriveStartedTime");
+        isArrived = event.get("isArrived");
+        isArrivedTime = event.get("isArrivedTime");
+        isWorkStarted = event.get("isWorkStarted");
+        isWorkStartedTime = event.get("isWorkStartedTime");
+        isWorkFinished = event.get("isWorkFinished");
+        isWorkFinishedTime = event.get("isWorkFinishedTime");
+        isPayment = event.get("isPayment");
+        isPaymentTime = event.get("isPaymentTime");
+      });
 
-      print(" >>>> Date : >>>>>" + tempDate.compareTo(dateToday).toString());
-      if(tempDate.compareTo(dateToday) == 0 || tempDate.compareTo(dateToday) == -1){
+      if(scheduledDate.isNotEmpty){
+        DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(scheduledDate);
+
+        print(" >>>> Date : >>>>>" + tempDate.compareTo(dateToday).toString());
+        if(tempDate.compareTo(dateToday) == 0 || tempDate.compareTo(dateToday) == -1){
+          setState(() {
+            //isBookedDate = "0";
+            updateToCloudFirestoreDB("isBookedDate","0");
+            print(" >>>>> isBookedDate >>>" + isBookedDate);
+          });
+        }
+      }
+
+      if(isPayment == "5"){
         setState(() {
-          //isBookedDate = "0";
-          updateToCloudFirestoreDB("isBookedDate","0");
-          print(" >>>>> isBookedDate >>>" + isBookedDate);
+          isCompleted = "0";
         });
       }
 
       print(" >>>> Date : >>>>>" + dateToday.toString());
 
-      print(" >>>> Date : >>>>>" + tempDate.toString());
      /* customerDiagonsisApproval = event.get("customerDiagonsisApproval");
       mechanicName = event.get('mechanicName');
       totalEstimatedCost = event.get("updatedServiceCost");
@@ -108,7 +137,14 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Container(
+        child: isLoading == true
+            ?
+        Container(
+            width: size.width,
+            height: size.height,
+            child: Center(child: CircularProgressIndicator(color: CustColors.light_navy)))
+            :
+        Container(
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -127,6 +163,8 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                     : paymentOptionActiveUi(size),
 
                 // one more widget on processing payment or waiting payment
+
+                completedUi(size),
 
                 textButtonUi(size),
               ],
@@ -162,17 +200,11 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
     return Padding(
       padding: const EdgeInsets.only(left: 22.0,right: 22.0),
       child: Container(
-        //color: CustColors.light_navy,
         height: 83,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: CustColors.light_navy,
         ),
-        // child: Container(
-        //
-        //   decoration: BoxDecoration(
-        //     borderRadius: BorderRadius.circular(10)
-        //   ),
           child: Row(
             children: [
               Padding(
@@ -225,7 +257,6 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      //color: CustColors.light_navy,
                       child: SvgPicture.asset('assets/image/ic_calender.svg',
                         fit: BoxFit.contain,
                       color: Colors.white,),
@@ -245,6 +276,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                     ),),
                     SizedBox(height: 05),
                     Text(
+                      //_mechanicHomeBloc.dateMonthConverter(DateFormat("yyyy-MM-dd").parse(bookingDate)),
                       _mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(bookingDate)),
                       //bookingDate.toString(),
                     textAlign: TextAlign.start,
@@ -297,8 +329,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                         Container(
                           height: 25,
                           width: 25,
-                          //color: CustColors.light_navy,
-                          child: Image.asset('assets/image/ServiceTrackScreen/active_start_from_mech.png',
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drive_started_w.svg',
                             fit: BoxFit.contain,
                             //color: Colors.white,
                           ),
@@ -315,20 +346,22 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Jaymech started from ',
+                      Text('$mechanicName drive started',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
                       SizedBox(height: 02),
-                      Text('Savannah estate, plot 176',
+                      mechanicAddress.isEmpty ? Container():
+                      Text(
+                        'from - $mechanicAddress',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
                         ),),
-                      SizedBox(height: 02),
+                      mechanicAddress.isEmpty ? Container(): SizedBox(height: 02),
                       Text('on ${_mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(scheduledDate))}'
                           + '\nat ${isDriveStartedTime}',
                         textAlign: TextAlign.start,
@@ -381,7 +414,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
               height: 50.0,
             ),
           ),
-    ],
+        ],
       ),
     );
   }
@@ -413,7 +446,6 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                         Container(
                           height: 25,
                           width: 25,
-                          //color: CustColors.light_navy,
                           child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drive_started_b.svg',
                             fit: BoxFit.contain,
                             //color: Colors.white,
@@ -432,13 +464,13 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Jaymech started from ',
+                      Text('Mechanic $mechanicName come to ',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
                       SizedBox(height: 02),
-                      Text('Savannah estate, plot 176',
+                      Text('$customerAddress',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -446,7 +478,9 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                             color: const Color(0xff9b9b9b)
                         ),),
                       SizedBox(height: 02),
-                      Text('Mar 5,2022',
+                      Text(
+                        'on ' + _mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(scheduledDate)),
+                        //'Mar 5,2022',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -498,8 +532,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                         Container(
                           height: 25,
                           width: 25,
-                          //color: CustColors.light_navy,
-                          child: Image.asset('assets/image/ServiceTrackScreen/active_start_from_mech.png',
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_arrived_w.svg',
                             fit: BoxFit.contain,
                             //color: Colors.white,
                           ),
@@ -516,7 +549,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Jaymech reached',
+                      Text('$mechanicName reached',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
@@ -582,8 +615,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                         Container(
                           height: 25,
                           width: 25,
-                          //color: CustColors.light_navy,
-                          child: SvgPicture.asset('assets/image/ic_car1.svg',
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_arrived_b.svg',
                             fit: BoxFit.contain,
                             //color: Colors.white,
                           ),
@@ -597,31 +629,31 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
               Expanded(
                 flex: 200,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  padding: const EdgeInsets.only(left: 22.0,top: 01),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Jaymech started from ',
+                      Text( isDriveStarted == "-1" ? 'Drive not started' : "Expected to reach",
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      SizedBox(height: 02),
-                      Text('Savannah estate, plot 176',
+                      /*SizedBox(height: 02),
+                      isDriveStarted != "-1" ? Text('Expected to reach',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),),
-                      SizedBox(height: 02),
-                      Text('Mar 5,2022',
+                        ),) : Container(),*/
+                      isDriveStarted != "-1" ? SizedBox(height: 02) : Container(),
+                      isDriveStarted != "-1" ? Text('before $scheduledTime',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),)
+                        ),) : Container()
                     ],
                   ),
                 ),
@@ -636,271 +668,6 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget vehicleReachedNearUi(Size size){
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:[
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 22.0,top: 00),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children:[
-                    Container(
-                      height:50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: CustColors.light_navy05,
-                          borderRadius: BorderRadius.circular(25)
-                        //more than 50% of width makes circle
-                      ),
-                    ),
-                    Container(
-                      height: 25,
-                      width: 25,
-                      //color: CustColors.light_navy,
-                      child: SvgPicture.asset('assets/image/ic_car1.svg',
-                        fit: BoxFit.contain,),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 200,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 22.0,top: 00),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Jeymech reached near you',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                        ),),
-                      SizedBox(height: 05),
-                      Text('Mar 5,2022',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            color: const Color(0xff9b9b9b)
-                        ),)
-                    ],
-                  ),
-                ),
-              ),
-            ],
-        ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(45,5,5,5),
-            child: FDottedLine(
-              color: CustColors.light_navy05,
-              height: 50.0,
-            ),
-          ),
-    ],
-      ),
-    );
-  }
-
-  Widget pickedYourVehicleUi(Size size){
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:[
-          Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 22.0,top: 00),
-              child: Stack(
-                alignment: Alignment.center,
-                children:[
-                  Container(
-                    height:50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                        color: CustColors.light_navy05,
-                        borderRadius: BorderRadius.circular(25)
-                      //more than 50% of width makes circle
-                    ),
-                  ),
-                  Container(
-                    height: 25,
-                    width: 25,
-                    //color: CustColors.light_navy,
-                    child: SvgPicture.asset('assets/image/ic_car2.svg',
-                      fit: BoxFit.contain,),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex:200,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 22.0,top: 00),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Jaymech picked your vehicle',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'SamsungSharpSans-Medium',
-                      ),),
-                    SizedBox(height: 05),
-                    Text('Mar 5,2022',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                          color: const Color(0xff9b9b9b)
-                      ),)
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-              child: Container(
-                height: 23,
-                width: 55,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xffc9d6f2)
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 00.0),
-                  child: TextButton(
-                    onPressed: () {  },
-                    child: Text('TRACK',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: const Color(0xff919191),
-                        fontSize: 08,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color(0xffc9d6f2),
-                      shape:
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(45,5,5,5),
-            child: FDottedLine(
-              color: CustColors.light_navy05,
-              height: 50.0,
-            ),
-          ),
-    ]
-      ),
-    );
-  }
-
-  Widget reachedWorkShopUi(Size size){
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:[
-          Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 22.0,top: 00),
-              child: Stack(
-                alignment: Alignment.center,
-                children:[
-                  Container(
-                    height:50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                        color: CustColors.light_navy05,
-                        borderRadius: BorderRadius.circular(25)
-                      //more than 50% of width makes circle
-                    ),
-                  ),
-                  Container(
-                    height: 25,
-                    width: 25,
-                    //color: CustColors.light_navy,
-                    child: SvgPicture.asset('assets/image/ic_car2.svg',
-                      fit: BoxFit.contain,),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex:200,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 22.0,top: 00),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Jaymech reached his workshop',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'SamsungSharpSans-Medium',
-                      ),),
-                    SizedBox(height: 05),
-                    Text('Mar 5,2022',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                          color: const Color(0xff9b9b9b)
-                      ),)
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-              child: Container(
-                height: 23,
-                width: 55,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 00.0),
-                  child: TextButton(
-                    onPressed: () {  },
-                    child: Text('TRACK',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: const Color(0xff919191),
-                        fontSize: 08,
-                      ),
-                    ),
-                  style: ElevatedButton.styleFrom(
-                          primary: const Color(0xffc9d6f2),
-                          shape:
-                          RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                  ),
-                  ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(45,5,5,5),
-            child: FDottedLine(
-              color: CustColors.light_navy05,
-              height: 50.0,
-            ),
-          ),
-    ],
       ),
     );
   }
@@ -929,8 +696,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                   Container(
                     height: 25,
                     width: 25,
-                    //color: CustColors.light_navy,
-                    child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                    child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_started_b.svg',
                       fit: BoxFit.contain,),
                   ),
                 ],
@@ -943,24 +709,24 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Jaymech started work',
+                    Text('Start work',
                       style: TextStyle(
                         fontSize: 12,
                         fontFamily: 'SamsungSharpSans-Medium',
                       ),),
-                    SizedBox(height: 05),
+                    /*SizedBox(height: 05),
                     Text('Mar 5,2022',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                           color: const Color(0xff9b9b9b)
-                      ),)
+                      ),)*/
                   ],
                 ),
               ),
             ),
-            Padding(
+            /*Padding(
               padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
               child: Container(
                 height: 23,
@@ -990,7 +756,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                   ),
                 ),
               ),
-            ),
+            ),*/
           ],
         ),
           Padding(
@@ -1029,8 +795,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      //color: CustColors.light_navy,
-                      child: Image.asset('assets/image/ServiceTrackScreen/active_start_work.png',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_started_w.svg',
                         fit: BoxFit.contain,
                         //color: Colors.white,
                       ),
@@ -1045,7 +810,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Jaymech started work',
+                      Text('$mechanicName started work',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
@@ -1100,8 +865,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      //color: CustColors.light_navy,
-                      child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_finished_b.svg',
                         fit: BoxFit.contain,),
                     ),
                   ],
@@ -1114,51 +878,20 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Jaymech finished work',
+                      Text('Finish work',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      SizedBox(height: 05),
+                      /*SizedBox(height: 05),
                       Text('Mar 5,2022',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),)
+                        ),)*/
                     ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-                child: Container(
-                  height: 23,
-                  width: 55,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: const Color(0xffc9d6f2)
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 00.0),
-                    child: TextButton(
-                      onPressed: () {  },
-                      child: Text('TRACK',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: const Color(0xff919191),
-                          fontSize: 08,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: const Color(0xffc9d6f2),
-                        shape:
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                      ),
-                    ),
                   ),
                 ),
               ),
@@ -1200,8 +933,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      //color: CustColors.light_navy,
-                      child: Image.asset('assets/image/ServiceTrackScreen/active_start_work.png',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_finished_w.svg',
                         fit: BoxFit.contain,
                         //color: Colors.white,
                       ),
@@ -1216,7 +948,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Jaymech finished work',
+                      Text('$mechanicName finished work',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
@@ -1247,289 +979,101 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
     );
   }
 
-  Widget returnFromUi(Size size){
+  Widget paymentOptionInActiveUi(Size size){
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children:[
+        children: [
           Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 22.0,top: 00),
-              child: Stack(
-                alignment: Alignment.center,
-                children:[
-                  Container(
-                    height:50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                        color: CustColors.light_navy05,
-                        borderRadius: BorderRadius.circular(25)
-                      //more than 50% of width makes circle
-                    ),
-                  ),
-                  Container(
-                    height: 25,
-                    width: 25,
-                    //color: CustColors.light_navy,
-                    child: SvgPicture.asset('assets/image/ic_car1.svg',
-                      fit: BoxFit.contain,),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex:200,
-              child: Padding(
+            children: [
+              Padding(
                 padding: const EdgeInsets.only(left: 22.0,top: 00),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Jaymech started from',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'SamsungSharpSans-Medium',
-                      ),),
-                    SizedBox(height: 02),
-                    Text('Savannah estate, plot 176',
-                      textAlign: TextAlign.start,
-                     // maxLines: 1,
-                      softWrap: true,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                          color: const Color(0xff9b9b9b),
-                      ),),
-                    SizedBox(height: 02),
-                    Text('Mar 5,2022',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                          color: const Color(0xff9b9b9b)
-                      ),)
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy05,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_b.svg',
+                        fit: BoxFit.contain,),
+                    ),
                   ],
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-              child: Container(
-                height: 23,
-                width: 55,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xffc9d6f2)
-                ),
+              Expanded(
+                flex:200,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 00.0),
-                  child: TextButton(
-                    onPressed: () {  },
-                    child: Text('TRACK',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: const Color(0xff919191),
-                        fontSize: 08,
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Payment',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                      /*Text('Mar 5,2022',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)*/
+                    ],
+                  ),
+                ),
+              ),
+              /*Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {  },
+                      child: Text('TRACK',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xff919191),
+                          fontSize: 08,
+                        ),
                       ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color(0xffc9d6f2),
-                      shape:
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xffc9d6f2),
+                        shape:
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
-          ],
-        ),
+              ),*/
+              SizedBox(height: 20)
+            ],
+          ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(45,0,5,5),
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
             child: FDottedLine(
               color: CustColors.light_navy05,
               height: 50.0,
             ),
           ),
-    ],
-      ),
-    );
-  }
-
-  Widget returnAndReachNearUi(Size size){
-    return Container(
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 22.0,top: 00),
-            child: Stack(
-              alignment: Alignment.center,
-              children:[
-                Container(
-                  height:50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                      color: CustColors.light_navy05,
-                      borderRadius: BorderRadius.circular(25)
-                    //more than 50% of width makes circle
-                  ),
-                ),
-                Container(
-                  height: 25,
-                  width: 25,
-                  //color: CustColors.light_navy,
-                  child: SvgPicture.asset('assets/image/ic_car1.svg',
-                    fit: BoxFit.contain,),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            flex:200,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 22.0,top: 00),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Jaymech reached near you',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: 'SamsungSharpSans-Medium',
-                    ),),
-                  SizedBox(height: 05),
-                  Text('Mar 5,2022',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'SamsungSharpSans-Medium',
-                        color: const Color(0xff9b9b9b)
-                    ),)
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-            child: Container(
-              height: 23,
-              width: 55,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color(0xffc9d6f2)
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 00.0),
-                child: TextButton(
-                  onPressed: () {  },
-                  child: Text('TRACK',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: const Color(0xff919191),
-                      fontSize: 08,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color(0xffc9d6f2),
-                    shape:
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: 20)
-        ],
-      ),
-    );
-  }
-
-  Widget paymentOptionInActiveUi(Size size){
-    return Container(
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 22.0,top: 00),
-            child: Stack(
-              alignment: Alignment.center,
-              children:[
-                Container(
-                  height:50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                      color: CustColors.light_navy05,
-                      borderRadius: BorderRadius.circular(25)
-                    //more than 50% of width makes circle
-                  ),
-                ),
-                Container(
-                  height: 25,
-                  width: 25,
-                  //color: CustColors.light_navy,
-                  child: SvgPicture.asset('assets/image/ic_car1.svg',
-                    fit: BoxFit.contain,),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            flex:200,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 22.0,top: 00),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Payment',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: 'SamsungSharpSans-Medium',
-                    ),),
-                  SizedBox(height: 05),
-                  /*Text('Mar 5,2022',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'SamsungSharpSans-Medium',
-                        color: const Color(0xff9b9b9b)
-                    ),)*/
-                ],
-              ),
-            ),
-          ),
-          /*Padding(
-            padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-            child: Container(
-              height: 23,
-              width: 55,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color(0xffc9d6f2)
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 00.0),
-                child: TextButton(
-                  onPressed: () {  },
-                  child: Text('TRACK',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: const Color(0xff919191),
-                      fontSize: 08,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color(0xffc9d6f2),
-                    shape:
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),*/
-          SizedBox(height: 20)
         ],
       ),
     );
@@ -1537,7 +1081,209 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
 
   Widget paymentOptionActiveUi(Size size){
     return Container(
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_w.svg',
+                        fit: BoxFit.contain,),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex:200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Payment ',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {
+                        //updateToCloudFirestoreDB("isPayment","0");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RegularPaymentScreen(
+                                  firebaseCollection: TextStrings.firebase_mobile_mech,
+                                  bookingId: widget.bookingId,
+                                )));
+                      },
+                      child: Text('Pay Now',
+                        textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: CustColors.white_02,
+                            fontSize: 08,
+                          )
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: CustColors.light_navy,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20)
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
+            child: FDottedLine(
+              color: CustColors.light_navy05,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget paymentOptionFinishedUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_w.svg',
+                        fit: BoxFit.contain,),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex:200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Payment Completed',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                      Text('at $isPaymentTime',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)
+                    ],
+                  ),
+                ),
+              ),
+              /*Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {  },
+                      child: Text('TRACK',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xff919191),
+                          fontSize: 08,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xffc9d6f2),
+                        shape:
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),*/
+              SizedBox(height: 20)
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
+            child: FDottedLine(
+              color: CustColors.light_navy,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget completedUi(Size size){
+    return Container(
+      child: isCompleted == '-1'
+          ? Row(
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 22.0,top: 00),
@@ -1556,86 +1302,31 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                 Container(
                   height: 25,
                   width: 25,
-                  //color: CustColors.light_navy,
-                  child: SvgPicture.asset('assets/image/ic_car1.svg',
+                  child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_b.svg',
                     fit: BoxFit.contain,),
                 ),
               ],
             ),
           ),
           Expanded(
-            flex:200,
             child: Padding(
               padding: const EdgeInsets.only(left: 22.0,top: 00),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Payment ',
+                  Text('Service Completed',
                     style: TextStyle(
                       fontSize: 12,
                       fontFamily: 'SamsungSharpSans-Medium',
                     ),),
                   SizedBox(height: 05),
-                  /*Text('Mar 5,2022',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'SamsungSharpSans-Medium',
-                        color: const Color(0xff9b9b9b)
-                    ),)*/
                 ],
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-            child: Container(
-              height: 23,
-              width: 55,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color(0xffc9d6f2)
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 00.0),
-                child: TextButton(
-                  onPressed: () {
-                    //updateToCloudFirestoreDB("isPayment","0");
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => RegularPaymentScreen(
-                              firebaseCollection: TextStrings.firebase_mobile_mech,
-                              bookingId: widget.bookingId,
-                            )));
-                  },
-                  child: Text('Pay Now',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: const Color(0xff919191),
-                      fontSize: 08,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: CustColors.light_navy,
-                    shape:
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: 20)
         ],
-      ),
-    );
-  }
-
-  Widget paymentOptionFinishedUi(Size size){
-    return Container(
-      child: Row(
+      )
+          : Row(
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 22.0,top: 00),
@@ -1654,71 +1345,29 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                 Container(
                   height: 25,
                   width: 25,
-                  //color: CustColors.light_navy,
-                  child: Image.asset('assets/image/ServiceTrackScreen/active_start_from_mech.png',
-                    fit: BoxFit.contain,
-                    //color: Colors.white,
-                  ),
+                  child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_w.svg',
+                      fit: BoxFit.contain,
+                      color: CustColors.white_02),
                 ),
               ],
             ),
           ),
           Expanded(
-            flex:200,
             child: Padding(
               padding: const EdgeInsets.only(left: 22.0,top: 00),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Received Payment',
+                  Text('Service Completed',
                     style: TextStyle(
                       fontSize: 12,
                       fontFamily: 'SamsungSharpSans-Medium',
                     ),),
                   SizedBox(height: 05),
-                  Text('at 11:30 Am',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'SamsungSharpSans-Medium',
-                        color: const Color(0xff9b9b9b)
-                    ),)
                 ],
               ),
             ),
           ),
-          /*Padding(
-            padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-            child: Container(
-              height: 23,
-              width: 55,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color(0xffc9d6f2)
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 00.0),
-                child: TextButton(
-                  onPressed: () {  },
-                  child: Text('TRACK',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: const Color(0xff919191),
-                      fontSize: 08,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color(0xffc9d6f2),
-                    shape:
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),*/
-          SizedBox(height: 20)
         ],
       ),
     );
@@ -1767,6 +1416,11 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
       ),
 
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
 }

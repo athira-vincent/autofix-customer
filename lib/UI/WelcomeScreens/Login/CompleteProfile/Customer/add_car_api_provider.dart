@@ -17,11 +17,11 @@ class AddCarApiProvider {
   Future<VehicleCreateMdl> postAddCarRequest(
       token, brand, model, engine, year,
       plateNo, lastMaintenance, milege,
-      vehiclePic, latitude, longitude,) async {
+      vehiclePic,color, latitude, longitude,) async {
     Map<String, dynamic> _resp = await _queryProvider.postAddCarRequest(
       token, brand, model, engine, year,
       plateNo, lastMaintenance, milege,
-      vehiclePic, latitude, longitude,);
+      vehiclePic, color, latitude, longitude,);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

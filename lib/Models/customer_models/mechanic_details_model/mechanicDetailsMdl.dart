@@ -86,7 +86,7 @@ class MechanicDetails {
   int status;
   String jwtToken;
   String fcmToken;
-  dynamic otpCode;
+  String otpCode;
   int isProfile;
   int otpVerified;
   List<Mechanic>? mechanic;
@@ -96,8 +96,8 @@ class MechanicDetails {
   String distance;
   String duration;
   int reviewCount;
-  List<dynamic>? mechanicReviewsData;
-  int mechanicReview;
+  List<MechanicReviewsDatum>? mechanicReviewsData;
+  var mechanicReview;
   dynamic bookingsCount;
 
   factory MechanicDetails.fromJson(Map<String, dynamic> json) => MechanicDetails(
@@ -111,7 +111,7 @@ class MechanicDetails {
     status: json["status"] == null ? null : json["status"],
     jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
     fcmToken: json["fcmToken"] == null ? null : json["fcmToken"],
-    otpCode: json["otpCode"],
+    otpCode: json["otpCode"] == null ? null : json["otpCode"],
     isProfile: json["isProfile"] == null ? null : json["isProfile"],
     otpVerified: json["otpVerified"] == null ? null : json["otpVerified"],
     mechanic: json["mechanic"] == null ? null : List<Mechanic>.from(json["mechanic"].map((x) => Mechanic.fromJson(x))),
@@ -121,7 +121,7 @@ class MechanicDetails {
     distance: json["distance"] == null ? null : json["distance"],
     duration: json["duration"] == null ? null : json["duration"],
     reviewCount: json["reviewCount"] == null ? null : json["reviewCount"],
-    mechanicReviewsData: json["mechanicReviewsData"] == null ? null : List<dynamic>.from(json["mechanicReviewsData"].map((x) => x)),
+    mechanicReviewsData: json["mechanicReviewsData"] == null ? null : List<MechanicReviewsDatum>.from(json["mechanicReviewsData"].map((x) => MechanicReviewsDatum.fromJson(x))),
     mechanicReview: json["mechanicReview"] == null ? null : json["mechanicReview"],
     bookingsCount: json["bookingsCount"],
   );
@@ -137,7 +137,7 @@ class MechanicDetails {
     "status": status == null ? null : status,
     "jwtToken": jwtToken == null ? null : jwtToken,
     "fcmToken": fcmToken == null ? null : fcmToken,
-    "otpCode": otpCode,
+    "otpCode": otpCode == null ? null : otpCode,
     "isProfile": isProfile == null ? null : isProfile,
     "otpVerified": otpVerified == null ? null : otpVerified,
     "mechanic": mechanic == null ? null : List<dynamic>.from(mechanic!.map((x) => x.toJson())),
@@ -147,7 +147,7 @@ class MechanicDetails {
     "distance": distance == null ? null : distance,
     "duration": duration == null ? null : duration,
     "reviewCount": reviewCount == null ? null : reviewCount,
-    "mechanicReviewsData": mechanicReviewsData == null ? null : List<dynamic>.from(mechanicReviewsData!.map((x) => x)),
+    "mechanicReviewsData": mechanicReviewsData == null ? null : List<dynamic>.from(mechanicReviewsData!.map((x) => x.toJson())),
     "mechanicReview": mechanicReview == null ? null : mechanicReview,
     "bookingsCount": bookingsCount,
   };
@@ -175,19 +175,19 @@ class Mechanic {
 
   String id;
   dynamic usersId;
-  int yearExp;
+  String yearExp;
   String profilePic;
   String mechType;
-  dynamic workType;
+  String workType;
   dynamic noMech;
   String state;
   dynamic rcNumber;
-  dynamic brands;
-  dynamic address;
+  String brands;
+  String address;
   dynamic certificate1;
   dynamic certificate2;
   int status;
-  int rate;
+  dynamic rate;
   int reviewCount;
 
   factory Mechanic.fromJson(Map<String, dynamic> json) => Mechanic(
@@ -196,12 +196,12 @@ class Mechanic {
     yearExp: json["yearExp"] == null ? null : json["yearExp"],
     profilePic: json["profilePic"] == null ? null : json["profilePic"],
     mechType: json["mechType"] == null ? null : json["mechType"],
-    workType: json["workType"],
+    workType: json["workType"] == null ? null : json["workType"],
     noMech: json["noMech"],
     state: json["state"] == null ? null : json["state"],
     rcNumber: json["rcNumber"],
-    brands: json["brands"],
-    address: json["address"],
+    brands: json["brands"] == null ? null : json["brands"],
+    address: json["address"] == null ? null : json["address"],
     certificate1: json["certificate1"],
     certificate2: json["certificate2"],
     status: json["status"] == null ? null : json["status"],
@@ -215,17 +215,141 @@ class Mechanic {
     "yearExp": yearExp == null ? null : yearExp,
     "profilePic": profilePic == null ? null : profilePic,
     "mechType": mechType == null ? null : mechType,
-    "workType": workType,
+    "workType": workType == null ? null : workType,
     "noMech": noMech,
     "state": state == null ? null : state,
     "rcNumber": rcNumber,
-    "brands": brands,
-    "address": address,
+    "brands": brands == null ? null : brands,
+    "address": address == null ? null : address,
     "certificate1": certificate1,
     "certificate2": certificate2,
     "status": status == null ? null : status,
     "rate": rate == null ? null : rate,
     "reviewCount": reviewCount == null ? null : reviewCount,
+  };
+}
+
+class MechanicReviewsDatum {
+  MechanicReviewsDatum({
+    required this.id,
+    required this.transType,
+    required this.rating,
+    required this.feedback,
+    required this.bookingId,
+    required this.orderId,
+    required this.status,
+    required this.order,
+    required this.bookings,
+    required this.productData,
+  });
+
+  String id;
+  int transType;
+  var rating;
+  String feedback;
+  int bookingId;
+  dynamic orderId;
+  int status;
+  dynamic order;
+  Bookings? bookings;
+  dynamic productData;
+
+  factory MechanicReviewsDatum.fromJson(Map<String, dynamic> json) => MechanicReviewsDatum(
+    id: json["id"] == null ? null : json["id"],
+    transType: json["transType"] == null ? null : json["transType"],
+    rating: json["rating"] == null ? null : json["rating"],
+    feedback: json["feedback"] == null ? null : json["feedback"],
+    bookingId: json["bookingId"] == null ? null : json["bookingId"],
+    orderId: json["orderId"],
+    status: json["status"] == null ? null : json["status"],
+    order: json["order"],
+    bookings: json["bookings"] == null ? null : Bookings.fromJson(json["bookings"]),
+    productData: json["productData"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id == null ? null : id,
+    "transType": transType == null ? null : transType,
+    "rating": rating == null ? null : rating,
+    "feedback": feedback == null ? null : feedback,
+    "bookingId": bookingId == null ? null : bookingId,
+    "orderId": orderId,
+    "status": status == null ? null : status,
+    "order": order,
+    "bookings": bookings == null ? null : bookings!.toJson(),
+    "productData": productData,
+  };
+}
+
+class Bookings {
+  Bookings({
+    required this.id,
+    required this.bookingCode,
+    required this.customer,
+  });
+
+  int id;
+  String bookingCode;
+  BookingsCustomer? customer;
+
+  factory Bookings.fromJson(Map<String, dynamic> json) => Bookings(
+    id: json["id"] == null ? null : json["id"],
+    bookingCode: json["bookingCode"] == null ? null : json["bookingCode"],
+    customer: json["customer"] == null ? null : BookingsCustomer.fromJson(json["customer"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id == null ? null : id,
+    "bookingCode": bookingCode == null ? null : bookingCode,
+    "customer": customer == null ? null : customer!.toJson(),
+  };
+}
+
+class BookingsCustomer {
+  BookingsCustomer({
+    required this.fcmToken,
+    required this.firstName,
+    required this.phoneNo,
+    required this.lastName,
+    required this.customer,
+  });
+
+  String fcmToken;
+  String firstName;
+  String phoneNo;
+  String lastName;
+  List<CustomerElement>? customer;
+
+  factory BookingsCustomer.fromJson(Map<String, dynamic> json) => BookingsCustomer(
+    fcmToken: json["fcmToken"] == null ? null : json["fcmToken"],
+    firstName: json["firstName"] == null ? null : json["firstName"],
+    phoneNo: json["phoneNo"] == null ? null : json["phoneNo"],
+    lastName: json["lastName"] == null ? null : json["lastName"],
+    customer: json["customer"] == null ? null : List<CustomerElement>.from(json["customer"].map((x) => CustomerElement.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "fcmToken": fcmToken == null ? null : fcmToken,
+    "firstName": firstName == null ? null : firstName,
+    "phoneNo": phoneNo == null ? null : phoneNo,
+    "lastName": lastName == null ? null : lastName,
+    "customer": customer == null ? null : List<dynamic>.from(customer!.map((x) => x.toJson())),
+  };
+}
+
+class CustomerElement {
+  CustomerElement({
+    required this.profilePic,
+  });
+
+  String profilePic;
+
+  factory CustomerElement.fromJson(Map<String, dynamic> json) => CustomerElement(
+    profilePic: json["profilePic"] == null ? null : json["profilePic"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "profilePic": profilePic == null ? null : profilePic,
   };
 }
 

@@ -228,6 +228,9 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     _signinBloc.userDefault(
         authToken,
         TextStrings.user_mechanic,
+        value.data!.mechanicDetails!.mechanic![0].mechType.toString() == "1"
+            ? TextStrings.user_category_individual
+            : TextStrings.user_category_corporate ,              //change after merge on 18-08-2022
         _imageUrl,
         value.data!.mechanicDetails!.firstName.toString(),
         value.data!.mechanicDetails!.id.toString(),

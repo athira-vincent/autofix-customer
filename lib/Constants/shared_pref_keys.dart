@@ -8,15 +8,28 @@ class SharedPrefKeys {
   static const userLanguageCode = "userLanguageCode";
   static const profileImageUrl = "profileImageUrl";
 
+  static const currentLatitude = "currentLatitude";
+  static const currentLongitude = "currentLongitude";
+  static const currentAddress = "currentAddress";
+  static const preferredLatitude = "preferredLatitude";
+  static const preferredLongitude = "preferredLongitude";
+  static const preferredAddress = "preferredAddress";
+
+
   //---------------------Customer
   static const isUserLoggedIn = "is_Logged_In";
   static const userName = "userName";
   static const userEmail = "userEmail";
   static const userID = "userID";
+  static const userCode = "userCode";
+  static const userPhone = "userPhone";
+  static const otpCode = "otpCode";
+  static const userTypeId = "userTypeId";
   static const userProfilePic = "userProfilePic";
   static const isDefaultVehicleAvailable = "isDefaultVehicleAvailable";
   static const isCustomerSignUp = "isCustomerSignUp";
   static const defaultVehicleID = "defaultVehicleID";
+  static const defaultBrandID = "defaultBrandID";
 
   //------------------------Mechanic
 
@@ -26,6 +39,7 @@ class SharedPrefKeys {
   static const mechanicCode = "mechanicCode";
   static const mechanicID = "mechanicID";
   static const mechanicIsOnline = "mechanicIsOnline";
+  static const isWorkProfileCompleted = "isWorkProfileCompleted";
 
   ///========= Customer Tracking Variables ==============///
 

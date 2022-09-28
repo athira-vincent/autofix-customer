@@ -61,6 +61,7 @@ class CustVehicleList {
     required this.lastMaintenance,
     required this.latitude,
     required this.longitude,
+    required this.color,
     required this.vehiclePic,
     required this.userId,
     required this.status,
@@ -77,6 +78,7 @@ class CustVehicleList {
   String lastMaintenance;
   double latitude;
   double longitude;
+  String color;
   String vehiclePic;
   int userId;
   int status;
@@ -93,6 +95,7 @@ class CustVehicleList {
     lastMaintenance: json["lastMaintenance"] == null ? null : json["lastMaintenance"],
     latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
     longitude: json["longitude"] == null ? null : json["longitude"].toDouble(),
+    color: json["color"] == null ? null : json["color"],
     vehiclePic: json["vehiclePic"] == null ? null : json["vehiclePic"],
     userId: json["userId"] == null ? null : json["userId"],
     status: json["status"] == null ? null : json["status"],
@@ -110,6 +113,7 @@ class CustVehicleList {
     "lastMaintenance": lastMaintenance == null ? null : lastMaintenance,
     "latitude": latitude == null ? null : latitude,
     "longitude": longitude == null ? null : longitude,
+    "color": color == null ? null : color,
     "vehiclePic": vehiclePic == null ? null : vehiclePic,
     "userId": userId == null ? null : userId,
     "status": status == null ? null : status,

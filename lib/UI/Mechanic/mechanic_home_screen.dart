@@ -3,15 +3,18 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/Provider/locale_provider.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_screen_ui.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyServices/mechanic_my_services.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/IncomingJobRequestScreen/incoming_job_request_screen.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/mechanic_side_bar.dart';
 import 'package:auto_fix/Widgets/show_pop_up_widget.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
@@ -93,8 +96,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     Provider.of<ProfileDataProvider>(context, listen: false).setProfile(userId, localProfileName, localProfileUrl);
   }
 
-
-
   Future<void> _getCurrentMechanicLocation() async {
     Position position = await _getGeoLocationPosition();
     location ='Lat: ${position.latitude} , Long: ${position.longitude}';
@@ -131,7 +132,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
   }
 
   _listenApiResponse() {
@@ -176,50 +177,83 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       });
       print("event.notification!.data " + event.data.toString());
 
-      NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
+      String screen = event.data['screen'];
+      if(screen.toString() == "IncomingJobOfferScreen"){
+        NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
 
-      //var data = message['data'] ?? message;
-      String bookingId = event.data['bookingId'];
-      print("bookingId >>>>> " + bookingId );
+        //var data = message['data'] ?? message;
+        String bookingId = event.data['bookingId'];
+        print("bookingId >>>>> " + bookingId );
 
-      final provider = Provider.of<LocaleProvider>(context,listen: false);
-      provider.setPayload(notificationPayloadMdl);
+        final provider = Provider.of<LocaleProvider>(context,listen: false);
+        provider.setPayload(notificationPayloadMdl);
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)
-          )).then((value){
-      });
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)
+            )).then((value){
+        });
+      }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
 
       print("message received onMessageOpenedApp");
-      NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
-      print("_notificationPayloadMdl >>>>> " + notificationPayloadMdl.toString());
 
-      final provider = Provider.of<LocaleProvider>(context,listen: false);
-      provider.setPayload(notificationPayloadMdl);
       setState(() {
         _counter += 1;
       });
 
       print("event.notification!.data " + event.data.toString());
+      String screen = event.data['screen'];
+      if(screen.toString() == "IncomingJobOfferScreen"){
+        NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
+        print("_notificationPayloadMdl >>>>> " + notificationPayloadMdl.toString());
 
-      //var data = message['data'] ?? message;
-      String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-      //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-      print("bookingId >>>>> " + bookingId );
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)
-          )).then((value){
-      });
+        final provider = Provider.of<LocaleProvider>(context,listen: false);
+        provider.setPayload(notificationPayloadMdl);
+
+        //var data = message['data'] ?? message;
+        String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+        //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+        print("bookingId >>>>> " + bookingId );
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)
+            )).then((value){
+        });
+      }else if(screen.toString() == "mechanicServiceDetails"){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  MechServiceRegularDetailsScreen(
+                  bookingId: event.data['bookingId'],
+                  firebaseCollection: event.data['regularType'].toString()  == "1"
+                      ?
+                  TextStrings.firebase_pick_up
+                      : event.data['regularType'].toString()  == "2" ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle ,
+                )
+            )).then((value){
+        });
+      }else if(screen.toString() == "customerServiceDetails"){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  CustServiceRegularDetailsScreen(
+                  bookingId: event.data['bookingId'],
+                  firebaseCollection: event.data['regularType'].toString()  == "1"
+                      ?
+                  TextStrings.firebase_pick_up
+                      : event.data['regularType'].toString()  == "2" ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle ,
+                )
+            )).then((value){
+        });
+      }
     });
 
-    /*FirebaseMessaging.onBackgroundMessage((message) async {
+    FirebaseMessaging.onBackgroundMessage((message) async {
       print("onBackgroundMessage " + message.data.toString());
 
       setState(() {
@@ -227,7 +261,41 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
         //_notificationPayloadMdl = event.data;
       });
       print("message.notification!.data " + message.data.toString());
-    });*/
+      print("event.notification!.data " + message.data.toString());
+      String screen = message.data['screen'];
+      if(screen.toString() == "IncomingJobOfferScreen"){
+        NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(message.data);
+        print("_notificationPayloadMdl >>>>> " + notificationPayloadMdl.toString());
+
+        final provider = Provider.of<LocaleProvider>(context,listen: false);
+        provider.setPayload(notificationPayloadMdl);
+
+        //var data = message['data'] ?? message;
+        String bookingId = message.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+        //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+        print("bookingId >>>>> " + bookingId );
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)
+            )).then((value){
+        });
+      }else if(screen.toString() == "mechanicServiceDetails"){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  MechServiceRegularDetailsScreen(
+                  bookingId: message.data['bookingId'],
+                  firebaseCollection: message.data['regularType'].toString()  == "1"
+                      ?
+                  TextStrings.firebase_pick_up
+                      : message.data['regularType'].toString()  == "2" ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle ,
+                )
+            )).then((value){
+        });
+      }
+
+    });
 
   }
 
@@ -436,42 +504,45 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
                     Spacer(),
 
-                    InkWell(
-                      onTap: (){
-                        setState(() {
-                          if(isOnline == "1"){
-                            _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "0", userId, );
-                          }else{
-                            _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken","1", userId, );
-                          }
-                        });// !isOnline
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(
-                          top: 25 + MediaQuery.of(context).padding.top,
-                          right: 10 + MediaQuery.of(context).padding.right
-                        ),
-                        padding: EdgeInsets.only(
-                            left: 7, right: 7,
-                            top: 4, bottom: 4
-                        ),
-                        decoration: BoxDecoration(
-                            color: isOnline == "1" ? CustColors.light_navy : CustColors.cloudy_blue,
-                            borderRadius: BorderRadius.circular(4),
-                            boxShadow: [new BoxShadow(
-                              color: CustColors.roseText1,
-                              blurRadius: 10.0,
-                            ),]
-                        ),
-                        //color: isOnline ? CustColors.light_navy : CustColors.cloudy_blue,
-                        child: Text(
-                            isOnline == "1" ? "Online" : "Offline",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontFamily: "Samsung_SharpSans_Medium",
-                              fontWeight: FontWeight.w400
-                            ),
+                    Container(
+                      color: Colors.white,
+                      child: InkWell(
+                        onTap: (){
+                          setState(() {
+                            if(isOnline == "1"){
+                              _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "0", userId, );
+                            }else{
+                              _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken","1", userId, );
+                            }
+                          });// !isOnline
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(
+                            top: 25 + MediaQuery.of(context).padding.top,
+                            right: 10 + MediaQuery.of(context).padding.right
+                          ),
+                          padding: EdgeInsets.only(
+                              left: 7, right: 7,
+                              top: 4, bottom: 4
+                          ),
+                          decoration: BoxDecoration(
+                              color: isOnline == "1" ? CustColors.light_navy : CustColors.cloudy_blue,
+                              borderRadius: BorderRadius.circular(4),
+                              boxShadow: [new BoxShadow(
+                                color: CustColors.roseText1,
+                                blurRadius: 10.0,
+                              ),]
+                          ),
+                          //color: isOnline ? CustColors.light_navy : CustColors.cloudy_blue,
+                          child: Text(
+                              isOnline == "1" ? "Online" : "Offline",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontFamily: "Samsung_SharpSans_Medium",
+                                fontWeight: FontWeight.w400
+                              ),
+                          ),
                         ),
                       ),
                     ),

@@ -39,12 +39,14 @@ class _BookingSuccessScreenState extends State<BookingSuccessScreen> {
                       warningTextWidget(size),
                       InkWell(
                         onTap: (){
-                          Navigator.pushAndRemoveUntil(
+                          /*Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => CustomerMainLandingScreen()),
                               ModalRoute.withName("/CustomerMainLandingScreen")
-                          );
+                          );*/
+                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                              CustomerMainLandingScreen()), (Route<dynamic> route) => false);
                         },
                           child: backToHomeButton(size))
                     ]

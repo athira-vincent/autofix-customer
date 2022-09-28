@@ -82,9 +82,9 @@ class MechanicBooking {
   String bookingCode;
   int reqType;
   int bookStatus;
-  int totalPrice;
+  var totalPrice;
   double tax;
-  int commission;
+  var commission;
   double serviceCharge;
   dynamic totalTime;
   String serviceTime;
@@ -184,6 +184,7 @@ class Vehicle {
     required this.lastMaintenance,
     required this.milege,
     required this.vehiclePic,
+    required this.color,
     required this.latitude,
     required this.longitude,
     required this.defaultVehicle,
@@ -200,6 +201,7 @@ class Vehicle {
   String lastMaintenance;
   String milege;
   String vehiclePic;
+  dynamic color;
   double latitude;
   double longitude;
   int defaultVehicle;
@@ -216,6 +218,7 @@ class Vehicle {
     lastMaintenance: json["lastMaintenance"] == null ? null : json["lastMaintenance"],
     milege: json["milege"] == null ? null : json["milege"],
     vehiclePic: json["vehiclePic"] == null ? null : json["vehiclePic"],
+    color: json["color"],
     latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
     longitude: json["longitude"] == null ? null : json["longitude"].toDouble(),
     defaultVehicle: json["defaultVehicle"] == null ? null : json["defaultVehicle"],
@@ -233,6 +236,7 @@ class Vehicle {
     "lastMaintenance": lastMaintenance == null ? null : lastMaintenance,
     "milege": milege == null ? null : milege,
     "vehiclePic": vehiclePic == null ? null : vehiclePic,
+    "color": color,
     "latitude": latitude == null ? null : latitude,
     "longitude": longitude == null ? null : longitude,
     "defaultVehicle": defaultVehicle == null ? null : defaultVehicle,

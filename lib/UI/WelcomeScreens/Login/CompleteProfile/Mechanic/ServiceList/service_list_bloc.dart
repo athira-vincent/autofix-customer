@@ -11,23 +11,11 @@ class ServiceListBloc {
   final postServiceList = PublishSubject<CategoryServiceListMdl>();
   Stream<CategoryServiceListMdl> get serviceListResponse => postServiceList.stream;
 
-  /// =============== regular services list ==================
-
-  postServiceListRequest(String token, searchText, count, categoryId) async {
+  postServiceListRequest(String token, searchText, count, categoryId, catSearch) async {
     print(">>>>>>>>>>>>>>>----- token" + token);
-    CategoryServiceListMdl _serviceListMdl = await repository.getServiceList(token, categoryId);
+    CategoryServiceListMdl _serviceListMdl = await repository.getServiceList(token, categoryId, searchText, catSearch);
     postServiceList.sink.add(_serviceListMdl);
   }
-
-  /// =============== Emergency services list ==================
-
-/*  postSignUpMechanicCorporateRequest(String username,) async {
-    String fullName = username;
-
-    ServiceListMdl _signUpMdl = await repository.getSignUpMechanicCorporate("");
-    postServiceList.sink.add(_signUpMdl);
-  }*/
-
 
 
 }

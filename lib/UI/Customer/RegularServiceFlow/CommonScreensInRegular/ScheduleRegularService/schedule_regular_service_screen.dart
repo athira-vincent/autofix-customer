@@ -12,7 +12,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ScheduleRegularServiceScreen extends StatefulWidget {
@@ -55,22 +54,18 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   TextEditingController _serviceTimeController = TextEditingController();
   FocusNode _serviceTimeFocusNode = FocusNode();
 
+  TextEditingController _locationController = TextEditingController();
+  FocusNode _locationFocusNode = FocusNode();
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-
-  String? _setTime, _setDate;
-
-  String? _hour, _minute, _time;
 
   String? dateTime;
 
-
   List<Service>? selectedCategoryList =[];
   String selectedServiceSpecializatonType = "";
-  int totalEstimatedTime = 0 , totalEstimatedPrice = 0;
+  int totalEstimatedTime = 0 , totalEstimatedMinPrice = 0, totalEstimatedMaxPrice = 0;
   String selectedServiceIds = "";
   List<String> selectedListServiceIds =[];
-
 
   List<String> serviceModelList = [
     TextStrings.txt_mobile_mechanic,
@@ -91,7 +86,8 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
     for(int i = 0; i<selectedCategoryList!.length ; i++){
       selectedListServiceIds.add(selectedCategoryList![i].id);
       selectedServiceIds = selectedCategoryList![i].id  + ',' + selectedServiceIds ;
-      totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList![i].maxPrice}');
+      totalEstimatedMinPrice = totalEstimatedMinPrice + int.parse('${selectedCategoryList![i].minPrice}');
+      totalEstimatedMaxPrice = totalEstimatedMaxPrice + int.parse('${selectedCategoryList![i].maxPrice}');
     }
   }
 
@@ -136,7 +132,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
     });
   }
-
 
   Widget appBarUiWidget(Size size){
     return Container(
@@ -279,12 +274,13 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
               height: 10,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Estimated price",
+                    Text("Minimum price",
                       style: TextStyle(
                         fontSize: 12,
                         fontFamily: "Samsung_SharpSans_Medium",
@@ -295,7 +291,34 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                         height: 1.3,
                       ),
                     ),
-                    Text("$totalEstimatedPrice",
+                    Text("₦ $totalEstimatedMinPrice",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: "SharpSans_Bold",
+                        fontWeight: FontWeight.w200,
+                        color: Colors.black,
+                        wordSpacing: .5,
+                        letterSpacing: .2,
+                        height: 1.3,
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Maximum price",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: "Samsung_SharpSans_Medium",
+                        fontWeight: FontWeight.w200,
+                        color: Colors.black,
+                        wordSpacing: .5,
+                        letterSpacing: .7,
+                        height: 1.3,
+                      ),
+                    ),
+                    Text("₦ $totalEstimatedMaxPrice",
                       style: TextStyle(
                         fontSize: 15,
                         fontFamily: "SharpSans_Bold",
@@ -402,6 +425,9 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                     if(selectedCategoryList![index].id == widget.categoryList!.service![i].id)
                       {
                         this.widget.categoryList!.service![i].isChecked = false;
+                        selectedListServiceIds.remove(widget.categoryList!.service![i].id);
+                        totalEstimatedMinPrice = totalEstimatedMinPrice - int.parse('${this.widget.categoryList!.service![i].minPrice}');
+                        totalEstimatedMaxPrice = totalEstimatedMaxPrice - int.parse('${this.widget.categoryList!.service![i].maxPrice}');
                       }
                   }
                 selectedCategoryList!.removeAt(index);
@@ -427,7 +453,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                             ? Image.network(selectedCategoryList![index].icon,
                                 fit: BoxFit.cover,
                               )
-                            : Icon(Icons.stop,size: 35,color: CustColors.light_navy,),
+                            : Icon(Icons.miscellaneous_services,size: 35,color: CustColors.light_navy,),
                         //child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
                       ),
                     ),
@@ -459,7 +485,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 ),
               ),
               SizedBox(
-                height: 1,
+                height: 3,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -467,7 +493,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 children: [
                   Text("Estimated price",
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 10,
                       fontFamily: "Samsung_SharpSans_Medium",
                       fontWeight: FontWeight.w200,
                       color: Colors.black,
@@ -476,7 +502,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                       height: 1.3,
                     ),
                   ),
-                  Text("₦ ${selectedCategoryList![index].maxPrice}",
+                  Text("₦ ${selectedCategoryList![index].minPrice} - ₦ ${selectedCategoryList![index].maxPrice}",
                     style: TextStyle(
                       fontSize: 15,
                       fontFamily: "SharpSans_Bold",
@@ -569,7 +595,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
       ),
     );
   }
-
 
   Widget timeTextSelection(Size size) {
     return  InkWell(
@@ -761,14 +786,14 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
                     )));
           }
-
       },
       child: Align(
         alignment: Alignment.bottomRight,
         child: Container(
           margin: EdgeInsets.only(
               right: size.width * 6 / 100,
-              top: size.height * 2.5 / 100
+              top: size.height * 2.5 / 100,
+              bottom: size.height * .5 / 100
           ),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(
@@ -800,7 +825,8 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
     selectedCategoryList = [];
     selectedListServiceIds =[];
     selectedServiceIds = "";
-    totalEstimatedPrice = 0;
+    totalEstimatedMinPrice = 0;
+    totalEstimatedMaxPrice = 0;
     selectedCategoryList = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -811,6 +837,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
             longitude: widget.longitude,
             latitude: widget.latitude,
             address: widget.address,
+            isFromScheduleServicePage: true,
           ),
         ));
 
@@ -818,9 +845,10 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
       for(int i = 0; i<selectedCategoryList!.length ; i++){
           selectedListServiceIds.add(selectedCategoryList![i].id);
           selectedServiceIds = selectedCategoryList![i].id  + ',' + selectedServiceIds ;
-          totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList![i].maxPrice}');
+          totalEstimatedMinPrice = totalEstimatedMinPrice + int.parse('${selectedCategoryList![i].minPrice}');
+          totalEstimatedMaxPrice = totalEstimatedMaxPrice + int.parse('${selectedCategoryList![i].maxPrice}');
       }
-      print('totalEstimatedPrice >>>>>>>>>> $totalEstimatedPrice');
+      print('totalEstimatedPrice >>>>>>>>>> $totalEstimatedMinPrice - $totalEstimatedMaxPrice');
     });
   }
 

@@ -93,58 +93,53 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return SafeArea(
+      child: Scaffold(
         key: scaffoldKey,
-        body: SafeArea(
-          child: Container(
-            width: size.width,
-            height: size.height,
-            color: Colors.white,
-            child: Column(
-              children: [
-                Container(
+        body: Container(
+          width: size.width,
+          height: size.height,
+          color: Colors.white,
+          child: Column(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  paymentScreenTitle(size),
+                  paymentScreenImage(size),
+                  paymentScreenSubTitle(size),
+                ],
+              ),
+              Expanded(
+                child: Container(
+                  //color: Colors.yellow,
+                  color: CustColors.white_02,
+                  margin: EdgeInsets.only(
+                    top: size.height * 1 / 100,
+                  ),
+                  padding: EdgeInsets.only(top: size.height * 1 / 100),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      paymentScreenTitle(size),
-                      paymentScreenImage(size),
-                      paymentScreenSubTitle(size),
+                      paymentOptions(size, "Direct payment", "assets/image/img_payment_cash.png",1),
+                      //  paymentOptions(size, "UPI", "assets/image/img_payment_upi.png",2),
+                      //  paymentOptions(size, "Credit/Debit /Atm cards", "assets/image/img_payment_card.png",3),
+                      // paymentOptions(size, "Netbanking", "assets/image/img_payment_netbank.png",4),
+
+                      InkWell(
+                        child: paymentContinueButton(size),
+                        onTap: (){
+                          print("On Press Continue");
+
+                          updateToCloudFirestoreDB();
+                          changeScreen(_selectedOptionValue);
+                        },
+                      )
+
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                     //color: Colors.yellow,
-                    color: CustColors.white_02,
-                    margin: EdgeInsets.only(
-                      top: size.height * 1 / 100,
-                    ),
-                    padding: EdgeInsets.only(top: size.height * 1 / 100),
-                    child: Column(
-                      children: [
-                        paymentOptions(size, "Direct payment", "assets/image/img_payment_cash.png",1),
-                       //  paymentOptions(size, "UPI", "assets/image/img_payment_upi.png",2),
-                       //  paymentOptions(size, "Credit/Debit /Atm cards", "assets/image/img_payment_card.png",3),
-                       // paymentOptions(size, "Netbanking", "assets/image/img_payment_netbank.png",4),
-
-                        InkWell(
-                            child: paymentContinueButton(size),
-                          onTap: (){
-                              print("On Press Continue");
-
-                              updateToCloudFirestoreDB();
-                              changeScreen(_selectedOptionValue);
-                          },
-                        )
-
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),
@@ -158,7 +153,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         // bottom: size.height * 1 /100,
         top: size.height * 3.4 / 100,
       ),
-      child: Text("Payments ",style: TextStyle(
+      child: const Text("Payments ",style: TextStyle(
         fontSize: 16,
         fontFamily: "Samsung_SharpSans_Medium",
         fontWeight: FontWeight.w400,
@@ -186,7 +181,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         // bottom: size.height * 1 /100,
         top: size.height * 4.1 / 100,
       ),
-      child: Text("Payment method ",style: TextStyle(
+      child: const Text("Payment method ",style: TextStyle(
         fontSize: 15,
         fontFamily: "Samsung_SharpSans_Medium",
         fontWeight: FontWeight.w400,
@@ -229,14 +224,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 }),
           ),
 
-          Text(optionName, style: TextStyle(
+          Text(optionName, style: const TextStyle(
               fontSize: 13,
               fontFamily: "Samsung_SharpSans_Medium",
               fontWeight: FontWeight.w500,
               color: CustColors.greyish_brown
           ),),
 
-          Spacer(),
+          const Spacer(),
 
           Image.asset(
             imagePath,
@@ -256,9 +251,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
             right: size.width * 8.3 / 100,
             top: size.height * 4 / 100
         ),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(6),
+        decoration: const BoxDecoration(
+            borderRadius: const BorderRadius.all(
+              const Radius.circular(6),
             ),
             color: CustColors.light_navy
         ),
@@ -268,9 +263,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
           top: size.height * 1 / 100,
           bottom: size.height * 1 / 100,
         ),
-        child: Text(
+        child: const Text(
           "Continue",
-          style: TextStyle(
+          style:  TextStyle(
             fontSize: 14.3,
             fontWeight: FontWeight.w600,
             fontFamily: "Samsung_SharpSans_Medium",

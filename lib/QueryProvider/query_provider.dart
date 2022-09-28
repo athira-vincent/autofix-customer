@@ -1,17 +1,18 @@
 import 'dart:developer';
 
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class QueryProvider {
-
   signIn(String userName, String password) async {
     String _query = """
       mutation {
-    SignIn(emailId: "$userName", password: "$password", platformId: 1) {
-      token
-      user {
-        id
+  SignIn(emailId: "$userName", password: "$password", platformId: 1) {
+    token
+    user {
+     		id
         userCode
         firstName
         lastName
@@ -24,49 +25,103 @@ class QueryProvider {
         otpCode
         isProfile
         otpVerified
+      customer{
+        id
+        
       }
-      vendor {
+      mechanic{
         id
-        userCode
-        firstName
-        lastName
-        emailId
-        phoneNo
-        userTypeId
-        status
-        jwtToken
-        fcmToken
-        otpCode
-        isProfile
-        otpVerified
       }
-      admin {
+      vendor{
         id
-        userCode
-        firstName
-        lastName
-        emailId
-        phoneNo
-        userTypeId
-        status
-        jwtToken
-        fcmToken
-        otpCode
-        isProfile
-        otpVerified
       }
     }
+    vendor {
+      id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        userTypeId
+        status
+        jwtToken
+        fcmToken
+        otpCode
+        isProfile
+        otpVerified
+    }
+    admin {
+    		id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        userTypeId
+        status
+        jwtToken
+        fcmToken
+        otpCode
+        isProfile
+        otpVerified
+    }
+    generalCustomer {
+      id
+      custType
+      orgName
+      orgType
+      userId
+      profilePic
+      state
+      ministryName
+      hod
+      status
+    }
+    genMechanic {
+      id
+      orgName
+      orgType
+      yearExp
+      mechType
+      workType
+      numMech
+      rcNumber
+      address
+      apprentice_cert
+      identification_cert
+      yearExist
+      rate
+      reviewCount
+      adminApprove
+      userId
+      profilePic
+      state
+      status
+      brands
+    }
+    genVendor {
+      id
+      userId
+      profilePic
+      state
+      shopName
+      productCount
+      orderCount
+      totalEarning
+      status
+    }
   }
+}
     """;
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  socialLogin( email,  phoneNumber) async {
+  socialLogin(email, phoneNumber) async {
     String _query;
-    if(email!="")
-      {
-        _query = """  
+    if (email != "") {
+      _query = """  
         mutation {
       socialLogin(emailId: "$email") {
         token
@@ -84,14 +139,66 @@ class QueryProvider {
           otpCode
           isProfile
           otpVerified
+          customer{
+            id
+          }
+          mechanic{
+            id
+          }
+          vendor{
+            id
+          }
+        }
+        genCustomer {
+          id
+          custType
+          orgName
+          orgType
+          userId
+          profilePic
+          state
+          ministryName
+          hod
+          status
+        }
+        genMechanic {
+          id
+          orgName
+          orgType
+          yearExp
+          mechType
+          workType
+          numMech
+          rcNumber
+          address
+          apprentice_cert
+          identification_cert
+          yearExist
+          rate
+          reviewCount
+          adminApprove
+          userId
+          profilePic
+          state
+          status
+          brands
+        }
+        genVendor {
+          id
+          userId
+          profilePic
+          state
+          shopName
+          productCount
+          orderCount
+          totalEarning
+          status
         }
       }
     }      
      """;
-      }
-    else
-      {
-        _query = """  
+    } else {
+      _query = """  
              mutation {
       socialLogin(emailId: "$phoneNumber") {
         token
@@ -109,17 +216,71 @@ class QueryProvider {
           otpCode
           isProfile
           otpVerified
+          customer{
+            id
+          }
+          mechanic{
+            id
+          }
+          vendor{
+            id
+          }
+        }
+        genCustomer {
+          id
+          custType
+          orgName
+          orgType
+          userId
+          profilePic
+          state
+          ministryName
+          hod
+          status
+        }
+        genMechanic {
+          id
+          orgName
+          orgType
+          yearExp
+          mechType
+          workType
+          numMech
+          rcNumber
+          address
+          apprentice_cert
+          identification_cert
+          yearExist
+          rate
+          reviewCount
+          adminApprove
+          userId
+          profilePic
+          state
+          status
+          brands
+        }
+        genVendor {
+          id
+          userId
+          profilePic
+          state
+          shopName
+          productCount
+          orderCount
+          totalEarning
+          status
         }
       }
     } 
     """;
-      }
+    }
 
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  phoneLogin(  phoneNumber) async {
+  phoneLogin(phoneNumber) async {
     String _query = """
         mutation {
           signIn_phoneNo(phoneNo: "$phoneNumber", platformId: 1) {
@@ -142,10 +303,27 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  signUp( type, firstName, lastName, emailId, phoneNo, password, state,
-  fcmToken, userTypeId, userType, profilepic, orgName, orgType,
-  ministryName, hod, latitude, longitude, yearExp, shopName,) async
-  {
+  signUp(
+    type,
+    firstName,
+    lastName,
+    emailId,
+    phoneNo,
+    password,
+    state,
+    fcmToken,
+    userTypeId,
+    userType,
+    profilepic,
+    orgName,
+    orgType,
+    ministryName,
+    hod,
+    latitude,
+    longitude,
+    yearExp,
+    shopName,
+  ) async {
     String _query = """ 
     mutation {
         signUp(
@@ -255,8 +433,7 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  postBrandDetailsRequest(
-      token,search) async {
+  postBrandDetailsRequest(token, search) async {
     String _query = """ 
        {
         brandList(page: 0, size: 300, search: "$search") {
@@ -282,11 +459,20 @@ class QueryProvider {
   }
 
   postAddCarRequest(
-      token, brand, model, engine, year,
-      plateNo, lastMaintenance, milege,
-      vehiclePic, latitude, longitude,
-      ) async {
-          String _query = """ 
+    token,
+    brand,
+    model,
+    engine,
+    year,
+    plateNo,
+    lastMaintenance,
+    milege,
+    vehiclePic,
+    color,
+    latitude,
+    longitude,
+  ) async {
+    String _query = """ 
          mutation {
             vehicleCreate(
               brand: "$brand"
@@ -297,6 +483,7 @@ class QueryProvider {
               lastMaintenance: "$lastMaintenance"
               milege: "$milege"
               vehiclePic: "$vehiclePic"
+              color: "$color"
               latitude: ${double.parse(latitude.toString())}
               longitude: ${double.parse(longitude.toString())}
             ) {
@@ -309,21 +496,22 @@ class QueryProvider {
               lastMaintenance
               milege
               vehiclePic
+              color
               latitude
               longitude
               defaultVehicle
               status
+              userId
             }
           }
   
           """;
-          log(_query);
-          return await GqlClient.I.mutation11(_query,
-              enableDebug: true,token: token, isTokenThere: true, variables: {});
-        }
+    log(_query);
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
+  }
 
-  postUpdateDefaultVehicle(
-      token,vehicleId, customerId) async {
+  postUpdateDefaultVehicle(token, vehicleId, customerId) async {
     String _query = """ 
         mutation {
           updateDefaultVehicle(vehicleId: ${int.parse(vehicleId.toString())}, customerId: ${int.parse(customerId.toString())}) {
@@ -333,11 +521,12 @@ class QueryProvider {
           """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
 
   postMakeBrandRequest(
-      token,) async {
+    token,
+  ) async {
     String _query = """ 
     {
       brandDetails {
@@ -358,8 +547,7 @@ class QueryProvider {
     );
   }
 
-  postModelDetailRequest(
-      token,type) async {
+  postModelDetailRequest(token, type) async {
     String _query = """ 
    {
       modelDetails(id: null) {
@@ -381,12 +569,8 @@ class QueryProvider {
     );
   }
 
-
-  postPhoneLoginOtpVerificationRequest(
-      token,
-      otp,
-      userTypeId) async {
-      String _query = """ 
+  postPhoneLoginOtpVerificationRequest(token, otp, userTypeId) async {
+    String _query = """ 
          mutation {
             signIn_Otp(otp: "$otp", userTypeId: ${int.parse(userTypeId.toString())}) {
               token
@@ -408,15 +592,12 @@ class QueryProvider {
             }
           }
       """;
-      log(_query);
-      return await GqlClient.I.mutation11(_query,
-          enableDebug: true,token: token, isTokenThere: true, variables: {});
+    log(_query);
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
 
-  postOtpVerificationRequest(
-      token,
-      otp,
-      userTypeId) async {
+  postOtpVerificationRequest(token, otp, userTypeId) async {
     String _query = """ 
        mutation {
           otp_Verification(otpCode: "$otp", userTypeId: ${int.parse(userTypeId.toString())}) {
@@ -427,20 +608,13 @@ class QueryProvider {
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
-
 
   /// =============== Mechanics List Emergency ================== latitude: "9.2575"  longitude: "76.4508"///
 
   postFindMechanicsListEmergencyRequest(
-      token,
-      page,
-      size,
-      latitude,
-      longitude,
-      serviceId,
-      serviceType) async {
+      token, page, size, latitude, longitude, serviceId, serviceType) async {
     String _query = """ 
           {
             mechanicList(
@@ -579,23 +753,24 @@ class QueryProvider {
           }
     """;
     log(_query);
-   return await GqlClient.I.query01(
-    _query,
-    token,
-    enableDebug: true,
-    isTokenThere: false,
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
     );
   }
 
   /// =============== Mechanics Profile Details ================== ///
 
   fetchMechanicProfileDetails(
-      token,
-      mechanicId,
-      serviceId,
-      latitude,
-      longitude,) async {
-        String _query = """
+    token,
+    mechanicId,
+    serviceId,
+    latitude,
+    longitude,
+  ) async {
+    String _query = """
                 {
                   mechanicDetails(
                      mechanicId: ${int.parse(mechanicId)}
@@ -700,23 +875,30 @@ class QueryProvider {
                     }
                 }
              """;
-        log(_query);
-        return await GqlClient.I.query01(
-          _query,
-          token,
-          enableDebug: true,
-          isTokenThere: true,
-        );
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
   }
-
 
   /// =============== Mechanics Regular Service Booking Id  ================== ///
 
   postMechanicsRegularServiceBookingIDRequest(
-      token, date, time,
-      latitude, longitude,
-      serviceId, mechanicId, reqType, regularServiceType,
-      totalPrice, paymentType, travelTime) async {
+      token,
+      date,
+      time,
+      latitude,
+      longitude,
+      serviceId,
+      mechanicId,
+      reqType,
+      regularServiceType,
+      totalPrice,
+      paymentType,
+      travelTime) async {
     String _query = """  
     mutation {
         mechanicBooking(
@@ -814,6 +996,7 @@ class QueryProvider {
               lastMaintenance
               milege
               vehiclePic
+              color
               latitude
               longitude
               defaultVehicle
@@ -836,30 +1019,35 @@ class QueryProvider {
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
 
   /// =============== Mechanics Emergency Service Booking Id  ================== ///
 
   postMechanicsEmergencyServiceBookingIDRequest(
-      token, date, time,
-      latitude, longitude,
-      serviceId, mechanicId, reqType,
-      totalPrice, paymentType, travelTime) async {
+      token,
+      date,
+      time,
+      latitude,
+      longitude,
+      serviceId,
+      mechanicId,
+      reqType,
+      totalPrice,
+      paymentType,
+      travelTime) async {
     String _query = """  
     mutation {
         emergencyBooking(
-           bookedDate: "$date"
+              bookedDate: "$date"
               bookedTime: "$time"
               latitude: ${double.parse(latitude.toString())}
               longitude: ${double.parse(longitude.toString())}
               serviceId: ${int.parse(serviceId.toString())}
               mechanicId:${int.parse(mechanicId.toString())}
               reqType: ${int.parse(reqType.toString())}
-              totalPrice: ${int.parse(totalPrice.toString())}
               paymentType: ${int.parse(paymentType.toString())}
               travelTime:  ""
-        
           ) {
             id
             bookingCode
@@ -944,14 +1132,16 @@ class QueryProvider {
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
-
 
   /// =============== Update Mechanic Booking Id  ================== ///
 
   postUpdateMechanicsBookingIDRequest(
-      token, bookingId, mechanicId,) async {
+    token,
+    bookingId,
+    mechanicId,
+  ) async {
     String _query = """  
         mutation {
           updateMechanicBooking(
@@ -965,14 +1155,15 @@ class QueryProvider {
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
-
 
   /// ===============  Booking Details  ================== ///
 
   postBookingDetailsRequest(
-      token, bookingId,) async {
+    token,
+    bookingId,
+  ) async {
     String _query = """        
       {
         bookingDetails(bookingId: ${int.parse(bookingId.toString())}) {
@@ -981,11 +1172,9 @@ class QueryProvider {
           bookedTime
           latitude
           longitude
-          paymentMethod
           demoMechanicId
           customerId
           status
-          isAccepted
           vehicleId
           serviceId
           bookService {
@@ -1003,6 +1192,7 @@ class QueryProvider {
             engine
             year
             plateNo
+            color
             lastMaintenance
             milege
             vehiclePic
@@ -1021,7 +1211,7 @@ class QueryProvider {
             accountType
             status
             jwtToken
-            fcmToke
+            fcmToken
             otpCode
           }
           customer {
@@ -1034,12 +1224,11 @@ class QueryProvider {
             accountType
             status
             jwtToken
-            fcmToke
+            fcmToken
             otpCode
           }
         }
       }
-
     """;
     log(_query);
     return await GqlClient.I.query01(
@@ -1050,19 +1239,15 @@ class QueryProvider {
     );
   }
 
-
   postSearchServiceRequest(
-      token,
-      search,
-      count,
-      categoryId) async {
-    String _query ;
+      token, serviceSearch, catSearch, count, categoryId) async {
+    String _query;
 
-    if(search != null){
+    if (catSearch != null && serviceSearch != null) {
       _query = """ 
     query
     {
-        serviceListAll(search: "$search", count: $count, categoryId: $categoryId) {
+        serviceListAll(serviceSearch: "$serviceSearch", catSearch: "$catSearch", count: $count, categoryId: $categoryId) {
           id
           serviceName
           description
@@ -1090,11 +1275,75 @@ class QueryProvider {
         }
       }
     """;
-    }else{
+    } else if (serviceSearch != null) {
       _query = """ 
     query
     {
-        serviceListAll(search: $search, count: $count, categoryId: $categoryId) {
+        serviceListAll(serviceSearch: "$serviceSearch", catSearch: null, count: $count, categoryId: $categoryId) {
+          id
+          serviceName
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+          category {
+            id
+            catType
+            catName
+            icon
+            status
+            service{
+              serviceName
+              status
+              description
+              id
+              icon
+              minPrice
+              maxPrice
+            }
+          }
+        }
+      }
+    """;
+    } else if (catSearch != null) {
+      _query = """ 
+    query
+    {
+        serviceListAll(serviceSearch: null, catSearch: "$catSearch", count: $count, categoryId: $categoryId) {
+          id
+          serviceName
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+          category {
+            id
+            catType
+            catName
+            icon
+            status
+            service{
+              serviceName
+              status
+              description
+              id
+              icon
+              minPrice
+              maxPrice
+            }
+          }
+        }
+      }
+    """;
+    } else {
+      _query = """ 
+    query
+    {
+        serviceListAll(serviceSearch: null, catSearch: null, count: $count, categoryId: $categoryId) {
           id
           serviceName
           description
@@ -1132,15 +1381,9 @@ class QueryProvider {
     );
   }
 
-
   /// ===============  Service List of Mechanic ================== ///
 
-  fetchServiceListOfMechanic(
-      token,
-      mechanicId,
-      page,
-      size,
-      search) async {
+  fetchServiceListOfMechanic(token, mechanicId, page, size, search) async {
     String _query = """
                 {
                  mechanicServicesList(
@@ -1194,8 +1437,7 @@ class QueryProvider {
     );
   }
 
-
-  fcmTokenUpdate(String fcmToken,String Authtoken) async {
+  fcmTokenUpdate(String fcmToken, String Authtoken) async {
     String _query = """
       mutation {
         fcm_token_update(fcmToken: "$fcmToken") {
@@ -1221,29 +1463,75 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  postMechanicMyWalletRequest(String token, ) async {
+  postMechanicMyWalletRequest(String token, mechanicId) async {
     String _query = """
-    mutation {
-      myWallet(
-    #   dayStart: "2022-05-03"
-    #   dayEnd: "2022-05-03"
-       monthStart: "2022-05-03"
-       monthEnd: "2022-05-31"
-    #   weekStart: "string"
-    #   weekEnd: "string"
-        mechanicId: 8
-      ) {
-        jobCount
-        sum
-        bookingData {
-          id
-          bookingCode
-          mechanic{
-            id
-          }
+      mutation {
+   myWallet(
+    dayStart: "2022-07-07"
+    dayEnd: "2022-07-07"
+    monthStart: "2022-07-01"
+    monthEnd: "2022-07-31"
+    mechanicId: $mechanicId
+  ) {
+    jobCount
+    monthlySum
+    totalPayment
+    bookingData {
+      id
+      bookingCode
+      reqType
+      bookStatus
+      totalPrice
+      tax
+      commission
+      serviceCharge
+      totalTime
+      serviceTime
+      latitude
+      longitude
+      extend
+      totalExt
+      extendTime
+      bookedDate
+      bookedTime
+      isRated
+      status
+      regularType
+      mechLatitude
+      mechLongitude
+      demoMechanicId
+      customerId
+      vehicleId
+      serviceId
+      mechanic{
+        id
+        mechanic{
+          profilePic
+        }
+      }
+      customer{
+        id
+        firstName
+        customer{
+          profilePic
         }
       }
     }
+    payArr {
+      id
+      transType
+      amount
+      paymentType
+      transId
+      status
+      createdAt
+      updatedAt
+      bookingId
+      orderId
+    }
+  }
+}
+
      """;
     log(_query);
     print("Token >>>>>>> $token");
@@ -1257,67 +1545,85 @@ class QueryProvider {
 
   postMechanicMyJobReviewRequest(String token, mechanicId) async {
     String _query = """
-    {
-  mechanicReviewList(mechanicId: $mechanicId)  {
-        id
-        userCode
-        firstName
-        lastName
-        emailId
-        phoneNo
-        userTypeId
-        status
-        jwtToken
-        fcmToken
-        otpCode
-        isProfile
-        otpVerified
-        mechanic {
-          id
-          address
-          state
-          profilePic
-          status
-          rate
-          reviewCount
+{
+  mechanicReviewList(mechanicId: $mechanicId) {
+    id
+    userCode
+    firstName
+    lastName
+    emailId
+    phoneNo
+    userTypeId
+    status
+    jwtToken
+    fcmToken
+    otpCode
+    isProfile
+    otpVerified
+    mechanic {
+      id
+      usersId
+      yearExp
+      profilePic
+      mechType
+      workType
+      noMech
+      state
+      rcNumber
+      brands
+      address
+      certificate1
+      certificate2
+      status
+      rate
+      reviewCount
+    }
+    mechanicStatus {
+      distance
+      latitude
+      longitude
+      workStatus
+    }
+    mechanicService {
+      id
+      fee
+      time
+      service
+      {id 
+        serviceName}
+      status
+      userId
+      serviceId
+    }
+    totalAmount
+    distance
+    duration
+    reviewCount
+    mechanicReviewsData {
+      id
+      transType
+      rating
+      feedback
+      bookingId
+      orderId
+      status
+      order{id}
+      bookings{id 
+        customer{id
+          firstName
+        customer{profilePic
         }
-        mechanicStatus {
-          distance
         }
-        mechanicService {
-          id
-          fee
-          service{
-            id
-          }
-          status
-          userId
-        }
-        totalAmount
-        distance
-        duration
-        reviewCount
-        mechanicReviewsData {
-          id
-          transType
-          rating
-          feedback
-          bookingId
-          orderId
-          status
-          order{
-            id
-          }
-          bookings{
-            id
-          }
-          productData{
-            id
-          }
-        }
-        mechanicReview
-        bookingsCount
+        bookService{
+          service{id 
+            serviceName
+          }}
       }
+      productData{id}
+    }
+    mechanicReview
+    bookingsCount
+  }
 }
      """;
     log(_query);
@@ -1330,10 +1636,8 @@ class QueryProvider {
     );
   }
 
-
-
 //-------------------------- remove after merge on 11/04/2022-----------------------------------------
-  serviceList(String token, searchText, count, categoryId ) async {
+  serviceList(String token, searchText, count, categoryId) async {
     String _query = """
     {
       serviceListAll(search: $searchText, count: $count, categoryId: $categoryId) {
@@ -1358,7 +1662,7 @@ class QueryProvider {
     );
   }
 
-  categoryList(String token, searchText, count, categoryId ) async {
+  categoryList(String token, searchText, count, categoryId) async {
     String _query = """
     {
     category_list(catType: $categoryId) {
@@ -1379,12 +1683,16 @@ class QueryProvider {
       isTokenThere: false,
     );
   }
+
 //-------------------------- remove after merge on 11/04/2022-----------------------------------------
 
-  serviceListWithCategory(String token, categoryType ) async {
-    String _query = """
-    {
-      category_list(catType: $categoryType) {
+  serviceListWithCategory(
+      String token, categoryType, String search, String catSearch) async {
+    String _query;
+    if (search.isEmpty && catSearch.isEmpty) {
+      _query = """
+        {
+      category_list(catType: $categoryType, serviceSearch: null, catSearch: null) {
         id
         catType
         catName
@@ -1393,6 +1701,7 @@ class QueryProvider {
         service {
           id
           serviceName
+          serviceCode
           description
           icon
           minPrice
@@ -1403,6 +1712,77 @@ class QueryProvider {
       }
     }
      """;
+    } else if (search.isEmpty) {
+      _query = """
+        {
+      category_list(catType: $categoryType, catSearch: "$catSearch", serviceSearch: null) {
+        id
+        catType
+        catName
+        icon
+        status
+        service {
+          id
+          serviceName
+          serviceCode
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+    }
+     """;
+    } else if (catSearch.isEmpty) {
+      _query = """
+        {
+      category_list(catType: $categoryType, catSearch: null, serviceSearch: "$search") {
+        id
+        catType
+        catName
+        icon
+        status
+        service {
+          id
+          serviceName
+          serviceCode
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+    }
+     """;
+    } else {
+      _query = """
+        {
+      category_list(catType: $categoryType, catSearch: "$catSearch", serviceSearch: "$search") {
+        id
+        catType
+        catName
+        icon
+        status
+        service {
+          id
+          serviceName
+          serviceCode
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+    }
+     """;
+    }
+
     log(_query);
     print("Token >>>>>>> $token");
     return await GqlClient.I.query01(
@@ -1415,10 +1795,14 @@ class QueryProvider {
 
   selectCar() {}
 
-  completeProfileMechanicIndividual(String token,
+  completeProfileMechanicIndividual(
+      String token,
       String workSelection,
       String vehicleSpecialization,
-      String address,String apprentice_cert, String identification_cert, String photoUrl) async {
+      String address,
+      String apprentice_cert,
+      String identification_cert,
+      String photoUrl) async {
     String _query = """
         mutation {
       mechanic_work_selection_Individual(
@@ -1462,9 +1846,9 @@ class QueryProvider {
       String mechanicNumber,
       String rcNumber,
       String existenceYear,
-      String photoUrl
-      ) async {
-    print('completeProfileMechanicCorporate>>>>>>  $serviceType   $vehicleSpecialization $address, $mechanicNumber, $rcNumber, $existenceYear$photoUrl');
+      String photoUrl) async {
+    print(
+        'completeProfileMechanicCorporate>>>>>>  $serviceType   $vehicleSpecialization $address, $mechanicNumber, $rcNumber, $existenceYear$photoUrl');
 
     String _query = """ 
     mutation {
@@ -1549,9 +1933,6 @@ class QueryProvider {
         .query01(_query, token, enableDebug: true, isTokenThere: true);
   }
 
-
-
-
   forgotPassword(String email) async {
     String _query = """
           mutation {
@@ -1568,7 +1949,7 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  createPassword(String otp,String newPswd, String confirmPswd ) async {
+  createPassword(String otp, String newPswd, String confirmPswd) async {
     String _query = """
         mutation {
       ResetPassword(
@@ -1587,7 +1968,8 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  changePassword(String token, String email,String oldPswd, String newPswd, String confirmPswd ) async {
+  changePassword(String token, String email, String oldPswd, String newPswd,
+      String confirmPswd) async {
     String _query = """
       mutation {
     ChangePassword(
@@ -1611,10 +1993,11 @@ class QueryProvider {
     );
   }
 
-  mechanicAddServiceList(String token,String serviceList, String costList, String timeList) async {
+  mechanicAddServiceList(String token, String serviceList, String costList,
+      String timeList, catType) async {
     String _query = """ 
     mutation {
-      mechanic_service_add(services: "$serviceList", fee: $costList, time: $timeList) {
+      mechanic_service_add(catType: $catType, services: "$serviceList", fee: $costList, time: $timeList) {
         message
       }
     }
@@ -1628,10 +2011,13 @@ class QueryProvider {
     );
   }
 
-  categoryListHome(String token,  categoryId ) async {
-    String _query = """
+  categoryListHome(String token, categoryId, serviceSearch, catSearch) async {
+    String _query;
+
+    if (catSearch != null && serviceSearch != null) {
+      _query = """
       {
-      category_list(catType: $categoryId) {
+      category_list(serviceSearch: "$serviceSearch", catSearch: "$catSearch", catType: $categoryId) {
         id
         catType
         catName
@@ -1650,6 +2036,74 @@ class QueryProvider {
       }
     }
      """;
+    } else if (catSearch != null) {
+      _query = """
+      {
+      category_list(serviceSearch: null, catSearch: "$catSearch", catType: $categoryId) {
+        id
+        catType
+        catName
+        icon
+        status
+        service {
+          id
+          serviceName
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+    }
+     """;
+    } else if (serviceSearch != null) {
+      _query = """
+      {
+      category_list(serviceSearch: "$serviceSearch", catSearch: null, catType: $categoryId) {
+        id
+        catType
+        catName
+        icon
+        status
+        service {
+          id
+          serviceName
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+    }
+     """;
+    } else {
+      _query = """
+      {
+      category_list(serviceSearch: null, catSearch: null, catType: $categoryId) {
+        id
+        catType
+        catName
+        icon
+        status
+        service {
+          id
+          serviceName
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+    }
+     """;
+    }
+
     log(_query);
     print("Token >>>>>>> $token");
     return await GqlClient.I.query01(
@@ -1660,8 +2114,7 @@ class QueryProvider {
     );
   }
 
-  postCustFetchProfileRequest(
-      token,id) async {
+  postCustFetchProfileRequest(token, id) async {
     String _query = """ 
      query
      {
@@ -1675,7 +2128,7 @@ class QueryProvider {
             accountType
             status
             jwtToken
-            fcmToke
+            fcmToken
             otpCode
             customer 
                     {
@@ -1720,8 +2173,7 @@ class QueryProvider {
     );
   }
 
-  postMechanicLocationUpdateRequest(
-      token, mechanicId, lat, lng) async {
+  postMechanicLocationUpdateRequest(token, mechanicId, lat, lng) async {
     String _query = """
     mutation {
     mechanic_location_update(
@@ -1742,8 +2194,7 @@ class QueryProvider {
     );
   }
 
-  postMechanicBrandSpecializationRequest(
-      token, brandName) async {
+  postMechanicBrandSpecializationRequest(token, brandName) async {
     String _query = """
       {
     brandDetails(brandName: "$brandName") {
@@ -1763,85 +2214,119 @@ class QueryProvider {
     );
   }
 
-  postMechanicUpcomingServiceRequest(
-      token, type, mechanicId) async {
+  postMechanicUpcomingServiceRequest(token, type, mechanicId) async {
     String _query;
-    if(type.toString()=="undefined")
+    if (type.toString() == "undefined") {
+      _query = """
       {
-        _query = """
-      {
-      UpcomingCompletedServices(mechanicId: $mechanicId) {
-        id
-        bookingCode
-        reqType
-        bookStatus
-        totalPrice
-        tax
-        commission
-        serviceCharge
-        totalTime
-        serviceTime
-        latitude
-        longitude
-        extend
-        totalExt
-        extendTime
-        bookedDate
-        isRated
-        status
-        customerId
-        mechanicId
-        vehicleId
-        mechanic {
+      UpcomingCompletedServices(type: null, mechanicId: $mechanicId) 
+        {
           id
-          userCode
-          firstName
-          lastName
-          emailId
-          phoneNo
-          status
-          userTypeId
-          jwtToken
-          fcmToken
-          otpCode
-          isProfile
-          otpVerified
-        }
-        customer {
-          id
-          userCode
-          firstName
-          lastName
-          emailId
-          phoneNo
-          status
-          userTypeId
-          jwtToken
-          fcmToken
-          otpCode
-          isProfile
-          otpVerified
-        }
-        vehicle {
-          id
-          brand
-          model
-          engine
-          year
-          plateNo
-          lastMaintenance
-          milege
-          vehiclePic
+          bookingCode
+          reqType
+          bookStatus
+          totalPrice
+          tax
+          commission
+          serviceCharge
+          totalTime
+          serviceTime
           latitude
           longitude
-          defaultVehicle
+          mechLatitude
+          mechLongitude
+          extend
+          totalExt
+          extendTime
+          bookedDate
+          bookedTime
+          isRated
           status
+          customerId
+          mechanicId
+          vehicleId
+          regularType
+          mechanic {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            status
+            userTypeId
+            jwtToken
+            fcmToken
+            otpCode
+            isProfile
+            otpVerified
+            customer{
+              id
+            }
+            mechanic{
+              id
+            }
+            vendor{
+              id
+            }
+          }
+          customer {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            status
+            userTypeId
+            jwtToken
+            fcmToken
+            otpCode
+            isProfile
+            otpVerified
+            customer{
+              id
+            }
+            mechanic{
+              id
+            }
+            vendor{
+              id
+            }
+          }
+          vehicle {
+            id
+            brand
+            model
+            engine
+            year
+            plateNo
+            lastMaintenance
+            milege
+            vehiclePic
+            latitude
+            longitude
+            defaultVehicle
+            status
+            userId
+          }
+          bookService {
+            id
+            mechanicId
+            customerId
+            status
+            serviceId
+            bookMechanicId
+            service{
+              id
+              serviceName
+              minPrice
+            }
+          }
         }
-      }
     }
     """;
-      }
-    else{
+    } else {
       _query = """
       {
       UpcomingCompletedServices(type: $type, mechanicId: $mechanicId) {
@@ -1857,15 +2342,19 @@ class QueryProvider {
         serviceTime
         latitude
         longitude
+        mechLatitude
+        mechLongitude
         extend
         totalExt
         extendTime
         bookedDate
+        bookedTime
         isRated
         status
         customerId
         mechanicId
         vehicleId
+        regularType
         mechanic {
           id
           userCode
@@ -1880,6 +2369,15 @@ class QueryProvider {
           otpCode
           isProfile
           otpVerified
+          customer{
+            id
+          }
+          mechanic{
+            id
+          }
+          vendor{
+            id
+          }
         }
         customer {
           id
@@ -1895,6 +2393,15 @@ class QueryProvider {
           otpCode
           isProfile
           otpVerified
+          customer{
+            id
+          }
+          mechanic{
+            id
+          }
+          vendor{
+            id
+          }
         }
         vehicle {
           id
@@ -1910,6 +2417,20 @@ class QueryProvider {
           longitude
           defaultVehicle
           status
+          userId
+        }
+        bookService {
+          id
+          mechanicId
+          customerId
+          status
+          serviceId
+          bookMechanicId
+          service{
+            id
+            serviceName
+            minPrice
+          }
         }
       }
     }
@@ -1925,8 +2446,7 @@ class QueryProvider {
     );
   }
 
-  postMechanicActiveServiceRequest(
-      token,  mechanicId) async {
+  postMechanicActiveServiceRequest(token, mechanicId) async {
     String _query = """
      mutation {
   currentlyWorkingService(mechanicId: $mechanicId) {
@@ -2028,8 +2548,7 @@ class QueryProvider {
     );
   }
 
-  postMechanicIncomingJobUpdateRequest(
-      token,  bookingId, bookStatus) async {
+  postMechanicIncomingJobUpdateRequest(token, bookingId, bookStatus) async {
     String _query = """
      mutation {
     acceptRejectRequest(bookingId: $bookingId, bookStatus: $bookStatus) {
@@ -2049,7 +2568,10 @@ class QueryProvider {
   }
 
   postMechanicOrderStatusUpdate(
-      token, bookingId, bookStatus,) async {
+    token,
+    bookingId,
+    bookStatus,
+  ) async {
     String _query = """
      mutation {
       mechanic_status_update(state: $bookStatus, bookId: $bookingId) {
@@ -2067,7 +2589,10 @@ class QueryProvider {
   }
 
   postMechanicAddTimeUpdateRequest(
-      token, extendTime, bookingId,) async {
+    token,
+    extendTime,
+    bookingId,
+  ) async {
     String _query = """
      mutation {
     timeUpdateBooking(extendTime: "$extendTime", bookingId: $bookingId) {
@@ -2103,7 +2628,7 @@ class QueryProvider {
   }
 
   postCustIndividualEditProfileRequest(
-    String token, firstName,  lastName,  state, status, imageUrl) async {
+      String token, firstName, lastName, state, status, imageUrl) async {
     String _query = """  
       mutation {
       customer_Individual_profile_update(
@@ -2126,8 +2651,8 @@ class QueryProvider {
     );
   }
 
-  postCustCorporateEditProfileRequest(
-      String token, firstName,  lastName,  state, status, imageUrl, orgName, orgType) async {
+  postCustCorporateEditProfileRequest(String token, firstName, lastName, state,
+      status, imageUrl, orgName, orgType) async {
     String _query = """  
      mutation {
   customer_Corporate_profile_update(
@@ -2152,8 +2677,8 @@ class QueryProvider {
     );
   }
 
-  postCustGovernmentEditProfileRequest(
-      String token, firstName,  lastName,  state, status, imageUrl, ministryName) async {
+  postCustGovernmentEditProfileRequest(String token, firstName, lastName, state,
+      status, imageUrl, ministryName) async {
     String _query = """  
      mutation {
       customer_GovtBodies_profile_update(
@@ -2177,9 +2702,7 @@ class QueryProvider {
     );
   }
 
-
-  postMechanicFetchProfileRequest(
-      token, userId) async {
+  postMechanicFetchProfileRequest(token, userId) async {
     String _query = """ 
     {
   mechanic_Details(id: $userId) {
@@ -2237,8 +2760,15 @@ class QueryProvider {
     );
   }
 
-  postMechanicEditProfileIndividualRequest(token, firstName, lastName, state, profilepic,
-      status, year_of_experience,) async {
+  postMechanicEditProfileIndividualRequest(
+    token,
+    firstName,
+    lastName,
+    state,
+    profilepic,
+    status,
+    year_of_experience,
+  ) async {
     String _query = """  
       mutation {
           mechanic_signUp_Individual_Update(
@@ -2256,11 +2786,20 @@ class QueryProvider {
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
 
-  postMechanicEditProfileCorporateRequest(token, firstName, lastName, state, profilepic,
-      status, year_of_experience, org_Name, org_Type,) async {
+  postMechanicEditProfileCorporateRequest(
+    token,
+    firstName,
+    lastName,
+    state,
+    profilepic,
+    status,
+    year_of_experience,
+    org_Name,
+    org_Type,
+  ) async {
     String _query = """  
       mutation {
           mechanic_signUp_Corporate_Update(
@@ -2280,14 +2819,15 @@ class QueryProvider {
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
 
-
-
-
   postAddMechanicReviewAndRatingRequest(
-      token,rating, feedback, bookingId, bookingType) async {
+    token,
+    rating,
+    feedback,
+    bookingId,
+  ) async {
     String _query = """ 
     mutation {
         addRating(rating: ${double.parse(rating.toString())}, feedback: "$feedback", bookingId: ${int.parse(bookingId.toString())},  bookingType: 1) {
@@ -2304,9 +2844,7 @@ class QueryProvider {
     );
   }
 
-
-  postCustVehicleListRequest(
-      token) async {
+  postCustVehicleListRequest(token) async {
     String _query = """ 
      query
      {
@@ -2321,6 +2859,7 @@ class QueryProvider {
           lastMaintenance
           latitude
           longitude
+          color
           vehiclePic
           userId
           status
@@ -2338,35 +2877,7 @@ class QueryProvider {
     );
   }
 
-
-  postCatListBothRequest(
-      token,type) async {
-    String _query = """ 
-     query
-     {
-        category_list(catType: $type) {
-          id
-          catType
-          catName
-          icon
-          status
-        }
-      }
-
-
-    """;
-    log(_query);
-    return await GqlClient.I.query01(
-      _query,
-      token,
-      enableDebug: true,
-      isTokenThere: true,
-    );
-  }
-
-
-  postserviceListAllBothRequest(
-      token,type) async {
+  postserviceListAllBothRequest(token, type) async {
     String _query = """ 
      query
      {
@@ -2394,11 +2905,9 @@ class QueryProvider {
     );
   }
 
-
   // 23/05/2022**********add price and fault**********
 
-  postAddPriceFaultReviewRequest(
-      token,mechanicId) async {
+  postAddPriceFaultReviewRequest(token, mechanicId) async {
     String _query = """ 
      query
      {
@@ -2460,7 +2969,8 @@ class QueryProvider {
     );
   }
 
-  postUpdateAddPriceFaultReviewRequest(token,mechanicId,time,fee,serviceId) async {
+  postUpdateAddPriceFaultReviewRequest(
+      token, mechanicId, time, fee, serviceId) async {
     String _query = """  
       mutation  {
         updateTimeFees(time: "$time", fee: "$fee", mechanicId: $mechanicId, serviceId: $serviceId) {
@@ -2470,11 +2980,11 @@ class QueryProvider {
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
 
   postEmrgRegAddPriceReviewRequest(
-      token,page,size,search,userId,catType) async {
+      token, page, size, search, userId, catType) async {
     String _query = """ 
      query
      {
@@ -2507,8 +3017,6 @@ class QueryProvider {
   }
 }
 
-
-
     """;
     log(_query);
     return await GqlClient.I.query01(
@@ -2519,9 +3027,7 @@ class QueryProvider {
     );
   }
 
-  postVechicleUpdateRequest(
-      token, id,
-      status) async {
+  postVechicleUpdateRequest(token, id, status) async {
     String _query = """ 
      mutation {
         vehicle_Update(
@@ -2541,15 +3047,15 @@ class QueryProvider {
     );
   }
 
-  postCustomerCompletedOrdersRequest(
-      token,count, recent, customerId) async {
+  postCustomerCompletedOrdersRequest(token, count, recent, customerId) async {
     String _query = """ 
      {
-        cust_completed_orders(count: 300, recent: ${recent == null?null: int.parse(recent.toString())}, customerId: ${int.parse(customerId.toString())}) 
+        cust_completed_orders(count: 300, recent: ${recent == null ? null : int.parse(recent.toString())}, customerId: ${int.parse(customerId.toString())}) 
         {
           id
           bookingCode
           reqType
+          regularType
           bookStatus
           totalPrice
           tax
@@ -2565,6 +3071,7 @@ class QueryProvider {
           totalExt
           extendTime
           bookedDate
+          bookedTime
           isRated
           status
           customerId
@@ -2649,8 +3156,7 @@ class QueryProvider {
     );
   }
 
-  postMechServiceDetailsRequest(
-      token,bookingId) async {
+  postMechServiceDetailsRequest(token, bookingId) async {
     String _query = """
       {
     bookingDetails(bookingId: $bookingId) {
@@ -2719,7 +3225,7 @@ class QueryProvider {
         accountType
         status
         jwtToken
-        fcmToke
+        fcmToken
         otpCode
         customer{
           id
@@ -2735,7 +3241,7 @@ class QueryProvider {
         accountType
         status
         jwtToken
-        fcmToke
+        fcmToken
         otpCode
         customer{
           id
@@ -2752,11 +3258,13 @@ class QueryProvider {
       isTokenThere: true,
     );
   }
+
   postTimePriceServiceDetailsRequest(
-      token,services,fee,time) async {
+      token, services, fee, time, catType) async {
     String _query = """ 
      mutation {
   mechanic_service_add(
+  catType: $catType,
   services: "$services",
    fee: $fee,
     time: $time)
@@ -2774,5 +3282,912 @@ class QueryProvider {
     );
   }
 
+  postRegularServiceStatusUpdateRequest(
+    token,
+    bookingId,
+    bookStatus,
+  ) async {
+    String _query = """
+         mutation {
+      regularMechStatusUpdate(state: $bookStatus, bookId: $bookingId) {
+        message
+      }
+    }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
 
+  /// sparepartsvehicle
+  fetchServicespareparts() async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String _query = """ 
+     query
+     {
+        Cust_vehicle_list {
+          id
+          year
+          brand
+          model
+          engine
+          plateNo
+          milege
+          lastMaintenance
+          latitude
+          longitude
+          color
+          vehiclePic
+          userId
+          status
+          defaultVehicle
+        }
+      }
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  /// sparepartslist
+  fetchServicesparepartslist(model, search, fromcost, tocost, sort) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String ischanged = shdPre.getString("ischanged").toString();
+    String isfiltered = shdPre.getString("filterstatus").toString();
+    String _query;
+
+    if (ischanged == "true") {
+      _query = """
+       query
+       {
+    spare_parts_list(
+      modelName: "$model"
+      search: "$search"
+      sortBy: null
+      fromCost: null
+      toCost: null
+    ) {
+      id
+      productCode
+      productName
+      price
+      shippingCharge
+      productImage
+      description
+      status
+      vehicleModelId
+      vendorId
+      vehicleModel {
+        id
+        modelName
+        engineName
+        years
+        brandName
+        status
+      }
+      inCart
+      reviewCount
+      avgRate
+      salesCount
+      reviewData {
+        id
+        transType
+        rating
+        feedback
+        bookingId
+        orderId
+        status
+        order{
+          id
+        }
+        bookings{
+          id
+        }
+        productData{
+          id
+        }
+      }
+    }
+  }
+
+    """;
+    } else if (isfiltered == "true") {
+      _query = """
+       query
+       {
+    spare_parts_list(
+      modelName: "$model"
+      search: "$search"
+      sortBy: $sort
+      fromCost: $fromcost
+      toCost: $tocost
+    ) {
+      id
+      productCode
+      productName
+      price
+      shippingCharge
+      productImage
+      description
+      status
+      vehicleModelId
+      vendorId
+      vehicleModel {
+        id
+        modelName
+        engineName
+        years
+        brandName
+        status
+      }
+      inCart
+      reviewCount
+      avgRate
+      salesCount
+      reviewData {
+        id
+        transType
+        rating
+        feedback
+        bookingId
+        orderId
+        status
+        order{
+          id
+        }
+        bookings{
+          id
+        }
+        productData{
+          id
+        }
+      }
+    }
+  }
+
+    """;
+    } else {
+      print("display");
+      _query = """
+       query
+       {
+    spare_parts_list(
+      modelName: "$model"
+      search: null
+      sortBy: null
+      fromCost: null
+      toCost: null
+    ) {
+      id
+      productCode
+      productName
+      price
+      shippingCharge
+      productImage
+      description
+      status
+      vehicleModelId
+      vendorId
+      vehicleModel {
+        id
+        modelName
+        engineName
+        years
+        brandName
+        status
+      }
+      inCart
+      reviewCount
+      avgRate
+      salesCount
+      reviewData {
+        id
+        transType
+        rating
+        feedback
+        bookingId
+        orderId
+        status
+        order{
+          id
+        }
+        bookings{
+          id
+        }
+        productData{
+          id
+        }
+      }
+    }
+  }
+
+    """;
+    }
+
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  /// add to cart queryprovider
+  fetchServiceaddcart(productid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    print("noel");
+    print(authToken);
+    String _query = """
+        
+  mutation {
+  addCart(productId: $productid, quantity: 1) {
+    msg {
+      status
+      code
+      message
+    }
+    itemCount
+    totalAmount
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  ///  cartlist queryprovider
+  fetchServicecartlist() async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String custId = shdPre.getString(SharedPrefKeys.userID).toString();
+    print("custoid");
+    print(custId);
+    print(authToken);
+
+    String _query = """
+   query      
+  {
+  cartList(customerId: $custId, page: 0, size: 100) {
+    totalItems
+    data {
+      
+      id
+      customerId
+      productId
+      quantity
+      status
+      customer{
+        id
+        address{
+          fullName
+          phoneNo
+          pincode
+          city
+          state
+          
+        }
+      }
+      product{
+        vehicleModel{
+          id,
+          brandName,
+          modelName
+        }
+        id
+        productName
+        productCode
+        price
+        productImage
+        
+        
+      }
+    }
+    totalPages
+    currentPage
+    totalPrice
+    count
+    deliveryCharge
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  /// delete cart queryprovider
+  fetchServicedeletelist(productid, quantity, status) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    print("noel");
+    print(authToken);
+    String _query = """
+                
+  mutation {
+  updateCart(productId:$productid, quantity: $quantity, status: $status) {
+    status
+    code
+    message
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  ///  address queryprovider
+  fetchServiceaddresslist() async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+
+    String _query = """
+   query      
+  {
+  selectAddress {
+    id
+    fullName
+    phoneNo
+    pincode
+    city
+    state
+    address
+    addressLine2
+    type
+    userId
+    isDefault
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  /// add address queryprovider
+  fetchaddaddresslist(fullname, phone, pincode, city, state, address,
+      addressline2, type) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+
+    print("noel");
+    print(authToken);
+    String _query;
+
+    _query = """
+                
+ mutation {
+  addAddress(
+    fullName: "$fullname"
+    phoneNo: "$phone"
+    pincode: "$pincode"
+    city: "$city"
+    state:"$state"
+    address: "$address"
+    addressLine2: "$addressline2"
+    type: "$type"
+  ) {
+    status
+    code
+    message
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  /// edit address queryprovider
+  fetcheditaddresslist(fullname, phone, pincode, city, state, address,
+      addressline2, type, isdefault, addressid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+
+    print("noel");
+    print(authToken);
+    String _query;
+
+    _query = """
+                
+ mutation {
+  updateAddress(
+  fullName: "$fullname"
+    phoneNo: "$phone"
+    pincode: "$pincode"
+    city: "$city"
+    state:"$state"
+    address: "$address"
+    addressLine2: "$addressline2"
+    type: "$type"
+    isDefault:$isdefault
+    addressId: $addressid
+    status: 1
+  ) {
+    status
+    code
+    message
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  /// delete address queryprovider
+  fetchServicedeleteaddresslist(addressid, status) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    print("noel");
+    print(authToken);
+    String _query = """
+                
+ mutation {
+  updateAddress(
+    addressId: $addressid
+    status: 0
+  ) {
+    status
+    code
+    message
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  /// placeorder queryprovider
+  fetchServiceplaceorderlist(qty, totalprice, productid, addressid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String custid = shdPre.getString(SharedPrefKeys.userID).toString();
+    print("noel");
+    print(authToken);
+    String _query = """
+                
+  mutation {
+  placeOrder(
+    qty: $qty
+    totalPrice: $totalprice
+    paymentType: null
+    customerId: $custid
+    productId: $productid
+    addressId: $addressid
+  ) {
+    id
+    oderCode
+    qty
+    totalPrice
+    commision
+    tax
+    paymentType
+    deliverDate
+    status
+    vendorId
+    customerId
+    vendor {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      status
+      userTypeId
+      jwtToken
+      fcmToken
+      otpCode
+      isProfile
+      otpVerified
+      customer{
+        id
+      }
+      mechanic{
+        id
+      }
+      vendor{
+         id
+      }
+    }
+    customer {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      status
+      userTypeId
+      jwtToken
+      fcmToken
+      otpCode
+      isProfile
+      otpVerified
+      customer{
+        id
+      }
+      mechanic{
+        id
+      }
+      vendor{
+        id
+      }
+    }
+    product {
+      id
+      productCode
+      productName
+      price
+      shippingCharge
+      productImage
+      description
+      quantity
+      status
+      vehicleModelId
+      vendorId
+      user{id}
+      vehicleModel{
+        id
+      }
+      reviewCount
+      avgRate
+      salesCount
+      reviewData{
+        id
+      }
+    }
+    review {
+      id
+      transType
+      rating
+      feedback
+      bookingId
+      orderId
+      status
+    }
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  ///  order list queryprovider
+  fetchServiceorderdetailslist() async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String custid = shdPre.getString(SharedPrefKeys.userID).toString();
+
+    String _query = """
+   query      
+  {
+  orderList(vendorId:null,customerId: $custid) {
+    id
+    oderCode
+    qty
+    totalPrice
+    commision
+    tax
+    paymentType
+    paymentStatus
+    deliverDate
+    status
+    vendorId
+    customerId
+    vendor {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      status
+      userTypeId
+      jwtToken
+      fcmToken
+      otpCode
+      isProfile
+      otpVerified
+      customer{
+        id
+      }
+      mechanic{
+        id
+      }
+      vendor{
+        id
+      }
+    }
+    customer {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      status
+      userTypeId
+      jwtToken
+      fcmToken
+      otpCode
+      isProfile
+      otpVerified
+      customer{
+        id
+      }
+      mechanic{
+        id
+      }
+      vendor{
+        id
+      }
+    }
+    product {
+      id
+      productCode
+      productName
+      price
+      shippingCharge
+      productImage
+      description
+      quantity
+      status
+      vehicleModelId
+      vendorId
+      productImage
+      user{
+        id
+      }
+      vehicleModel{
+        id
+      }
+      reviewCount
+      avgRate
+      salesCount
+      reviewData{
+        id
+      }
+    }
+    review {
+      id
+      transType
+      rating
+      feedback
+      bookingId
+      orderId
+      status
+    }
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  /// cancel order
+  fetchcacncelorder(orderid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String _query = """
+    mutation {
+    orderCancel(orderId: $orderid) {
+      message
+    }
+  }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  /// cod approve
+  fetchcodapprove(amount, orderid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String _query = """
+   mutation {
+  cashOnDelivery(amount: $amount, orderId: $orderid, transData: "string") {
+    message
+  }
+}
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  ///  wallethistory queryprovider
+  fetchwallethistory(date) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+
+    String _query = """
+   query      
+ {
+  walletHistory(date: "$date") {
+    id
+    type
+    amount
+    balance
+    recordDate
+    reference
+    paymentMode
+    status
+    customerId
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  ///  customer my wallet queryprovider
+  fetchcustomerwallet(/*date*/) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String userID = shdPre.getString(SharedPrefKeys.userID).toString();
+
+    String _query = """
+      {
+    walletDetails(customerId: $userID) {
+      id
+      type
+      amount
+      balance
+      recordDate
+      reference
+      paymentMode
+      status
+      customerId
+      customer {
+        id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        status
+        userTypeId
+        jwtToken
+        fcmToken
+        otpCode
+        isProfile
+        otpVerified
+        customer{
+          id
+        }
+        mechanic{
+          id
+        }
+        vendor{
+          id
+        }
+      }
+    }
+  }
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  /// customer rating
+  fetchcustrating(rating, orderid, productid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String _query = """
+  mutation {
+  review_Create(
+    transType: 2
+    rating: $rating
+    feedback: "string"
+    bookingId: 1
+    orderId: $orderid
+    mechanicId: 1
+    productId: $productid
+  ) {
+    message
+  }
+}
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
 }
