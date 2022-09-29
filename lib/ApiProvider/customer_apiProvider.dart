@@ -23,6 +23,7 @@ import 'package:auto_fix/Models/customer_models/update_mechanic_booking_model/up
 import 'package:auto_fix/Models/customer_rating_model/customer_rating_model.dart';
 import 'package:auto_fix/Models/customer_wallet_detail_model/customer_wallet_detail_model.dart';
 import 'package:auto_fix/Models/delete_cart_model/delete_cart_model.dart';
+import 'package:auto_fix/Models/notification_model/notification_model.dart';
 import 'package:auto_fix/Models/wallet_history_model/wallet_history_model.dart';
 import 'package:auto_fix/QueryProvider/query_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
@@ -34,11 +35,17 @@ class CustomerApiProvider {
 
   /// =============== Mechanics List Emergency ================== ///
 
-  Future<MechanicListMdl> postFindMechanicsListEmergencyRequest(
-      token, page, size, latitude, longitude, serviceId, serviceType) async {
+  Future<MechanicListMdl> postFindMechanicsListEmergencyRequest(token, page,
+      size, latitude, longitude, serviceId, serviceType) async {
     Map<String, dynamic> _resp =
-        await _queryProvider.postFindMechanicsListEmergencyRequest(
-            token, page, size, latitude, longitude, serviceId, serviceType);
+    await _queryProvider.postFindMechanicsListEmergencyRequest(
+        token,
+        page,
+        size,
+        latitude,
+        longitude,
+        serviceId,
+        serviceType);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
@@ -58,15 +65,13 @@ class CustomerApiProvider {
 
   /// =============== Mechanics Profile Details ================== ///
 
-  Future<MechanicDetailsMdl> fetchMechanicProfileDetails(
-    token,
-    mechanicId,
-    serviceId,
-    latitude,
-    longitude,
-  ) async {
+  Future<MechanicDetailsMdl> fetchMechanicProfileDetails(token,
+      mechanicId,
+      serviceId,
+      latitude,
+      longitude,) async {
     Map<String, dynamic> _resp =
-        await _queryProvider.fetchMechanicProfileDetails(
+    await _queryProvider.fetchMechanicProfileDetails(
       token,
       mechanicId,
       serviceId,
@@ -92,8 +97,7 @@ class CustomerApiProvider {
 
   /// =============== Mechanics Regular Service Booking Id  ================== ///
 
-  Future<MechanicBookingMdl> postMechanicsRegularServiceBookingIDRequest(
-      token,
+  Future<MechanicBookingMdl> postMechanicsRegularServiceBookingIDRequest(token,
       date,
       time,
       latitude,
@@ -106,19 +110,19 @@ class CustomerApiProvider {
       paymentType,
       travelTime) async {
     Map<String, dynamic> _resp =
-        await _queryProvider.postMechanicsRegularServiceBookingIDRequest(
-            token,
-            date,
-            time,
-            latitude,
-            longitude,
-            serviceId,
-            mechanicId,
-            reqType,
-            regularServiceType,
-            totalPrice,
-            paymentType,
-            travelTime);
+    await _queryProvider.postMechanicsRegularServiceBookingIDRequest(
+        token,
+        date,
+        time,
+        latitude,
+        longitude,
+        serviceId,
+        mechanicId,
+        reqType,
+        regularServiceType,
+        totalPrice,
+        paymentType,
+        travelTime);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
@@ -151,18 +155,18 @@ class CustomerApiProvider {
       paymentType,
       travelTime) async {
     Map<String, dynamic> _resp =
-        await _queryProvider.postMechanicsEmergencyServiceBookingIDRequest(
-            token,
-            date,
-            time,
-            latitude,
-            longitude,
-            serviceId,
-            mechanicId,
-            reqType,
-            totalPrice,
-            paymentType,
-            travelTime);
+    await _queryProvider.postMechanicsEmergencyServiceBookingIDRequest(
+        token,
+        date,
+        time,
+        latitude,
+        longitude,
+        serviceId,
+        mechanicId,
+        reqType,
+        totalPrice,
+        paymentType,
+        travelTime);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
@@ -182,13 +186,11 @@ class CustomerApiProvider {
 
   /// =============== Update Mechanic Booking Id  ================== ///
 
-  Future<UpdateMechanicBookingMdl> postUpdateMechanicsBookingIDRequest(
-    token,
-    bookingId,
-    mechanicId,
-  ) async {
+  Future<UpdateMechanicBookingMdl> postUpdateMechanicsBookingIDRequest(token,
+      bookingId,
+      mechanicId,) async {
     Map<String, dynamic> _resp =
-        await _queryProvider.postUpdateMechanicsBookingIDRequest(
+    await _queryProvider.postUpdateMechanicsBookingIDRequest(
       token,
       bookingId,
       mechanicId,
@@ -212,10 +214,8 @@ class CustomerApiProvider {
 
   /// ===============  Booking Details  ================== ///
 
-  Future<BookingDetailsMdl> postBookingDetailsRequest(
-    token,
-    bookingId,
-  ) async {
+  Future<BookingDetailsMdl> postBookingDetailsRequest(token,
+      bookingId,) async {
     Map<String, dynamic> _resp = await _queryProvider.postBookingDetailsRequest(
       token,
       bookingId,
@@ -237,11 +237,11 @@ class CustomerApiProvider {
     }
   }
 
-  Future<CustomerAddMoreServiceMdl> postCustomerAddMoreServiceUpdate(
-      token, bookingId, serviceIds, totalPrice, travelTime) async {
+  Future<CustomerAddMoreServiceMdl> postCustomerAddMoreServiceUpdate(token,
+      bookingId, serviceIds, totalPrice, travelTime) async {
     Map<String, dynamic> _resp =
-        await _queryProvider.postCustomerAddMoreServiceUpdate(
-            token, bookingId, serviceIds, totalPrice, travelTime);
+    await _queryProvider.postCustomerAddMoreServiceUpdate(
+        token, bookingId, serviceIds, totalPrice, travelTime);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
@@ -259,8 +259,8 @@ class CustomerApiProvider {
     }
   }
 
-  Future<ServiceSearchListAllMdl> postSearchServiceRequest(
-      token, serviceSearch, catSearch, count, categoryId) async {
+  Future<ServiceSearchListAllMdl> postSearchServiceRequest(token, serviceSearch,
+      catSearch, count, categoryId) async {
     Map<String, dynamic> _resp = await _queryProvider.postSearchServiceRequest(
         token, serviceSearch, catSearch, count, categoryId);
     // ignore: unnecessary_null_comparison
@@ -282,7 +282,7 @@ class CustomerApiProvider {
 
   Future<CustVehicleListMdl> postCustVehicleListRequest(token) async {
     Map<String, dynamic> _resp =
-        await _queryProvider.postCustVehicleListRequest(
+    await _queryProvider.postCustVehicleListRequest(
       token,
     );
 
@@ -304,14 +304,12 @@ class CustomerApiProvider {
     }
   }
 
-  Future<AddRatingMdl> postAddMechanicReviewAndRatingRequest(
-    token,
-    rating,
-    feedback,
-    bookingId,
-  ) async {
+  Future<AddRatingMdl> postAddMechanicReviewAndRatingRequest(token,
+      rating,
+      feedback,
+      bookingId,) async {
     Map<String, dynamic> _resp =
-        await _queryProvider.postAddMechanicReviewAndRatingRequest(
+    await _queryProvider.postAddMechanicReviewAndRatingRequest(
       token,
       rating,
       feedback,
@@ -336,8 +334,8 @@ class CustomerApiProvider {
     }
   }
 
-  Future<CategoryListHomeMdl> getCategoryListHomeRequest(
-      String token, categoryId, serviceSearch, catSearch) async {
+  Future<CategoryListHomeMdl> getCategoryListHomeRequest(String token,
+      categoryId, serviceSearch, catSearch) async {
     Map<String, dynamic> _resp = await _queryProvider.categoryListHome(
         token, categoryId, serviceSearch, catSearch);
     // ignore: unnecessary_null_comparison
@@ -400,8 +398,8 @@ class CustomerApiProvider {
 
   /// spare partslist api provider
 
-  Future<SparePartsListModel> fetchServicesparepartslist(
-      model, search, fromcost, tocost, sort) async {
+  Future<SparePartsListModel> fetchServicesparepartslist(model, search,
+      fromcost, tocost, sort) async {
     Map<String, dynamic> _resp = await _queryProvider
         .fetchServicesparepartslist(model, search, fromcost, tocost, sort);
     if (_resp != null) {
@@ -424,7 +422,7 @@ class CustomerApiProvider {
 
   Future<AddCartModel> fetchServiceaddcart(productid) async {
     Map<String, dynamic> _resp =
-        await _queryProvider.fetchServiceaddcart(productid);
+    await _queryProvider.fetchServiceaddcart(productid);
     if (_resp != null) {
       if (_resp['status'] == "error") {
         final errorMsg = AddCartModel(
@@ -462,8 +460,8 @@ class CustomerApiProvider {
   }
 
   /// delete cart
-  Future<DeleteCartModel> fetchServicedeletelist(
-      productid, quantity, status) async {
+  Future<DeleteCartModel> fetchServicedeletelist(productid, quantity,
+      status) async {
     Map<String, dynamic> _resp = await _queryProvider.fetchServicedeletelist(
         productid, quantity, status);
     if (_resp != null) {
@@ -502,16 +500,14 @@ class CustomerApiProvider {
   }
 
   /// add address
-  Future<AddAddressModel> fetchaddaddresslist(
-    fullname,
-    phone,
-    pincode,
-    city,
-    state,
-    address,
-    addressline2,
-    type,
-  ) async {
+  Future<AddAddressModel> fetchaddaddresslist(fullname,
+      phone,
+      pincode,
+      city,
+      state,
+      address,
+      addressline2,
+      type,) async {
     Map<String, dynamic> _resp = await _queryProvider.fetchaddaddresslist(
       fullname,
       phone,
@@ -569,10 +565,10 @@ class CustomerApiProvider {
   }
 
   /// delete address
-  Future<DeleteAddressModel> fetchServicedeleteaddresslist(
-      addressid, status) async {
+  Future<DeleteAddressModel> fetchServicedeleteaddresslist(addressid,
+      status) async {
     Map<String, dynamic> _resp =
-        await _queryProvider.fetchServicedeleteaddresslist(addressid, status);
+    await _queryProvider.fetchServicedeleteaddresslist(addressid, status);
     if (_resp != null) {
       if (_resp['status'] == "error") {
         final errorMsg = DeleteAddressModel(
@@ -591,10 +587,11 @@ class CustomerApiProvider {
 
 
   /// placeorder
-  Future<PlaceOrderModel> fetchServiceplaceorderlist(
-      qty,totprice,productid,addressid) async {
+  Future<PlaceOrderModel> fetchServiceplaceorderlist(qty, totprice, productid,
+      addressid) async {
     Map<String, dynamic> _resp =
-    await _queryProvider.fetchServiceplaceorderlist(qty,totprice,productid,addressid);
+    await _queryProvider.fetchServiceplaceorderlist(
+        qty, totprice, productid, addressid);
     if (_resp != null) {
       if (_resp['status'] == "error") {
         final errorMsg = PlaceOrderModel(
@@ -613,8 +610,7 @@ class CustomerApiProvider {
 
 
   /// orderlist
-  Future<OrderDetails> fetchServiceorderdetailslist(
-      ) async {
+  Future<OrderDetails> fetchServiceorderdetailslist() async {
     Map<String, dynamic> _resp =
     await _queryProvider.fetchServiceorderdetailslist();
     if (_resp != null) {
@@ -634,8 +630,7 @@ class CustomerApiProvider {
   }
 
   /// cancelorder
-  Future<CancelOrder> fetchcancelorderlist(orderid
-      ) async {
+  Future<CancelOrder> fetchcancelorderlist(orderid) async {
     Map<String, dynamic> _resp =
     await _queryProvider.fetchcacncelorder(orderid);
     if (_resp != null) {
@@ -656,10 +651,9 @@ class CustomerApiProvider {
 
 
   /// cod
-  Future<Codmodel> fetchcodlist(amount,orderid
-      ) async {
+  Future<Codmodel> fetchcodlist(amount, orderid) async {
     Map<String, dynamic> _resp =
-    await _queryProvider.fetchcodapprove(amount,orderid);
+    await _queryProvider.fetchcodapprove(amount, orderid);
     if (_resp != null) {
       if (_resp['status'] == "error") {
         final errorMsg = Codmodel(
@@ -678,8 +672,7 @@ class CustomerApiProvider {
 
 
   /// wallethistorymerchant
-  Future<WalletistoryModel> fetchwallethistory(date
-      ) async {
+  Future<WalletistoryModel> fetchwallethistory(date) async {
     Map<String, dynamic> _resp =
     await _queryProvider.fetchwallethistory(date);
     if (_resp != null) {
@@ -700,8 +693,8 @@ class CustomerApiProvider {
 
 
   /// customerrating
-  Future<CustomerRatingModel> fetchcustrating(rating, orderid, productid
-      ) async {
+  Future<CustomerRatingModel> fetchcustrating(rating, orderid,
+      productid) async {
     Map<String, dynamic> _resp =
     await _queryProvider.fetchcustrating(rating, orderid, productid);
     if (_resp != null) {
@@ -722,8 +715,7 @@ class CustomerApiProvider {
 
   /// =============== Customer My Wallet ================== ///
 
-  Future<CustomerWalletDetailModel> fetchcustomerwallet(/*date*/
-      ) async {
+  Future<CustomerWalletDetailModel> fetchcustomerwallet(/*date*/) async {
     Map<String, dynamic> _resp =
     await _queryProvider.fetchcustomerwallet(/*date*/);
     if (_resp != null) {
@@ -742,10 +734,8 @@ class CustomerApiProvider {
     }
   }
 
-
   /// placeorderallitem
-  Future<PlaceOrderModel> placeorderallitem(
-      addressid) async {
+  Future<PlaceOrderModel> placeorderallitem(addressid) async {
     Map<String, dynamic> _resp =
     await _queryProvider.fetchServiceplaceorderallitemlist(addressid);
     if (_resp != null) {
@@ -763,9 +753,28 @@ class CustomerApiProvider {
       return errorMsg;
     }
   }
+
+  ///----- Customer Notification List----------///
+
+  Future<NotificationModel> customernotification(
+      ) async {
+    Map<String, dynamic> _resp =
+    await _queryProvider.fetchcustomernotification();
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = NotificationModel(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return NotificationModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = NotificationModel(
+          status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+
 }
-
-
-
-
-

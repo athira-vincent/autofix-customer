@@ -6,6 +6,7 @@ import 'package:auto_fix/UI/Common/PrivacyPolicy/privacy_policy.dart';
 import 'package:auto_fix/UI/Common/TermsAndCondition/terms_and_conditions.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.dart';
+import 'package:auto_fix/UI/Customer/SideBar/CustomerNotifications/cust_notification_list.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyOrders/my_orders_list.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyWallet/my_wallet.dart';
@@ -29,7 +30,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
 
   String authToken="";
   String userName="", profileImageUrl = "";
-
+  BuildContext? dialogContext;
   @override
   void initState() {
     super.initState();
@@ -287,18 +288,14 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           },
         ),
 
-        /*ListTile(
+        ListTile(
           contentPadding: EdgeInsets.only(left: 20.4),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
             alignment: Alignment(-1.21, 0),
             child: Text(
               "Notification",
-              style: TextStyle(
-                  fontFamily: 'Corbel_Regular',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14.5,
-                  color: CustColors.blue),
+              style: Styles.navDrawerTextStyle02,
             ),
           ),
           leading: Container(
@@ -311,9 +308,9 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => NotificationScreen()));
+                MaterialPageRoute(builder: (context) => CustNotificationList()));
           },
-        ),*/
+        ),
 
         ListTile(
           contentPadding: const EdgeInsets.only(left: 20.4),
@@ -333,8 +330,9 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           onTap: () {
             showDialog(
                 context: context,
-                builder: (BuildContext context)
-                {
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  dialogContext = context;
                   return deactivateDialog();
                 });
           },
@@ -555,7 +553,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             ),
             isDefaultAction: true,
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(dialogContext!);
             },
             child: const Text("Cancel")),
         CupertinoDialogAction(
@@ -566,6 +564,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             isDefaultAction: true,
             onPressed: () async {
               setState(() {
+                Navigator.pop(dialogContext!);
                 setDeactivate();
                 Navigator.pushAndRemoveUntil(
                     context,

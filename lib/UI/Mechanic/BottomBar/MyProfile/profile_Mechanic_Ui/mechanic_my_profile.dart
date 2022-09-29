@@ -100,6 +100,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
 
   String authToken="";
   String id="", isOnline = "";
+  BuildContext? dialogContext;
 
   @override
   void initState() {
@@ -422,8 +423,9 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             onTap: (){
                               showDialog(
                                   context: context,
-                                  builder: (BuildContext context)
-                                  {
+                                  barrierDismissible: false,
+                                  builder: (BuildContext context) {
+                                    dialogContext = context;
                                     return deactivateDialog();
                                   });
                             },
@@ -1668,9 +1670,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
             ),
             isDefaultAction: true,
             onPressed: () {
-              Navigator.pop(context);
-
-
+              Navigator.pop(dialogContext!);
             },
             child: Text("Cancel")),
         CupertinoDialogAction(
@@ -1680,8 +1680,8 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
             ),
             isDefaultAction: true,
             onPressed: () async {
-
               setState(() {
+                Navigator.pop(dialogContext!);
                 setDeactivate();
                 Navigator.pushAndRemoveUntil(
                     context,

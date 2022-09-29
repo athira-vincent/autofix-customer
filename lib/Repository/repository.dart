@@ -14,6 +14,7 @@ import 'package:auto_fix/Models/customer_models/spare_parts_model/spare_parts_mo
 import 'package:auto_fix/Models/customer_rating_model/customer_rating_model.dart';
 import 'package:auto_fix/Models/customer_wallet_detail_model/customer_wallet_detail_model.dart';
 import 'package:auto_fix/Models/delete_cart_model/delete_cart_model.dart';
+import 'package:auto_fix/Models/notification_model/notification_model.dart';
 import 'package:auto_fix/Models/wallet_history_model/wallet_history_model.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
@@ -82,6 +83,9 @@ class Repository {
   final _codprovider=CustomerApiProvider();
   final _wallethistoryprovider=CustomerApiProvider();
   final _customerratingprovider=CustomerApiProvider();
+  final _notificationprovider = CustomerApiProvider();
+  final _vendornotificationprovider = MechanicApiProvider();
+
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>
       _serviceListApiProvider.getServiceListRequest(
@@ -680,4 +684,11 @@ class Repository {
 
   Future<PlaceOrderModel> placeorderallitem(addressid) =>
       _placeorderprovider.placeorderallitem(addressid);
+
+  Future<NotificationModel> customernotification() =>
+      _notificationprovider.customernotification();
+
+  Future<NotificationModel> vendornotification() =>
+      _vendornotificationprovider.vendornotification();
+
 }

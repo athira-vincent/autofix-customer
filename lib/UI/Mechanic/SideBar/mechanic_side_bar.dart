@@ -7,7 +7,7 @@ import 'package:auto_fix/UI/Common/TermsAndCondition/terms_and_conditions.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyServices/mechanic_my_services.dart';
-import 'package:auto_fix/UI/Mechanic/SideBar/MyJobAppointments/my_job_appointments.dart';
+import 'package:auto_fix/UI/Mechanic/SideBar/MechanicNotifications/mech_notification_list.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,6 +31,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
   String isOnline = "";
   String authToken="";
   String userName="", profileImageUrl = "";
+  BuildContext? dialogContext;
 
   _logout() async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
@@ -258,6 +259,34 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           contentPadding: EdgeInsets.only(left: 20.4),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
+            alignment: Alignment(-1.21, 0),
+            child: Text(
+              "Notification",
+              style: TextStyle(
+                  fontFamily: 'Corbel_Regular',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14.5,
+                  color: CustColors.blue),
+            ),
+          ),
+          leading: Container(
+            child: Image.asset(
+              'assets/images/notification.png',
+              width: 17.92,
+              height: 19.88,
+            ),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MechanicNotificationList()));
+          },
+        ),
+
+        ListTile(
+          contentPadding: EdgeInsets.only(left: 20.4),
+          visualDensity: VisualDensity(horizontal: 0, vertical: -3),
+          title: Align(
             alignment: Alignment(-1.18, 0),
             child: Text(
               "Logout",
@@ -272,11 +301,11 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             ),
           ),
           onTap: () {
-            //Navigator.pop(context);
             showDialog(
                 context: context,
-                builder: (BuildContext context)
-                {
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  dialogContext = context;
                   return deactivateDialog();
                 });
           },
@@ -504,7 +533,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             ),
             isDefaultAction: true,
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(dialogContext!);
             },
             child: Text("Cancel")),
         CupertinoDialogAction(
@@ -515,13 +544,13 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             isDefaultAction: true,
             onPressed: () async {
               setState(() {
+                Navigator.pop(dialogContext!);
                 setDeactivate();
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                         builder: (context) => LoginScreen()),
                     ModalRoute.withName("/LoginScreen"));
-
               });
             },
             child: Text("Logout")),

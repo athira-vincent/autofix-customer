@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:auto_fix/Models/mechanic_models/mechanic_Services_List_Mdl/mechanicServicesListMdl.dart';
+import 'package:auto_fix/Models/notification_model/notification_model.dart';
 import 'package:auto_fix/QueryProvider/query_provider.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/brand_specialization_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_active_service_mdl.dart';
@@ -191,6 +192,27 @@ class MechanicApiProvider {
       }
     } else {
       final errorMsg = MechanicServicesBasedListMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+///------ Mechanic Notification list-----------///
+  Future<NotificationModel> vendornotification(
+      ) async {
+    Map<String, dynamic> _resp =
+    await _queryProvider.fetchvendornotification();
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = NotificationModel(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return NotificationModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = NotificationModel(
+          status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
   }

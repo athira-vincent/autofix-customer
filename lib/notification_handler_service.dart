@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -40,16 +41,31 @@ void setupFcm() {
 
   //when the app is in foreground state and you click on notification.
   flutterLocalNotificationsPlugin.initialize(initializationSettings,
-    onSelectNotification: (payload) async{
-      if (payload != null) {
-        Map<String, dynamic> data = json.decode(payload);
-        goToNextScreen(data);
+
+      onSelectNotification: (String? payload){
+        Fluttertoast.showToast(
+            msg:
+            "Notification onselect notification", timeInSecForIosWeb: 15);
+        if (payload != null) {
+          Map<String, dynamic> data = json.decode(payload);
+          goToNextScreen(data);
+        }
       }
-    },
+      /*onDidReceiveNotificationResponse: (NotificationResponse notificationResponse){
+        final String? payload = notificationResponse.payload;
+        if (payload != null) {
+          Map<String, dynamic> data = json.decode(payload);
+          goToNextScreen(data);
+        }
+      },*/
+
     //onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
   );
   //When the app is terminated, i.e., app is neither in foreground or background.
   FirebaseMessaging.instance.getInitialMessage().then((value){
+    Fluttertoast.showToast(
+        msg:
+        "get initial message");
     //Its compulsory to check if RemoteMessage instance is null or not.
     if(value != null){
       goToNextScreen(value.data);
@@ -58,6 +74,9 @@ void setupFcm() {
 
   //When the app is in the background, but not terminated.
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    Fluttertoast.showToast(
+        msg:
+        "Notification on message opened");
     goToNextScreen(event.data);
   },
     cancelOnError: false,
@@ -65,6 +84,9 @@ void setupFcm() {
   );
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    Fluttertoast.showToast(
+        msg:
+        "Notification on message listen");
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     if (notification != null && android != null) {
@@ -138,6 +160,10 @@ Future<String> getFcmToken() async {
 }
 
 Future<void> goToNextScreen(Map<String, dynamic> data) async {
+  Fluttertoast.showToast(
+      msg: "goToNextScreen",
+      timeInSecForIosWeb: 15
+  );
   SharedPreferences _shdPre = await SharedPreferences.getInstance();
   String? _token = _shdPre.getString(SharedPrefKeys.token.toString());
   String? userTypeId = _shdPre.getString(SharedPrefKeys.userType.toString());
@@ -145,12 +171,15 @@ Future<void> goToNextScreen(Map<String, dynamic> data) async {
 
   if (data['click_action'] != null) {
 
-    /// Edit after merge..... 28/sep/2022
-   /* if(userTypeId.toString() == "3"){
-      navigatorKey.currentState!.pushNamed('/vendorNotificationList',);
-    }else{
+    Fluttertoast.showToast(
+        msg: "Notification hit on change screen",
+      timeInSecForIosWeb: 15
+    );
+    if(userTypeId.toString() == TextStrings.user_customer){
       navigatorKey.currentState!.pushNamed('/custNotificationList',);
-    }*/
+    }else{
+      navigatorKey.currentState!.pushNamed('/mechNotificationList',);
+    }
     /*switch (data['click_action']) {
       case "first_screen":
         navigatorKey.currentState.pushNamed(FirstScreen.routeName,);

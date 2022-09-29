@@ -4118,16 +4118,74 @@ class QueryProvider {
     String _query = """
       {
     walletDetails(customerId: $userID) {
+      walletData {
+        id
+        type
+        amount
+        balance
+        recordDate
+        reference
+        paymentMode
+        status
+        customerId
+        customer{
+          id
+          userCode
+          firstName
+          lastName
+          emailId
+          phoneNo
+          status
+          userTypeId
+          jwtToken
+          fcmToken
+          otpCode
+          isProfile
+          otpVerified
+          customer{
+            id
+          }
+          mechanic{
+            id
+          }
+          vendor{
+            id
+          }
+        }
+      }
+      totalBalance
+    }
+  }
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  /// mechanic notification
+  ///  customer notification queryprovider
+  fetchvendornotification() async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String userID = shdPre.getString(SharedPrefKeys.userID).toString();
+
+    String _query = """
+        {
+     
+    notificationList(id: $userID, platformId: 1) {
       id
-      type
-      amount
-      balance
-      recordDate
-      reference
-      paymentMode
+      caption
+      message
+      read
+      trash
       status
-      customerId
-      customer {
+      toId
+      bookingId
+      to {
         id
         userCode
         firstName
@@ -4151,9 +4209,149 @@ class QueryProvider {
           id
         }
       }
+      booking {
+        id
+        bookingCode
+        reqType
+        bookStatus
+        totalPrice
+        tax
+        commission
+        serviceCharge
+        totalTime
+        serviceTime
+        latitude
+        longitude
+        mechLatitude
+        mechLongitude
+        extend
+        totalExt
+        extendTime
+        bookedDate
+        bookedTime
+        isRated
+        status
+        customerId
+        mechanicId
+        vehicleId
+        regularType
+        mechanic{
+          id
+        }
+        customer{
+          id
+        }
+        vehicle{
+          id
+        }
+        bookService{
+          id
+        }
+      }
+    }
+  }
+
+    """;
+    print("cred");
+    print(_query);
+    print(authToken);
+    //print(userID);
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  ///  customer notification queryprovider
+  fetchcustomernotification() async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String userID = shdPre.getString(SharedPrefKeys.userID).toString();
+
+    String _query = """
+        {
+    notificationList(id: $userID, platformId: 1) {
+      id
+      caption
+      message
+      read
+      trash
+      status
+      toId
+      bookingId
+      to {
+        id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        status
+        userTypeId
+        jwtToken
+        fcmToken
+        otpCode
+        isProfile
+        otpVerified
+        customer{
+          id
+        }
+        mechanic{
+          id
+        }
+        vendor{
+          id
+        }
+      }
+      booking {
+        id
+        bookingCode
+        reqType
+        bookStatus
+        totalPrice
+        tax
+        commission
+        serviceCharge
+        totalTime
+        serviceTime
+        latitude
+        longitude
+        mechLatitude
+        mechLongitude
+        extend
+        totalExt
+        extendTime
+        bookedDate
+        bookedTime
+        isRated
+        status
+        customerId
+        mechanicId
+        vehicleId
+        regularType
+        mechanic{
+          id
+        }
+        customer{
+          id
+        }
+        vehicle{
+          id
+        }
+        bookService{
+          id
+        }
+      }
     }
   }
     """;
+    print("cred");
+    print(_query);
+    print(authToken);
+    print(userID);
 
     return await GqlClient.I.query01(
       _query,

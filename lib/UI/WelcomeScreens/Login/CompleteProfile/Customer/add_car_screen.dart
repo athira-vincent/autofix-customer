@@ -137,7 +137,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
   String latitude = '10.5075868';
   String longitude = '76.2424536';
 
-
+  BuildContext? dialogContext;
   @override
   void initState() {
     // TODO: implement initState
@@ -992,7 +992,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
       onTap: (){
         showDialog(
             context: context,
+            barrierDismissible: false,
             builder: (BuildContext context) {
+              dialogContext = context;
               return AlertDialog(
                 contentPadding: const EdgeInsets.all(0.0),
                 content: StatefulBuilder(
@@ -1755,7 +1757,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               child: MaterialButton(
                 onPressed: () {
 
-                  Navigator.pop(context);
+                  Navigator.pop(dialogContext!);
                   setState(() {
 
                     _lastMaintenanceController.text = '$selectedMonthText  $selectedYearText';
