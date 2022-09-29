@@ -496,26 +496,7 @@ class _ChangeDeliveryAddressScreenState
                                                       .selectAddress[index]
                                                       .fullName,
                                                   style: addressTextStyle01),
-                                              state
-                                                          .addressModel
-                                                          .data!
-                                                          .selectAddress[index]
-                                                          .isDefault ==
-                                                      1
-                                                  ? Align(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: SvgPicture.asset(
-                                                        "assets/image/ic_selected_blue_white_tick.svg",
-                                                        height: size.height *
-                                                            3 /
-                                                            100,
-                                                        width: size.width *
-                                                            3 /
-                                                            100,
-                                                      ),
-                                                    )
-                                                  : Container(),
+
                                             ],
                                           ),
                                           Text(
