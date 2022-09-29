@@ -11,12 +11,10 @@ import 'package:auto_fix/UI/SpareParts/MyCart/bloc/add_cart_state.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/my_cart_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_event.dart';
-import 'package:auto_fix/UI/SpareParts/spare_parts_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SparePartsListScreen extends StatefulWidget {
   final String modelname;
@@ -353,7 +351,6 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
               },
             );
           } else {
-
             return GridView.builder(
               itemCount: sparepartslistsearch.length,
               shrinkWrap: true,
@@ -391,8 +388,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                             child: sparepartslistsearch[index]
                                         .productImage
                                         .isEmpty ||
-                                sparepartslistsearch[index]
-                                            .productImage ==
+                                    sparepartslistsearch[index].productImage ==
                                         "null"
                                 ? Container(
                                     color: Colors.white,
@@ -479,9 +475,10 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                                         final addcartBloc =
                                             BlocProvider.of<AddCartBloc>(
                                                 context);
-                                        addcartBloc.add(FetchAddCartEvent(sparepartslistsearch[index]
-                                            .id
-                                            .toString()));
+                                        addcartBloc.add(FetchAddCartEvent(
+                                            sparepartslistsearch[index]
+                                                .id
+                                                .toString()));
                                       },
                                       child: Container(
                                         height: 20,
