@@ -131,6 +131,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   String _userName = "", _imageUrl = "", _userType = "", _orgName = "";
   final picker = ImagePicker();
   File? _images;
+  BuildContext? dialogContext;
 
   @override
   void initState() {
@@ -551,9 +552,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                           child: InkWell(
                             onTap: (){
                               showDialog(
+                                  barrierDismissible: false,
                                   context: context,
-                                  builder: (BuildContext context)
-                                  {
+                                  builder: (BuildContext context) {
+                                    dialogContext = context;
                                     return deactivateDialog();
                                   });
                             },
@@ -1777,9 +1779,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
             ),
             isDefaultAction: true,
             onPressed: () {
-              Navigator.pop(context);
-
-
+              Navigator.pop(dialogContext!);
             },
             child: Text("Cancel")),
         CupertinoDialogAction(
@@ -1789,15 +1789,14 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
             ),
             isDefaultAction: true,
             onPressed: () async {
-
               setState(() {
+                Navigator.pop(dialogContext!);
                 setDeactivate();
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                         builder: (context) => LoginScreen()),
                     ModalRoute.withName("/LoginScreen"));
-
               });
             },
             child: Text("Logout")),

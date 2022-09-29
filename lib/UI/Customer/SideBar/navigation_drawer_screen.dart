@@ -30,7 +30,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
 
   String authToken="";
   String userName="", profileImageUrl = "";
-
+  BuildContext? dialogContext;
   @override
   void initState() {
     super.initState();
@@ -295,11 +295,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             alignment: Alignment(-1.21, 0),
             child: Text(
               "Notification",
-              style: TextStyle(
-                  fontFamily: 'Corbel_Regular',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14.5,
-                  color: CustColors.blue),
+              style: Styles.navDrawerTextStyle02,
             ),
           ),
           leading: Container(
@@ -334,8 +330,9 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           onTap: () {
             showDialog(
                 context: context,
-                builder: (BuildContext context)
-                {
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  dialogContext = context;
                   return deactivateDialog();
                 });
           },
@@ -556,7 +553,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             ),
             isDefaultAction: true,
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(dialogContext!);
             },
             child: const Text("Cancel")),
         CupertinoDialogAction(
@@ -567,6 +564,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             isDefaultAction: true,
             onPressed: () async {
               setState(() {
+                Navigator.pop(dialogContext!);
                 setDeactivate();
                 Navigator.pushAndRemoveUntil(
                     context,

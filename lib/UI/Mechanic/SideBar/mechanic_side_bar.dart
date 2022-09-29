@@ -8,7 +8,6 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dar
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyServices/mechanic_my_services.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MechanicNotifications/mech_notification_list.dart';
-import 'package:auto_fix/UI/Mechanic/SideBar/MyJobAppointments/my_job_appointments.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,6 +31,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
   String isOnline = "";
   String authToken="";
   String userName="", profileImageUrl = "";
+  BuildContext? dialogContext;
 
   _logout() async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
@@ -301,11 +301,11 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             ),
           ),
           onTap: () {
-            //Navigator.pop(context);
             showDialog(
                 context: context,
-                builder: (BuildContext context)
-                {
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  dialogContext = context;
                   return deactivateDialog();
                 });
           },
@@ -533,7 +533,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             ),
             isDefaultAction: true,
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(dialogContext!);
             },
             child: Text("Cancel")),
         CupertinoDialogAction(
@@ -544,13 +544,13 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             isDefaultAction: true,
             onPressed: () async {
               setState(() {
+                Navigator.pop(dialogContext!);
                 setDeactivate();
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                         builder: (context) => LoginScreen()),
                     ModalRoute.withName("/LoginScreen"));
-
               });
             },
             child: Text("Logout")),

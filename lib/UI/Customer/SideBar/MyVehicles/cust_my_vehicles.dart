@@ -74,7 +74,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
   String isDefaultId ="";
 
 
-
+  BuildContext? dialogContext;
 
   @override
   void initState() {
@@ -385,8 +385,9 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                                     {
                                       showDialog(
                                           context: context,
-                                          builder: (BuildContext context)
-                                          {
+                                          barrierDismissible: false,
+                                          builder: (BuildContext context) {
+                                            dialogContext = context;
                                             return deleteVehicleDialog(i,snapshot.data?.data?.custVehicleList);
                                           });
                                     }
@@ -1104,7 +1105,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
             ),
             isDefaultAction: true,
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(dialogContext!);
             },
             child: Text("Cancel")),
         CupertinoDialogAction(
@@ -1119,7 +1120,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                     authToken, custVehicleList?[i].id,
                     "0");
                 custVehicleList?.removeAt(i);
-                Navigator.pop(context);
+                Navigator.pop(dialogContext!);
 
               });
             },

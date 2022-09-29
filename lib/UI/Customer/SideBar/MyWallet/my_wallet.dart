@@ -196,9 +196,9 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                                 style: Styles.myWalletCardText01,
                               ),
                               Text(
-                                walletistoryModel != null
-                                    ? walletistoryModel.data!.walletDetails.amount.toString()
-                                    : "0",
+                                walletistoryModel == null || walletistoryModel.data!.walletDetails == "null"
+                                    ? "0"
+                                    : walletistoryModel.data!.walletDetails.totalBalance.toString(),
                                 style: Styles.myWalletCardText01,
                               )
                             ]),
@@ -255,14 +255,14 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                         SubTitleTextRound(
                             size,
                             "Total spent",
-                            walletistoryModel != null
-                                ? walletistoryModel.data!.walletDetails.balance.toString() : "0"),
+                            walletistoryModel == null || walletistoryModel.data!.walletDetails.walletData == "null" || walletistoryModel.data!.walletDetails.walletData == null
+                                ? "0" : walletistoryModel.data!.walletDetails.walletData!.balance.toString() ),
                         SubTitleTextRound(
                             size,
                             "Total balance",
-                            walletistoryModel != null
-                                ? walletistoryModel.data!.walletDetails.amount.toString()
-                                : "0"
+                            walletistoryModel == null || walletistoryModel.data!.walletDetails.walletData == "null" || walletistoryModel.data!.walletDetails.walletData == null
+                                ? "0"
+                                : walletistoryModel.data!.walletDetails.walletData!.amount.toString()
                         ),
                       ],
                     ),
@@ -331,8 +331,7 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                   maxLines: 1,
                   style: Styles.textLabelSubTitle01,
                   focusNode: _phoneFocusNode,
-                  keyboardType:
-                  TextInputType.number,
+                  keyboardType: TextInputType.number,
                   inputFormatters: [
                     LengthLimitingTextInputFormatter(
                         15),

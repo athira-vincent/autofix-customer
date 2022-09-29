@@ -4118,39 +4118,42 @@ class QueryProvider {
     String _query = """
       {
     walletDetails(customerId: $userID) {
-      id
-      type
-      amount
-      balance
-      recordDate
-      reference
-      paymentMode
-      status
-      customerId
-      customer {
+      walletData {
         id
-        userCode
-        firstName
-        lastName
-        emailId
-        phoneNo
+        type
+        amount
+        balance
+        recordDate
+        reference
+        paymentMode
         status
-        userTypeId
-        jwtToken
-        fcmToken
-        otpCode
-        isProfile
-        otpVerified
+        customerId
         customer{
           id
-        }
-        mechanic{
-          id
-        }
-        vendor{
-          id
+          userCode
+          firstName
+          lastName
+          emailId
+          phoneNo
+          status
+          userTypeId
+          jwtToken
+          fcmToken
+          otpCode
+          isProfile
+          otpVerified
+          customer{
+            id
+          }
+          mechanic{
+            id
+          }
+          vendor{
+            id
+          }
         }
       }
+      totalBalance
     }
   }
     """;
