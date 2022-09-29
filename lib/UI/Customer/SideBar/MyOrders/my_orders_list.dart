@@ -149,22 +149,34 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
 
                 formate1 = "${dateTime.day}-${dateTime.month}-${dateTime.year}";
               }
-              image = state
-                  .orderDetailsmodel.data!.orderList[index].product.productImage
-                  .replaceAll("[", "")
-                  .replaceAll("]", "")
-                  .split(",");
-              print("imagesss");
-              print(image);
+              if(state.orderDetailsmodel.data!.orderList[index].product.productImage.toString() != "null"){
+                image = state
+                    .orderDetailsmodel.data!.orderList[index].product.productImage
+                    .replaceAll("[", "")
+                    .replaceAll("]", "")
+                    .split(",");
+                print("imagesss >>>");
+                print(image[0]);
+              }
 
               return InkWell(
                 onTap: () {
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => My_Orders_Display(
+                  //             modeldetails: state
+                  //                 .orderDetailsmodel.data!.orderList[index],deliverydate:formate1)));
+
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => My_Orders_Display(
-                              modeldetails: state
-                                  .orderDetailsmodel.data!.orderList[index],deliverydate:formate1)));
+                            modeldetails: state
+                                .orderDetailsmodel.data!.orderList[index],
+                            deliverydate: formate1,
+                            productpic:image[0],)));
                 },
                 child: SizedBox(
                     width: double.infinity,
@@ -349,14 +361,33 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: orderlistsearch.length,
             itemBuilder: (context, index) {
+
+              if (orderlistsearch[index].deliverDate !=
+                  null) {
+                var dateTime = DateTime.parse(orderlistsearch[index].deliverDate
+                    .toString());
+
+                formate1 = "${dateTime.day}-${dateTime.month}-${dateTime.year}";
+              }
+              if(orderlistsearch[index].product.productImage.toString() != "null"){
+                image = orderlistsearch[index].product.productImage
+                    .replaceAll("[", "")
+                    .replaceAll("]", "")
+                    .split(",");
+                print("imagesss >>>");
+                print(image[0]);
+              }
               return InkWell(
                 onTap: () {
+
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => My_Orders_Display(
-                            modeldetails: state
-                                .orderDetailsmodel.data!.orderList[index],deliverydate: formate1,)));
+                            modeldetails: orderlistsearch[index],
+                            deliverydate: formate1,
+                            productpic:image[0],)));
                 },
                 child: SizedBox(
                     width: double.infinity,
@@ -374,7 +405,12 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
                                   width: 90,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(5),
-                                    child: Image.network(
+                                    child: image != null
+                                        ? Image.network(
+                                      image[0].toString(),
+                                      fit: BoxFit.cover,
+                                    )
+                                        : Image.network(
                                       "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
                                       fit: BoxFit.cover,
                                     ),
@@ -389,26 +425,95 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Container(
+                                      // Container(
+                                      //   decoration: BoxDecoration(
+                                      //       color: CustColors.whiteBlueish,
+                                      //       borderRadius:
+                                      //           BorderRadius.circular(5)),
+                                      //   child: const Padding(
+                                      //     padding:
+                                      //         EdgeInsets.fromLTRB(8, 8, 8, 2),
+                                      //     child: Text(
+                                      //       "Delivered",
+                                      //       style: Styles
+                                      //           .sparePartNameSubTextBlack,
+                                      //     ),
+                                      //   ),
+                                      // ),
+
+
+                                      orderlistsearch[index]
+                                          .paymentStatus !=
+                                          0
+                                          ? Container(
                                         decoration: BoxDecoration(
-                                            color: CustColors.whiteBlueish,
+                                            color:
+                                            CustColors.whiteBlueish,
                                             borderRadius:
-                                                BorderRadius.circular(5)),
+                                            BorderRadius.circular(5)),
                                         child: const Padding(
-                                          padding:
-                                              EdgeInsets.fromLTRB(8, 8, 8, 2),
+                                          padding: EdgeInsets.fromLTRB(
+                                              8, 8, 8, 2),
                                           child: Text(
+                                            "Payment Completed",
+                                            style: Styles
+                                                .sparePartNameSubTextBlack,
+                                          ),
+                                        ),
+                                      )
+                                          : Container(
+                                        decoration: BoxDecoration(
+                                            color: orderlistsearch[index]
+                                                .status ==
+                                                3
+                                                ? CustColors.materialBlue
+                                                : CustColors.whiteBlueish,
+                                            borderRadius:
+                                            BorderRadius.circular(5)),
+                                        child: Padding(
+                                          padding:
+                                          const EdgeInsets.fromLTRB(
+                                              8, 8, 8, 2),
+                                          child: orderlistsearch[index]
+                                              .status ==
+                                              1
+                                              ?  Text(
+                                            "Order created",
+                                            style: Styles
+                                                .sparePartNameSubTextBlack,
+                                          )
+                                              : orderlistsearch[
+                                          index]
+                                              .status ==
+                                              2
+                                              ?  Text(
+                                            "Dispatched",
+                                            style: Styles
+                                                .sparePartNameSubTextBlack,
+                                          )
+                                              : orderlistsearch[
+                                          index]
+                                              .status ==
+                                              3
+                                              ? const Text(
                                             "Delivered",
+                                            style: Styles
+                                                .badgeTextStyle1,
+                                          )
+                                              :  Text(
+                                            "Cancelled",
                                             style: Styles
                                                 .sparePartNameSubTextBlack,
                                           ),
                                         ),
                                       ),
-                                      const Padding(
+
+
+                                       Padding(
                                         padding:
-                                            EdgeInsets.fromLTRB(0, 8, 0, 0),
+                                            const EdgeInsets.fromLTRB(0, 8, 0, 0),
                                         child: Text(
-                                          "Delivery on jan 20  5pm",
+                                          "Delivery on " + formate1,
                                           style:
                                               Styles.sparePartNameTextBlack17,
                                         ),

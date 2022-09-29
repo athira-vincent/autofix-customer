@@ -351,6 +351,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
               },
             );
           } else {
+
             return GridView.builder(
               itemCount: sparepartslistsearch.length,
               shrinkWrap: true,
@@ -361,11 +362,13 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                 context,
                 index,
               ) {
+
                 image = sparepartslistsearch[index]
                     .productImage
                     .replaceAll("[", "")
                     .replaceAll("]", "")
                     .split(",");
+
                 print("imagesss");
 
                 print(image);
