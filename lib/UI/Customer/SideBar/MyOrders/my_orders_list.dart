@@ -7,7 +7,6 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/order_list_bloc/order_list_s
 import 'package:auto_fix/UI/Customer/SideBar/MyOrders/my_orders_display_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class MyOrdersListScreen extends StatefulWidget {
   const MyOrdersListScreen({Key? key}) : super(key: key);
@@ -116,6 +115,8 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
                             .toLowerCase()
                             .contains(text.toLowerCase()))
                         .toList();
+                    print("orderlistsearch");
+                    print(orderlistsearch);
                   });
                 },
               ),

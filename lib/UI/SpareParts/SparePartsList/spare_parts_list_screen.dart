@@ -1,6 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Models/customer_models/spare_parts_list_model/spare_parts_list_model.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_event.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_state.dart';
@@ -44,8 +44,8 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
   String totalamount = "";
   bool _isSearching = false;
   bool ischanged = false;
-
-
+  List<SparePartsList> sparepartslistsearch = [];
+  List<SparePartsList> spareparts = [];
 
   @override
   Widget build(BuildContext context) {
@@ -166,182 +166,361 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
         if (state is SparePartListLoadingState) {
           return Container();
         } else if (state is SparePartListLoadedState) {
-          return GridView.builder(
-            itemCount: state.sparePartslistModel.data!.sparePartsList.length,
-            shrinkWrap: true,
-            controller: ScrollController(keepScrollOffset: false),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, childAspectRatio: 0.7),
-            itemBuilder: (
-              context,
-              index,
-            ) {
-              image = state
-                  .sparePartslistModel.data!.sparePartsList[index].productImage
-                  .replaceAll("[", "")
-                  .replaceAll("]", "")
-                  .split(",");
-              print("imagesss");
+          if (searchController.text.isEmpty) {
+            return GridView.builder(
+              itemCount: state.sparePartslistModel.data!.sparePartsList.length,
+              shrinkWrap: true,
+              controller: ScrollController(keepScrollOffset: false),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, childAspectRatio: 0.7),
+              itemBuilder: (
+                context,
+                index,
+              ) {
+                spareparts = state.sparePartslistModel.data!.sparePartsList;
 
-              print(image);
+                image = state.sparePartslistModel.data!.sparePartsList[index]
+                    .productImage
+                    .replaceAll("[", "")
+                    .replaceAll("]", "")
+                    .split(",");
+                print("imagesss");
 
-              return Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: CustColors.greyText1),
-                    borderRadius: BorderRadius.circular(0)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        height: 100,
-                        width: double.infinity,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: state
-                                      .sparePartslistModel
-                                      .data!
-                                      .sparePartsList[index]
-                                      .productImage
-                                      .isEmpty ||
-                                  state.sparePartslistModel.data!
-                                          .sparePartsList[index].productImage ==
-                                      "null"
-                              ? Container(
-                                  color: Colors.white,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(25),
-                                    child: SvgPicture.asset(
-                                      'assets/image/CustomerType/dummyCar00.svg',
-                                      fit: BoxFit.contain,
+                print(image);
+
+                return Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: CustColors.greyText1),
+                      borderRadius: BorderRadius.circular(0)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          height: 100,
+                          width: double.infinity,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: state
+                                        .sparePartslistModel
+                                        .data!
+                                        .sparePartsList[index]
+                                        .productImage
+                                        .isEmpty ||
+                                    state
+                                            .sparePartslistModel
+                                            .data!
+                                            .sparePartsList[index]
+                                            .productImage ==
+                                        "null"
+                                ? Container(
+                                    color: Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(25),
+                                      child: SvgPicture.asset(
+                                        'assets/image/CustomerType/dummyCar00.svg',
+                                        fit: BoxFit.contain,
+                                      ),
                                     ),
+                                  )
+                                : Image.network(
+                                    image[0],
+                                    fit: BoxFit.cover,
                                   ),
-                                )
-                              : Image.network(
-                                  image[0],
-                                  fit: BoxFit.cover,
-                                ),
+                          ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
-                            child: Text(
-                              state.sparePartslistModel.data!
-                                  .sparePartsList[index].productName,
-                              style: Styles.sparePartNameTextBlack17,
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
+                              child: Text(
+                                state.sparePartslistModel.data!
+                                    .sparePartsList[index].productName,
+                                style: Styles.sparePartNameTextBlack17,
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
-                            child: Text(
-                              state.sparePartslistModel.data!
-                                      .sparePartsList[index].productCode +
-                                  "." " |" +
-                                  state
-                                      .sparePartslistModel
-                                      .data!
-                                      .sparePartsList[index]
-                                      .vehicleModel
-                                      .modelName,
-                              style: Styles.sparePartNameSubTextBlack,
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                              child: Text(
+                                state.sparePartslistModel.data!
+                                        .sparePartsList[index].productCode +
+                                    "." " |" +
+                                    state
+                                        .sparePartslistModel
+                                        .data!
+                                        .sparePartsList[index]
+                                        .vehicleModel
+                                        .modelName,
+                                style: Styles.sparePartNameSubTextBlack,
+                              ),
                             ),
-                          ),
-                          // Padding(
-                          //   padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                          //   child: Container(
-                          //     height: 20,
-                          //     width: 50,
-                          //     alignment: Alignment.center,
-                          //     color: CustColors.light_navy,
-                          //     child: const Text(
-                          //       "5% OFF",
-                          //       style: Styles.badgeTextStyle1,
-                          //     ),
-                          //   ),
-                          // ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
-                            child: Text(
-                              "₦ " +
-                                  state.sparePartslistModel.data!
-                                      .sparePartsList[index].price
-                                      .toString(),
-                              style: Styles.sparePartOrginalPriceSubTextBlack,
+                            // Padding(
+                            //   padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                            //   child: Container(
+                            //     height: 20,
+                            //     width: 50,
+                            //     alignment: Alignment.center,
+                            //     color: CustColors.light_navy,
+                            //     child: const Text(
+                            //       "5% OFF",
+                            //       style: Styles.badgeTextStyle1,
+                            //     ),
+                            //   ),
+                            // ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                              child: Text(
+                                "₦ " +
+                                    state.sparePartslistModel.data!
+                                        .sparePartsList[index].price
+                                        .toString(),
+                                style: Styles.sparePartOrginalPriceSubTextBlack,
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "₦" +
-                                      state.sparePartslistModel.data!
-                                          .sparePartsList[index].price
-                                          .toString(),
-                                  style: Styles.sparePartOfferPriceSubTextBlack,
-                                ),
-                                const Spacer(),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                  child: InkWell(
-                                    onTap: () {
-                                      final addcartBloc =
-                                          BlocProvider.of<AddCartBloc>(context);
-                                      addcartBloc.add(FetchAddCartEvent(state
-                                          .sparePartslistModel
-                                          .data!
-                                          .sparePartsList[index]
-                                          .id
-                                          .toString()));
-                                    },
-                                    child: Container(
-                                      height: 20,
-                                      width: 70,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                              color: CustColors.greyText3),
-                                          borderRadius:
-                                              BorderRadius.circular(4)),
-                                      child: state
-                                                  .sparePartslistModel
-                                                  .data!
-                                                  .sparePartsList[index]
-                                                  .inCart ==
-                                              false
-                                          ? const Text(
-                                              "+ Add to cart",
-                                              style: Styles.homeActiveTextStyle,
-                                            )
-                                          : const Text(
-                                              "in cart",
-                                              style: Styles.homeActiveTextStyle,
-                                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "₦" +
+                                        state.sparePartslistModel.data!
+                                            .sparePartsList[index].price
+                                            .toString(),
+                                    style:
+                                        Styles.sparePartOfferPriceSubTextBlack,
+                                  ),
+                                  const Spacer(),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        final addcartBloc =
+                                            BlocProvider.of<AddCartBloc>(
+                                                context);
+                                        addcartBloc.add(FetchAddCartEvent(state
+                                            .sparePartslistModel
+                                            .data!
+                                            .sparePartsList[index]
+                                            .id
+                                            .toString()));
+                                      },
+                                      child: Container(
+                                        height: 20,
+                                        width: 70,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            border: Border.all(
+                                                color: CustColors.greyText3),
+                                            borderRadius:
+                                                BorderRadius.circular(4)),
+                                        child: state
+                                                    .sparePartslistModel
+                                                    .data!
+                                                    .sparePartsList[index]
+                                                    .inCart ==
+                                                false
+                                            ? const Text(
+                                                "+ Add to cart",
+                                                style:
+                                                    Styles.homeActiveTextStyle,
+                                              )
+                                            : const Text(
+                                                "in cart",
+                                                style:
+                                                    Styles.homeActiveTextStyle,
+                                              ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
+                    ],
+                  ),
+                );
+              },
+            );
+          } else {
+
+            return GridView.builder(
+              itemCount: sparepartslistsearch.length,
+              shrinkWrap: true,
+              controller: ScrollController(keepScrollOffset: false),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, childAspectRatio: 0.7),
+              itemBuilder: (
+                context,
+                index,
+              ) {
+                image = sparepartslistsearch[index]
+                    .productImage
+                    .replaceAll("[", "")
+                    .replaceAll("]", "")
+                    .split(",");
+                print("imagesss");
+
+                print(image);
+
+                return Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: CustColors.greyText1),
+                      borderRadius: BorderRadius.circular(0)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          height: 100,
+                          width: double.infinity,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: sparepartslistsearch[index]
+                                        .productImage
+                                        .isEmpty ||
+                                sparepartslistsearch[index]
+                                            .productImage ==
+                                        "null"
+                                ? Container(
+                                    color: Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(25),
+                                      child: SvgPicture.asset(
+                                        'assets/image/CustomerType/dummyCar00.svg',
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  )
+                                : Image.network(
+                                    image[0],
+                                    fit: BoxFit.cover,
+                                  ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
+                              child: Text(
+                                sparepartslistsearch[index].productName,
+                                style: Styles.sparePartNameTextBlack17,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                              child: Text(
+                                sparepartslistsearch[index].productCode +
+                                    "." " |" +
+                                    sparepartslistsearch[index]
+                                        .vehicleModel
+                                        .modelName,
+                                style: Styles.sparePartNameSubTextBlack,
+                              ),
+                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                            //   child: Container(
+                            //     height: 20,
+                            //     width: 50,
+                            //     alignment: Alignment.center,
+                            //     color: CustColors.light_navy,
+                            //     child: const Text(
+                            //       "5% OFF",
+                            //       style: Styles.badgeTextStyle1,
+                            //     ),
+                            //   ),
+                            // ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                              child: Text(
+                                "₦ " +
+                                    sparepartslistsearch[index]
+                                        .price
+                                        .toString(),
+                                style: Styles.sparePartOrginalPriceSubTextBlack,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "₦" +
+                                        sparepartslistsearch[index]
+                                            .price
+                                            .toString(),
+                                    style:
+                                        Styles.sparePartOfferPriceSubTextBlack,
+                                  ),
+                                  const Spacer(),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        final addcartBloc =
+                                            BlocProvider.of<AddCartBloc>(
+                                                context);
+                                        addcartBloc.add(FetchAddCartEvent(sparepartslistsearch[index]
+                                            .id
+                                            .toString()));
+                                      },
+                                      child: Container(
+                                        height: 20,
+                                        width: 70,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            border: Border.all(
+                                                color: CustColors.greyText3),
+                                            borderRadius:
+                                                BorderRadius.circular(4)),
+                                        child: sparepartslistsearch[index]
+                                                    .inCart ==
+                                                false
+                                            ? const Text(
+                                                "+ Add to cart",
+                                                style:
+                                                    Styles.homeActiveTextStyle,
+                                              )
+                                            : const Text(
+                                                "in cart",
+                                                style:
+                                                    Styles.homeActiveTextStyle,
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          }
         } else {
           return Container();
         }
@@ -475,34 +654,43 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
     return TextField(
       controller: searchController,
       autofocus: true,
+      onChanged: (text) {
+        setState(() {
+          sparepartslistsearch = spareparts
+              .where((element) => element.productName
+                  .toLowerCase()
+                  .contains(text.toLowerCase()))
+              .toList();
+        });
+      },
       decoration: InputDecoration(
         hintText: 'Search spare parts for your vehicle',
         contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 5.0),
         prefixIcon: InkWell(
           onTap: () async {
-            SharedPreferences shdPre = await SharedPreferences.getInstance();
-            setState(() {
-              ischanged = true;
-              shdPre.setString("ischanged", ischanged.toString());
-
-              final addcartsBloc = BlocProvider.of<SparePartListBloc>(context);
-              addcartsBloc.add(FetchSparePartListEvent(
-                  widget.modelname.toString(),
-                  searchController.text.toString(),
-                  "null",
-                  "null",
-                  "null"));
-            });
-
-
-
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => Search_Spare_Parts(
-                        changestatus: ischanged,
-                        modelname: widget.modelname,
-                        searchkey: searchController.text)));
+            // SharedPreferences shdPre = await SharedPreferences.getInstance();
+            // setState(() {
+            //   ischanged = true;
+            //   shdPre.setString("ischanged", ischanged.toString());
+            //
+            //   final addcartsBloc = BlocProvider.of<SparePartListBloc>(context);
+            //   addcartsBloc.add(FetchSparePartListEvent(
+            //       widget.modelname.toString(),
+            //       searchController.text.toString(),
+            //       "null",
+            //       "null",
+            //       "null"));
+            // });
+            //
+            //
+            //
+            // Navigator.pushReplacement(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (BuildContext context) => Search_Spare_Parts(
+            //             changestatus: ischanged,
+            //             modelname: widget.modelname,
+            //             searchkey: searchController.text)));
           },
           child: const Icon(Icons.search_rounded, color: CustColors.light_navy),
         ),
@@ -524,8 +712,6 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
       ),
     );
   }
-
-
 }
 
 class MyBehavior extends ScrollBehavior {
