@@ -7,6 +7,7 @@ import 'package:auto_fix/UI/Common/TermsAndCondition/terms_and_conditions.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyServices/mechanic_my_services.dart';
+import 'package:auto_fix/UI/Mechanic/SideBar/MechanicNotifications/mech_notification_list.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyJobAppointments/my_job_appointments.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
@@ -251,6 +252,34 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             Navigator.pop(context);
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) =>Addpricefault(position: 1,)));
+          },
+        ),
+
+        ListTile(
+          contentPadding: EdgeInsets.only(left: 20.4),
+          visualDensity: VisualDensity(horizontal: 0, vertical: -3),
+          title: Align(
+            alignment: Alignment(-1.21, 0),
+            child: Text(
+              "Notification",
+              style: TextStyle(
+                  fontFamily: 'Corbel_Regular',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14.5,
+                  color: CustColors.blue),
+            ),
+          ),
+          leading: Container(
+            child: Image.asset(
+              'assets/images/notification.png',
+              width: 17.92,
+              height: 19.88,
+            ),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MechanicNotificationList()));
           },
         ),
 

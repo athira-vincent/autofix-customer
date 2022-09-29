@@ -23,6 +23,7 @@ import 'package:auto_fix/Models/customer_models/update_mechanic_booking_model/up
 import 'package:auto_fix/Models/customer_rating_model/customer_rating_model.dart';
 import 'package:auto_fix/Models/customer_wallet_detail_model/customer_wallet_detail_model.dart';
 import 'package:auto_fix/Models/delete_cart_model/delete_cart_model.dart';
+import 'package:auto_fix/Models/notification_model/notification_model.dart';
 import 'package:auto_fix/Models/wallet_history_model/wallet_history_model.dart';
 import 'package:auto_fix/QueryProvider/query_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
@@ -741,6 +742,29 @@ class CustomerApiProvider {
       return errorMsg;
     }
   }
+
+  ///----- Customer Notification List----------///
+
+  Future<NotificationModel> customernotification(
+      ) async {
+    Map<String, dynamic> _resp =
+    await _queryProvider.fetchcustomernotification();
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = NotificationModel(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return NotificationModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = NotificationModel(
+          status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
 }
 
 
