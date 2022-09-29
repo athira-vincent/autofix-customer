@@ -533,6 +533,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             ),
             isDefaultAction: true,
             onPressed: () {
+              Navigator.pop(context);
               Navigator.pop(dialogContext!);
             },
             child: Text("Cancel")),
@@ -544,6 +545,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             isDefaultAction: true,
             onPressed: () async {
               setState(() {
+                Navigator.pop(context);
                 Navigator.pop(dialogContext!);
                 setDeactivate();
                 Navigator.pushAndRemoveUntil(
