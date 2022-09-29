@@ -606,8 +606,14 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                             )));
                                               },
                                               child: Container(
-                                                height: 20,
-                                                width: 70,
+                                                height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                    0.03,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                    0.23,
                                                 alignment: Alignment.center,
                                                 color: CustColors.light_navy,
                                                 child: const Text(

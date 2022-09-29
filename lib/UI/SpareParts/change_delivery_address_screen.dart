@@ -81,7 +81,6 @@ class _ChangeDeliveryAddressScreenState
               listener: (context, state) {
                 if (state is PlaceOrderLoadedState) {
                   if (state.placeorderModel.data!.placeOrder.isNotEmpty) {
-                    Fluttertoast.showToast(msg: "Placed order successfully");
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -102,12 +101,12 @@ class _ChangeDeliveryAddressScreenState
               listener: (context, state) {
                 if (state is PlaceOrderAllLoadedState) {
                   if (state.placeorderModel.data!.placeOrder.isNotEmpty) {
-                    Fluttertoast.showToast(msg: "Placed order successfully");
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                Payment_Main_Screen(amount:"",orderid:"")
+                                Payment_Main_Screen(amount: null.toString(),orderid:state
+                                    .placeorderModel.data!.placeOrder.first.id.toString())
 
                         ));
 
