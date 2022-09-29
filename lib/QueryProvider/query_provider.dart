@@ -4190,4 +4190,124 @@ class QueryProvider {
       isTokenThere: true,
     );
   }
+
+  /// placeorderallitem queryprovider
+  fetchServiceplaceorderallitemlist(addressid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String custid = shdPre.getString(SharedPrefKeys.userID).toString();
+    print("noel");
+    print(authToken);
+    String _query = """
+                
+ mutation {
+  placeCartOrder(customerId: $custid, addressId: $addressid) {
+    id
+    oderCode
+    qty
+    totalPrice
+    commision
+    tax
+    paymentType
+    paymentStatus
+    deliverDate
+    dispatchedDate
+    status
+    vendorId
+    customerId
+    vendor {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      status
+      userTypeId
+      jwtToken
+      fcmToken
+      otpCode
+      isProfile
+      otpVerified
+      customer{
+        id
+      }
+      mechanic{
+        id
+      }
+      vendor{
+        id
+      }
+    }
+    customer {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      status
+      userTypeId
+      jwtToken
+      fcmToken
+      otpCode
+      isProfile
+      otpVerified
+      customer{
+        id
+      }
+      mechanic{
+        id
+      }
+      vendor{
+        id
+      }
+    }
+    product {
+      id
+      productCode
+      productName
+      price
+      shippingCharge
+      productImage
+      description
+      quantity
+      status
+      vehicleModelId
+      vendorId
+      user{
+        id
+      }
+      vehicleModel{
+        id
+      }
+      reviewCount
+      avgRate
+      salesCount
+      reviewData{
+        id
+      }
+    }
+    review {
+      id
+      transType
+      rating
+      feedback
+      bookingId
+      orderId
+      status
+    }
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
 }

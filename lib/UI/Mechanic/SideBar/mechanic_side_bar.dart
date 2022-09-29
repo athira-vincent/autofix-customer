@@ -182,7 +182,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           },
         ),
 
-       /* ListTile(
+        /* ListTile(
           contentPadding: EdgeInsets.only(left: 20.4),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
@@ -247,7 +247,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               height: 20.76,
             ),
           ),
-           onTap: () {
+          onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) =>Addpricefault(position: 1,)));
@@ -428,11 +428,11 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
                                     child: ClipOval(
                                         child: profileImageUrl != null && profileImageUrl != ""
                                             ?
-                                         Image.network(profileImageUrl,
+                                        Image.network(profileImageUrl,
                                           width: 150,
                                           height: 150,
                                           fit: BoxFit.cover,
-                                         )
+                                        )
                                             :
                                         SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
                                     )))
@@ -440,7 +440,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
                         ),
                       ),
 
-                     /* Positioned(
+                      /* Positioned(
                         right: 1.5,
                         bottom: 1,
                         child: ClipRRect(
@@ -463,7 +463,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
                   ),
                   Container(
                     margin: EdgeInsets.only(
-                      top: 5
+                        top: 5
                     ),
                     child: Text(
                       //_userName.toString(),

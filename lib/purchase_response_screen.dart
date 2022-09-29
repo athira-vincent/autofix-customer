@@ -1,12 +1,16 @@
 import 'dart:async';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
+
+
+
 class PurchaseResponseScreen extends StatefulWidget {
+
   final bool isSuccess;
 
   PurchaseResponseScreen({required this.isSuccess});
@@ -18,16 +22,12 @@ class PurchaseResponseScreen extends StatefulWidget {
 }
 
 class _PurchaseResponseScreenState extends State<PurchaseResponseScreen> {
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // Timer(const Duration(seconds: 5), () {
-    //   Navigator.pushReplacement(
-    //       context,
-    //       MaterialPageRoute(
-    //           builder: (context) => PurchaseResponseScreen(isSuccess: true,)));
-    // });
+
   }
 
   @override
@@ -51,20 +51,18 @@ class _PurchaseResponseScreenState extends State<PurchaseResponseScreen> {
                 appBarCustomUi(size),
                 mainContent(size),
                 InkWell(
-                    onTap: () {
+                    onTap: (){
                       print("on tap button");
-                      // Navigator.pushReplacement(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => CustomerMainLandingScreen()));
+
+
 
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  CustomerMainLandingScreen()));
+                              builder: (context) => CustomerMainLandingScreen()));
                     },
-                    child: doneButton(size)),
+                    child: doneButton(size)
+                ),
               ],
             ),
           ),
@@ -75,24 +73,11 @@ class _PurchaseResponseScreenState extends State<PurchaseResponseScreen> {
 
   Widget appBarCustomUi(Size size) {
     return Container(
-      margin: EdgeInsets.only(
-        left: size.width * .2 / 100,
-        top: size.height * .2 / 100,
-      ),
-      child: IconButton(
-        icon: Icon(Icons.arrow_back, color: CustColors.warm_grey03),
-        //onPressed: () => Navigator.pop(context),
-        onPressed: () {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CustomerMainLandingScreen()));
-        },
-      ),
+
     );
   }
 
-  Widget mainContent(Size size) {
+  Widget mainContent(Size size){
     return Container(
       height: size.height * 75 / 100,
       width: size.width * 63 / 100,
@@ -105,47 +90,51 @@ class _PurchaseResponseScreenState extends State<PurchaseResponseScreen> {
         alignment: Alignment.topCenter,
         children: [
           Container(
-            margin: EdgeInsets.only(bottom: size.height * 12 / 100),
-            child: Image.asset(
-              "assets/images/img_purchase_bg.png",
-            ),
-          ),
+              margin: EdgeInsets.only(
+                bottom: size.height * 12 / 100
+              ),
+              child: SvgPicture.asset(
+                "assets/images/img_purchase_bg.svg",
+              ),),
           Column(
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 height: size.height * 25 / 100,
-                width: size.width * 30 / 100,
+                width: size.width * 25 / 100,
                 margin: EdgeInsets.only(
                   //left: size.width * 18 / 100,
                   //right: size.width * 18 / 100,
-                  top: size.height * 7 / 100,
+                  top: size.height * 6.5 / 100,
                 ),
-                child: Image.asset(
+                child: SvgPicture.asset(
                   widget.isSuccess
-                      ? "assets/images/ic_success_blue_white.png"
-                      : "assets/images/ic_failed_blue_white.png",
+                  ? "assets/images/ic_success_blue_white.svg"
+                  : "assets/images/ic_failed_blue_white.svg",
                 ),
-              ),
-              Text(
-                widget.isSuccess ? "Thank you !" : "Sorry your ",
-                style: TextStyle(
-                    fontSize: 33.3,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: "SharpSans_Bold",
-                    color: CustColors.materialBlue,
-                    letterSpacing: .5),
               ),
               Text(
                 widget.isSuccess
-                    ? "Purchase was successful"
-                    : "Purchase was unsuccessful",
+                ? "Thank you !"
+                : "Sorry your ",
                 style: TextStyle(
-                    fontSize: widget.isSuccess ? 16.3 : 14.3,
+                  fontSize: 33.3,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: "SharpSans_Bold",
+                  color: CustColors.light_navy,
+                  letterSpacing: .5
+              ),),
+              Text(
+                widget.isSuccess
+                ? "Purchase was successful"
+                : "Purchase was unsuccessful",
+                style: TextStyle(
+                    fontSize: widget.isSuccess ? 21.3 : 20.3,
                     fontWeight: FontWeight.w400,
                     fontFamily: "Samsung_SharpSans_Medium",
                     color: Colors.black,
-                    letterSpacing: .5),
+                    letterSpacing: .5
+                ),
               ),
               // Container(
               //   margin: EdgeInsets.only(
@@ -182,12 +171,13 @@ class _PurchaseResponseScreenState extends State<PurchaseResponseScreen> {
               // )
             ],
           ),
+
         ],
       ),
     );
   }
 
-  Widget doneButton(Size size) {
+  Widget doneButton(Size size){
     return Align(
       alignment: Alignment.center,
       child: Container(
@@ -195,21 +185,24 @@ class _PurchaseResponseScreenState extends State<PurchaseResponseScreen> {
             borderRadius: BorderRadius.all(
               Radius.circular(7),
             ),
-            color: CustColors.materialBlue),
+            color: CustColors.light_navy
+        ),
         height: size.height * 6 / 100,
         width: size.width * 92 / 100,
         child: Center(
           child: Text(
-            "DONE",
+            "DONE" ,
             style: TextStyle(
-                fontSize: 14.3,
-                fontWeight: FontWeight.w600,
-                fontFamily: "SharpSans_Bold",
-                color: Colors.white,
-                letterSpacing: .5),
+              fontSize: 14.3,
+              fontWeight: FontWeight.w600,
+              fontFamily: "SharpSans_Bold",
+              color: Colors.white,
+              letterSpacing: .5
+            ),
           ),
         ),
       ),
     );
   }
+
 }

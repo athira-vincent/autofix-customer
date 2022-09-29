@@ -1,26 +1,13 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/Customer/payment_main_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_state.dart';
-import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_oder_bloc.dart';
-import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_oder_state.dart';
-import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_order_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_state.dart';
 import 'package:auto_fix/UI/SpareParts/change_delivery_address_screen.dart';
-import 'package:auto_fix/UI/SpareParts/purchase_response_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
-import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
-import 'package:auto_fix/Widgets/input_validator.dart';
-import 'package:auto_fix/Widgets/screen_size.dart';
-import 'package:auto_fix/Widgets/show_pop_up_widget.dart';
-import 'package:auto_fix/main.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -46,6 +33,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
   bool _isLoading = false;
   double per = .10;
   double perfont = .10;
+  bool allitems=false;
 
   double _setValue(double value) {
     return value * per + value;
@@ -159,10 +147,10 @@ class _MyCartScreenState extends State<MyCartScreen> {
                     itemCount:
                         state.cartlistmodel.data?.cartList.data.length ?? 0,
                     itemBuilder: (context, index) {
-                      // image = state.cartlistmodel.data!.cartList.data[index].product.productImage
-                      //     .replaceAll("[", "")
-                      //     .replaceAll("]", "")
-                      //     .split(",");
+                      image = state.cartlistmodel.data!.cartList.data[index].product.productImage
+                          .replaceAll("[", "")
+                          .replaceAll("]", "")
+                          .split(",");
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         print("WidgetsBinding");
                         states = state.cartlistmodel.data!.cartList.data[index]
@@ -224,13 +212,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                   ),
                                                 )
                                               : Image.network(
-                                                  state
-                                                      .cartlistmodel
-                                                      .data!
-                                                      .cartList
-                                                      .data[index]
-                                                      .product
-                                                      .productImage,
+                                                  image[0],
                                                   fit: BoxFit.cover,
                                                 ),
                                         ),
@@ -566,7 +548,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                             padding: const EdgeInsets.fromLTRB(
                                                 0, 8, 0, 0),
                                             child: Text(
-                                              "\$ " +
+                                              " ₦" +
                                                   state
                                                       .cartlistmodel
                                                       .data!
@@ -619,12 +601,19 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                                   .product
                                                                   .id
                                                                   .toString(),
+                                                                allitems:false
 
                                                             )));
                                               },
                                               child: Container(
-                                                height: 20,
-                                                width: 70,
+                                                height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                    0.03,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                    0.23,
                                                 alignment: Alignment.center,
                                                 color: CustColors.light_navy,
                                                 child: const Text(
@@ -752,7 +741,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                         width: 70,
                         alignment: Alignment.center,
                         color: CustColors.light_navy,
-                        child: Text(
+                        child: const Text(
                           "Place order",
                           style: Styles.badgeTextStyle1,
                         ),
@@ -803,44 +792,45 @@ class _MyCartScreenState extends State<MyCartScreen> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ChangeDeliveryAddressScreen(
-                                        quantity: "",
-                                        productprice: "",
-                                        productid: "",
-                                      )));
-                        },
-                        child: Container(
-                          height: 25,
-                          width: 60,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: CustColors.light_navy),
-                              borderRadius: BorderRadius.circular(4)),
-                          child: const Text(
-                            "Change",
-                            style: Styles.homeActiveTextStyle,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8),
+              //   child: Column(
+              //     mainAxisAlignment: MainAxisAlignment.end,
+              //     crossAxisAlignment: CrossAxisAlignment.end,
+              //     children: [
+              //       Padding(
+              //         padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+              //         child: InkWell(
+              //           onTap: () {
+              //             Navigator.push(
+              //                 context,
+              //                 MaterialPageRoute(
+              //                     builder: (context) =>
+              //                         ChangeDeliveryAddressScreen(
+              //                           quantity: "",
+              //                           productprice: "",
+              //                           productid: "",
+              //                             allitems:false
+              //                         )));
+              //           },
+              //           child: Container(
+              //             height: 25,
+              //             width: 60,
+              //             alignment: Alignment.center,
+              //             decoration: BoxDecoration(
+              //                 color: Colors.white,
+              //                 border: Border.all(color: CustColors.light_navy),
+              //                 borderRadius: BorderRadius.circular(4)),
+              //             child: const Text(
+              //               "Change",
+              //               style: Styles.homeActiveTextStyle,
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           )),
     );
@@ -992,11 +982,30 @@ class _MyCartScreenState extends State<MyCartScreen> {
                   )
                 : MaterialButton(
                     onPressed: () {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => const Payment_Main_Screen(
+                      //             amount: "", orderid: "")));
+
+
+
+
+
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Payment_Main_Screen(
-                                  amount: "", orderid: "")));
+                              builder: (context) =>
+                                  ChangeDeliveryAddressScreen(
+                                    quantity: "",
+                                    productprice: "",
+                                    productid: "",
+                                    allitems:true
+                                  )));
+
+                      Fluttertoast.showToast(msg: "Confirm Address");
+
                     },
                     child: SizedBox(
                       height: 50,
