@@ -13,6 +13,7 @@ import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -273,13 +274,56 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                             //   ),
                             // ),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
-                              child: Text(
-                                "₦ " +
+                              padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Spacer(),
+                                  Text(
                                     state.sparePartslistModel.data!
-                                        .sparePartsList[index].price
-                                        .toString(),
-                                style: Styles.sparePartOrginalPriceSubTextBlack,
+                                        .sparePartsList[index].avgRate
+                                        .toString()
+                                        .substring(0, 3),
+                                    style: Styles.sparePartOrginalPriceSubTextBlack,
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "₦ " +
+                                        state.sparePartslistModel.data!
+                                            .sparePartsList[index].price
+                                            .toString(),
+                                    style: Styles.sparePartOrginalPriceSubTextBlack,
+                                  ),
+
+                                  SizedBox(
+                                    height: 10,
+                                    child: RatingBar.builder(
+                                      itemSize: 13,
+                                      ignoreGestures: true,
+                                      initialRating: state.sparePartslistModel.data!
+                                          .sparePartsList[index].avgRate
+                                          .toDouble(),
+                                      direction: Axis.horizontal,
+                                      itemCount: 5,
+                                      itemPadding: const EdgeInsets.symmetric(
+                                          horizontal: 1.0),
+                                      itemBuilder: (context, _) => const Icon(
+                                        Icons.star,
+                                        color: CustColors.materialBlue,
+                                      ),
+                                      onRatingUpdate: (rating) {
+                                        print(rating);
+                                      },
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
                             Padding(
