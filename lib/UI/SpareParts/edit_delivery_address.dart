@@ -28,6 +28,7 @@ class Edit_Delivery_Address extends StatefulWidget {
       addressline2,
       type,
       addressid;
+  final int isDefault;
 
   const Edit_Delivery_Address(
       {Key? key,
@@ -39,7 +40,8 @@ class Edit_Delivery_Address extends StatefulWidget {
       required this.addressline1,
       required this.addressline2,
       required this.type,
-      required this.addressid})
+      required this.addressid,
+        required this.isDefault})
       : super(key: key);
 
   @override
@@ -68,11 +70,28 @@ class _Edit_Delivery_AddressState extends State<Edit_Delivery_Address> {
     namecontroller.text = widget.fullname;
     phonecontroller.text = widget.phone;
     pincontroller.text = widget.pincode;
+    isDefault = widget.isDefault;
+    print("isdefault");
+    print(isDefault);
     if (widget.addressline1.isEmpty || widget.addressline2.isEmpty) {
       localitycontroller.text = widget.city;
     } else {
       localitycontroller.text = widget.addressline1 + widget.addressline2;
     }
+
+    setState(() {
+      if (widget.type == "Home") {
+        selectedIndex = 0;
+        type = "Home";
+      } else if (widget.type == "Work") {
+        type = "Work";
+        selectedIndex = 1;
+      } else {
+        type = "Other";
+        selectedIndex = 2;
+      }
+    });
+
     super.initState();
   }
 
@@ -566,13 +585,15 @@ class _Edit_Delivery_AddressState extends State<Edit_Delivery_Address> {
           children: [
             Text("Make this as default address : ", style: hintTextStyle),
             Checkbox(
-              value: value,
+              value: value == true || isDefault == 1 ? true : false,
               onChanged: (value) {
                 setState(() {
                   this.value = value!;
 
                   if (value == true) {
                     isDefault = 1;
+                  } else {
+                    isDefault = 2;
                   }
                 });
               },
