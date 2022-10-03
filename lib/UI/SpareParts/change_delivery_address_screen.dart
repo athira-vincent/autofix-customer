@@ -595,6 +595,7 @@ class _ChangeDeliveryAddressScreenState
                                                                     .selectAddress[
                                                                         index]
                                                                     .id,
+                                                                  isDefault:state.addressModel.data!.selectAddress[index].isDefault
                                                               )));
                                                 },
                                                 child: CircleAvatar(
