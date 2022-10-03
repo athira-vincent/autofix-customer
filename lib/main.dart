@@ -64,14 +64,14 @@ void main() async {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
     await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-
 
     runApp(MyApp());
   }, (error, stackTrace) {
@@ -100,98 +100,93 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarBrightness: Brightness.light,
       statusBarColor:
           CustColors.light_navy, //or set color with: Color(0xFF0000FF)
     ));
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      navigatorKey: navigatorKey,
-      routes: {
-        '/custNotificationList' : (_) => CustNotificationList(),
-        '/mechNotificationList' : (_) => MechanicNotificationList()
-      },
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider.value(
-            value: LocaleProvider(),
-          ),
-          ChangeNotifierProvider.value(
-            value: ProfileDataProvider(),
-          ),
-          ChangeNotifierProvider.value(
-            value: JobRequestNotifyProvider(),
-          ),
-        ],
-        child: Sizer(
-          builder: (context, orientation, deviceType) {
-            return MultiBlocProvider(
-              providers: [
-                BlocProvider<AddCartBloc>(
-                  create: (context) => AddCartBloc(),
-                ),
-                BlocProvider<SparePartListBloc>(
-                  create: (context) => SparePartListBloc(),
-                ),
-                BlocProvider(
-                  create: (context) =>
-                      ShowCartPopBloc()..add(FetchShowCartPopEvent()),
-                ),
-                BlocProvider<DeleteCartBloc>(
-                  create: (context) => DeleteCartBloc(),
-                ),
-                BlocProvider<AddressBloc>(
-                  create: (context) => AddressBloc(),
-                ),
-                BlocProvider<AddAddressBloc>(
-                  create: (context) => AddAddressBloc(),
-                ),
-                BlocProvider<EditAddressBloc>(
-                  create: (context) => EditAddressBloc(),
-                ),
-                BlocProvider<DeleteAddressBloc>(
-                  create: (context) => DeleteAddressBloc(),
-                ),
-                BlocProvider<PlaceOrderBloc>(
-                  create: (context) => PlaceOrderBloc(),
-                ),
-                BlocProvider<PlaceOrderAllBloc>(
-                  create: (context) => PlaceOrderAllBloc(),
-                ),
-                BlocProvider<OrderListBloc>(
-                  create: (context) => OrderListBloc(),
-                ),
-                BlocProvider<CancelOrderBloc>(
-                  create: (context) => CancelOrderBloc(),
-                ),
-                BlocProvider<CodBloc>(
-                  create: (context) => CodBloc(),
-                ),
-                BlocProvider<CustRatingBloc>(
-                  create: (context) => CustRatingBloc(),
-                ),
-                BlocProvider<CustomerWalletBloc>(
-                  create: (context) => CustomerWalletBloc(),
-                ),
-              ],
-              child: MaterialApp(
-                debugShowCheckedModeBanner: false,
-                locale: _locale,
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
-                supportedLocales: AppLocalizations.supportedLocales,
-                title: 'ResolMech',
-                theme: ThemeData(
-                  primaryColor: Colors.white,
-                  primarySwatch: CustColors.materialBlue,
-                ),
-                home: SplashScreen(),
-                //home: ChatScreen(peerId: "123"),
-              ),
-            );
-          },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: LocaleProvider(),
         ),
+        ChangeNotifierProvider.value(
+          value: ProfileDataProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: JobRequestNotifyProvider(),
+        ),
+      ],
+      child: Sizer(
+        builder: (context, orientation, deviceType) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<AddCartBloc>(
+                create: (context) => AddCartBloc(),
+              ),
+              BlocProvider<SparePartListBloc>(
+                create: (context) => SparePartListBloc(),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    ShowCartPopBloc()..add(FetchShowCartPopEvent()),
+              ),
+              BlocProvider<DeleteCartBloc>(
+                create: (context) => DeleteCartBloc(),
+              ),
+              BlocProvider<AddressBloc>(
+                create: (context) => AddressBloc(),
+              ),
+              BlocProvider<AddAddressBloc>(
+                create: (context) => AddAddressBloc(),
+              ),
+              BlocProvider<EditAddressBloc>(
+                create: (context) => EditAddressBloc(),
+              ),
+              BlocProvider<DeleteAddressBloc>(
+                create: (context) => DeleteAddressBloc(),
+              ),
+              BlocProvider<PlaceOrderBloc>(
+                create: (context) => PlaceOrderBloc(),
+              ),
+              BlocProvider<PlaceOrderAllBloc>(
+                create: (context) => PlaceOrderAllBloc(),
+              ),
+              BlocProvider<OrderListBloc>(
+                create: (context) => OrderListBloc(),
+              ),
+              BlocProvider<CancelOrderBloc>(
+                create: (context) => CancelOrderBloc(),
+              ),
+              BlocProvider<CodBloc>(
+                create: (context) => CodBloc(),
+              ),
+              BlocProvider<CustRatingBloc>(
+                create: (context) => CustRatingBloc(),
+              ),
+              BlocProvider<CustomerWalletBloc>(
+                create: (context) => CustomerWalletBloc(),
+              ),
+            ],
+            child: MaterialApp(
+              routes: {
+                '/custNotificationList': (_) => CustNotificationList(),
+                '/mechNotificationList': (_) => MechanicNotificationList()
+              },
+              debugShowCheckedModeBanner: false,
+              locale: _locale,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              title: 'ResolMech',
+              theme: ThemeData(
+                primaryColor: Colors.white,
+                primarySwatch: CustColors.materialBlue,
+              ),
+              home: SplashScreen(),
+              //home: ChatScreen(peerId: "123"),
+            ),
+          );
+        },
       ),
     );
   }

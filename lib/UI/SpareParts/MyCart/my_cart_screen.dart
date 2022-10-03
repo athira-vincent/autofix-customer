@@ -33,7 +33,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
   bool _isLoading = false;
   double per = .10;
   double perfont = .10;
-  bool allitems=false;
+  bool allitems = false;
 
   double _setValue(double value) {
     return value * per + value;
@@ -147,7 +147,8 @@ class _MyCartScreenState extends State<MyCartScreen> {
                     itemCount:
                         state.cartlistmodel.data?.cartList.data.length ?? 0,
                     itemBuilder: (context, index) {
-                      image = state.cartlistmodel.data!.cartList.data[index].product.productImage
+                      image = state.cartlistmodel.data!.cartList.data[index]
+                          .product.productImage
                           .replaceAll("[", "")
                           .replaceAll("]", "")
                           .split(",");
@@ -344,6 +345,77 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                                     .quantity
                                                                     .toString(),
                                                                 "1"));
+                                                          } else {
+                                                            print("jambu");
+                                                            showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (context) {
+                                                                  return CupertinoAlertDialog(
+                                                                    title: const Text(
+                                                                        "Confirm",
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontFamily:
+                                                                              'Formular',
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                          fontSize:
+                                                                              18,
+                                                                          color:
+                                                                              CustColors.materialBlue,
+                                                                        )),
+                                                                    content:
+                                                                        const Text(
+                                                                            "Are you sure you want to delete?"),
+                                                                    actions: <
+                                                                        Widget>[
+                                                                      CupertinoDialogAction(
+                                                                          textStyle:
+                                                                              const TextStyle(
+                                                                            color:
+                                                                                CustColors.rusty_red,
+                                                                            fontWeight:
+                                                                                FontWeight.normal,
+                                                                          ),
+                                                                          isDefaultAction:
+                                                                              true,
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.pop(context);
+                                                                          },
+                                                                          child:
+                                                                              const Text("No")),
+                                                                      CupertinoDialogAction(
+                                                                          textStyle:
+                                                                              const TextStyle(
+                                                                            color:
+                                                                                CustColors.rusty_red,
+                                                                            fontWeight:
+                                                                                FontWeight.normal,
+                                                                          ),
+                                                                          isDefaultAction:
+                                                                              true,
+                                                                          onPressed:
+                                                                              () async {
+                                                                            final deletcartBloc =
+                                                                                BlocProvider.of<DeleteCartBloc>(context);
+                                                                            deletcartBloc.add(FetchDeleteCartEvent(
+                                                                                state.cartlistmodel.data!.cartList.data[index].product.id.toString(),
+                                                                                "1",
+                                                                                "0"));
+                                                                            Navigator.pop(context);
+                                                                            Fluttertoast.showToast(
+                                                                              msg: "Removed from cart successfully!!",
+                                                                              timeInSecForIosWeb: 1,
+                                                                            );
+                                                                          },
+                                                                          child:
+                                                                              const Text("Yes")),
+                                                                    ],
+                                                                  );
+                                                                });
                                                           }
                                                         },
                                                         child: Container(
@@ -537,10 +609,13 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                       );
                                                     });
                                               },
-                                              child: SvgPicture.asset(
-                                                'assets/image/home_customer/deleteMyCart.svg',
-                                                height: 20,
-                                                width: 20,
+                                              child: Visibility(
+                                                visible: false,
+                                                child: SvgPicture.asset(
+                                                  'assets/image/home_customer/deleteMyCart.svg',
+                                                  height: 20,
+                                                  width: 20,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -566,53 +641,54 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                 0, 8, 0, 0),
                                             child: InkWell(
                                               onTap: () {
-
-                                                int totalprice= state
-                                                    .cartlistmodel
-                                                    .data!
-                                                    .cartList
-                                                    .data[index]
-                                                    .quantity*state
-                                                    .cartlistmodel
-                                                    .data!
-                                                    .cartList
-                                                    .data[index]
-                                                    .product
-                                                    .price;
+                                                int totalprice = state
+                                                        .cartlistmodel
+                                                        .data!
+                                                        .cartList
+                                                        .data[index]
+                                                        .quantity *
+                                                    state
+                                                        .cartlistmodel
+                                                        .data!
+                                                        .cartList
+                                                        .data[index]
+                                                        .product
+                                                        .price;
 
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             ChangeDeliveryAddressScreen(
-                                                              quantity: state
-                                                                  .cartlistmodel
-                                                                  .data!
-                                                                  .cartList
-                                                                  .data[index]
-                                                                  .quantity
-                                                                  .toString(),
-                                                              productprice: totalprice.toString(),
-                                                              productid: state
-                                                                  .cartlistmodel
-                                                                  .data!
-                                                                  .cartList
-                                                                  .data[index]
-                                                                  .product
-                                                                  .id
-                                                                  .toString(),
-                                                                allitems:false
-
-                                                            )));
+                                                                quantity: state
+                                                                    .cartlistmodel
+                                                                    .data!
+                                                                    .cartList
+                                                                    .data[index]
+                                                                    .quantity
+                                                                    .toString(),
+                                                                productprice:
+                                                                    totalprice
+                                                                        .toString(),
+                                                                productid: state
+                                                                    .cartlistmodel
+                                                                    .data!
+                                                                    .cartList
+                                                                    .data[index]
+                                                                    .product
+                                                                    .id
+                                                                    .toString(),
+                                                                allitems:
+                                                                    false)));
                                               },
                                               child: Container(
                                                 height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
+                                                        .size
+                                                        .height *
                                                     0.03,
                                                 width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
+                                                        .size
+                                                        .width *
                                                     0.23,
                                                 alignment: Alignment.center,
                                                 color: CustColors.light_navy,
@@ -988,24 +1064,16 @@ class _MyCartScreenState extends State<MyCartScreen> {
                       //         builder: (context) => const Payment_Main_Screen(
                       //             amount: "", orderid: "")));
 
-
-
-
-
-
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  ChangeDeliveryAddressScreen(
-                                    quantity: "",
-                                    productprice: "",
-                                    productid: "",
-                                    allitems:true
-                                  )));
+                              builder: (context) => ChangeDeliveryAddressScreen(
+                                  quantity: "",
+                                  productprice: "",
+                                  productid: "",
+                                  allitems: true)));
 
                       Fluttertoast.showToast(msg: "Confirm Address");
-
                     },
                     child: SizedBox(
                       height: 50,
