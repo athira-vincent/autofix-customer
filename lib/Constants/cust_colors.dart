@@ -77,5 +77,6 @@ class CustColors {
   static const pinkish_grey05= Color(0xffc7c7c7);
   static const chatcolor= Color(0xffE6E6E6);
   static const grey_04= Color(0xffbdc5dc);
+  static const addresstilecolor=Color(0xffd4d4d8);
 
 }
