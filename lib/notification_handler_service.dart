@@ -5,6 +5,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -105,7 +106,6 @@ void setupFcm() {
           htmlFormatSummaryText: true,
           hideExpandedLargeIcon: true,
         );
-
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
           notification.title,
@@ -166,8 +166,8 @@ Future<void> goToNextScreen(Map<String, dynamic> data) async {
   );
   SharedPreferences _shdPre = await SharedPreferences.getInstance();
   String? _token = _shdPre.getString(SharedPrefKeys.token.toString());
-  String? userTypeId = _shdPre.getString(SharedPrefKeys.userType.toString());
-  print(' $_token ============= ');
+  String? userType = _shdPre.getString(SharedPrefKeys.userType);
+  print(' $userType ============= ');
 
   if (data['click_action'] != null) {
 
@@ -175,7 +175,7 @@ Future<void> goToNextScreen(Map<String, dynamic> data) async {
         msg: "Notification hit on change screen",
       timeInSecForIosWeb: 15
     );
-    if(userTypeId.toString() == TextStrings.user_customer){
+    if(userType.toString() == TextStrings.user_customer){
       navigatorKey.currentState!.pushNamed('/custNotificationList',);
     }else{
       navigatorKey.currentState!.pushNamed('/mechNotificationList',);
@@ -205,4 +205,39 @@ Future<String> _base64encodedImage(String url) async {
   return base64Data;
 }
 
+Future<void> showNotificationWithChronometer() async {
+  final AndroidNotificationDetails androidNotificationDetails =
+  AndroidNotificationDetails(
+    channel.id,
+    channel.name,
+    channelDescription: channel.description,
+    importance: Importance.max,
+    priority: Priority.high,
+    when: DateTime.now().millisecondsSinceEpoch - 120 * 1000,
+    usesChronometer: true,
+    ongoing: true,
+    autoCancel: false,
+    color: Colors.red,
+    colorized: true,
+  );
+  final NotificationDetails notificationDetails =
+  NotificationDetails(android: androidNotificationDetails);
+  await flutterLocalNotificationsPlugin.show(
+      0, 'plain title', 'plain body', notificationDetails,
+      payload: 'item x');
+}
+
+showSimpleNotification() async {
+  var androidDetails = AndroidNotificationDetails(
+      channel.id,
+      channel.name,
+      channelDescription: channel.description,
+      priority: Priority.high,
+      importance: Importance.max
+  );
+  var iOSDetails = IOSNotificationDetails();
+  var platformDetails = new NotificationDetails(android: androidDetails, iOS: iOSDetails);
+  await flutterLocalNotificationsPlugin.show(0, 'Flutter Local Notification', 'Flutter Simple Notification',
+      platformDetails, payload: 'Destination Screen (Simple Notification)');
+}
 

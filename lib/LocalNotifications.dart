@@ -45,7 +45,8 @@ class _LocalNotificationsState extends State<LocalNotifications> {
           if (notificationResponse != null) {
             print('notification payload: $payload');
             if (payload != null) {
-              Map<String, dynamic> data = json.decode(payload);
+              //Map<String, dynamic> data = json.decode(payload);
+
               onClickNotification(payload);
             }
             Fluttertoast.showToast(
@@ -65,6 +66,7 @@ class _LocalNotificationsState extends State<LocalNotifications> {
   }
 
   Future onClickNotification(String payload) async {
+    print(">>> onClickNotification");
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
       return DestinationScreen(
         payload: payload,
@@ -183,7 +185,10 @@ class _LocalNotificationsState extends State<LocalNotifications> {
         importance: Importance.max,
         priority: Priority.high,
         ongoing: true,
-        autoCancel: false);
+        autoCancel: false,
+        color: Colors.blue,
+        colorized: true,
+    );
     const iOSDetails = IOSNotificationDetails();
     const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails, iOS: iOSDetails);
     await flutterLocalNotificationsPlugin.show(0, 'Flutter Local Notification', 'Flutter Ongoing Notification',
@@ -213,6 +218,28 @@ class _LocalNotificationsState extends State<LocalNotifications> {
             notificationDetails, payload: 'Destination Screen(Progress Notification)');
       });
     }
+  }
+
+  Future<void> _showNotificationWithChronometer() async {
+    final AndroidNotificationDetails androidNotificationDetails =
+    AndroidNotificationDetails(
+      channel.id,
+      channel.name,
+      channelDescription: channel.description,
+      importance: Importance.max,
+      priority: Priority.high,
+      when: DateTime.now().millisecondsSinceEpoch - 120 * 1000,
+      usesChronometer: true,
+      ongoing: true,
+      autoCancel: false,
+      color: Colors.red,
+      colorized: true,
+    );
+    final NotificationDetails notificationDetails =
+    NotificationDetails(android: androidNotificationDetails);
+    await flutterLocalNotificationsPlugin.show(
+        0, 'plain title', 'plain body', notificationDetails,
+        payload: 'item x');
   }
 
   @override
@@ -262,6 +289,12 @@ class _LocalNotificationsState extends State<LocalNotifications> {
               RaisedButton(
                 child: Text('Progress Notification'),
                 onPressed: () => showProgressNotification(),
+              ),
+
+              SizedBox(height: 15),
+              RaisedButton(
+                child: Text('Chronometer Notification'),
+                onPressed: () => _showNotificationWithChronometer(),
               ),
             ],
           ),

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/LocalNotifications.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/Provider/chat_provider.dart';
 import 'package:auto_fix/Provider/jobRequestNotifyProvider/job_request_notify_provider.dart';
@@ -99,6 +100,13 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    requestPermissions();
+    setupFcm();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarBrightness: Brightness.light,
@@ -169,6 +177,7 @@ class _MyAppState extends State<MyApp> {
               ),
             ],
             child: MaterialApp(
+              navigatorKey: navigatorKey,
               routes: {
                 '/custNotificationList': (_) => CustNotificationList(),
                 '/mechNotificationList': (_) => MechanicNotificationList()
@@ -183,11 +192,20 @@ class _MyAppState extends State<MyApp> {
                 primarySwatch: CustColors.materialBlue,
               ),
               home: SplashScreen(),
+              //home: LocalNotifications(title: "abc"),
               //home: ChatScreen(peerId: "123"),
             ),
           );
         },
       ),
+    );
+  }
+
+  void requestPermissions() {
+    flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()?.requestPermissions(
+      alert: true,
+      badge: true,
+      sound: true,
     );
   }
 }
