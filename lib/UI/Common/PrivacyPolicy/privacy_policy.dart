@@ -1,3 +1,4 @@
+import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -9,6 +10,15 @@ class Privacypolicy extends StatefulWidget {
 
 }
 class _Privacypolicy extends State<Privacypolicy>{
+  bool? isLoading;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isLoading = true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,14 +41,39 @@ class _Privacypolicy extends State<Privacypolicy>{
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Container(
-          child: WebView(
-            initialUrl: "https://autofix-web.techlabz.in/privacy-policy",
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
+              child: WebView(
+                initialUrl: "https://autofix-web.techlabz.in/privacy-policy",
+                onProgress: (val){
+                  print("finish >>> $val" );
+                  if(val == 100){
+                    setState(() {
+                      isLoading = false;
+                    });
+                  }else{
+                    setState(() {
+                      isLoading = true;
+                    });
+                  }
+                },
+              ),
             ),
-        ),
+          ),
+          Visibility(
+            visible: isLoading!,
+            child: Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    CustColors.light_navy),
+              ),
+            ),
+          )
+        ],
       ),
-      );
+     );
   }
 }

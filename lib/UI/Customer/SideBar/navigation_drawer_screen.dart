@@ -553,6 +553,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             ),
             isDefaultAction: true,
             onPressed: () {
+              Navigator.pop(context);
               Navigator.pop(dialogContext!);
             },
             child: const Text("Cancel")),
@@ -564,6 +565,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             isDefaultAction: true,
             onPressed: () async {
               setState(() {
+                Navigator.pop(context);
                 Navigator.pop(dialogContext!);
                 setDeactivate();
                 Navigator.pushAndRemoveUntil(

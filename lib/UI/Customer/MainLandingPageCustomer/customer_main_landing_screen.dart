@@ -347,7 +347,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
     return WillPopScope(
       onWillPop: () async {
         final difference = DateTime.now().difference(timeBackPressed);
-        final isExitWarning = difference >= Duration(seconds: 2);
+        final isExitWarning = difference >= Duration(seconds: 3);
         timeBackPressed = DateTime.now();
         if (isExitWarning) {
           /* final message = 'Press back again to exit';
@@ -357,7 +357,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
         } else {
           //Fluttertoast.cancel();
           ShowPopUpWidget().showPopUp(context);
-          return true;
+          return false;
         }
       },
       child: Scaffold(
