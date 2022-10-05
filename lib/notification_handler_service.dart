@@ -84,70 +84,68 @@ void setupFcm() {
     onDone: () {},
   );
 
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+  FirebaseMessaging.onMessage.listen((RemoteMessage remoteMessage) async {
     Fluttertoast.showToast(
         msg:
         "Notification on message listen");
-    RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
+    RemoteNotification? notification = remoteMessage.notification;
+    AndroidNotification? android = remoteMessage.notification?.android;
     if (notification != null && android != null) {
-      if (android.imageUrl != null && android.imageUrl!.trim().isNotEmpty) {
+      if (remoteMessage.notification?.android!.imageUrl != null
+          && remoteMessage.notification!.android!.imageUrl!.trim().isNotEmpty) {
         final String largeIcon = await _base64encodedImage(
-          android.imageUrl!,
+          remoteMessage.notification!.android!.imageUrl!,
         );
 
         final BigPictureStyleInformation bigPictureStyleInformation =
         BigPictureStyleInformation(
           ByteArrayAndroidBitmap.fromBase64String(largeIcon),
           largeIcon: ByteArrayAndroidBitmap.fromBase64String(largeIcon),
-          contentTitle: notification.title,
+          contentTitle: remoteMessage.notification!.title,
           htmlFormatContentTitle: true,
-          summaryText: notification.body,
+          summaryText: remoteMessage.notification!.body,
           htmlFormatSummaryText: true,
           hideExpandedLargeIcon: true,
         );
         flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
+          remoteMessage.hashCode,
+          remoteMessage.notification!.title,
+          remoteMessage.notification!.body,
           NotificationDetails(
             android: AndroidNotificationDetails(
               channel.id,
               channel.name,
               channelDescription: channel.description,
               icon: 'mipmap/ic_launcher',
-              color: CustColors.cloudy_blue,
               importance: Importance.max,
               priority: Priority.high,
               largeIcon: ByteArrayAndroidBitmap.fromBase64String(largeIcon),
               styleInformation: bigPictureStyleInformation,
             ),
           ),
-          payload: json.encode(message.data),
+          payload: json.encode(remoteMessage.data),
         );
       }
       else {
         flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
+          remoteMessage.hashCode,
+          remoteMessage.notification!.title,
+          remoteMessage.notification!.body,
           NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channelDescription: channel.description,
-              icon: 'mipmap/ic_launcher',
-              color: CustColors.cloudy_blue,
-              importance: Importance.max,
-              priority: Priority.high,
-            ),
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                channelDescription: channel.description,
+                importance: Importance.max,
+                priority: Priority.high,
+              ),
+              iOS: IOSNotificationDetails()
           ),
-          payload: json.encode(message.data),
+          payload: json.encode(remoteMessage.data),
         );
       }
     }
   });
-
 }
 
 Future<void> deleteFcmToken() async {
@@ -171,14 +169,14 @@ Future<void> goToNextScreen(Map<String, dynamic> data) async {
 
   if (data['click_action'] != null) {
 
-    Fluttertoast.showToast(
+    /*Fluttertoast.showToast(
         msg: "Notification hit on change screen",
       timeInSecForIosWeb: 15
-    );
+    );*/
     if(userType.toString() == TextStrings.user_customer){
-      navigatorKey.currentState!.pushNamed('/custNotificationList',);
+      notificationNavigatorKey.currentState!.pushNamed('/custNotificationList',);
     }else{
-      navigatorKey.currentState!.pushNamed('/mechNotificationList',);
+      notificationNavigatorKey.currentState!.pushNamed('/mechNotificationList',);
     }
     /*switch (data['click_action']) {
       case "first_screen":
@@ -205,39 +203,143 @@ Future<String> _base64encodedImage(String url) async {
   return base64Data;
 }
 
-Future<void> showNotificationWithChronometer() async {
-  final AndroidNotificationDetails androidNotificationDetails =
-  AndroidNotificationDetails(
-    channel.id,
-    channel.name,
-    channelDescription: channel.description,
-    importance: Importance.max,
-    priority: Priority.high,
-    when: DateTime.now().millisecondsSinceEpoch - 120 * 1000,
-    usesChronometer: true,
-    ongoing: true,
-    autoCancel: false,
-    color: Colors.red,
-    colorized: true,
+Future<void> showNotificationWithChronometer(RemoteMessage remoteMessage) async {
+
+  print("showNotificationWithChronometer");
+  Fluttertoast.showToast(
+      msg: "showNotificationWithChronometer",
+      timeInSecForIosWeb: 25
   );
-  final NotificationDetails notificationDetails =
-  NotificationDetails(android: androidNotificationDetails);
-  await flutterLocalNotificationsPlugin.show(
-      0, 'plain title', 'plain body', notificationDetails,
-      payload: 'item x');
+
+  if (remoteMessage.notification?.android!.imageUrl != null
+      && remoteMessage.notification!.android!.imageUrl!.trim().isNotEmpty) {
+    final String largeIcon = await _base64encodedImage(
+      remoteMessage.notification!.android!.imageUrl!,
+    );
+
+    final BigPictureStyleInformation bigPictureStyleInformation =
+    BigPictureStyleInformation(
+      ByteArrayAndroidBitmap.fromBase64String(largeIcon),
+      largeIcon: ByteArrayAndroidBitmap.fromBase64String(largeIcon),
+      contentTitle: remoteMessage.notification!.title,
+      htmlFormatContentTitle: true,
+      summaryText: remoteMessage.notification!.body,
+      htmlFormatSummaryText: true,
+      hideExpandedLargeIcon: true,
+    );
+    flutterLocalNotificationsPlugin.show(
+      remoteMessage.hashCode,
+      remoteMessage.notification!.title,
+      remoteMessage.notification!.body,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            icon: 'mipmap/ic_launcher',
+            importance: Importance.max,
+            priority: Priority.high,
+            largeIcon: ByteArrayAndroidBitmap.fromBase64String(largeIcon),
+            styleInformation: bigPictureStyleInformation,
+            when: DateTime.now().millisecondsSinceEpoch - 120 * 1000,
+            usesChronometer: true,
+            ongoing: true,
+            autoCancel: false,
+            color: const Color.fromARGB(255, 255, 0, 0),
+            ledColor: const Color.fromARGB(255, 255, 0, 0),
+            ledOnMs: 1000,
+            ledOffMs: 500
+          // color: Color.fromARGB(0, 50, 0, 0),
+          // colorized: true,
+        ),
+      ),
+      payload: json.encode(remoteMessage.data),
+    );
+  }
+  else {
+    flutterLocalNotificationsPlugin.show(
+      remoteMessage.hashCode,
+      remoteMessage.notification!.title,
+      remoteMessage.notification!.body,
+      NotificationDetails(
+          android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channelDescription: channel.description,
+              importance: Importance.max,
+              priority: Priority.high,
+              when: DateTime.now().millisecondsSinceEpoch - 120 * 1000,
+              usesChronometer: true,
+              ongoing: true,
+              autoCancel: false,
+              color: const Color.fromARGB(255, 255, 0, 0),
+              ledColor: const Color.fromARGB(255, 255, 0, 0),
+              ledOnMs: 1000,
+              ledOffMs: 500
+          ),
+          iOS: IOSNotificationDetails()
+      ),
+      payload: json.encode(remoteMessage.data),
+    );
+  }
 }
 
-showSimpleNotification() async {
-  var androidDetails = AndroidNotificationDetails(
-      channel.id,
-      channel.name,
-      channelDescription: channel.description,
-      priority: Priority.high,
-      importance: Importance.max
-  );
-  var iOSDetails = IOSNotificationDetails();
-  var platformDetails = new NotificationDetails(android: androidDetails, iOS: iOSDetails);
-  await flutterLocalNotificationsPlugin.show(0, 'Flutter Local Notification', 'Flutter Simple Notification',
-      platformDetails, payload: 'Destination Screen (Simple Notification)');
+showSimpleNotification(RemoteMessage remoteMessage) async {
+
+  if (remoteMessage.notification?.android!.imageUrl != null
+      && remoteMessage.notification!.android!.imageUrl!.trim().isNotEmpty) {
+    final String largeIcon = await _base64encodedImage(
+      remoteMessage.notification!.android!.imageUrl!,
+    );
+
+    final BigPictureStyleInformation bigPictureStyleInformation =
+    BigPictureStyleInformation(
+      ByteArrayAndroidBitmap.fromBase64String(largeIcon),
+      largeIcon: ByteArrayAndroidBitmap.fromBase64String(largeIcon),
+      contentTitle: remoteMessage.notification!.title,
+      htmlFormatContentTitle: true,
+      summaryText: remoteMessage.notification!.body,
+      htmlFormatSummaryText: true,
+      hideExpandedLargeIcon: true,
+    );
+    flutterLocalNotificationsPlugin.show(
+      remoteMessage.notification.hashCode,
+      remoteMessage.notification!.title,
+      remoteMessage.notification!.body,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          channelDescription: channel.description,
+          icon: 'mipmap/ic_launcher',
+          color: CustColors.cloudy_blue,
+          importance: Importance.max,
+          priority: Priority.high,
+          largeIcon: ByteArrayAndroidBitmap.fromBase64String(largeIcon),
+          styleInformation: bigPictureStyleInformation,
+        ),
+      ),
+      payload: json.encode(remoteMessage.data),
+    );
+  }
+  else {
+    flutterLocalNotificationsPlugin.show(
+          remoteMessage.notification.hashCode,
+          remoteMessage.notification!.title,
+          remoteMessage.notification!.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channelDescription: channel.description,
+              icon: 'mipmap/ic_launcher',
+              color: CustColors.cloudy_blue,
+              importance: Importance.max,
+              priority: Priority.high,
+            ),
+          ),
+          payload: json.encode(remoteMessage.data),
+        );
+  }
 }
 

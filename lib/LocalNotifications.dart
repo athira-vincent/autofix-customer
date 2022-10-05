@@ -25,6 +25,7 @@ class _LocalNotificationsState extends State<LocalNotifications> {
     'Notification',
     description: 'notifications from Your App Name.',
     importance: Importance.high,
+    //ledColor: Color.fromARGB(255, 255, 0, 0),
   );
 
   @override
@@ -234,6 +235,10 @@ class _LocalNotificationsState extends State<LocalNotifications> {
       autoCancel: false,
       color: Colors.red,
       colorized: true,
+        // enableLights: true,
+        // ledColor: const Color.fromARGB(255, 255, 0, 0),
+        // ledOnMs: 1000,
+        // ledOffMs: 500,
     );
     final NotificationDetails notificationDetails =
     NotificationDetails(android: androidNotificationDetails);

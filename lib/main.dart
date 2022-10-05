@@ -80,7 +80,7 @@ void main() async {
   });
 }
 
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> notificationNavigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   @override
@@ -177,7 +177,7 @@ class _MyAppState extends State<MyApp> {
               ),
             ],
             child: MaterialApp(
-              navigatorKey: navigatorKey,
+              navigatorKey: notificationNavigatorKey,
               routes: {
                 '/custNotificationList': (_) => CustNotificationList(),
                 '/mechNotificationList': (_) => MechanicNotificationList()
