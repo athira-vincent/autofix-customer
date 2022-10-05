@@ -366,20 +366,20 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                                 borderRadius: BorderRadius.circular(20.0),
                                 child: _images == null
                                     ? Container(
-                                    child:CircleAvatar(
-                                        radius: 50,
-                                        backgroundColor: Colors.white,
-                                        child: ClipOval(
-                                          child:  SvgPicture.asset('assets/image/CustomerType/upload_car_avathar.svg'),
-                                        )))
+                                      child:CircleAvatar(
+                                          radius: 50,
+                                          backgroundColor: Colors.white,
+                                          child: ClipOval(
+                                            child:  SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg'),
+                                          )))
                                     : Container(
-                                  height: 100,
-                                  width: 100,
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    backgroundImage: FileImage(_images!),
-                                  ),
-                                ),
+                                      height: 100,
+                                      width: 100,
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        backgroundImage: FileImage(_images!),
+                                      ),
+                                    ),
                               ),
                             ),
                           ),

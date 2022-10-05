@@ -255,15 +255,16 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
         InkWell(
           onTap: () async {
             var datePicked = await DatePicker.showSimpleDatePicker(context,
-                    initialDate: DateTime(2022),
-                    firstDate: DateTime(2022),
-                    lastDate: DateTime(2050),
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(DateTime.now().year - 10),
+                    lastDate: DateTime.now(),
                     dateFormat: "dd-MMMM-yyyy",
                     locale: DateTimePickerLocale.en_us,
-                    looping: true,
+                    looping: false,
+                    textColor: CustColors.light_navy,
                     itemTextStyle: const TextStyle(
                         fontSize: 18,
-                        color: Colors.black,
+                        color: CustColors.light_navy,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Samsung_SharpSans_Medium'))
                 .then((datePicked) {
@@ -302,14 +303,14 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                     ),
                   ),
                   Container(
-                    color: CustColors.blue,
+                    color: CustColors.light_navy,
                     child: Padding(
                       padding: const EdgeInsets.only(
-                          top: 6, left: 6, bottom: 6, right: 4),
+                          top: 6.5, left: 6.5, bottom: 6.5, right: 4.3),
                       child: SvgPicture.asset(
                         'assets/image/ic_calender.svg',
-                        height: 20,
-                        width: 20,
+                        height: 18,
+                        width: 18,
                         color: Colors.white,
                       ),
                     ),

@@ -262,11 +262,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             alignment: Alignment(-1.21, 0),
             child: Text(
               "Notification",
-              style: TextStyle(
-                  fontFamily: 'Corbel_Regular',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14.5,
-                  color: CustColors.blue),
+              style: Styles.navDrawerTextStyle02,
             ),
           ),
           leading: Container(
