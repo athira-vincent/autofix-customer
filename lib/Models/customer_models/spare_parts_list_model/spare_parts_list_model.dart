@@ -98,7 +98,7 @@ class SparePartsList {
     vehicleModel: VehicleModel.fromMap(json["vehicleModel"]),
     inCart: json["inCart"],
     reviewCount: json["reviewCount"],
-    avgRate: json["avgRate"],
+    avgRate: json["avgRate"].toDouble(),
 
   );
 
