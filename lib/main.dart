@@ -192,6 +192,7 @@ class _MyAppState extends State<MyApp> {
                 primarySwatch: CustColors.materialBlue,
               ),
               home: SplashScreen(),
+
               //home: LocalNotifications(title: "abc"),
               //home: ChatScreen(peerId: "123"),
             ),
