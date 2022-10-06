@@ -710,34 +710,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
       decoration: InputDecoration(
         hintText: 'Search spare parts for your vehicle',
         contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 5.0),
-        prefixIcon: InkWell(
-          onTap: () async {
-            // SharedPreferences shdPre = await SharedPreferences.getInstance();
-            // setState(() {
-            //   ischanged = true;
-            //   shdPre.setString("ischanged", ischanged.toString());
-            //
-            //   final addcartsBloc = BlocProvider.of<SparePartListBloc>(context);
-            //   addcartsBloc.add(FetchSparePartListEvent(
-            //       widget.modelname.toString(),
-            //       searchController.text.toString(),
-            //       "null",
-            //       "null",
-            //       "null"));
-            // });
-            //
-            //
-            //
-            // Navigator.pushReplacement(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (BuildContext context) => Search_Spare_Parts(
-            //             changestatus: ischanged,
-            //             modelname: widget.modelname,
-            //             searchkey: searchController.text)));
-          },
-          child: const Icon(Icons.search_rounded, color: CustColors.light_navy),
-        ),
+        prefixIcon: const Icon(Icons.search_rounded, color: CustColors.light_navy),
         border: OutlineInputBorder(
             borderSide: const BorderSide(color: CustColors.whiteBlueish),
             borderRadius: BorderRadius.circular(0.0)),

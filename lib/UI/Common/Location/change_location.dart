@@ -79,7 +79,29 @@ class _ChangeLocationScreenState extends State<ChangeLocationScreen> {
     LatLng latLng = LatLng(lat, long);
     getBytesFromAsset('assets/image/mechanicTracking/carMapIcon.png', 150).then((onValue) {
       customerIcon = BitmapDescriptor.fromBytes(onValue);
-      markers.add(Marker( //add start location marker
+      markers.add(Marker(
+        onDragEnd: (result){
+          setState(() {
+            selectedLatLng = result;
+            print("Print Val >>> " + result.toString());
+            customerMarker(result.latitude, result.longitude);
+            ///----------------------- address change here
+            //locationAddress = result
+            mapController!.animateCamera(
+                CameraUpdate.newCameraPosition(
+                    CameraPosition(
+                        target: LatLng(
+                          result.latitude,
+                          result.longitude,),
+                        zoom: 13)
+                )
+            );
+            GetAddressFromLatLong(result);
+
+            //getGoogleMapCameraPosition(LatLng(result.latitude, result.longitude));
+          });
+        },
+        draggable: true,//add start location marker
         markerId: MarkerId('customerMarkerId'),
         position: latLng, //position of marker
         infoWindow: InfoWindow( //popup info
@@ -136,8 +158,11 @@ class _ChangeLocationScreenState extends State<ChangeLocationScreen> {
               alignment: Alignment.bottomCenter,
               children: [
 
-                GoogleMap( //Map widget from google_maps_flutter package
-                  zoomGesturesEnabled: true, //enable Zoom in, out on map
+                GoogleMap(
+
+                  //Map widget from google_maps_flutter package
+                  zoomGesturesEnabled: true,
+                  //enable Zoom in, out on map
                   initialCameraPosition: _kGooglePlex!,
                   markers: markers, //markers to show on map
                   mapType: MapType.normal, //map type
