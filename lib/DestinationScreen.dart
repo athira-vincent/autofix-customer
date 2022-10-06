@@ -1,4 +1,3 @@
-/*
 import 'package:flutter/material.dart';
 
 class DestinationScreen extends StatelessWidget {
@@ -15,4 +14,4 @@ class DestinationScreen extends StatelessWidget {
         )
     );
   }
-}*/
+}

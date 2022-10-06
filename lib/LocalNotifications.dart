@@ -1,4 +1,3 @@
-/*
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -26,17 +25,18 @@ class _LocalNotificationsState extends State<LocalNotifications> {
     'Notification',
     description: 'notifications from Your App Name.',
     importance: Importance.high,
+    //ledColor: Color.fromARGB(255, 255, 0, 0),
   );
 
   @override
   void initState() {
     super.initState();
     requestPermissions();
-    var androidSettings = AndroidInitializationSettings('app_icon');
+    var androidSettings = AndroidInitializationSettings('mipmap/ic_launcher');
     var iOSSettings = IOSInitializationSettings(
-      requestSoundPermission: false,
-      requestBadgePermission: false,
-      requestAlertPermission: false,
+      requestSoundPermission: true,
+      requestBadgePermission: true,
+      requestAlertPermission: true,
     );
 
     var initSetttings = InitializationSettings(android: androidSettings, iOS: iOSSettings);
@@ -46,7 +46,8 @@ class _LocalNotificationsState extends State<LocalNotifications> {
           if (notificationResponse != null) {
             print('notification payload: $payload');
             if (payload != null) {
-              Map<String, dynamic> data = json.decode(payload);
+              //Map<String, dynamic> data = json.decode(payload);
+
               onClickNotification(payload);
             }
             Fluttertoast.showToast(
@@ -66,6 +67,7 @@ class _LocalNotificationsState extends State<LocalNotifications> {
   }
 
   Future onClickNotification(String payload) async {
+    print(">>> onClickNotification");
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
       return DestinationScreen(
         payload: payload,
@@ -93,8 +95,8 @@ class _LocalNotificationsState extends State<LocalNotifications> {
       channel.id,
       channel.name,
       channelDescription: channel.description,
-      icon: 'app_icon',
-      largeIcon: DrawableResourceAndroidBitmap('app_icon'),
+      icon: 'mipmap/ic_launcher',
+      largeIcon: DrawableResourceAndroidBitmap('mipmap/ic_launcher'),
     );
     var iOSDetails = IOSNotificationDetails();
     var platformDetails = NotificationDetails(android: androidDetails, iOS: iOSDetails);
@@ -103,11 +105,14 @@ class _LocalNotificationsState extends State<LocalNotifications> {
   }
 
   Future<void> showPeriodicNotification() async {
-    const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
-        'high_importance_channel', 'Channel Name',
+     AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+        channel.id,
+        channel.name,
         channelDescription: 'Channel Description'
     );
-    const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails, iOS: null);
+    var iOSDetails = IOSNotificationDetails();
+
+    NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails, iOS: iOSDetails);
     await flutterLocalNotificationsPlugin.periodicallyShow(0, 'Flutter Local Notification', 'Flutter Periodic Notification',
         RepeatInterval.everyMinute, notificationDetails, payload: 'Destination Screen(Periodic Notification)');
   }
@@ -115,16 +120,18 @@ class _LocalNotificationsState extends State<LocalNotifications> {
   Future<void> showBigPictureNotification() async {
     var bigPictureStyleInformation = BigPictureStyleInformation(
       DrawableResourceAndroidBitmap("cover_image"),
-      largeIcon: DrawableResourceAndroidBitmap("app_icon"),
+      largeIcon: DrawableResourceAndroidBitmap("mipmap/ic_launcher"),
       contentTitle: 'Flutter Big Picture Notification Title',
       summaryText: 'Flutter Big Picture Notification Summary Text',
     );
+
     var androidDetails = AndroidNotificationDetails(
         channel.id,
         channel.name,
         channelDescription: channel.description,
         styleInformation: bigPictureStyleInformation);
-    var platformDetails = NotificationDetails(android: androidDetails, iOS: null);
+    var iOSDetails = IOSNotificationDetails();
+    var platformDetails = NotificationDetails(android: androidDetails, iOS: iOSDetails);
     await flutterLocalNotificationsPlugin.show(0, 'Flutter Local Notification', 'Flutter Big Picture Notification',
         platformDetails, payload: 'Destination Screen(Big Picture Notification)');
   }
@@ -132,18 +139,25 @@ class _LocalNotificationsState extends State<LocalNotifications> {
   Future<void> showBigTextNotification() async {
     const BigTextStyleInformation bigTextStyleInformation =
     BigTextStyleInformation(
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do '
+          'eiusmod tempor incididunt ut labore et dolore magna aliqua. '
+          'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris '
+          'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor '
+          'in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. '
+          'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt '
+          'mollit anim id est laborum.',
       htmlFormatBigText: true,
       contentTitle: 'Flutter Big Text Notification Title',
       htmlFormatContentTitle: true,
       summaryText: 'Flutter Big Text Notification Summary Text',
       htmlFormatSummaryText: true,
     );
-    const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+    AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
         'high_importance_channel', 'Channel Name',
         channelDescription: 'Channel Description',
         styleInformation: bigTextStyleInformation);
-    const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails,iOS:  null);
+    var iOSDetails = IOSNotificationDetails();
+    NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails,iOS: iOSDetails);
     await flutterLocalNotificationsPlugin.show(0, 'Flutter Local Notification', 'Flutter Big Text Notification',
         notificationDetails, payload: 'Destination Screen(Big Text Notification)');
   }
@@ -158,7 +172,9 @@ class _LocalNotificationsState extends State<LocalNotifications> {
         priority: Priority.high,
         ticker: 'ticker',
         additionalFlags: Int32List.fromList(<int>[insistentFlag]));
-    final NotificationDetails notificationDetails = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: null);
+    var iOSDetails = IOSNotificationDetails();
+    final NotificationDetails notificationDetails = NotificationDetails(
+        android: androidPlatformChannelSpecifics, iOS: iOSDetails);
     await flutterLocalNotificationsPlugin.show(0, 'Flutter Local Notification', 'Flutter Insistent Notification',
         notificationDetails, payload: 'Destination Screen(Insistent Notification)');
   }
@@ -170,8 +186,12 @@ class _LocalNotificationsState extends State<LocalNotifications> {
         importance: Importance.max,
         priority: Priority.high,
         ongoing: true,
-        autoCancel: false);
-    const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails, iOS: null);
+        autoCancel: false,
+        color: Colors.blue,
+        colorized: true,
+    );
+    const iOSDetails = IOSNotificationDetails();
+    const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails, iOS: iOSDetails);
     await flutterLocalNotificationsPlugin.show(0, 'Flutter Local Notification', 'Flutter Ongoing Notification',
         notificationDetails, payload: 'Destination Screen(Ongoing Notification)');
   }
@@ -191,12 +211,40 @@ class _LocalNotificationsState extends State<LocalNotifications> {
             showProgress: true,
             maxProgress: maxProgress,
             progress: i);
-        final NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails, iOS: null);
+        var iOSDetails = IOSNotificationDetails();
+        final NotificationDetails notificationDetails = NotificationDetails(
+            android: androidNotificationDetails, iOS: iOSDetails);
         await flutterLocalNotificationsPlugin.show(0,
             'Flutter Local Notification', 'Flutter Progress Notification',
             notificationDetails, payload: 'Destination Screen(Progress Notification)');
       });
     }
+  }
+
+  Future<void> _showNotificationWithChronometer() async {
+    final AndroidNotificationDetails androidNotificationDetails =
+    AndroidNotificationDetails(
+      channel.id,
+      channel.name,
+      channelDescription: channel.description,
+      importance: Importance.max,
+      priority: Priority.high,
+      when: DateTime.now().millisecondsSinceEpoch - 120 * 1000,
+      usesChronometer: true,
+      ongoing: true,
+      autoCancel: false,
+      color: Colors.red,
+      colorized: true,
+        // enableLights: true,
+        // ledColor: const Color.fromARGB(255, 255, 0, 0),
+        // ledOnMs: 1000,
+        // ledOffMs: 500,
+    );
+    final NotificationDetails notificationDetails =
+    NotificationDetails(android: androidNotificationDetails);
+    await flutterLocalNotificationsPlugin.show(
+        0, 'plain title', 'plain body', notificationDetails,
+        payload: 'item x');
   }
 
   @override
@@ -247,10 +295,16 @@ class _LocalNotificationsState extends State<LocalNotifications> {
                 child: Text('Progress Notification'),
                 onPressed: () => showProgressNotification(),
               ),
+
+              SizedBox(height: 15),
+              RaisedButton(
+                child: Text('Chronometer Notification'),
+                onPressed: () => _showNotificationWithChronometer(),
+              ),
             ],
           ),
         ),
       ),
     );
   }
-}*/
+}
