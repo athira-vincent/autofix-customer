@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "54966987696",
+    "firebase_url": "https://autofix-336509-default-rtdb.firebaseio.com",
     "project_id": "autofix-336509",
     "storage_bucket": "autofix-336509.appspot.com"
   },
@@ -14,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "54966987696-i713l5netjn4fr5o83bd9j6ejdt8qgc6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.auto_fix",
+            "certificate_hash": "0e857d1f0391fb392cf4a9740ec6b3951b1e8923"
+          }
+        },
+        {
           "client_id": "54966987696-l4nneps42tossms6tff3nugqn5e9tvtd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -26,6 +35,74 @@
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.auto_fix",
+            "certificate_hash": "9065cf511aedcedca5e8220af460df9a0d36f896"
+          }
+        },
+        {
+          "client_id": "54966987696-o44p6a865mv250r41umppujom22umpkq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.auto_fix",
+            "certificate_hash": "55512b6caf70f8676d1313e186b595d69625bca0"
+          }
+        },
+        {
+          "client_id": "54966987696-hc5rilh7ts4gsra2vg4kd0t80c6544s4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnxRej1WXDW1kiBap9xmYR9IXBTcturMY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "54966987696-hc5rilh7ts4gsra2vg4kd0t80c6544s4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "54966987696-99ur3pg893f75aafkd4vg6k2apm514t0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.relex"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54966987696:android:f9c0680dbeddde77a84475",
+        "android_client_info": {
+          "package_name": "com.example.relex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "54966987696-02auvrr87qlvd8uhdhp6g49t5b3a3kps.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.relex",
+            "certificate_hash": "4551f0d26330f0deae1d344e817acb99827add34"
+          }
+        },
+        {
+          "client_id": "54966987696-2ev8ji8440dckqujta7h7cadktmgkdt9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.relex",
+            "certificate_hash": "1d38ddc914fa9b5d39ac90dfb9b42097f20709a9"
+          }
+        },
+        {
+          "client_id": "54966987696-k45i7uf1jm42kliles9v7iod6gvqf14v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.relex",
             "certificate_hash": "9065cf511aedcedca5e8220af460df9a0d36f896"
           }
         },
@@ -45,6 +122,13 @@
             {
               "client_id": "54966987696-hc5rilh7ts4gsra2vg4kd0t80c6544s4.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "54966987696-99ur3pg893f75aafkd4vg6k2apm514t0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.relex"
+              }
             }
           ]
         }
