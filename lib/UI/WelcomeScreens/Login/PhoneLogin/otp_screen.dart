@@ -145,308 +145,306 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: CustColors.whiteBlueish,
-          body: ScrollConfiguration(
-            behavior: MyBehavior(),
-            child: SingleChildScrollView(
-              // ignore: avoid_unnecessary_containers
-              child: Column(
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height *0.40 ,
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          widget.fromPage == "3"
+    return Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: CustColors.whiteBlueish,
+        body: ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: SingleChildScrollView(
+            // ignore: avoid_unnecessary_containers
+            child: Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height *0.40 ,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      // ignore: prefer_const_literals_to_create_immutables
+                      children: [
+                        widget.fromPage == "3"
                             ? Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: SvgPicture.asset('assets/image/phoneLogin/EmailBgImage.svg',height: MediaQuery.of(context).size.height *0.23,),
-                            )
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: SvgPicture.asset('assets/image/phoneLogin/EmailBgImage.svg',height: MediaQuery.of(context).size.height *0.23,),
+                        )
                             : Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: SvgPicture.asset('assets/image/phoneLogin/otp_login_bg.svg',height: MediaQuery.of(context).size.height *0.23,),
-                            ),
-                        ],
-                      ),
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: SvgPicture.asset('assets/image/phoneLogin/otp_login_bg.svg',height: MediaQuery.of(context).size.height *0.23,),
+                        ),
+                      ],
                     ),
                   ),
-                  CurvedBottomSheetContainer(
-                    percentage:0.60,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Form(
-                            autovalidateMode: _autoValidate,
-                            key: _formKey,
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    child: Text(
-                                      'Enter code send to your phone',    //'Enter your code',
-                                      style: Styles.textHeadLogin,
-                                    ),
+                ),
+                CurvedBottomSheetContainer(
+                  percentage:0.60,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Form(
+                          autovalidateMode: _autoValidate,
+                          key: _formKey,
+                          child: Container(
+                            margin: EdgeInsets.only(
+                              left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  child: Text(
+                                    'Enter code send to your phone',    //'Enter your code',
+                                    style: Styles.textHeadLogin,
                                   ),
-                                  Container(
-                                    margin: EdgeInsets.only(left: 10, right: 10, top: 15,bottom: 10),
-                                    padding: EdgeInsets.all(5),
-                                    alignment: Alignment.centerLeft,
-                                    //color: Colors.red,
-                                    child: Text(
-                                      widget.fromPage == "3"
-                                      ? "Please enter the verification code sent to your mail id. "
-                                      : "Please enter the verification code sent to your phone number. ",
-                                      /*"Enter your code number to verify your phone \n"
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(left: 10, right: 10, top: 15,bottom: 10),
+                                  padding: EdgeInsets.all(5),
+                                  alignment: Alignment.centerLeft,
+                                  //color: Colors.red,
+                                  child: Text(
+                                    widget.fromPage == "3"
+                                        ? "Please enter the verification code sent to your mail id. "
+                                        : "Please enter the verification code sent to your phone number. ",
+                                    /*"Enter your code number to verify your phone \n"
                                       "Enter the 4 digit code .",*/
-                                      textAlign: TextAlign.left,
-                                      softWrap: true,
-                                      style: Styles.textLabelSubTitle12,
-                                    ),
+                                    textAlign: TextAlign.left,
+                                    softWrap: true,
+                                    style: Styles.textLabelSubTitle12,
                                   ),
-                                  Padding(
-                                    padding:  EdgeInsets.only(left: _setValue(0.5), right: _setValue(0.5)),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(top: _setValue(15.5)),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
-                                                child: Text(
-                                                  '4 digit Code',     //'4 digit Code',
-                                                  style: Styles.textLabelTitle,
-                                                ),
+                                ),
+                                Padding(
+                                  padding:  EdgeInsets.only(left: _setValue(0.5), right: _setValue(0.5)),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(top: _setValue(15.5)),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
+                                              child: Text(
+                                                '4 digit Code',     //'4 digit Code',
+                                                style: Styles.textLabelTitle,
                                               ),
-                                              Container(
-                                                padding:  EdgeInsets.only(top: _setValue(15.5), bottom: _setValue(0.5)),
-                                                child: TextFieldPin(
-                                                    textController: textEditingController,
-                                                    autoFocus: false,
-                                                    codeLength: _otpCodeLength,
-                                                    alignment: MainAxisAlignment.center,
-                                                    defaultBoxSize: 50.0,
-                                                    margin: 10,
-                                                    selectedBoxSize: 50.0,
-                                                    textStyle: TextStyle(fontSize: 16),
-                                                    defaultDecoration: _pinPutDecoration,
-                                                    selectedDecoration: _pinPutDecoration,
-                                                    onChange: (code) {
-                                                      _onOtpCallBack(code,false);
+                                            ),
+                                            Container(
+                                              padding:  EdgeInsets.only(top: _setValue(15.5), bottom: _setValue(0.5)),
+                                              child: TextFieldPin(
+                                                  textController: textEditingController,
+                                                  autoFocus: false,
+                                                  codeLength: _otpCodeLength,
+                                                  alignment: MainAxisAlignment.center,
+                                                  defaultBoxSize: 50.0,
+                                                  margin: 10,
+                                                  selectedBoxSize: 50.0,
+                                                  textStyle: TextStyle(fontSize: 16),
+                                                  defaultDecoration: _pinPutDecoration,
+                                                  selectedDecoration: _pinPutDecoration,
+                                                  onChange: (code) {
+                                                    _onOtpCallBack(code,false);
+                                                  }),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
+                                        margin: EdgeInsets.only(top: 10.8),
+                                        child: _isLoading
+                                            ? Center(
+                                          child: Container(
+                                            height: _setValue(28),
+                                            width: _setValue(28),
+                                            child: CircularProgressIndicator(
+                                              valueColor: AlwaysStoppedAnimation<Color>(
+                                                  CustColors.light_navy),
+                                            ),
+                                          ),
+                                        )
+                                            : Container(
+                                          child: MaterialButton(
+                                            onPressed: () {
+                                              setState(() async {
+                                                print(widget.fromPage.toString() + '>>>>>>>>>>>>>>>>widget.fromPage');
+
+                                                if(widget.fromPage=="3")
+                                                {
+                                                  _isLoading = true;
+                                                  if(textEditingController.text == widget.otpNumber){
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ResetPasswordScreen(
+                                                                otpNumber: textEditingController.text.toString(),
+                                                              )),
+                                                    );
+                                                  }
+                                                  else{
+                                                    _isLoading = false;
+                                                    SnackBarWidget().setMaterialSnackBar( "Otp Verification failed", _scaffoldKey);
+                                                  }
+                                                }
+                                                else if(widget.fromPage=="2")
+                                                {
+                                                  _isLoading = true;
+                                                  if(textEditingController.text == widget.otpNumber){
+                                                    print(widget.userTypeId.toString() + '>>>>>>>>>>>>>>>>widget.userTypeId');
+                                                    if(widget.userTypeId.toString() == "1")
+                                                    {
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>  CustomerMainLandingScreen()));
+                                                    }
+                                                    else{
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) => MechanicHomeScreen()));
+                                                    }
+                                                  }
+                                                  else
+                                                  {
+                                                    _isLoading = false;
+                                                    SnackBarWidget().setMaterialSnackBar( "Otp Verification failed", _scaffoldKey);
+                                                  }
+                                                }
+                                                else{
+                                                  _isLoading=true;
+                                                  print(textEditingController.text);
+                                                  print(authToken.toString());
+                                                  _isLoading = false;
+                                                  SharedPreferences _shdPre = await SharedPreferences.getInstance();
+                                                  if( widget.fromPage == "3")
+                                                  {
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ResetPasswordScreen(
+                                                                otpNumber: textEditingController.text.toString(),
+                                                              )),
+                                                    );
+                                                  }
+                                                  else if( widget.fromPage == "2")
+                                                  {
+                                                    print(widget.userTypeId.toString() + '>>>>>>>>>>>>>>>>widget.userTypeId');
+
+                                                    if(widget.userTypeId.toString() == "1")
+                                                    {
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>  CustomerMainLandingScreen()));
+                                                    }
+                                                    else{
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) => MechanicHomeScreen()));
+                                                    }
+
+                                                  }
+                                                  else if( widget.userType == TextStrings.user_customer)
+                                                  {
+                                                    _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 2);
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      new MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              AddCarScreen(userCategory:widget.userCategory ,userType: widget.userType,fromPage: "1",)),
+                                                    );
+                                                  }
+                                                  else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_corporate)
+                                                  {
+                                                    _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 2);
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      new MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              WorkSelectionScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
+                                                    );
+                                                  }
+                                                  else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_individual)
+                                                  {
+                                                    _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 2);
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      new MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              WorkSelectionScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
+                                                    );
+                                                  }
+                                                  else if( widget.userType == '1')
+                                                  {
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      new MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              LoginScreen()),
+                                                    );
+                                                  }
+                                                  else
+                                                  {
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      new MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              LoginScreen()),
+                                                    );
+                                                  }
+                                                  //_signupBloc.postOtpVerificationRequest(authToken.toString(),widget.otpNumber,'${widget.userTypeId}');
+
+                                                }
+                                              });
+                                            },
+                                            child: Container(
+                                              height: 45,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    'Verify',     // 'Verify',
+                                                    textAlign: TextAlign.center,
+                                                    style: Styles.textButtonLabelSubTitle,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            color: CustColors.materialBlue,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                    _setValue(13))),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(top: 15.8),
+                                        child: RichText(
+                                          maxLines: 2,
+                                          text: TextSpan(
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: 'Didn’t receive code? ',
+                                                style: Styles.textLabelSubTitle,
+                                              ),
+                                              TextSpan(
+                                                  text: 'Try again',   //'Try again',
+                                                  style: Styles.textLabelTitle_10,
+                                                  recognizer: TapGestureRecognizer()
+                                                    ..onTap = () {
+
                                                     }),
-                                              ),
                                             ],
                                           ),
                                         ),
-                                        Container(
-                                          padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
-                                          margin: EdgeInsets.only(top: 10.8),
-                                          child: _isLoading
-                                              ? Center(
-                                                  child: Container(
-                                                    height: _setValue(28),
-                                                    width: _setValue(28),
-                                                    child: CircularProgressIndicator(
-                                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                                          CustColors.light_navy),
-                                                    ),
-                                                  ),
-                                                )
-                                              : Container(
-                                                  child: MaterialButton(
-                                                    onPressed: () {
-                                                      setState(() async {
-                                                        print(widget.fromPage.toString() + '>>>>>>>>>>>>>>>>widget.fromPage');
-
-                                                        if(widget.fromPage=="3")
-                                                          {
-                                                            _isLoading = true;
-                                                            if(textEditingController.text == widget.otpNumber){
-                                                              Navigator.pushReplacement(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) =>
-                                                                        ResetPasswordScreen(
-                                                                          otpNumber: textEditingController.text.toString(),
-                                                                        )),
-                                                              );
-                                                            }
-                                                            else{
-                                                              _isLoading = false;
-                                                              SnackBarWidget().setMaterialSnackBar( "Otp Verification failed", _scaffoldKey);
-                                                            }
-                                                          }
-                                                        else if(widget.fromPage=="2")
-                                                        {
-                                                          _isLoading = true;
-                                                          if(textEditingController.text == widget.otpNumber){
-                                                            print(widget.userTypeId.toString() + '>>>>>>>>>>>>>>>>widget.userTypeId');
-                                                                    if(widget.userTypeId.toString() == "1")
-                                                                    {
-                                                                      Navigator.pushReplacement(
-                                                                          context,
-                                                                          MaterialPageRoute(
-                                                                              builder: (context) =>  CustomerMainLandingScreen()));
-                                                                    }
-                                                                    else{
-                                                                      Navigator.pushReplacement(
-                                                                          context,
-                                                                          MaterialPageRoute(
-                                                                              builder: (context) => MechanicHomeScreen()));
-                                                                    }
-                                                          }
-                                                          else
-                                                          {
-                                                            _isLoading = false;
-                                                            SnackBarWidget().setMaterialSnackBar( "Otp Verification failed", _scaffoldKey);
-                                                          }
-                                                        }
-                                                        else{
-                                                          _isLoading=true;
-                                                          print(textEditingController.text);
-                                                          print(authToken.toString());
-                                                          _isLoading = false;
-                                                          SharedPreferences _shdPre = await SharedPreferences.getInstance();
-                                                          if( widget.fromPage == "3")
-                                                          {
-                                                            Navigator.pushReplacement(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      ResetPasswordScreen(
-                                                                        otpNumber: textEditingController.text.toString(),
-                                                                      )),
-                                                            );
-                                                          }
-                                                          else if( widget.fromPage == "2")
-                                                          {
-                                                            print(widget.userTypeId.toString() + '>>>>>>>>>>>>>>>>widget.userTypeId');
-
-                                                            if(widget.userTypeId.toString() == "1")
-                                                              {
-                                                                Navigator.pushReplacement(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder: (context) =>  CustomerMainLandingScreen()));
-                                                              }
-                                                            else{
-                                                              Navigator.pushReplacement(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder: (context) => MechanicHomeScreen()));
-                                                            }
-
-                                                          }
-                                                          else if( widget.userType == TextStrings.user_customer)
-                                                          {
-                                                            _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 2);
-                                                            Navigator.pushReplacement(
-                                                              context,
-                                                              new MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      AddCarScreen(userCategory:widget.userCategory ,userType: widget.userType,fromPage: "1",)),
-                                                            );
-                                                          }
-                                                          else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_corporate)
-                                                          {
-                                                            _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 2);
-                                                            Navigator.pushReplacement(
-                                                              context,
-                                                              new MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      WorkSelectionScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
-                                                            );
-                                                          }
-                                                          else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_individual)
-                                                          {
-                                                            _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 2);
-                                                            Navigator.pushReplacement(
-                                                              context,
-                                                              new MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      WorkSelectionScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
-                                                            );
-                                                          }
-                                                          else if( widget.userType == '1')
-                                                          {
-                                                            Navigator.pushReplacement(
-                                                              context,
-                                                              new MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      LoginScreen()),
-                                                            );
-                                                          }
-                                                          else
-                                                          {
-                                                            Navigator.pushReplacement(
-                                                              context,
-                                                              new MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      LoginScreen()),
-                                                            );
-                                                          }
-                                                          //_signupBloc.postOtpVerificationRequest(authToken.toString(),widget.otpNumber,'${widget.userTypeId}');
-
-                                                        }
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      height: 45,
-                                                      child: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                                        children: [
-                                                          Text(
-                                                            'Verify',     // 'Verify',
-                                                            textAlign: TextAlign.center,
-                                                            style: Styles.textButtonLabelSubTitle,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    color: CustColors.materialBlue,
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.circular(
-                                                            _setValue(13))),
-                                                  ),
-                                                ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(top: 15.8),
-                                          child: RichText(
-                                            maxLines: 2,
-                                            text: TextSpan(
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text: 'Didn’t receive code? ',
-                                                  style: Styles.textLabelSubTitle,
-                                                ),
-                                                TextSpan(
-                                                    text: 'Try again',   //'Try again',
-                                                    style: Styles.textLabelTitle_10,
-                                                    recognizer: TapGestureRecognizer()
-                                                      ..onTap = () {
-
-                                                      }),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        /*Container(
+                                      ),
+                                      /*Container(
                                           margin: EdgeInsets.only(top: 15.8),
                                           child: RichText(
                                             maxLines: 2,
@@ -464,22 +462,21 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                             ),
                                           ),
                                         ),*/
-                                      ],
-                                    ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          )),
-    );
+          ),
+        ));
   }
 
   /// get signature code

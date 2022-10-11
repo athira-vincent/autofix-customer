@@ -189,22 +189,19 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                appBarCustomUi(size),
-                searchYouService(),
-                emergencyService(size),
-                SizedBox(
-                  height: 10,
-                ),
-                regularService(),
-              ],
-            ),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              appBarCustomUi(size),
+              searchYouService(),
+              emergencyService(size),
+              SizedBox(
+                height: 10,
+              ),
+              regularService(),
+            ],
           ),
         ),
       ),

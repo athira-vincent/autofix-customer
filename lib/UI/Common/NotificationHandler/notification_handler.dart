@@ -1,3 +1,4 @@
+/*
 
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/jobRequestNotifyProvider/job_request_notify_provider.dart';
@@ -46,13 +47,15 @@ class _NotificationHandlerState extends State<NotificationHandler> {
   }
   _listenNotification(BuildContext context) {
 
-    /*print("jgjgsjghgh  0002 ${context}");
+    */
+/*print("jgjgsjghgh  0002 ${context}");
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print(">>>message received onMessage");
       print("jgjgsjghgh  0003 ${context} ");
       print("event.notification!.data " + event.data.toString());
       _serialiseAndNavigate(event, context);
-    });*/
+    });*//*
+
 
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       print(">>>message received onMessageOpenedApp");
@@ -123,6 +126,7 @@ class _NotificationHandlerState extends State<NotificationHandler> {
       ;
   }
 
+*/
 /*  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     await Firebase.initializeApp();
     print("onBackgroundMessage " + message.data.toString());
@@ -132,7 +136,7 @@ class _NotificationHandlerState extends State<NotificationHandler> {
 
     print("Handling a background message: ${message.messageId}");
     print(message.data);
-  }*/
-
+  }*//*
 
 }
+*/

@@ -37,63 +37,60 @@ class _MechanicDiagnoseTestScreenState extends State<MechanicDiagnoseTestScreen>
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: SafeArea(
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          width: size.width,
+          height: size.height,
+          color: Colors.white,
           child: Container(
-            width: size.width,
-            height: size.height,
-            color: Colors.white,
-            child: Container(
-              margin: EdgeInsets.only(
+            margin: EdgeInsets.only(
                 left: size.width * 2 / 100,
                 top: size.height * 2 / 100,
                 right: size.width * 2 / 100
-              ),
+            ),
 
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  mechanicStartServiceTitle(size),
-                  mechanicStartServiceImage(size),
-                  mechanicEditSelectedService(size,selectedServiceName),
-                  mechanicAdditionalFaultService(size, additionalServiceNames ),
-                  InkWell(
-                    onTap: (){
-                      print(" on Tap - Add More");
-                      _awaitReturnValueFromSecondScreenOnAdd(context);
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                mechanicStartServiceTitle(size),
+                mechanicStartServiceImage(size),
+                mechanicEditSelectedService(size,selectedServiceName),
+                mechanicAdditionalFaultService(size, additionalServiceNames ),
+                InkWell(
+                  onTap: (){
+                    print(" on Tap - Add More");
+                    _awaitReturnValueFromSecondScreenOnAdd(context);
 
-                    },
-                    child: Align(
+                  },
+                  child: Align(
                       alignment: Alignment.centerRight,
-                        child: Container(
+                      child: Container(
                           margin: EdgeInsets.only(
-                            right: size.width * 6 / 100,
-                            top: size.height * 1.2 / 100
+                              right: size.width * 6 / 100,
+                              top: size.height * 1.2 / 100
                           ),
-                            child: Text("Add more",
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: "SharpSans_Bold",
-                                fontWeight: FontWeight.w700,
-                                color: CustColors.light_navy,
-                              ),
-                            ))),
-                  ),
+                          child: Text("Add more",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: "SharpSans_Bold",
+                              fontWeight: FontWeight.w700,
+                              color: CustColors.light_navy,
+                            ),
+                          ))),
+                ),
 
-                  mechanicEstimateDetailsArea(size),
+                mechanicEstimateDetailsArea(size),
 
-                  InkWell(
+                InkWell(
                     onTap: (){
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => CustomerApprovedScreen()));
                     },
-                      child: mechanicStartServiceButton(size)),
-                ],
-              ),
+                    child: mechanicStartServiceButton(size)),
+              ],
             ),
           ),
         ),

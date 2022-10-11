@@ -78,56 +78,53 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        key: scaffoldKey,
-        body: SafeArea(
-          child: Container(
-            width: size.width,
-            height: size.height,
-            color: Colors.white,
-            child: Column(
-              children: [
-                Container(
+    return Scaffold(
+      key: scaffoldKey,
+      body: SafeArea(
+        child: Container(
+          width: size.width,
+          height: size.height,
+          color: Colors.white,
+          child: Column(
+            children: [
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    paymentScreenTitle(size),
+                    paymentScreenImage(size),
+                    paymentScreenSubTitle(size),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  //color: Colors.yellow,
+                  color: CustColors.white_02,
+                  margin: EdgeInsets.only(
+                    top: size.height * 1 / 100,
+                  ),
+                  padding: EdgeInsets.only(top: size.height * 1 / 100),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      paymentScreenTitle(size),
-                      paymentScreenImage(size),
-                      paymentScreenSubTitle(size),
+                      paymentOptions(size, "Direct payment", "assets/image/img_payment_cash.png",1),
+                      //  paymentOptions(size, "UPI", "assets/image/img_payment_upi.png",2),
+                      //  paymentOptions(size, "Credit/Debit /Atm cards", "assets/image/img_payment_card.png",3),
+                      // paymentOptions(size, "Netbanking", "assets/image/img_payment_netbank.png",4),
+
+                      InkWell(
+                        child: paymentContinueButton(size),
+                        onTap: (){
+                          print("On Press Continue");
+
+                          changeScreen(_selectedOptionValue);
+                        },
+                      )
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                     //color: Colors.yellow,
-                    color: CustColors.white_02,
-                    margin: EdgeInsets.only(
-                      top: size.height * 1 / 100,
-                    ),
-                    padding: EdgeInsets.only(top: size.height * 1 / 100),
-                    child: Column(
-                      children: [
-                        paymentOptions(size, "Direct payment", "assets/image/img_payment_cash.png",1),
-                       //  paymentOptions(size, "UPI", "assets/image/img_payment_upi.png",2),
-                       //  paymentOptions(size, "Credit/Debit /Atm cards", "assets/image/img_payment_card.png",3),
-                       // paymentOptions(size, "Netbanking", "assets/image/img_payment_netbank.png",4),
-
-                        InkWell(
-                            child: paymentContinueButton(size),
-                          onTap: (){
-                              print("On Press Continue");
-
-                              changeScreen(_selectedOptionValue);
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),

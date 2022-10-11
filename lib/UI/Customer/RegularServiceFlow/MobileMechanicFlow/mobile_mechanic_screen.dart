@@ -18,36 +18,33 @@ class _MobileMechanicScreenState extends State<MobileMechanicScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Container(
-                width: size.width,
-                height: size.height,
-                //color: Colors.green,
-                child: Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    titleWidget(size),
-                    warningTextWidget(size),
-                    titleImageWidget(size),
-                    estimatedDateWidget(size),
-                    InkWell(
-                      onTap: (){
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CustomerMainLandingScreen()));
-                      },
-                        child: backToHomeButton(size))
-                  ],
-                ),
-              ),
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            width: size.width,
+            height: size.height,
+            //color: Colors.green,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                titleWidget(size),
+                warningTextWidget(size),
+                titleImageWidget(size),
+                estimatedDateWidget(size),
+                InkWell(
+                    onTap: (){
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CustomerMainLandingScreen()));
+                    },
+                    child: backToHomeButton(size))
+              ],
             ),
           ),
         ),
+      ),
     );
   }
   Widget titleWidget(Size size){

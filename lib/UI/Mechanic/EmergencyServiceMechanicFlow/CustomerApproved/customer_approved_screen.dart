@@ -161,37 +161,34 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                customerApprovedScreenTitle(size),
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              customerApprovedScreenTitle(size),
 
-                customerApprovedScreenSubTitle(size),
+              customerApprovedScreenSubTitle(size),
 
-                customerApprovedScreenTitleImage(size),
+              customerApprovedScreenTitleImage(size),
 
-                customerApprovedScreenStartWorkText(size),
+              customerApprovedScreenStartWorkText(size),
 
-                customerApprovedScreenWarningText(size),
+              customerApprovedScreenWarningText(size),
 
-                customerApprovedScreenTimer(size),
+              customerApprovedScreenTimer(size),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    isEnableAddMoreBtnFirstTym
-                    ? Container()
-                    : isEnableAddMoreBtn ? mechanicAddMoreTimeButton(size) : Container(),
-                    mechanicStartServiceButton(size),
-                  ],
-                )
-              ],
-            ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  isEnableAddMoreBtnFirstTym
+                      ? Container()
+                      : isEnableAddMoreBtn ? mechanicAddMoreTimeButton(size) : Container(),
+                  mechanicStartServiceButton(size),
+                ],
+              )
+            ],
           ),
         ),
       ),

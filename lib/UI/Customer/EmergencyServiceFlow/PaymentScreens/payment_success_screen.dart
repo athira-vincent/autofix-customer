@@ -20,28 +20,25 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
     Size size = MediaQuery
         .of(context)
         .size;
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: SafeArea(
-            child: SingleChildScrollView(
+    return Scaffold(
+      body: SafeArea(
+          child: SingleChildScrollView(
               child: Container(
-                width: size.width,
-                height: size.height,
-                //color: Colors.green,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      titleWidget(size),
-                      InfoTextWidget(size),
-                      titleImageWidget(size),
-                      reviewButtonsWidget(size),
-                    ]
-                )
+                  width: size.width,
+                  height: size.height,
+                  //color: Colors.green,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        titleWidget(size),
+                        InfoTextWidget(size),
+                        titleImageWidget(size),
+                        reviewButtonsWidget(size),
+                      ]
+                  )
               )
-            )
-          ),
-        ),
+          )
+      ),
     );
   }
 

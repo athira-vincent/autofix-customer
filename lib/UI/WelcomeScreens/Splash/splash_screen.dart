@@ -124,7 +124,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (isWalked == null || isWalked == false) {
         print('WalkThroughPages');
         Timer(
-            Duration(seconds: 3),
+            Duration(seconds: 5),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) => WalkThroughPages())));
       } else {
@@ -139,65 +139,56 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      /*routes: {
-        // '/CustomerMainLandingScreen': (BuildContext context) => CustomerMainLandingScreen(),
-        "/CustomerMainLandingScreen": (context) => CustomerMainLandingScreen(),
-        "/MechanicHomeScreen" : (context) => MechanicHomeScreen(),
-        "/IncomingJobRequestScreen" : (context) => IncomingJobRequestScreen(),
-      },*/
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.326,
+              //margin: EdgeInsets.only(left: 0, right:  0, top: 0, bottom: 0),
+              child: Image.asset(
+                "assets/image/splash_bg_top.png",
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.326,
-                //margin: EdgeInsets.only(left: 0, right:  0, top: 0, bottom: 0),
-                child: Image.asset(
-                  "assets/image/splash_bg_top.png",
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.contain,
-                ),
+                height: double.infinity,
+                fit: BoxFit.contain,
               ),
+            ),
 
-              Stack(
-                children: [
-                  Container(
+            Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.562,
+                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.053,bottom: 0),
+                  child: Image.asset(
+                    "assets/image/splash_bg_bottom.png",
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.562,
-                    margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.053,bottom: 0),
-                    child: Image.asset(
-                      "assets/image/splash_bg_bottom.png",
-                      width: double.infinity,
-                      height: double.infinity,
-                      fit: BoxFit.fill,
-                    ),
+                    height: double.infinity,
+                    fit: BoxFit.fill,
                   ),
-                  Container(
-                    margin: EdgeInsets.only(
+                ),
+                Container(
+                  margin: EdgeInsets.only(
                       left: MediaQuery.of(context).size.width * 0.232,
                       right: MediaQuery.of(context).size.width * 0.198
-                    ),
-                    height: MediaQuery.of(context).size.height * 0.118,
-                    width: MediaQuery.of(context).size.height * 0.569,
-                    child: Image.asset(
-                      "assets/image/splash_icon.png",
-                      width: double.infinity,
-                      height: 100,
-                      fit: BoxFit.contain,
-                    ),
                   ),
-                ],
-              )
-            ],
-          ),
+                  height: MediaQuery.of(context).size.height * 0.118,
+                  width: MediaQuery.of(context).size.height * 0.569,
+                  child: Image.asset(
+                    "assets/image/splash_icon.png",
+                    width: double.infinity,
+                    height: 100,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );

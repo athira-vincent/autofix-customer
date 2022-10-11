@@ -92,104 +92,103 @@ class _CheckYourMailScreenState extends State<CheckYourMailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-          backgroundColor: Colors.white,
-          body: ScrollConfiguration(
-            behavior: MyBehavior(),
-            child: SingleChildScrollView(
-              // ignore: avoid_unnecessary_containers
-              child: Column(
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height *0.40 ,
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: SvgPicture.asset('assets/image/forgotPwd/forgotPwd_bg.svg',height: MediaQuery.of(context).size.height *0.23,),
-                          ),
-                        ],
-                      ),
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: SingleChildScrollView(
+            // ignore: avoid_unnecessary_containers
+            child: Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height *0.40 ,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      // ignore: prefer_const_literals_to_create_immutables
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: SvgPicture.asset('assets/image/forgotPwd/forgotPwd_bg.svg',height: MediaQuery.of(context).size.height *0.23,),
+                        ),
+                      ],
                     ),
                   ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Form(
-                        autovalidateMode: _autoValidate,
-                        key: _formKey,
-                        child: Container(
-                          margin: EdgeInsets.only(
-                            left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              InkWell(
-                                onTap: (){
-                                  if(language_en_ar==true)
-                                  {
-                                    MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
-                                    setState(() {
-                                      language_en_ar=false;
-                                    });
-                                  }
-                                  else
-                                  {
-                                    MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
-                                    setState(() {
-                                      language_en_ar=true;
-                                    });
-                                  }
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Form(
+                      autovalidateMode: _autoValidate,
+                      key: _formKey,
+                      child: Container(
+                        margin: EdgeInsets.only(
+                          left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              onTap: (){
+                                if(language_en_ar==true)
+                                {
+                                  MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
+                                  setState(() {
+                                    language_en_ar=false;
+                                  });
+                                }
+                                else
+                                {
+                                  MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
+                                  setState(() {
+                                    language_en_ar=true;
+                                  });
+                                }
 
-                                },
-                                child: Container(
-                                  child: Text(
-                                    'Check your mail',   //'Check your mail',
-                                    style: Styles.textHeadLogin,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(left: 10, right: 10, top: 15,bottom: 10),
-                                padding: EdgeInsets.all(5),
-                                alignment: Alignment.centerLeft,
-                                //color: Colors.red,
+                              },
+                              child: Container(
                                 child: Text(
-                                  'Please check your email , we have sent you an \nemail that contains a link to reset your password. ',
-                                  textAlign: TextAlign.justify,
-                                  softWrap: true,
-                                  style: Styles.textLabelSubTitle12,
+                                  'Check your mail',   //'Check your mail',
+                                  style: Styles.textHeadLogin,
                                 ),
                               ),
-                              Padding(
-                                padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.only(top: 20.8),
-                                      child: _isLoading
-                                          ? Center(
-                                        child: Container(
-                                          height: _setValue(28),
-                                          width: _setValue(28),
-                                          child: CircularProgressIndicator(
-                                            valueColor: AlwaysStoppedAnimation<Color>(
-                                                CustColors.light_navy),
-                                          ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(left: 10, right: 10, top: 15,bottom: 10),
+                              padding: EdgeInsets.all(5),
+                              alignment: Alignment.centerLeft,
+                              //color: Colors.red,
+                              child: Text(
+                                'Please check your email , we have sent you an \nemail that contains a link to reset your password. ',
+                                textAlign: TextAlign.justify,
+                                softWrap: true,
+                                style: Styles.textLabelSubTitle12,
+                              ),
+                            ),
+                            Padding(
+                              padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(top: 20.8),
+                                    child: _isLoading
+                                        ? Center(
+                                      child: Container(
+                                        height: _setValue(28),
+                                        width: _setValue(28),
+                                        child: CircularProgressIndicator(
+                                          valueColor: AlwaysStoppedAnimation<Color>(
+                                              CustColors.light_navy),
                                         ),
-                                      )
-                                          : Container(
+                                      ),
+                                    )
+                                        : Container(
 
-                                            child: MaterialButton(
-                                              onPressed: () {
-                                                /*if (_formKey.currentState!.validate()) {
+                                      child: MaterialButton(
+                                        onPressed: () {
+                                          /*if (_formKey.currentState!.validate()) {
                                                       _forgotPasswordBloc.postForgotPasswordRequest(
                                                           _emailController.text);
 
@@ -200,81 +199,80 @@ class _CheckYourMailScreenState extends State<CheckYourMailScreen> {
                                                       setState(() =>
                                                       _autoValidate = AutovalidateMode.always);
                                                     }*/
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ResetPasswordScreen(otpNumber: "1234",)),
-                                                );
-                                              },
-                                              child: Container(
-                                                height: 45,
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      'Go to email',     //'Go to email',
-                                                      textAlign: TextAlign.center,
-                                                      style: Styles.textButtonLabelSubTitle,
-                                                    ),
-                                                  ],
-                                                ),
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ResetPasswordScreen(otpNumber: "1234",)),
+                                          );
+                                        },
+                                        child: Container(
+                                          height: 45,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'Go to email',     //'Go to email',
+                                                textAlign: TextAlign.center,
+                                                style: Styles.textButtonLabelSubTitle,
                                               ),
-                                              color: CustColors.materialBlue,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(
-                                                      _setValue(13))),
-                                            ),
+                                            ],
                                           ),
                                         ),
-
-                                    SizedBox(
-                                      height:MediaQuery.of(context).size.height *0.15 ,
-                                    ),
-
-                                    Container(
-                                      margin: EdgeInsets.only(top: 15.8),
-                                      alignment: Alignment.center,
-                                      child: RichText(
-                                        maxLines: 2,
-                                        textAlign: TextAlign.center,
-                                        text: TextSpan(
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                              text: 'Did not receive the email? Check your spam filter Or ',     //"Did not receive the email? Check your spam filter Or ",
-                                              style: Styles.textLabelSubTitle,
-                                            ),
-                                            TextSpan(
-                                                text: 'try another email address ',   //'try another email address ',
-                                                style: Styles.textLabelTitle_10,
-                                                recognizer: TapGestureRecognizer()
-                                                  ..onTap = () {
-                                                    Navigator.pushReplacement(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ForgotPasswordScreen()),
-                                                    );
-                                                  }),
-                                          ],
-                                        ),
+                                        color: CustColors.materialBlue,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                _setValue(13))),
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+
+                                  SizedBox(
+                                    height:MediaQuery.of(context).size.height *0.15 ,
+                                  ),
+
+                                  Container(
+                                    margin: EdgeInsets.only(top: 15.8),
+                                    alignment: Alignment.center,
+                                    child: RichText(
+                                      maxLines: 2,
+                                      textAlign: TextAlign.center,
+                                      text: TextSpan(
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: 'Did not receive the email? Check your spam filter Or ',     //"Did not receive the email? Check your spam filter Or ",
+                                            style: Styles.textLabelSubTitle,
+                                          ),
+                                          TextSpan(
+                                              text: 'try another email address ',   //'try another email address ',
+                                              style: Styles.textLabelTitle_10,
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () {
+                                                  Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ForgotPasswordScreen()),
+                                                  );
+                                                }),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          )),
-    );
+          ),
+        ));
   }
 }
 

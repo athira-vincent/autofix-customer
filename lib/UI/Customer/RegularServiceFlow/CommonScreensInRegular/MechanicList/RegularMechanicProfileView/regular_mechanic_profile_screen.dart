@@ -460,25 +460,22 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                appBarCustomUi(size),
-                profileImageAndKmAndReviewCount(size),
-                timeAndLocationUi(size),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              appBarCustomUi(size),
+              profileImageAndKmAndReviewCount(size),
+              timeAndLocationUi(size),
 
-                _mechanicDetailsMdl == null
-                    ? Container()
-                    : reviewsUi(size),
-                selectedServiceDetailsUi(size),
-                acceptAndSendRequestButton( size,context)
-              ],
-            ),
+              _mechanicDetailsMdl == null
+                  ? Container()
+                  : reviewsUi(size),
+              selectedServiceDetailsUi(size),
+              acceptAndSendRequestButton( size,context)
+            ],
           ),
         ),
       ),

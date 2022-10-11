@@ -18,6 +18,7 @@ class SharedPrefKeys {
 
   //---------------------Customer
   static const isUserLoggedIn = "is_Logged_In";
+  static const appState = "appState";
   static const userName = "userName";
   static const userEmail = "userEmail";
   static const userID = "userID";

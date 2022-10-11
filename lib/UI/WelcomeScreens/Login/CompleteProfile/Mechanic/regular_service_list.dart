@@ -147,203 +147,198 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: CustColors.materialBlue,
-      ),
-      home: SafeArea(
-        child: Scaffold(
-          body: Container(
-            height: size.height,
-            width:  size.width,
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          height: size.height,
+          width:  size.width,
+          color: Colors.white,
+          child: Container(
+            margin: EdgeInsets.only(
+              top: size.height * 0.033,
+              bottom: size.height * 0.027,
+              left: size.width * 0.06,
+              right: size.width * 0.06,
+            ),
             color: Colors.white,
-            child: Container(
-              margin: EdgeInsets.only(
-                  top: size.height * 0.033,
-                  bottom: size.height * 0.027,
-                  left: size.width * 0.06,
-                  right: size.width * 0.06,
-              ),
-              color: Colors.white,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                        6.0,6.0,6.0,4.0
-                    ),
-                    child: Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Select regular Services",
-                          style: Styles.serviceSelectionTitle01Style,)),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                      6.0,6.0,6.0,4.0
                   ),
+                  child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text("Select regular Services",
+                        style: Styles.serviceSelectionTitle01Style,)),
+                ),
 
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: size.height * 0.025,
-                      /* left: size.width * 6 / 100,
+                Container(
+                  margin: EdgeInsets.only(
+                    top: size.height * 0.025,
+                    /* left: size.width * 6 / 100,
                       right: size.width * 6 / 100,*/
+                  ),
+                  height: ScreenSize().setValue(36.3),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(
+                        ScreenSize().setValue(5),
+                      ),
                     ),
-                    height: ScreenSize().setValue(36.3),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(
-                          ScreenSize().setValue(5),
+                    boxShadow: [
+                      BoxShadow(
+                        color: CustColors.pinkish_grey,
+                        spreadRadius: 0,
+                        blurRadius: 1.5,
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: ScreenSize().setValue(20)),
+                        child: Icon(
+                          Icons.search,
+                          size: 20,
+                          color: CustColors.light_navy,
                         ),
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: CustColors.pinkish_grey,
-                          spreadRadius: 0,
-                          blurRadius: 1.5,
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(left: ScreenSize().setValue(20)),
-                          child: Icon(
-                            Icons.search,
-                            size: 20,
-                            color: CustColors.light_navy,
-                          ),
-                        ),
-                        Flexible(
-                          child: Container(
-                            margin: EdgeInsets.only(left: ScreenSize().setValue(15)),
-                            alignment: Alignment.center,
-                            height: ScreenSize().setValue(36.3),
-                            child: Center(
-                              child: TextFormField(
-                                keyboardType: TextInputType.text,
-                                textAlignVertical: TextAlignVertical.center,
-                                onChanged: (text) {
-                                  setState(() {
-                                    if(text.isNotEmpty){
-                                      _serviceListBloc.postServiceListRequest(authToken, text, null, "2", text );
-                                    }else{
-                                      _serviceListBloc.postServiceListRequest(authToken, "", null, "2", "" );
-                                    }
-                                  });
-                                  //_allMakeBloc.searchMake(text);
-                                },
-                                textAlign: TextAlign.left,
-                                style: Styles.searchTextStyle01,
-                                decoration: InputDecoration(
-                                    hintText: "Search Your Service",
-                                    border: InputBorder.none,
-                                    contentPadding: new EdgeInsets.only(bottom: 15),
-                                    hintStyle: Styles.searchTextStyle01
-                                ),
+                      Flexible(
+                        child: Container(
+                          margin: EdgeInsets.only(left: ScreenSize().setValue(15)),
+                          alignment: Alignment.center,
+                          height: ScreenSize().setValue(36.3),
+                          child: Center(
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              textAlignVertical: TextAlignVertical.center,
+                              onChanged: (text) {
+                                setState(() {
+                                  if(text.isNotEmpty){
+                                    _serviceListBloc.postServiceListRequest(authToken, text, null, "2", text );
+                                  }else{
+                                    _serviceListBloc.postServiceListRequest(authToken, "", null, "2", "" );
+                                  }
+                                });
+                                //_allMakeBloc.searchMake(text);
+                              },
+                              textAlign: TextAlign.left,
+                              style: Styles.searchTextStyle01,
+                              decoration: InputDecoration(
+                                  hintText: "Search Your Service",
+                                  border: InputBorder.none,
+                                  contentPadding: new EdgeInsets.only(bottom: 15),
+                                  hintStyle: Styles.searchTextStyle01
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                ),
 
-                  _isLoadingPage == true
-                  ?
-                  Container(
-                    margin: EdgeInsets.only(
+                _isLoadingPage == true
+                    ?
+                Container(
+                  margin: EdgeInsets.only(
                       top: 20.0
+                  ),
+                  child: const Center(
+                    child: CircularProgressIndicator(color: CustColors.light_navy,),),
+                )
+                    :
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(
+                        top: size.height * 0.020,
+                        bottom: size.height * 0.019
                     ),
-                    child: const Center(
-                      child: CircularProgressIndicator(color: CustColors.light_navy,),),
-                  )
-                  :
-                  Expanded(
+                    color: CustColors.pale_grey,
+                    height: size.height * 0.80, //0.764
                     child: Container(
                       margin: EdgeInsets.only(
-                          top: size.height * 0.020,
-                          bottom: size.height * 0.019
+                        //left: size.width * 0.005,
+                        //right: size.width * 0.020,
+                          bottom: size.height * 0.030
                       ),
-                      color: CustColors.pale_grey,
-                      height: size.height * 0.80, //0.764
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            //left: size.width * 0.005,
-                            //right: size.width * 0.020,
-                            bottom: size.height * 0.030
-                        ),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: regularServiceList.length != 0
-                                  ? ListView.builder(
-                                itemBuilder: (BuildContext context, int index) =>
-                                    _buildTiles(regularServiceList[index],size, index),
-                                itemCount: regularServiceList.length,
-                              )
-                                  :
-                              Center(
-                                child: Text('No Results found.'),
-                              ),
-
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: regularServiceList.length != 0
+                                ? ListView.builder(
+                              itemBuilder: (BuildContext context, int index) =>
+                                  _buildTiles(regularServiceList[index],size, index),
+                              itemCount: regularServiceList.length,
+                            )
+                                :
+                            Center(
+                              child: Text('No Results found.'),
                             ),
-                          ],
-                        ),
+
+                          ),
+                        ],
                       ),
                     ),
                   ),
+                ),
 
-                  _isLoadingPage == true
-                      ?
-                  Container()
-                      :
-                  InkWell(
-                    onTap: (){
-                      // Map<List<AllServiceFeeData>?, String> myData = new Map();
-                      //SelectedData data = SelectedData(selectedServiceList,"rate");
-                      //Navigator.pop(context, "data");
+                _isLoadingPage == true
+                    ?
+                Container()
+                    :
+                InkWell(
+                  onTap: (){
+                    // Map<List<AllServiceFeeData>?, String> myData = new Map();
+                    //SelectedData data = SelectedData(selectedServiceList,"rate");
+                    //Navigator.pop(context, "data");
 
-                      print(">>>>>>> selectedServiceMdlList.length ${selectedServiceMdlList.length}");
+                    print(">>>>>>> selectedServiceMdlList.length ${selectedServiceMdlList.length}");
 
 
-                      List<SelectedServicesMdl> selectedService=[];
+                    List<SelectedServicesMdl> selectedService=[];
 
-                      String serviceId="";
-                      String feeList = "[";
-                      String timeList = "[";
+                    String serviceId="";
+                    String feeList = "[";
+                    String timeList = "[";
 
-                      for(int i=0;i<selectedServiceMdlList.length;i++){
-                        print("time 001 ${selectedServiceMdlList[i].isEnable}");
-                        if(selectedServiceMdlList[i].isEnable){
-                          selectedService.add(selectedServiceMdlList[i]);
-                        }else{
-                          print("no data to print");
-                        }
-                        //print("fgdhj 001 ${selectedServiceMdlList[i].amount}");
-                        //print("time 001 ${selectedServiceMdlList[i].time}");
-                        //print("time 001 ${selectedServiceMdlList[i].isEnable}");
+                    for(int i=0;i<selectedServiceMdlList.length;i++){
+                      print("time 001 ${selectedServiceMdlList[i].isEnable}");
+                      if(selectedServiceMdlList[i].isEnable){
+                        selectedService.add(selectedServiceMdlList[i]);
+                      }else{
+                        print("no data to print");
                       }
+                      //print("fgdhj 001 ${selectedServiceMdlList[i].amount}");
+                      //print("time 001 ${selectedServiceMdlList[i].time}");
+                      //print("time 001 ${selectedServiceMdlList[i].isEnable}");
+                    }
 
-                      print(selectedService);
+                    print(selectedService);
 
-                      for(int m = 0 ; m< selectedService.length; m++){
-                        if( m != selectedService.length-1){
-                          serviceId = serviceId + "${selectedService[m].serviceId}" + ", ";
-                          feeList = feeList + """ "${selectedService[m].fee}",""";
-                          timeList = timeList + """ "${selectedService[m].time}",""";
-                        }else{
-                          serviceId = serviceId + "${selectedService[m].serviceId}" ;
-                          feeList = feeList + """ "${selectedService[m].fee}" """;
-                          timeList = timeList + """ "${selectedService[m].time}" """;
-                        }
+                    for(int m = 0 ; m< selectedService.length; m++){
+                      if( m != selectedService.length-1){
+                        serviceId = serviceId + "${selectedService[m].serviceId}" + ", ";
+                        feeList = feeList + """ "${selectedService[m].fee}",""";
+                        timeList = timeList + """ "${selectedService[m].time}",""";
+                      }else{
+                        serviceId = serviceId + "${selectedService[m].serviceId}" ;
+                        feeList = feeList + """ "${selectedService[m].fee}" """;
+                        timeList = timeList + """ "${selectedService[m].time}" """;
                       }
+                    }
 
-                      serviceId = serviceId ;
-                      feeList = feeList + "]";
-                      timeList = timeList + "]";
+                    serviceId = serviceId ;
+                    feeList = feeList + "]";
+                    timeList = timeList + "]";
 
-                      //print(serviceSpecialisationList);
+                    //print(serviceSpecialisationList);
 
-                      /* for(int i=0;i<serviceSpecialisationList.length;i++){
+                    /* for(int i=0;i<serviceSpecialisationList.length;i++){
                         serviceId = serviceId +""" "${serviceSpecialisationList[i].id}", """;
                       }
 
@@ -352,47 +347,46 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                       }
                       */
 
-                      print(" >>>> serviceId " +serviceId + " >>>> feeList " + feeList + " >>>>>>>> timeList" + timeList);
+                    print(" >>>> serviceId " +serviceId + " >>>> feeList " + feeList + " >>>>>>>> timeList" + timeList);
 
-                      _addServiceListBloc.postMechanicAddServicesRequest(
-                          authToken,
-                          serviceId,  feeList, timeList, 2);
-                    },
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        height: size.height * 0.045,
-                        width: size.width * 0.246,
-                        alignment: Alignment.center,
-                        margin: EdgeInsets.only(
-                            right: size.width * 7 / 100,
-                            top: size.height * 1.9 / 100
+                    _addServiceListBloc.postMechanicAddServicesRequest(
+                        authToken,
+                        serviceId,  feeList, timeList, 2);
+                  },
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      height: size.height * 0.045,
+                      width: size.width * 0.246,
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(
+                          right: size.width * 7 / 100,
+                          top: size.height * 1.9 / 100
+                      ),
+                      //margin: EdgeInsets.only(top: 8, bottom: 6,left: 75,right: 75),
+                      //padding: EdgeInsets.only(left: 20, right: 20),
+                      decoration: BoxDecoration(
+                        color: CustColors.light_navy,
+                        border: Border.all(
+                          color: CustColors.blue,
+                          style: BorderStyle.solid,
+                          width: 0.70,
                         ),
-                        //margin: EdgeInsets.only(top: 8, bottom: 6,left: 75,right: 75),
-                        //padding: EdgeInsets.only(left: 20, right: 20),
-                        decoration: BoxDecoration(
-                          color: CustColors.light_navy,
-                          border: Border.all(
-                            color: CustColors.blue,
-                            style: BorderStyle.solid,
-                            width: 0.70,
-                          ),
-                          borderRadius: BorderRadius.circular(7),
-                        ),
-                        child:  Text(
-                          "Next",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Corbel_Bold',
-                              fontSize: ScreenSize().setValueFont(14.5),
-                              fontWeight: FontWeight.w800),
-                        ),
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child:  Text(
+                        "Next",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Corbel_Bold',
+                            fontSize: ScreenSize().setValueFont(14.5),
+                            fontWeight: FontWeight.w800),
                       ),
                     ),
                   ),
+                ),
 
-                ],
-              ),
+              ],
             ),
           ),
         ),

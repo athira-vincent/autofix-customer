@@ -74,8 +74,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     getSharedPrefData();
     _listenApiResponse();
     _getCurrentMechanicLocation();
-    _listenNotification(context);
-
+    //_listenNotification(context);
   }
 
   Future<void> getSharedPrefData() async {
@@ -163,7 +162,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     });
   }
 
-  _listenNotification(BuildContext context){
+  /*_listenNotification(BuildContext context){
 
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
 
@@ -297,7 +296,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
     });
 
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {

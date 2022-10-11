@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/LocalNotifications.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
@@ -12,6 +13,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/order_list_bloc/order_list_b
 import 'package:auto_fix/UI/Customer/SideBar/CustomerNotifications/cust_notification_list.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyOrders/cacncel_order_bloc/cacncel_order_bloc.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyWallet/customer_wallet_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/IncomingJobRequestScreen/incoming_job_request_screen.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MechanicNotifications/mech_notification_list.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/add_address_bloc/add_address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/address_bloc/address_bloc.dart';
@@ -36,8 +38,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
@@ -181,6 +185,13 @@ class _MyAppState extends State<MyApp> {
               routes: {
                 '/custNotificationList': (_) => CustNotificationList(),
                 '/mechNotificationList': (_) => MechanicNotificationList()
+              },
+              onGenerateRoute: (settings){
+                if (settings.name == '/IncomingJobRequestScreen') {
+                  final value = settings.arguments ; // Retrieve the value.
+                  return MaterialPageRoute(builder: (_) => IncomingJobRequestScreen(notificationPayloadMdl: value,)); // Pass it to BarPage.
+                }
+                return null;
               },
               debugShowCheckedModeBanner: false,
               locale: _locale,
