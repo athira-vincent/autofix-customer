@@ -17,8 +17,9 @@ import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:otp_autofill/otp_autofill.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sms_otp_auto_verify/sms_otp_auto_verify.dart';
+//import 'package:sms_otp_auto_verify/sms_otp_auto_verify.dart';
 
 import '../../../../../main.dart';
 import '../../../../Constants/shared_pref_keys.dart';
@@ -96,18 +97,32 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   }
 
   String authToken="";
-
-
+  late OTPTextEditController controller;
+  late OTPInteractor _otpInteractor;
   @override
   void initState() {
     super.initState();
     getSharedPrefData();
     _phoneNoController.addListener(onFocusChange);
-    textEditingController.text = widget.otpNumber;
+   // textEditingController.text = widget.otpNumber;
     _listenOtpVerificationResponse();
 
     _getSignatureCode();
     _startListeningSms();
+    /*controller = OTPTextEditController(
+      codeLength: 4,
+      //ignore: avoid_print
+      onCodeReceive: (code) => print('Your Application receive code - $code'),
+      otpInteractor: _otpInteractor,
+    )..startListenUserConsent(
+          (code) {
+        final exp = RegExp(r'(\d{4})');
+        return exp.stringMatch(code ?? '') ?? '';
+      },
+      strategies: [
+        SampleStrategy(),
+      ],
+    );*/
   }
 
   _listenOtpVerificationResponse() {
@@ -130,7 +145,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     _phoneNoFocusNode.removeListener(onFocusChange);
     _phoneNoController.dispose();
     _forgotPasswordBloc.dispose();
-    SmsVerification.stopListening();
+    //SmsVerification.stopListening();
   }
 
 
@@ -230,7 +245,16 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                 style: Styles.textLabelTitle,
                                               ),
                                             ),
-                                            Container(
+                                           Container(
+                                             padding:  EdgeInsets.only(top: _setValue(15.5), bottom: _setValue(0.5)),
+                                             child: TextField(
+                                               controller: controller,
+                                               autofocus: false,
+                                               maxLength: _otpCodeLength,
+                                               style: TextStyle(fontSize: 16),
+                                             ),
+                                           )
+                                           /* Container(
                                               padding:  EdgeInsets.only(top: _setValue(15.5), bottom: _setValue(0.5)),
                                               child: TextFieldPin(
                                                   textController: textEditingController,
@@ -246,7 +270,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                   onChange: (code) {
                                                     _onOtpCallBack(code,false);
                                                   }),
-                                            ),
+                                            ),*/
                                           ],
                                         ),
                                       ),
@@ -267,7 +291,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                             : Container(
                                           child: MaterialButton(
                                             onPressed: () {
-                                              setState(() async {
+                                              setState(()  async {
                                                 print(widget.fromPage.toString() + '>>>>>>>>>>>>>>>>widget.fromPage');
 
                                                 if(widget.fromPage=="3")
@@ -481,19 +505,44 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   /// get signature code
   _getSignatureCode() async {
-    String? signature = await SmsVerification.getAppSignature();
-    print("signature $signature");
+    //String? signature = await SmsVerification.getAppSignature();
+    //print("signature $signature");
   }
 
   /// listen sms
   _startListeningSms()  {
-    SmsVerification.startListeningSms().then((message) {
+    _otpInteractor = OTPInteractor();
+    _otpInteractor
+        .getAppSignature()
+    //ignore: avoid_print
+        .then((value) => print('signature - $value'));
+
+    controller = OTPTextEditController(
+      codeLength: 4,
+      //ignore: avoid_print
+      onCodeReceive: (code) {
+        print('Your Application receive code - $code');
+        //textEditingController.text = _otpCode;
+      },
+      otpInteractor: _otpInteractor,
+    )..startListenUserConsent(
+          (code) {
+            print("fdjkfhfkf $code");
+        final exp = RegExp(r'([<#>] \d{4})');
+        String code01 = exp.stringMatch(code ?? '') ?? '';
+        final exp01 = RegExp(r'(\d{4})');
+            textEditingController.text = exp01.stringMatch(code01 ?? '') ?? '';
+        return exp01.stringMatch(code01 ?? '') ?? '';
+      },
+
+    );
+   /* SmsVerification.startListeningSms().then((message) {
       setState(() {
         _otpCode = SmsVerification.getCode(message, intRegex);
         textEditingController.text = _otpCode;
         _onOtpCallBack(_otpCode, true);
       });
-    });
+    });*/
   }
 
   _onSubmitOtp() {
@@ -546,3 +595,13 @@ class MyBehavior extends ScrollBehavior {
   }
 }
 
+
+class SampleStrategy extends OTPStrategy {
+  @override
+  Future<String> listenForCode() {
+    return Future.delayed(
+      const Duration(seconds: 4),
+          () => 'Your code is 54321',
+    );
+  }
+}

@@ -1,9 +1,29 @@
 import 'dart:io';
 
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:graphql/client.dart';
 import 'package:http/io_client.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GqlClient {
+  int lanCode = 0;
+  Future<String> getLanguage() async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String? lan = shdPre.getString(SharedPrefKeys.userLanguageCode);
+    if(lan == "ig"){
+      lanCode = 1;
+    }else if(lan == "en"){
+      lanCode = 2;
+    }else if(lan == "ha"){
+      lanCode = 3;
+    }else if(lan == "yo"){
+      lanCode = 4;
+    }else{
+      lanCode = 2;
+    }
+    return lanCode.toString();
+  }
+
   GqlClient._privateConstructor();
   static final GqlClient _instance = GqlClient._privateConstructor();
   static GqlClient get instance => _instance;
@@ -46,6 +66,7 @@ class GqlClient {
         "https://api-gateway.techlabz.in/autoconnect-be",
         defaultHeaders: <String, String>{
           'x-token': token,
+          'language' : "${getLanguage()}"
         },
         httpClient: _ioClient,
       );
@@ -64,6 +85,7 @@ class GqlClient {
         "https://api-gateway.techlabz.in/autoconnect-be",
         defaultHeaders: <String, String>{
           'x-token': token,
+          'language' : "${getLanguage()}"
         },
         httpClient: _ioClient,
       );
@@ -140,6 +162,7 @@ class GqlClient {
 
   Future<dynamic> query01(String query, String token,
       {bool enableDebug = false, required bool isTokenThere}) async {
+    String langCode = await getLanguage();
     try {
       if (enableDebug) {
         print('Query ===========> $query');
@@ -154,6 +177,7 @@ class GqlClient {
           link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
               defaultHeaders: <String, String>{
                 'x-token': token,
+                "language" : langCode
               },
               httpClient: _ioClient));
       final QueryResult resp = await _graphClient
@@ -206,6 +230,7 @@ class GqlClient {
       {bool enableDebug = false,
       required Map<String, dynamic> variables,
       required bool isTokenThere}) async {
+    String langCode = await getLanguage();
     try {
       if (enableDebug) {
         _showDebugMessage(query, 'GraphQL Query');
@@ -228,6 +253,7 @@ class GqlClient {
           link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
               defaultHeaders: <String, String>{
                 'x-token': "",
+                'language': langCode,
               },
               httpClient: _ioClient));
 
@@ -436,6 +462,7 @@ class GqlClient {
   void _showDebugMessage(dynamic message, String messageType) {
     print(
         '****************************  $messageType  ************************************');
-    print(message);
+    print(">>>message : $message");
+    print(">>>messageType : $messageType");
   }
 }

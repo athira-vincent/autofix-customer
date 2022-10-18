@@ -4,6 +4,7 @@ import 'dart:core';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
@@ -77,6 +78,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      JWTTokenChecking.checking(shdPre.getString(SharedPrefKeys.token).toString(), context);
       print('userFamilyId'+authToken.toString());
       _homeCustomerBloc.postSearchServiceRequest("$authToken", null, null,null,null);
       _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2", null, null);

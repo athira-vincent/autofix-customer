@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/UI/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mechanic_tracking_Screen.dart';
@@ -86,7 +87,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userID = shdPre.getString(SharedPrefKeys.userID).toString();
-
+      JWTTokenChecking.checking(authToken, context);
       print('userFamilyId'+authToken.toString());
       _homeCustomerBloc.postCustomerCompletedOrdersRequest(authToken, 300, "0", "$userID");
       _homeCustomerBloc.postCustomerUpcomingOrdersRequest(authToken, 300, "1", "$userID");

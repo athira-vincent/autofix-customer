@@ -28,6 +28,12 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
+  String screen = message.data['screen'];
+  if(screen.toString() == "IncomingJobOfferScreen") {
+    //_showTimeoutNotification(message);
+    //goToNextScreen_OnAppWorking(message.data);
+  }
+  print('Handling a background message ${message.messageId}');
 }
 
 Future<void> setupFcm() async {
@@ -46,34 +52,25 @@ Future<void> setupFcm() async {
 
   //when the app is in foreground state and you click on notification.
   flutterLocalNotificationsPlugin.initialize(initializationSettings,
-
       onSelectNotification: (String? payload){
         Fluttertoast.showToast(
             msg:
             "Notification onselect notification01", timeInSecForIosWeb: 15);
         if (payload != null) {
           Map<String, dynamic> data = json.decode(payload);
-          goToNextScreen(data);
+          goToNextScreen_OnClickNotification(data);
         }
       }
-      /*onDidReceiveNotificationResponse: (NotificationResponse notificationResponse){
-        final String? payload = notificationResponse.payload;
-        if (payload != null) {
-          Map<String, dynamic> data = json.decode(payload);
-          goToNextScreen(data);
-        }
-      },*/
-
     //onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
   );
   //When the app is terminated, i.e., app is neither in foreground or background.
   FirebaseMessaging.instance.getInitialMessage().then((value){
     Fluttertoast.showToast(
-        msg:
-        "get initial message");
+        msg: "get initial message");
     //Its compulsory to check if RemoteMessage instance is null or not.
     if(value != null){
-      goToNextScreen(value.data);
+
+      goToNextScreen_OnClickNotification(value.data);
     }
   });
 
@@ -82,7 +79,7 @@ Future<void> setupFcm() async {
     Fluttertoast.showToast(
         msg:
         "Notification on message opened 02");
-    goToNextScreen(event.data);
+    goToNextScreen_OnClickNotification(event.data);
   },
     cancelOnError: false,
     onDone: () {},
@@ -92,12 +89,10 @@ Future<void> setupFcm() async {
 
     String screen = remoteMessage.data['screen'];
     if(screen.toString() == "IncomingJobOfferScreen"){
-      _showTimeoutNotification(remoteMessage);
-      // NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(remoteMessage.data);
-      //
-      // String bookingId = remoteMessage.data['bookingId'];
-      // print("bookingId >>>>> " + bookingId );
-      // notificationNavigatorKey.currentState!.pushNamed('/IncomingJobRequestScreen',arguments: notificationPayloadMdl);
+      Fluttertoast.showToast(
+          msg:
+          "Notification on message listen 10");
+      goToNextScreen_OnAppWorking(remoteMessage.data);
     }
     else{
       Fluttertoast.showToast(
@@ -173,22 +168,17 @@ Future<String> getFcmToken() async {
   return Future.value(token);
 }
 
-Future<void> goToNextScreen(Map<String, dynamic> data) async {
+Future<void> goToNextScreen_OnClickNotification(Map<String, dynamic> data) async {
   Fluttertoast.showToast(
       msg: "goToNextScreen",
       timeInSecForIosWeb: 15
   );
   SharedPreferences _shdPre = await SharedPreferences.getInstance();
-  String? _token = _shdPre.getString(SharedPrefKeys.token.toString());
   String? userType = _shdPre.getString(SharedPrefKeys.userType);
-  print(' $userType ============= ');
+  print(' $userType ============= 01');
 
   if (data['click_action'] != null) {
 
-    /*Fluttertoast.showToast(
-        msg: "Notification hit on change screen",
-      timeInSecForIosWeb: 15
-    );*/
     String screen = data['screen'];
     if(screen.toString() == "IncomingJobOfferScreen"){
       NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(data);
@@ -201,10 +191,8 @@ Future<void> goToNextScreen(Map<String, dynamic> data) async {
     }else if (userType.toString() == TextStrings.user_mechanic){
       notificationNavigatorKey.currentState!.pushNamed('/mechNotificationList',);
     }else{
-      /*Fluttertoast.showToast(
-        msg: "Notification hit on change screen",
-      timeInSecForIosWeb: 15
-    );*/
+      Fluttertoast.showToast(
+          msg: "Notification else part");
     }
     /*switch (data['click_action']) {
       case "first_screen":
@@ -218,11 +206,53 @@ Future<void> goToNextScreen(Map<String, dynamic> data) async {
     }*/
     return;
   }
-  Fluttertoast.showToast(
-      msg:
-      "Notification else part");
   //If the payload is empty or no click_action key found then go to Notification Screen if your app has one.
   //navigatorKey.currentState.pushNamed(NotificationPage.routeName,);
+}
+
+Future<void> goToNextScreen_OnAppBackground(Map<String, dynamic> data) async {
+  Fluttertoast.showToast(
+      msg: "goToNextScreen_OnAppBackground",
+      timeInSecForIosWeb: 15
+  );
+  SharedPreferences _shdPre = await SharedPreferences.getInstance();
+  String? userType = _shdPre.getString(SharedPrefKeys.userType);
+  print(' $userType ============= 02');
+
+    String screen = data['screen'];
+    if(screen.toString() == "IncomingJobOfferScreen"){
+      NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(data);
+
+      String bookingId = data['bookingId'];
+      print("bookingId >>>>> " + bookingId );
+      notificationNavigatorKey.currentState!.pushNamed('/IncomingJobRequestScreen',arguments: notificationPayloadMdl);
+    } else{
+
+    }
+}
+
+Future<void> goToNextScreen_OnAppWorking(Map<String, dynamic> data) async {
+  Fluttertoast.showToast(
+      msg: "goToNextScreen_OnAppWorking",
+      timeInSecForIosWeb: 15
+  );
+  SharedPreferences _shdPre = await SharedPreferences.getInstance();
+  String? userType = _shdPre.getString(SharedPrefKeys.userType);
+  print(' $userType ============= 03');
+
+  String screen = data['screen'];
+  if(screen.toString() == "IncomingJobOfferScreen"){
+    NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(data);
+
+    String bookingId = data['bookingId'];
+    print("bookingId >>>>> " + bookingId );
+    notificationNavigatorKey.currentState!.pushNamed('/IncomingJobRequestScreen',arguments: notificationPayloadMdl);
+  } else{
+    Fluttertoast.showToast(
+        msg: "Notification hit on change screen",
+      timeInSecForIosWeb: 15
+    );
+  }
 }
 
 Future<String> _base64encodedImage(String url) async {
@@ -371,6 +401,7 @@ showSimpleNotification(RemoteMessage remoteMessage) async {
   }
 }
 
+///-------- method to show notification with time out ---------------
 Future<void> _showTimeoutNotification(RemoteMessage remoteMessage) async {
   //Map<String, dynamic> data = json.decode(remoteMessage.data[0]);
 

@@ -1,5 +1,7 @@
 import 'package:auto_fix/ApiProvider/customer_apiProvider.dart';
 import 'package:auto_fix/ApiProvider/mechanic_api_provider.dart';
+import 'package:auto_fix/Constants/GlobelTime/timeApiProvider.dart';
+import 'package:auto_fix/Constants/GlobelTime/timeMdl.dart';
 import 'package:auto_fix/Models/cod_model/cod_model.dart';
 import 'package:auto_fix/Models/customer_models/add_address_model/add_address_model.dart';
 import 'package:auto_fix/Models/customer_models/add_cart_model/add_cart_model.dart';
@@ -85,6 +87,7 @@ class Repository {
   final _customerratingprovider=CustomerApiProvider();
   final _notificationprovider = CustomerApiProvider();
   final _vendornotificationprovider = MechanicApiProvider();
+  final _apiTimeProvider = WorldTimeApiProvider();
 
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>
@@ -690,5 +693,8 @@ class Repository {
 
   Future<NotificationModel> vendornotification() =>
       _vendornotificationprovider.vendornotification();
+
+  Future<TimeModel> getCurrentWorldTime(parameter) =>
+      _apiTimeProvider.getTimeRequest(parameter);
 
 }

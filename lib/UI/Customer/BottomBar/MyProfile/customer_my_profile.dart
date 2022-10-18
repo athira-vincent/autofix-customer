@@ -6,6 +6,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
+import 'package:auto_fix/UI/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_mdl.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_bloc.dart';
@@ -147,6 +148,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      JWTTokenChecking.checking(authToken, context);
       print('userFamilyId CustomerMyProfileScreen'+authToken.toString());
     });
     String id = shdPre.getString(SharedPrefKeys.userID,).toString();

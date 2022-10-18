@@ -6,6 +6,7 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/Provider/locale_provider.dart';
+import 'package:auto_fix/UI/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
@@ -88,6 +89,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       localProfileName =  shdPre.getString(SharedPrefKeys.userName).toString();
       localProfileUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
     });
+    JWTTokenChecking.checking(shdPre.getString(SharedPrefKeys.token).toString(), context);
     print('userFamilyId  MechanicHomeScreen ' + authToken.toString());
     print('userId  MechanicHomeScreen ' + userId.toString());
     print('userName  MechanicHomeScreen ' + userName.toString());

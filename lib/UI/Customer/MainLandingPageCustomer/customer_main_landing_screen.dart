@@ -1,9 +1,11 @@
+import 'package:auto_fix/Constants/GlobelTime/timeBloc.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/Provider/locale_provider.dart';
+import 'package:auto_fix/UI/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_UI/HomeCustomer/customer_home.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
@@ -37,6 +39,8 @@ class CustomerMainLandingScreen extends StatefulWidget {
 }
 
 class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
+
+  final TimeBloc _timeCustomerBloc = TimeBloc();
   int _index = 0;
   int _counter = 0;
   var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -64,6 +68,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
   }
 
   Future<void> getSharedPrefData() async {
+    _timeCustomerBloc.postTimeRequest("Nairobi");
     String localProfileUrl = "", localProfileName = "", localUserId = "";
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
@@ -73,6 +78,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
       localProfileName = shdPre.getString(SharedPrefKeys.userName).toString();
       localProfileUrl =
           shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
+      JWTTokenChecking.checking(authToken, context);
       Provider.of<ProfileDataProvider>(context, listen: false)
           .setProfile(localUserId, localProfileName, localProfileUrl);
       print('authToken>>>>>>>>> ' + authToken.toString());
@@ -81,6 +87,10 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
   }
 
   _listenNotification(BuildContext context) {
+    _timeCustomerBloc.postTime.listen((value) {
+      print(">>>>>>> Time block listen >>> ${value}");
+    });
+
     /*FirebaseMessaging.onMessage.listen((RemoteMessage event) {
 
       print("message received onMessage");
@@ -113,17 +123,17 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
       }
     });*/
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+    /*FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print("message received onMessage");
 
-      /*setState(() {
+      *//*setState(() {
         _counter += 1;
         //_notificationPayloadMdl = event.data;
-      });*/
+      });*//*
       print("event.notification!.data " + event.data.toString());
 
       String screen = event.data['screen'];
-      /*if(screen.toString() == "MechanicWaitingPaymentScreen"){
+      *//*if(screen.toString() == "MechanicWaitingPaymentScreen"){
 
         String bookingId = event.data['bookingId'];
         print("bookingId >>>>> " + bookingId );
@@ -131,7 +141,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) => MechanicWaitingPaymentScreen()));
-      }*/
+      }*//*
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
@@ -210,7 +220,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
                                   : TextStrings.firebase_take_vehicle,
                     ))).then((value) {});
       }
-    });
+    });*/
   }
 
   @override

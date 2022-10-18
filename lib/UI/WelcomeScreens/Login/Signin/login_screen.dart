@@ -25,6 +25,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as JSON;
 
 import '../../../Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -141,7 +142,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       },
                                       child:*/ Container(
                                         child: Text(
-                                          'Login',
+                                          AppLocalizations.of(context)!.login ,
+                                          //'Login',
                                           style: Styles.textHeadLogin,
                                         ),
                                       ),
@@ -156,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  'Email',
+                                                  AppLocalizations.of(context)!.text_email, //'Email',
                                                   style: Styles.textLabelTitle,
                                                 ),
                                                 TextFormField(
@@ -167,13 +169,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   keyboardType: TextInputType.text,
                                                   validator:
                                                   InputValidator(
-                                                      ch: 'Your email id',
+                                                      ch:  AppLocalizations.of(context)!.text_hint_email, //'Your email id',
                                                   ).emailValidator,
                                                   controller: _userNameController,
                                                   cursorColor: CustColors.light_navy,
                                                   decoration: InputDecoration(
                                                     isDense: true,
-                                                    hintText: 'Your email id',
+                                                    hintText: AppLocalizations.of(context)!.text_hint_email,// 'Your email id',
                                                     border: UnderlineInputBorder(
                                                       borderSide: BorderSide(
                                                         color: CustColors.greyish,
@@ -206,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Text('Password',
+                                                Text(AppLocalizations.of(context)!.text_password, //'Password',
                                                   style: Styles.textLabelTitle,
                                                 ),
                                                 TextFormField(
@@ -215,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   obscureText: !_passwordVisible!,
                                                   validator:
                                                   InputValidator(ch:
-                                                    'Password'
+                                                  AppLocalizations.of(context)!.text_password // 'Password'
                                                   ).emptyChecking,
                                                   // validator:
                                                   //     InputValidator(ch: "Password").passwordChecking,
@@ -251,7 +253,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                         },
                                                       ),
                                                     ),
-                                                    hintText: 'Password',
+                                                    hintText: AppLocalizations.of(context)!.text_password, //'Password',
                                                     errorMaxLines: 3,
                                                     border: UnderlineInputBorder(
                                                       borderSide: BorderSide(
@@ -292,7 +294,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       child: Container(
                                                         margin: EdgeInsets.only(top: _setValue(10)),
                                                         child: Text(
-                                                          'Forgot password?',
+                                                          AppLocalizations.of(context)!.text_forgot_password, //'Forgot password?',
                                                           style: Styles.textLabelSubTitle,
                                                         ),
                                                       ),
@@ -337,7 +339,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     crossAxisAlignment: CrossAxisAlignment.center,
                                                     children: [
                                                       Text(
-                                                        'Login',
+                                                        AppLocalizations.of(context)!.login,  //'Login',
                                                         textAlign: TextAlign.center,
                                                         style: Styles.textButtonLabelSubTitle,
                                                       ),
@@ -358,11 +360,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                               text: TextSpan(
                                                 children: <TextSpan>[
                                                   TextSpan(
-                                                    text: 'Don\'t have an account?  ',
+                                                    text: AppLocalizations.of(context)!.text_dont_have_account,
                                                     style: Styles.textLabelSubTitle,
                                                   ),
                                                   TextSpan(
-                                                      text: 'Sign Up',
+                                                      text: AppLocalizations.of(context)!.text_sign_up, //'Sign Up',
                                                       style: Styles.textLabelTitle_10,
                                                       recognizer: TapGestureRecognizer()
                                                         ..onTap = () {
@@ -380,7 +382,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           Container(
                                             margin: EdgeInsets.only(top: 15.8),
                                             child: Text(
-                                              'Or login with',  //'Or login with',
+                                              AppLocalizations.of(context)!.text_or_login,  //'Or login with',
                                               style: Styles.textLabelSubTitleAzure,
                                             ),
                                           ),

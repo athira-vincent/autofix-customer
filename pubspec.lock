@@ -805,6 +805,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.4"
+  jwt_decoder:
+    dependency: "direct main"
+    description:
+      name: jwt_decoder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   lints:
     dependency: transitive
     description:
@@ -896,6 +903,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  otp_autofill:
+    dependency: "direct main"
+    description:
+      name: otp_autofill
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   path:
     dependency: transitive
     description:
@@ -1104,13 +1118,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  sms_otp_auto_verify:
-    dependency: "direct main"
-    description:
-      name: sms_otp_auto_verify
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
   source_span:
     dependency: transitive
     description:
