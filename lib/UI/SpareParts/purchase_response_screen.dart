@@ -9,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class PurchaseResponseScreen extends StatefulWidget {
   final bool isSuccess;
 
+
   PurchaseResponseScreen({required this.isSuccess});
 
   @override
