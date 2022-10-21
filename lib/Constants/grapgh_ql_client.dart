@@ -6,11 +6,11 @@ import 'package:http/io_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GqlClient {
-  int lanCode = 0;
+  //int lanCode = 0;
   Future<String> getLanguage() async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String? lan = shdPre.getString(SharedPrefKeys.userLanguageCode);
-    if(lan == "ig"){
+    /*if(lan == "ig"){
       lanCode = 1;
     }else if(lan == "en"){
       lanCode = 2;
@@ -20,8 +20,8 @@ class GqlClient {
       lanCode = 4;
     }else{
       lanCode = 2;
-    }
-    return lanCode.toString();
+    }*/
+    return lan.toString();
   }
 
   GqlClient._privateConstructor();
@@ -32,9 +32,9 @@ class GqlClient {
   final HttpLink httpLink = HttpLink(
     "https://api-gateway.techlabz.in/autoconnect-be",
   );
-  // final HttpLink httpLink = HttpLink(
-  //   "http://athiras-82.workspace.techwarelab.com/graphql",
-  // );
+  /*final HttpLink httpLink = HttpLink(
+    "https://athiras-82.workspace.techwarelab.com/graphql",
+  );*/
 
   GraphQLClient clientToQuery() {
     return GraphQLClient(
@@ -48,6 +48,7 @@ class GqlClient {
       cache: GraphQLCache(store: HiveStore()),
       link: HttpLink(
         "https://api-gateway.techlabz.in/autoconnect-be",
+        //"https://athiras-82.workspace.techwarelab.com/graphql",
         defaultHeaders: <String, String>{
           'x-token': "",
         },
@@ -64,6 +65,7 @@ class GqlClient {
       IOClient _ioClient = IOClient(_httpClient);
       final HttpLink httpLink = HttpLink(
         "https://api-gateway.techlabz.in/autoconnect-be",
+        //"https://athiras-82.workspace.techwarelab.com/graphql",
         defaultHeaders: <String, String>{
           'x-token': token,
           'language' : "${getLanguage()}"
@@ -83,6 +85,7 @@ class GqlClient {
       IOClient _ioClient = IOClient(_httpClient);
       final HttpLink httpLink = HttpLink(
         "https://api-gateway.techlabz.in/autoconnect-be",
+        //"https://athiras-82.workspace.techwarelab.com/graphql",
         defaultHeaders: <String, String>{
           'x-token': token,
           'language' : "${getLanguage()}"
@@ -110,8 +113,10 @@ class GqlClient {
       GraphQLClient _graphClient = GraphQLClient(
           cache: GraphQLCache(store: HiveStore()),
           link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
+              //"https://athiras-82.workspace.techwarelab.com/graphql",
               defaultHeaders: <String, String>{
                 'x-token': "",
+                'language' : "${getLanguage()}"
               },
               httpClient: _ioClient));
       final QueryResult resp = await _graphClient
@@ -175,9 +180,10 @@ class GqlClient {
       GraphQLClient _graphClient = GraphQLClient(
           cache: GraphQLCache(store: HiveStore()),
           link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
+              //"https://athiras-82.workspace.techwarelab.com/graphql",
               defaultHeaders: <String, String>{
                 'x-token': token,
-                "language" : langCode
+                'language' : "${getLanguage()}"
               },
               httpClient: _ioClient));
       final QueryResult resp = await _graphClient
@@ -251,9 +257,10 @@ class GqlClient {
       GraphQLClient _graphClient = GraphQLClient(
           cache: GraphQLCache(store: HiveStore()),
           link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
+              //"https://athiras-82.workspace.techwarelab.com/graphql",
               defaultHeaders: <String, String>{
                 'x-token': "",
-                'language': langCode,
+                'language' : "${getLanguage()}"
               },
               httpClient: _ioClient));
 
@@ -334,8 +341,10 @@ class GqlClient {
       GraphQLClient _graphClient = GraphQLClient(
           cache: GraphQLCache(store: HiveStore()),
           link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
+              //"https://athiras-82.workspace.techwarelab.com/graphql",
               defaultHeaders: <String, String>{
                 'x-token': token,
+                'language' : "${getLanguage()}"
               },
               httpClient: _ioClient));
 

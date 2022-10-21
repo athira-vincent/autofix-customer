@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:auto_fix/Models/resend_otp_model/resend_otp_model.dart';
 import 'package:auto_fix/QueryProvider/query_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/signUp_Mdl.dart';
@@ -61,13 +62,32 @@ class SignupApiProvider {
     }
   }
 
+  Future<ResendOtpModel> postResendOtpRequest(
+      email,
+      phone) async {
+    Map<String, dynamic> _resp = await _queryProvider.postResendOtpRequest(
+        email,
+        phone);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = ResendOtpModel(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return ResendOtpModel.fromJson(data);
+      }
+    } else {
+      final errorMsg = ResendOtpModel(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
 
   Future<PhoneLoginOtpVerificationMdl> postPhoneLoginOtpVerificationRequest(
-      token,
       otp,
       userTypeId) async {
     Map<String, dynamic> _resp = await _queryProvider.postPhoneLoginOtpVerificationRequest(
-        token,
         otp,
         userTypeId);
     // ignore: unnecessary_null_comparison

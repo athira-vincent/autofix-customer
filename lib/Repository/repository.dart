@@ -194,11 +194,15 @@ class Repository {
   Future<dynamic> postOtpVerificationRequest(token, otp, userTypeId) =>
       _signupApiProvider.postOtpVerificationRequest(token, otp, userTypeId);
 
+  //Resend OTP
+  Future<dynamic> postResentOtpRequest(email, phone) =>
+      _signupApiProvider.postResendOtpRequest(email, phone);
+
   //Phone Login Otp Verification
   Future<dynamic> postPhoneLoginOtpVerificationRequest(
-          token, otp, userTypeId) =>
+           otp, userTypeId) =>
       _signupApiProvider.postPhoneLoginOtpVerificationRequest(
-          token, otp, userTypeId);
+           otp, userTypeId);
 
   /// =============== Mechanics Regular Service Booking Id  ================== ///
 

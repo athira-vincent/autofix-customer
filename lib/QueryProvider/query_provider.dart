@@ -569,32 +569,86 @@ class QueryProvider {
     );
   }
 
-  postPhoneLoginOtpVerificationRequest(token, otp, userTypeId) async {
+  postPhoneLoginOtpVerificationRequest(otp, userTypeId) async {
     String _query = """ 
-         mutation {
-            signIn_Otp(otp: "$otp", userTypeId: ${int.parse(userTypeId.toString())}) {
-              token
-              user {
-                id
-                userCode
-                firstName
-                lastName
-                emailId
-                phoneNo
-                status
-                userTypeId
-                jwtToken
-                fcmToken
-                otpCode
-                isProfile
-                otpVerified
-              }
-            }
+      mutation {
+      signIn_Otp(otp: "$otp", userTypeId: ${int.parse(userTypeId.toString())}) {
+        token
+        user {
+          id
+          userCode
+          firstName
+          lastName
+          emailId
+          phoneNo
+          status
+          userTypeId
+          jwtToken
+          fcmToken
+          otpCode
+          isProfile
+          otpVerified
+          customer{
+            custType
           }
+          mechanic{
+            id
+          }
+          vendor{
+            id
+          }
+        }
+        genCustomer {
+          id
+          custType
+          orgName
+          orgType
+          userId
+          profilePic
+          state
+          ministryName
+          hod
+          status
+        }
+        genMechanic {
+          id
+          orgName
+          orgType
+          yearExp
+          mechType
+          workType
+          numMech
+          rcNumber
+          address
+          apprentice_cert
+          identification_cert
+          yearExist
+          rate
+          reviewCount
+          adminApprove
+          userId
+          profilePic
+          state
+          status
+          brands
+        }
+        genVendor {
+          id
+          userId
+          profilePic
+          state
+          shopName
+          productCount
+          orderCount
+          totalEarning
+          status
+        }
+      }
+    }
       """;
     log(_query);
-    return await GqlClient.I.mutation11(_query,
-        enableDebug: true, token: token, isTokenThere: true, variables: {});
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
   }
 
   postOtpVerificationRequest(token, otp, userTypeId) async {
@@ -604,11 +658,26 @@ class QueryProvider {
             verified
           }
         }
-
     """;
     log(_query);
-    return await GqlClient.I.mutation11(_query,
-        enableDebug: true, token: token, isTokenThere: true, variables: {});
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
+  postResendOtpRequest( email, phone) async {
+    String _query = """ 
+       mutation {
+        resendOtp(emailId: "$email", phoneNo: "$phone") {
+          otpCode
+          userId
+          userTypeId
+          phoneNo
+        }
+      }
+    """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
   }
 
   /// =============== Mechanics List Emergency ================== latitude: "9.2575"  longitude: "76.4508"///

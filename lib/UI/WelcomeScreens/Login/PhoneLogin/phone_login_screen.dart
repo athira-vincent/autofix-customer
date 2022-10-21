@@ -77,14 +77,14 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
       } else {
         setState(() {
           _isLoading = false;
-          _signinBloc.userDefaultData(
-            value.data!.signInPhoneNo!.jwtToken.toString(),
-              value.data!.signInPhoneNo!.userTypeId.toString(),
-            "",
-              value.data!.signInPhoneNo!.firstName.toString(),
-            value.data!.signInPhoneNo!.id.toString(),
-                         //----- profile image url should b updated
-              );
+          // _signinBloc.userDefaultData(
+          //   //value.data!.signInPhoneNo!.jwtToken.toString(),
+          //     value.data!.signInPhoneNo!.userTypeId.toString(),
+          //   "",
+          //     value.data!.signInPhoneNo!.firstName.toString(),
+          //   value.data!.signInPhoneNo!.id.toString(),
+          //                //----- profile image url should b updated
+          //     );
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -157,23 +157,6 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 InkWell(
-                                  onTap: (){
-                                    if(language_en_ar==true)
-                                    {
-                                      MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
-                                      setState(() {
-                                        language_en_ar=false;
-                                      });
-                                    }
-                                    else
-                                    {
-                                      MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
-                                      setState(() {
-                                        language_en_ar=true;
-                                      });
-                                    }
-
-                                  },
                                   child: Container(
                                     child: Text(
                                       'Phone Number',   //'Phone Number',
@@ -210,18 +193,17 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                               children: [
                                                 Center(
                                                   child: CountryCodePicker(
-
                                                     onChanged: _onCountryChange,
                                                     // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-                                                    initialSelection: 'IT',
-                                                    favorite: ['+234','FR'],
+                                                    initialSelection: 'NG',
+                                                    favorite: ['+234','NG'],
                                                     // optional. Shows only country name and flag
                                                     showCountryOnly: false,
                                                     // optional. Shows only country name and flag when popup is closed.
                                                     showOnlyCountryWhenClosed: false,
                                                     // optional. aligns the flag and the Text left
                                                     alignLeft: false,
-
+                                                    enabled: false,
                                                   ),
                                                 ),
                                                 Expanded(
