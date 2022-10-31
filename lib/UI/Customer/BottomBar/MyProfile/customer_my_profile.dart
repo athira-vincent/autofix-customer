@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
@@ -25,8 +24,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart' as path;
 
 class CustomerMyProfileScreen extends StatefulWidget {
-
   bool isEnableEditing;
+
   CustomerMyProfileScreen({required this.isEnableEditing});
 
   @override
@@ -36,8 +35,6 @@ class CustomerMyProfileScreen extends StatefulWidget {
 }
 
 class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
-
-
   final CustomerProfileBloc _fetchProfileBloc = CustomerProfileBloc();
   final CustomerEditProfileBloc _changeProfileBloc = CustomerEditProfileBloc();
   final SignupBloc _signupBloc = SignupBloc();
@@ -53,7 +50,6 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   TextEditingController _stateController = TextEditingController();
   TextEditingController _orgTypeController = TextEditingController();
   TextEditingController _ministryGovtController = TextEditingController();
-
 
   FocusNode _nameFocusNode = FocusNode();
   FocusNode _orgNameNode = FocusNode();
@@ -110,7 +106,6 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     "Nigerian Basketball Federation"
   ];
 
-
   bool isloading = false;
   bool saveloading = false;
 
@@ -127,7 +122,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
   bool editProfileEnabled = false;
   String selectedState = "";
-  String authToken="";
+  String authToken = "";
   String _userName = "", _imageUrl = "", _userType = "", _orgName = "";
   final picker = ImagePicker();
   File? _images;
@@ -147,52 +142,55 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      print('userFamilyId CustomerMyProfileScreen'+authToken.toString());
+      print('userFamilyId CustomerMyProfileScreen' + authToken.toString());
     });
-    String id = shdPre.getString(SharedPrefKeys.userID,).toString();
-    _fetchProfileBloc.postCustomerProfileRequest(authToken,id);
+    String id = shdPre
+        .getString(
+          SharedPrefKeys.userID,
+        )
+        .toString();
+    _fetchProfileBloc.postCustomerProfileRequest(authToken, id);
   }
-
 
   _listenFetchProfileResponse() {
     _fetchProfileBloc.postCustomerProfile.listen((value) {
-        if (value.status == "error") {
-          setState(() {
-           // _isLoading = false;
-            /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      if (value.status == "error") {
+        setState(() {
+          // _isLoading = false;
+          /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(value.message.toString(),
                   style: const TextStyle(
                       fontFamily: 'Roboto_Regular', fontSize: 14)),
               duration: const Duration(seconds: 2),
               backgroundColor: CustColors.light_navy,
             ));*/
-          });
-        } else {
-          setState(() {
-            //_isLoading = false;
-            /*ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        });
+      } else {
+        setState(() {
+          //_isLoading = false;
+          /*ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text("Password Reset Enabled.\nCheck Your mail",
                   style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
               duration: Duration(seconds: 2),
               backgroundColor: CustColors.peaGreen,
             ));*/
-            setProfileData(value);
-            Provider.of<ProfileDataProvider>(context, listen: false).setProfile(
-                value.data!.customerDetails!.id.toString(),
-                value.data!.customerDetails!.firstName.toString(),
-                value.data!.customerDetails!.customer![0].profilePic.toString());
-          });
-        }
-      });
-
+          setProfileData(value);
+          Provider.of<ProfileDataProvider>(context, listen: false).setProfile(
+              value.data!.customerDetails!.id.toString(),
+              value.data!.customerDetails!.firstName.toString(),
+              value.data!.customerDetails!.customer![0].profilePic.toString());
+        });
+      }
+    });
   }
-  _listenUpdateProfileResponse(){
+
+  _listenUpdateProfileResponse() {
     _changeProfileBloc.postCustomerIndividualEditProfile.listen((value) {
       print("dbjbjbdjdbkj 001");
-      if(value.status== "error"){
+      if (value.status == "error") {
         setState(() {
           // _isLoading = false;
-          saveloading=false;
+          saveloading = false;
           editProfileEnabled = true;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.message.toString(),
@@ -202,8 +200,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
             backgroundColor: CustColors.light_navy,
           ));
         });
-      }
-      else{
+      } else {
         setState(() {
           editProfileEnabled = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -220,10 +217,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     });
     _changeProfileBloc.postCustomerCorporateEditProfile.listen((value) {
       print("dbjbjbdjdbkj 002");
-      if(value.status== "error"){
+      if (value.status == "error") {
         setState(() {
           // _isLoading = false;
-          saveloading=false;
+          saveloading = false;
           editProfileEnabled = true;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.message.toString(),
@@ -233,8 +230,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
             backgroundColor: CustColors.light_navy,
           ));
         });
-      }
-      else{
+      } else {
         setState(() {
           editProfileEnabled = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -251,7 +247,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     });
     _changeProfileBloc.postCustomerGovernmentEditProfile.listen((value) {
       print("dbjbjbdjdbkj 003");
-      if(value.status== "error"){
+      if (value.status == "error") {
         setState(() {
           // _isLoading = false;
           saveloading = false;
@@ -264,8 +260,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
             backgroundColor: CustColors.light_navy,
           ));
         });
-      }
-      else{
+      } else {
         setState(() {
           editProfileEnabled = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -282,26 +277,29 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     });
   }
 
-  void setProfileData(CustomerProfileMdl value){
-    _nameController.text = value.data!.customerDetails!.firstName.toString() ;
+  void setProfileData(CustomerProfileMdl value) {
+    _nameController.text = value.data!.customerDetails!.firstName.toString();
     _emailController.text = value.data!.customerDetails!.emailId.toString();
     _phoneController.text = value.data!.customerDetails!.phoneNo.toString();
-    _stateController.text = value.data!.customerDetails!.customer![0].state.toString();
-    _orgTypeController.text = value.data!.customerDetails!.customer![0].orgType.toString();
-    _ministryGovtController.text = value.data!.customerDetails!.customer![0].ministryName.toString();
+    _stateController.text =
+        value.data!.customerDetails!.customer![0].state.toString();
+    _orgTypeController.text =
+        value.data!.customerDetails!.customer![0].orgType.toString();
+    _ministryGovtController.text =
+        value.data!.customerDetails!.customer![0].ministryName.toString();
 
     _userName = value.data!.customerDetails!.firstName.toString();
     _imageUrl = value.data!.customerDetails!.customer![0].profilePic.toString();
     _userType = value.data!.customerDetails!.customer![0].custType.toString();
-    _orgNameController.text = value.data!.customerDetails!.customer![0].orgName.toString();
+    _orgNameController.text =
+        value.data!.customerDetails!.customer![0].orgName.toString();
 
     _signinBloc.userDefaultData(
-        authToken,
-        TextStrings.user_customer,
-       _imageUrl,       //----- profile image url should b updated
-        value.data!.customerDetails!.firstName.toString(),
-        value.data!.customerDetails!.id.toString(),
-
+      authToken,
+      TextStrings.user_customer,
+      _imageUrl, //----- profile image url should b updated
+      value.data!.customerDetails!.firstName.toString(),
+      value.data!.customerDetails!.id.toString(),
     );
 
     print(">>>>>>>>>>>>> _userType : CustomerMyProfileScreen" + _userType);
@@ -317,71 +315,70 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return  Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: Container(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  //appBarCustomUi(size),
-                  profileImageAndKmAndReviewCount(size),
-                  Form(
-                      autovalidateMode: _autoValidate,
-                      key: _formKey,
-                      child:
-                        _userType == "1"
-                            ?
-                            Column(
-                              children: [
-                                NameTextUi(size),
-                                EmailTextUi(size),
-                                PhoneTextUi(size),
-                                StateTextUi(size),
-                                editProfileEnabled == true ? individualSaveChangeButton(size) : Container(),
-                              ],
-                            )
-                            :
-                          _userType == "2"
-                              ?
-                            Column(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Container(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                //appBarCustomUi(size),
+                profileImageAndKmAndReviewCount(size),
+                Form(
+                  autovalidateMode: _autoValidate,
+                  key: _formKey,
+                  child: _userType == "1"
+                      ? Column(
+                          children: [
+                            NameTextUi(size),
+                            EmailTextUi(size),
+                            PhoneTextUi(size),
+                            StateTextUi(size),
+                            editProfileEnabled == true
+                                ? individualSaveChangeButton(size)
+                                : Container(),
+                          ],
+                        )
+                      : _userType == "2"
+                          ? Column(
                               children: [
                                 OrgNameTextUi(size),
-                                OrganisationTypeTextUi(size),     // --------------------- Industry
+                                OrganisationTypeTextUi(size),
+                                // --------------------- Industry
                                 NameTextUi(size),
                                 EmailTextUi(size),
                                 PhoneTextUi(size),
                                 StateTextUi(size),
-                                editProfileEnabled == true ? corporateSaveChangeButton(size) : Container(),
+                                editProfileEnabled == true
+                                    ? corporateSaveChangeButton(size)
+                                    : Container(),
                               ],
                             )
-                              :
-                          Column(
-                            children: [
-                              StateTextUi(size),
-                              ministryTextUi(size),
-                              NameTextUi(size),
-                              EmailTextUi(size),
-                              PhoneTextUi(size),
-                              editProfileEnabled == true ? governmentSaveChangeButton(size) : Container(),
-                            ],
-                          ),
-                  ),
-                ],
-              ),
+                          : Column(
+                              children: [
+                                StateTextUi(size),
+                                ministryTextUi(size),
+                                NameTextUi(size),
+                                EmailTextUi(size),
+                                PhoneTextUi(size),
+                                editProfileEnabled == true
+                                    ? governmentSaveChangeButton(size)
+                                    : Container(),
+                              ],
+                            ),
+                ),
+              ],
             ),
           ),
         ),
-
+      ),
     );
   }
 
   Widget appBarCustomUi(Size size) {
     return Container(
       margin: EdgeInsets.only(
-        left: size.width * 10 / 100,
-        top: size.height * 3.3 / 100
-      ),
+          left: size.width * 10 / 100, top: size.height * 3.3 / 100),
       child: Stack(
         children: [
           Row(
@@ -396,7 +393,6 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 style: Styles.appBarTextBlack,
               ),
               Spacer(),
-
             ],
           ),
         ],
@@ -406,23 +402,22 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
   Widget profileImageAndKmAndReviewCount(Size size) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10,5,10,10),
+      padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
       child: Container(
-       // color: Colors.red,
+        // color: Colors.red,
         alignment: Alignment.center,
         child: Wrap(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(10,5,10,10),
+              padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
               child: Stack(
                 children: [
                   Stack(
                     alignment: Alignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0,80,155,0),
-                        child:
-                        Image.asset(
+                        padding: const EdgeInsets.fromLTRB(0, 80, 155, 0),
+                        child: Image.asset(
                           'assets/image/mechanicProfileView/curvedGray.png',
                           width: 150,
                           height: 150,
@@ -435,20 +430,16 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                           height: size.height * 5 / 100,
                           width: size.width * 28 / 100,
                           margin: EdgeInsets.only(
-                            left: size.width * 18 / 100,
-                            top: size.height * 11 / 100
-                          ),
+                              left: size.width * 18 / 100,
+                              top: size.height * 11 / 100),
                           child: InkWell(
-                            onTap: (){
+                            onTap: () {
                               setState(() {
                                 print('editProfileEnabled $editProfileEnabled');
-                                if(editProfileEnabled)
-                                {
-                                  editProfileEnabled=false;
-                                }
-                                else
-                                {
-                                  editProfileEnabled=true;
+                                if (editProfileEnabled) {
+                                  editProfileEnabled = false;
+                                } else {
+                                  editProfileEnabled = true;
                                 }
                                 print('editProfileEnabled $editProfileEnabled');
                               });
@@ -460,8 +451,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                   size: 15,
                                   color: CustColors.light_navy,
                                 ),
-                                Text(' Edit Profile',
-                                  style: Styles.appBarTextBlack17,),
+                                Text(
+                                  ' Edit Profile',
+                                  style: Styles.appBarTextBlack17,
+                                ),
                               ],
                             ),
                           ),
@@ -470,7 +463,6 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                       //),
                     ],
                   ),
-
                   Align(
                     alignment: Alignment.center,
                     child: Stack(
@@ -483,56 +475,53 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                               height: 125.0,
                               child: ClipRRect(
                                   borderRadius: BorderRadius.circular(20.0),
-                                  child:Container(
-                                      child:CircleAvatar(
+                                  child: Container(
+                                      child: CircleAvatar(
                                           radius: 50,
                                           backgroundColor: Colors.white,
                                           child: ClipOval(
-                                            child: _imageUrl != null&&_imageUrl!=""
-                                                ?
-                                            Image.network(_imageUrl,
-                                              width: 150,
-                                              height: 150,
-                                              fit: BoxFit.cover,)
-                                                :
-                                            SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg',
-                                              width: 150,
-                                              height: 150,
-                                              fit: BoxFit.cover,)
-                                          )))
-
-                              ),
+                                              child: _imageUrl != null &&
+                                                      _imageUrl != ""
+                                                  ? Image.network(
+                                                      _imageUrl,
+                                                      width: 150,
+                                                      height: 150,
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  : SvgPicture.asset(
+                                                      'assets/image/MechanicType/work_selection_avathar.svg',
+                                                      width: 150,
+                                                      height: 150,
+                                                      fit: BoxFit.cover,
+                                                    ))))),
                             ),
                           ),
                         ),
                         editProfileEnabled == true
-                            ?
-                        InkWell(
-                          onTap: (){
-                            _showDialogSelectPhoto();
-                            print("on tap photo ");
-                          },
-                          child: Center(
-                            child: Container(
-                              child: Image.asset(
-                                "assets/image/ic_camera_black.png",
-                                //height: size.height * 7 / 100,
-                                width: size.width * 7 / 100,
-                              ),
-                            ),
-                          ),
-                        )
-                            :
-                        Container(),
+                            ? InkWell(
+                                onTap: () {
+                                  _showDialogSelectPhoto();
+                                  print("on tap photo ");
+                                },
+                                child: Center(
+                                  child: Container(
+                                    child: Image.asset(
+                                      "assets/image/ic_camera_black.png",
+                                      //height: size.height * 7 / 100,
+                                      width: size.width * 7 / 100,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(),
                       ],
                     ),
                   ),
-
                   Stack(
                     alignment: Alignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(155,80,0,0),
+                        padding: const EdgeInsets.fromLTRB(155, 80, 0, 0),
                         child: Image.asset(
                           'assets/image/mechanicProfileView/curvedWhite.png',
                           width: 150,
@@ -547,10 +536,9 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                           width: size.width * 20 / 100,
                           margin: EdgeInsets.only(
                               right: size.width * 15 / 100,
-                              top: size.height * 11 / 100
-                          ),
+                              top: size.height * 11 / 100),
                           child: InkWell(
-                            onTap: (){
+                            onTap: () {
                               showDialog(
                                   barrierDismissible: false,
                                   context: context,
@@ -566,8 +554,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                   size: 15,
                                   color: CustColors.light_navy,
                                 ),
-                                Text(' Logout',
-                                  style: Styles.appBarTextBlack17,),
+                                Text(
+                                  ' Logout',
+                                  style: Styles.appBarTextBlack17,
+                                ),
                               ],
                             ),
                           ),
@@ -586,7 +576,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
   Widget NameTextUi(Size size) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
       child: Column(
         children: [
           Row(
@@ -594,8 +584,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               Container(
                 decoration: BoxDecoration(
                     color: CustColors.whiteBlueish,
-                    borderRadius: BorderRadius.circular(11.0)
-                ),
+                    borderRadius: BorderRadius.circular(11.0)),
                 child: Padding(
                   padding: const EdgeInsets.all(13),
                   child: Icon(Icons.person, color: CustColors.blue),
@@ -603,7 +592,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -622,12 +611,16 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                 RegExp('[a-zA-Z ]')),
                           ],
                           validator: InputValidator(
-                              ch : _userType == "1" ? "Name" : "Contact Person").nameChecking,
+                                  ch: _userType == "1"
+                                      ? "Name"
+                                      : "Contact Person")
+                              .nameChecking,
                           controller: _nameController,
                           cursorColor: CustColors.light_navy,
                           decoration: InputDecoration(
                             isDense: true,
-                            hintText:  _userType == "1" ? "Name" : "Contact Person",
+                            hintText:
+                                _userType == "1" ? "Name" : "Contact Person",
                             border: InputBorder.none,
                             focusedBorder: InputBorder.none,
                             enabledBorder: InputBorder.none,
@@ -637,18 +630,17 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                               vertical: 2.8,
                               horizontal: 0.0,
                             ),
-                            hintStyle: Styles.appBarTextBlack15,),
+                            hintStyle: Styles.appBarTextBlack15,
+                          ),
                         ),
                       ),
                       editProfileEnabled != true
-                          ?
-                      Text(
-                       _userType == "1" ? 'Your name' : 'Contact person',
-                        textAlign: TextAlign.center,
-                        style: Styles.textLabelSubTitle,
-                      )
-                          :
-                      Container(),
+                          ? Text(
+                              _userType == "1" ? 'Your name' : 'Contact person',
+                              textAlign: TextAlign.center,
+                              style: Styles.textLabelSubTitle,
+                            )
+                          : Container(),
                     ],
                   ),
                 ),
@@ -656,16 +648,15 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               //Spacer(),
               editProfileEnabled == true
                   ? Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                  )
-              )
+                      child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Icon(Icons.edit, size: 15, color: CustColors.blue),
+                    ))
                   : Container(),
             ],
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
             child: Divider(),
           )
         ],
@@ -675,7 +666,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
   Widget EmailTextUi(Size size) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
       child: Column(
         children: [
           Row(
@@ -683,11 +674,11 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               Container(
                 decoration: BoxDecoration(
                     color: CustColors.whiteBlueish,
-                    borderRadius: BorderRadius.circular(11.0)
-                ),
+                    borderRadius: BorderRadius.circular(11.0)),
                 child: Padding(
                   padding: const EdgeInsets.all(15),
-                  child: SvgPicture.asset('assets/image/ic_email.svg',
+                  child: SvgPicture.asset(
+                    'assets/image/ic_email.svg',
                     height: size.height * 2 / 100,
                     width: size.width * 2 / 100,
                   ),
@@ -696,14 +687,13 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10,0,00,0),
+                  padding: const EdgeInsets.fromLTRB(10, 0, 00, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
                         child: TextFormField(
-
                           //enabled: editProfileEnabled,
                           enabled: false,
                           readOnly: !editProfileEnabled,
@@ -721,7 +711,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                           cursorColor: CustColors.light_navy,
                           decoration: InputDecoration(
                             isDense: true,
-                            hintText:  'Email',
+                            hintText: 'Email',
                             border: InputBorder.none,
                             focusedBorder: InputBorder.none,
                             enabledBorder: InputBorder.none,
@@ -731,18 +721,17 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                               vertical: 2.8,
                               horizontal: 0.0,
                             ),
-                            hintStyle: Styles.appBarTextBlack15,),
+                            hintStyle: Styles.appBarTextBlack15,
+                          ),
                         ),
                       ),
                       editProfileEnabled != true
-                          ?
-                      Text(
-                        'Your email id',
-                        textAlign: TextAlign.center,
-                        style: Styles.textLabelSubTitle,
-                      )
-                          :
-                      Container(),
+                          ? Text(
+                              'Your email id',
+                              textAlign: TextAlign.center,
+                              style: Styles.textLabelSubTitle,
+                            )
+                          : Container(),
                     ],
                   ),
                 ),
@@ -759,7 +748,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
             child: Divider(),
           )
         ],
@@ -769,7 +758,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
   Widget PhoneTextUi(Size size) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
       child: Column(
         children: [
           Row(
@@ -777,11 +766,11 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               Container(
                 decoration: BoxDecoration(
                     color: CustColors.whiteBlueish,
-                    borderRadius: BorderRadius.circular(11.0)
-                ),
+                    borderRadius: BorderRadius.circular(11.0)),
                 child: Padding(
                   padding: const EdgeInsets.all(15),
-                  child: SvgPicture.asset('assets/image/ic_phone.svg',
+                  child: SvgPicture.asset(
+                    'assets/image/ic_phone.svg',
                     height: size.height * 2 / 100,
                     width: size.width * 2 / 100,
                   ),
@@ -790,14 +779,14 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
                         child: TextFormField(
-                         // enabled: editProfileEnabled,
+                          // enabled: editProfileEnabled,
                           enabled: false,
                           readOnly: !editProfileEnabled,
                           textAlignVertical: TextAlignVertical.center,
@@ -808,12 +797,14 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(15),
                           ],
-                          validator: InputValidator(ch: 'Phone Number',).phoneNumChecking,
+                          validator: InputValidator(
+                            ch: 'Phone Number',
+                          ).phoneNumChecking,
                           controller: _phoneController,
                           cursorColor: CustColors.light_navy,
                           decoration: InputDecoration(
                             isDense: true,
-                            hintText:  'Phone',
+                            hintText: 'Phone',
                             border: InputBorder.none,
                             focusedBorder: InputBorder.none,
                             enabledBorder: InputBorder.none,
@@ -823,18 +814,17 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                               vertical: 2.8,
                               horizontal: 0.0,
                             ),
-                            hintStyle: Styles.appBarTextBlack15,),
+                            hintStyle: Styles.appBarTextBlack15,
+                          ),
                         ),
                       ),
                       editProfileEnabled != true
-                          ?
-                      Text(
-                        'Your phone number',
-                        textAlign: TextAlign.center,
-                        style: Styles.textLabelSubTitle05,
-                      )
-                          :
-                      Container(),
+                          ? Text(
+                              'Your phone number',
+                              textAlign: TextAlign.center,
+                              style: Styles.textLabelSubTitle05,
+                            )
+                          : Container(),
                     ],
                   ),
                 ),
@@ -842,16 +832,16 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               Spacer(),
               editProfileEnabled == true
                   ? Container(
-                  // child: Padding(
-                  //   padding: const EdgeInsets.all(15),
-                  //   child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                  // )
-              )
+                      // child: Padding(
+                      //   padding: const EdgeInsets.all(15),
+                      //   child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                      // )
+                      )
                   : Container(),
             ],
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
             child: Divider(),
           )
         ],
@@ -861,12 +851,12 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
   Widget StateTextUi(Size size) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
       child: Column(
         children: [
           InkWell(
-            onTap: (){
-              if(editProfileEnabled == true){
+            onTap: () {
+              if (editProfileEnabled == true) {
                 _awaitReturnValueFromSecondScreen(context);
               }
             },
@@ -875,11 +865,11 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 Container(
                   decoration: BoxDecoration(
                       color: CustColors.whiteBlueish,
-                      borderRadius: BorderRadius.circular(11.0)
-                  ),
+                      borderRadius: BorderRadius.circular(11.0)),
                   child: Padding(
                     padding: const EdgeInsets.all(15),
-                    child: SvgPicture.asset('assets/image/ic_location.svg',
+                    child: SvgPicture.asset(
+                      'assets/image/ic_location.svg',
                       height: size.height * 2.5 / 100,
                       width: size.width * 2.5 / 100,
                     ),
@@ -888,7 +878,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -901,12 +891,13 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                             maxLines: 1,
                             style: Styles.appBarTextBlack15,
                             focusNode: _stateFocusNode,
-                            validator: InputValidator(ch: 'State/FCT').emptyChecking,
+                            validator:
+                                InputValidator(ch: 'State/FCT').emptyChecking,
                             controller: _stateController,
                             cursorColor: CustColors.light_navy,
                             decoration: InputDecoration(
                               isDense: true,
-                              hintText:  'State',
+                              hintText: 'State',
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
@@ -916,35 +907,34 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                 vertical: 2.8,
                                 horizontal: 0.0,
                               ),
-                              hintStyle: Styles.appBarTextBlack15,),
+                              hintStyle: Styles.appBarTextBlack15,
+                            ),
                           ),
                         ),
                         editProfileEnabled != true
-                        ?
-                        Text(
-                          'Your state',
-                          textAlign: TextAlign.center,
-                          style: Styles.textLabelSubTitle,
-                        )
-                        :
-                        Container(),
+                            ? Text(
+                                'Your state',
+                                textAlign: TextAlign.center,
+                                style: Styles.textLabelSubTitle,
+                              )
+                            : Container(),
                       ],
                     ),
                   ),
                 ),
                 editProfileEnabled == true
                     ? Container(
-                      child: Padding(
+                        child: Padding(
                         padding: const EdgeInsets.all(15),
-                        child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                      )
-                )
+                        child:
+                            Icon(Icons.edit, size: 15, color: CustColors.blue),
+                      ))
                     : Container(),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
             child: Divider(),
           )
         ],
@@ -954,12 +944,12 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
   Widget ministryTextUi(Size size) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
       child: Column(
         children: [
           InkWell(
-            onTap: (){
-              if(editProfileEnabled == true){
+            onTap: () {
+              if (editProfileEnabled == true) {
                 print("on tap Ministry/Govt. agency ");
                 showMinistryGovtSelector();
               }
@@ -969,11 +959,11 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 Container(
                   decoration: BoxDecoration(
                       color: CustColors.whiteBlueish,
-                      borderRadius: BorderRadius.circular(11.0)
-                  ),
+                      borderRadius: BorderRadius.circular(11.0)),
                   child: Padding(
                     padding: const EdgeInsets.all(15),
-                    child: SvgPicture.asset('assets/image/ic_ministry.svg',
+                    child: SvgPicture.asset(
+                      'assets/image/ic_ministry.svg',
                       height: size.height * 2.5 / 100,
                       width: size.width * 2.5 / 100,
                     ),
@@ -982,7 +972,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -995,12 +985,14 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                             maxLines: null,
                             style: Styles.appBarTextBlack15,
                             focusNode: _ministryGovtFocusNode,
-                            validator: InputValidator(ch: 'Ministry/Govt. Agency').emptyChecking,
+                            validator:
+                                InputValidator(ch: 'Ministry/Govt. Agency')
+                                    .emptyChecking,
                             controller: _ministryGovtController,
                             cursorColor: CustColors.light_navy,
                             decoration: InputDecoration(
                               isDense: true,
-                              hintText:  'Ministry',
+                              hintText: 'Ministry',
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
@@ -1010,35 +1002,34 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                 vertical: 2.8,
                                 horizontal: 0.0,
                               ),
-                              hintStyle: Styles.appBarTextBlack15,),
+                              hintStyle: Styles.appBarTextBlack15,
+                            ),
                           ),
                         ),
                         editProfileEnabled != true
-                            ?
-                        Text(
-                          'Your ministry/govt agency ',
-                          textAlign: TextAlign.center,
-                          style: Styles.textLabelSubTitle,
-                        )
-                            :
-                        Container(),
+                            ? Text(
+                                'Your ministry/govt agency ',
+                                textAlign: TextAlign.center,
+                                style: Styles.textLabelSubTitle,
+                              )
+                            : Container(),
                       ],
                     ),
                   ),
                 ),
                 editProfileEnabled == true
                     ? Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                    )
-                )
+                        child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child:
+                            Icon(Icons.edit, size: 15, color: CustColors.blue),
+                      ))
                     : Container(),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
             child: Divider(),
           )
         ],
@@ -1048,7 +1039,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
   Widget OrgNameTextUi(Size size) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
       child: Column(
         children: [
           Row(
@@ -1056,11 +1047,11 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               Container(
                 decoration: BoxDecoration(
                     color: CustColors.whiteBlueish,
-                    borderRadius: BorderRadius.circular(11.0)
-                ),
+                    borderRadius: BorderRadius.circular(11.0)),
                 child: Padding(
                   padding: const EdgeInsets.all(13),
-                  child: SvgPicture.asset('assets/image/ic_org_name.svg',
+                  child: SvgPicture.asset(
+                    'assets/image/ic_org_name.svg',
                     height: size.height * 2.5 / 100,
                     width: size.width * 2.5 / 100,
                   ),
@@ -1068,7 +1059,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -1086,8 +1077,8 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                             FilteringTextInputFormatter.allow(
                                 RegExp('[a-zA-Z ]')),
                           ],
-                          validator: InputValidator(
-                              ch :'Name of Organization').nameChecking,
+                          validator: InputValidator(ch: 'Name of Organization')
+                              .nameChecking,
                           controller: _orgNameController,
                           cursorColor: CustColors.light_navy,
                           decoration: InputDecoration(
@@ -1102,18 +1093,17 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                               vertical: 2.8,
                               horizontal: 0.0,
                             ),
-                            hintStyle: Styles.appBarTextBlack15,),
+                            hintStyle: Styles.appBarTextBlack15,
+                          ),
                         ),
                       ),
                       editProfileEnabled != true
-                          ?
-                      Text(
-                        'Organisation name',
-                        textAlign: TextAlign.center,
-                        style: Styles.textLabelSubTitle,
-                      )
-                          :
-                      Container(),
+                          ? Text(
+                              'Organisation name',
+                              textAlign: TextAlign.center,
+                              style: Styles.textLabelSubTitle,
+                            )
+                          : Container(),
                     ],
                   ),
                 ),
@@ -1121,16 +1111,15 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               //Spacer(),
               editProfileEnabled == true
                   ? Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                  )
-              )
+                      child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Icon(Icons.edit, size: 15, color: CustColors.blue),
+                    ))
                   : Container(),
             ],
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
             child: Divider(),
           )
         ],
@@ -1140,12 +1129,12 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
   Widget OrganisationTypeTextUi(Size size) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
       child: Column(
         children: [
           InkWell(
-            onTap: (){
-              if(editProfileEnabled == true){
+            onTap: () {
+              if (editProfileEnabled == true) {
                 showOrganisationTypeSelector();
                 print("Type of Organisation");
               }
@@ -1155,11 +1144,11 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 Container(
                   decoration: BoxDecoration(
                       color: CustColors.whiteBlueish,
-                      borderRadius: BorderRadius.circular(11.0)
-                  ),
+                      borderRadius: BorderRadius.circular(11.0)),
                   child: Padding(
                     padding: const EdgeInsets.all(15),
-                    child: SvgPicture.asset('assets/image/ic_org_type.svg',
+                    child: SvgPicture.asset(
+                      'assets/image/ic_org_type.svg',
                       height: size.height * 2.5 / 100,
                       width: size.width * 2.5 / 100,
                     ),
@@ -1167,7 +1156,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -1186,12 +1175,13 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                   RegExp('[a-zA-Z ]')),
                             ],
                             validator: InputValidator(
-                                ch :'Select your organization from list').emptyChecking,
+                                    ch: 'Select your organization from list')
+                                .emptyChecking,
                             controller: _orgTypeController,
                             cursorColor: CustColors.light_navy,
                             decoration: InputDecoration(
                               isDense: true,
-                              hintText:  'Organization Type',
+                              hintText: 'Organization Type',
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
@@ -1201,18 +1191,17 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                 vertical: 2.8,
                                 horizontal: 0.0,
                               ),
-                              hintStyle: Styles.appBarTextBlack15,),
+                              hintStyle: Styles.appBarTextBlack15,
+                            ),
                           ),
                         ),
                         editProfileEnabled != true
-                            ?
-                        Text(
-                          'Type of organisation ',
-                          textAlign: TextAlign.center,
-                          style: Styles.textLabelSubTitle,
-                        )
-                            :
-                        Container(),
+                            ? Text(
+                                'Type of organisation ',
+                                textAlign: TextAlign.center,
+                                style: Styles.textLabelSubTitle,
+                              )
+                            : Container(),
                       ],
                     ),
                   ),
@@ -1220,17 +1209,17 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 //Spacer(),
                 editProfileEnabled == true
                     ? Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                    )
-                )
+                        child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child:
+                            Icon(Icons.edit, size: 15, color: CustColors.blue),
+                      ))
                     : Container(),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
             child: Divider(),
           )
         ],
@@ -1238,139 +1227,130 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     );
   }
 
-  Widget individualSaveChangeButton (Size size){
-    return saveloading ? CircularProgressIndicator(
-      valueColor: AlwaysStoppedAnimation<Color>(
-          CustColors.light_navy),
-    ):
-    InkWell(
-      onTap: (){
-
-        if (_formKey.currentState!.validate()) {
-          //_isLoading = true;
-          saveloading = true;
-          //editProfileEnabled = false;
-          _changeProfileBloc.postCustomerIndividualEditProfileRequest(
-              authToken,
-              _nameController.text.toString(),"",
-              _stateController.text.toString(),1,
-              //selectedState, 1,
-              _imageUrl);
-
-        } else {
-          print("individual _formKey.currentState!.validate() - else");
-          setState(() => _autoValidate = AutovalidateMode.always);
-        }
-
-      },
-      child:
-      Container(
-        width: size.width,
-        height: size.height * 7 / 100,
-        color: CustColors.light_navy,
-        margin: EdgeInsets.only(
-          bottom: size.height * 2 / 100
-        ),
-        //padding: ,
-        child: Center(
-          child: Text(
-            "Save changes",
-            style: Styles.addToCartText02,
-          ),
-        ),
-      ),
-    );
+  Widget individualSaveChangeButton(Size size) {
+    return saveloading
+        ? CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(CustColors.light_navy),
+          )
+        : InkWell(
+            onTap: () {
+              if (_formKey.currentState!.validate()) {
+                //_isLoading = true;
+                saveloading = true;
+                //editProfileEnabled = false;
+                _changeProfileBloc.postCustomerIndividualEditProfileRequest(
+                    authToken,
+                    _nameController.text.toString(),
+                    "",
+                    _stateController.text.toString(),
+                    1,
+                    //selectedState, 1,
+                    _imageUrl);
+              } else {
+                print("individual _formKey.currentState!.validate() - else");
+                setState(() => _autoValidate = AutovalidateMode.always);
+              }
+            },
+            child: Container(
+              width: size.width,
+              height: size.height * 7 / 100,
+              color: CustColors.light_navy,
+              margin: EdgeInsets.only(bottom: size.height * 2 / 100),
+              //padding: ,
+              child: Center(
+                child: Text(
+                  "Save changes",
+                  style: Styles.addToCartText02,
+                ),
+              ),
+            ),
+          );
   }
 
-  Widget corporateSaveChangeButton (Size size){
-    return saveloading ? CircularProgressIndicator(
-      valueColor: AlwaysStoppedAnimation<Color>(
-          CustColors.light_navy),
-    ):
-    InkWell(
-      onTap: (){
-
-        if (_formKey.currentState!.validate()) {
-          //_isLoading = true;
-          saveloading = true;
-         // editProfileEnabled = false;
-          _changeProfileBloc.postCustomerCorporateEditProfileRequest(
-              authToken,
-              _nameController.text.toString(), "",
-              _stateController.text.toString(), 1,
-              _imageUrl,
-              _orgNameController.text.toString(),       // org name
-              _orgTypeController.text.toString()
+  Widget corporateSaveChangeButton(Size size) {
+    return saveloading
+        ? CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(CustColors.light_navy),
+          )
+        : InkWell(
+            onTap: () {
+              if (_formKey.currentState!.validate()) {
+                //_isLoading = true;
+                saveloading = true;
+                // editProfileEnabled = false;
+                _changeProfileBloc.postCustomerCorporateEditProfileRequest(
+                    authToken,
+                    _nameController.text.toString(),
+                    "",
+                    _stateController.text.toString(),
+                    1,
+                    _imageUrl,
+                    _orgNameController.text.toString(),
+                    // org name
+                    _orgTypeController.text.toString());
+              } else {
+                print("individual _formKey.currentState!.validate() - else");
+                setState(() => _autoValidate = AutovalidateMode.always);
+              }
+            },
+            child: Container(
+              width: size.width,
+              height: size.height * 7 / 100,
+              color: CustColors.light_navy,
+              margin: EdgeInsets.only(bottom: size.height * 2 / 100),
+              //padding: ,
+              child: Center(
+                child: Text(
+                  "Save changes",
+                  style: Styles.addToCartText02,
+                ),
+              ),
+            ),
           );
-
-        } else {
-          print("individual _formKey.currentState!.validate() - else");
-          setState(() => _autoValidate = AutovalidateMode.always);
-        }
-
-      },
-      child: Container(
-        width: size.width,
-        height: size.height * 7 / 100,
-        color: CustColors.light_navy,
-        margin: EdgeInsets.only(
-            bottom: size.height * 2 / 100
-        ),
-        //padding: ,
-        child: Center(
-          child: Text(
-            "Save changes",
-            style: Styles.addToCartText02,
-          ),
-        ),
-      ),
-    );
   }
 
-  Widget governmentSaveChangeButton (Size size){
-    return saveloading ? CircularProgressIndicator(
-      valueColor: AlwaysStoppedAnimation<Color>(
-        CustColors.light_navy),):
-    InkWell(
-      onTap: (){
-
-        if (_formKey.currentState!.validate()) {
-          //_isLoading = true;
-          saveloading = true;
-          //editProfileEnabled = false;
-          _changeProfileBloc.postCustomerGovernmentEditProfileRequest(
-              authToken,
-              _nameController.text.toString(), "",
-              _stateController.text.toString(), 1,
-              _imageUrl, _ministryGovtController.text.toString()    //ministryName
+  Widget governmentSaveChangeButton(Size size) {
+    return saveloading
+        ? CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(CustColors.light_navy),
+          )
+        : InkWell(
+            onTap: () {
+              if (_formKey.currentState!.validate()) {
+                //_isLoading = true;
+                saveloading = true;
+                //editProfileEnabled = false;
+                _changeProfileBloc.postCustomerGovernmentEditProfileRequest(
+                    authToken,
+                    _nameController.text.toString(),
+                    "",
+                    _stateController.text.toString(),
+                    1,
+                    _imageUrl,
+                    _ministryGovtController.text.toString() //ministryName
+                    );
+              } else {
+                print("individual _formKey.currentState!.validate() - else");
+                setState(() => _autoValidate = AutovalidateMode.always);
+              }
+            },
+            child: Container(
+              width: size.width,
+              height: size.height * 7 / 100,
+              color: CustColors.light_navy,
+              margin: EdgeInsets.only(bottom: size.height * 2 / 100),
+              //padding: ,
+              child: Center(
+                child: Text(
+                  "Save changes",
+                  style: Styles.addToCartText02,
+                ),
+              ),
+            ),
           );
-
-        } else {
-          print("individual _formKey.currentState!.validate() - else");
-          setState(() => _autoValidate = AutovalidateMode.always);
-        }
-
-      },
-      child: Container(
-        width: size.width,
-        height: size.height * 7 / 100,
-        color: CustColors.light_navy,
-        margin: EdgeInsets.only(
-            bottom: size.height * 2 / 100
-        ),
-        //padding: ,
-        child: Center(
-          child: Text(
-            "Save changes",
-            style: Styles.addToCartText02,
-          ),
-        ),
-      ),
-    );
   }
 
   void _awaitReturnValueFromSecondScreen(BuildContext context) async {
-
     // start the SecondScreen and wait for it to finish with a result
     final result = await Navigator.push(
         context,
@@ -1380,7 +1360,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     setState(() {
       selectedState = result;
       _stateController.text = selectedState;
-      print ("Selected state @ sign up: " + selectedState );
+      print("Selected state @ sign up: " + selectedState);
     });
   }
 
@@ -1453,21 +1433,23 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
   Future uploadImageToFirebase(File images) async {
     String fileName = path.basename(images.path);
-    Reference reference = FirebaseStorage.instance.ref().child("SupportChatImages").child(fileName);
-    print(">>>>>>>>>>>>>>>> reference"+reference.toString());
-    UploadTask uploadTask =  reference.putFile(images);
-    uploadTask.whenComplete(() async{
-      try{
-        String fileImageurl="";
+    Reference reference = FirebaseStorage.instance
+        .ref()
+        .child("SupportChatImages")
+        .child(fileName);
+    print(">>>>>>>>>>>>>>>> reference" + reference.toString());
+    UploadTask uploadTask = reference.putFile(images);
+    uploadTask.whenComplete(() async {
+      try {
+        String fileImageurl = "";
         fileImageurl = await reference.getDownloadURL();
         setState(() {
           _imageUrl = fileImageurl;
         });
-
-      }catch(onError){
+      } catch (onError) {
         print("Error");
       }
-      print(">>>>>>>>>>>>>>>> imageFirebaseUrl "+_imageUrl.toString());
+      print(">>>>>>>>>>>>>>>> imageFirebaseUrl " + _imageUrl.toString());
     });
   }
 
@@ -1495,61 +1477,61 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                 Container(
                                   height: 421 - 108,
                                   padding:
-                                  EdgeInsets.only(top: _setValue(22.4)),
+                                      EdgeInsets.only(top: _setValue(22.4)),
                                   child: orgTypeList.length != 0
                                       ? ListView.separated(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: orgTypeList.length,
-                                    itemBuilder: (context, index) {
-                                      return InkWell(
-                                          onTap: () {
-                                            final dial_Code =
-                                            orgTypeList[index];
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: orgTypeList.length,
+                                          itemBuilder: (context, index) {
+                                            return InkWell(
+                                                onTap: () {
+                                                  final dial_Code =
+                                                      orgTypeList[index];
 
-                                            setState(() {
-                                              _orgTypeController.text =
-                                                  dial_Code.toString();
-                                            });
+                                                  setState(() {
+                                                    _orgTypeController.text =
+                                                        dial_Code.toString();
+                                                  });
 
-                                            Navigator.pop(context);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                  margin: EdgeInsets.only(
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                  ),
+                                                  child: Text(
+                                                    '${orgTypeList[index]}',
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                            _setValueFont(12),
+                                                        fontFamily:
+                                                            'Corbel-Light',
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color:
+                                                            Color(0xff0b0c0d)),
+                                                  ),
+                                                ));
                                           },
-                                          child: Container(
-                                            margin: EdgeInsets.only(
-                                              left: _setValue(41.3),
-                                              right: _setValue(41.3),
-                                            ),
-                                            child: Text(
-                                              '${orgTypeList[index]}',
-                                              style: TextStyle(
-                                                  fontSize:
-                                                  _setValueFont(12),
-                                                  fontFamily:
-                                                  'Corbel-Light',
-                                                  fontWeight:
-                                                  FontWeight.w600,
-                                                  color:
-                                                  Color(0xff0b0c0d)),
-                                            ),
-                                          ));
-                                    },
-                                    separatorBuilder:
-                                        (BuildContext context,
-                                        int index) {
-                                      return Container(
-                                          margin: EdgeInsets.only(
-                                              top: _setValue(12.7),
-                                              left: _setValue(41.3),
-                                              right: _setValue(41.3),
-                                              bottom: _setValue(12.9)),
-                                          child: Divider(
-                                            height: 0,
-                                          ));
-                                    },
-                                  )
+                                          separatorBuilder:
+                                              (BuildContext context,
+                                                  int index) {
+                                            return Container(
+                                                margin: EdgeInsets.only(
+                                                    top: _setValue(12.7),
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                    bottom: _setValue(12.9)),
+                                                child: Divider(
+                                                  height: 0,
+                                                ));
+                                          },
+                                        )
                                       : Center(
-                                        child: Text('No Results found.'),
-                                  ),
+                                          child: Text('No Results found.'),
+                                        ),
                                 ),
                               ])),
                           Center(
@@ -1689,62 +1671,64 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                   ),
                                 ),*/
                                 Container(
-                                  height: 421 ,
-                                  padding: EdgeInsets.only(top: _setValue(22.4)),
+                                  height: 421,
+                                  padding:
+                                      EdgeInsets.only(top: _setValue(22.4)),
                                   child: ministryGovtList.length != 0
                                       ? ListView.separated(
-                                      scrollDirection: Axis.vertical,
-                                      shrinkWrap: true,
-                                      itemCount: ministryGovtList.length,
-                                      itemBuilder: (context, index) {
-                                      return InkWell(
-                                          onTap: () {
-                                            final dial_Code =
-                                            ministryGovtList[index];
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: ministryGovtList.length,
+                                          itemBuilder: (context, index) {
+                                            return InkWell(
+                                                onTap: () {
+                                                  final dial_Code =
+                                                      ministryGovtList[index];
 
-                                            setState(() {
-                                              _ministryGovtController.text =
-                                                  dial_Code.toString();
-                                            });
+                                                  setState(() {
+                                                    _ministryGovtController
+                                                            .text =
+                                                        dial_Code.toString();
+                                                  });
 
-                                            Navigator.pop(context);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                  margin: EdgeInsets.only(
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                  ),
+                                                  child: Text(
+                                                    '${ministryGovtList[index]}',
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                            _setValueFont(12),
+                                                        fontFamily:
+                                                            'Corbel-Light',
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color:
+                                                            Color(0xff0b0c0d)),
+                                                  ),
+                                                ));
                                           },
-                                          child: Container(
-                                            margin: EdgeInsets.only(
-                                              left: _setValue(41.3),
-                                              right: _setValue(41.3),
-                                            ),
-                                            child: Text(
-                                              '${ministryGovtList[index]}',
-                                              style: TextStyle(
-                                                  fontSize:
-                                                  _setValueFont(12),
-                                                  fontFamily:
-                                                  'Corbel-Light',
-                                                  fontWeight:
-                                                  FontWeight.w600,
-                                                  color:
-                                                  Color(0xff0b0c0d)),
-                                            ),
-                                          ));
-                                    },
-                                    separatorBuilder:
-                                        (BuildContext context,
-                                        int index) {
-                                      return Container(
-                                          margin: EdgeInsets.only(
-                                              top: _setValue(12.7),
-                                              left: _setValue(41.3),
-                                              right: _setValue(41.3),
-                                              bottom: _setValue(12.9)),
-                                          child: Divider(
-                                            height: 0,
-                                          ));
-                                    },
-                                  )
+                                          separatorBuilder:
+                                              (BuildContext context,
+                                                  int index) {
+                                            return Container(
+                                                margin: EdgeInsets.only(
+                                                    top: _setValue(12.7),
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                    bottom: _setValue(12.9)),
+                                                child: Divider(
+                                                  height: 0,
+                                                ));
+                                          },
+                                        )
                                       : Center(
-                                    child: Text('No Results found.'),
-                                  ),
+                                          child: Text('No Results found.'),
+                                        ),
                                 ),
                               ])),
                           Center(
@@ -1794,8 +1778,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 setDeactivate();
                 Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => LoginScreen()),
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
                     ModalRoute.withName("/LoginScreen"));
               });
             },
@@ -1811,8 +1794,5 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     prefs.setString(SharedPrefKeys.userName, "");
     prefs.setBool(SharedPrefKeys.isUserLoggedIn, false);
     prefs.setString(SharedPrefKeys.userType, "");
-
-
   }
-
 }
