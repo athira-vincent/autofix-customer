@@ -53,6 +53,14 @@ class SignupBloc {
     print("token===================================${shdPre.getString(SharedPrefKeys.token)}");
   }
 
+  void setProfileStatus(int status) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    shdPre.setInt(SharedPrefKeys.isProfileCompleted, status);
+
+    GqlClient.I.config(token: shdPre.getString(SharedPrefKeys.token).toString());
+    print("token===================================${shdPre.getString(SharedPrefKeys.token)}");
+  }
+
   /// ---------------  SignUp Starts -------------------- ///
 
 
@@ -83,12 +91,10 @@ class SignupBloc {
 
 
   postOtpVerificationRequest(
-      token,
       otp,
       userTypeId
       ) async {
     OtpVerificationMdl _otpVerificationMdl = await repository.postOtpVerificationRequest(
-      token,
       otp,
       userTypeId);
     postOtpVerification.sink.add(_otpVerificationMdl);

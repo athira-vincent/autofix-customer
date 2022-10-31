@@ -41,18 +41,16 @@ class _SplashScreenState extends State<SplashScreen> {
     String? userType = _shdPre.getString(SharedPrefKeys.userType);
     String? userCategory = _shdPre.getString(SharedPrefKeys.userCategory);
     int? _isDefaultVehicleAvailable = _shdPre.getInt(SharedPrefKeys.isDefaultVehicleAvailable);
-    int? _isWorkProfileCompleted = _shdPre.getInt(SharedPrefKeys.isWorkProfileCompleted);
-    //String? defaultVehicle = _shdPre.getString(SharedPrefKeys.defaultBrandID);
-    String? phoneNo = _shdPre.getString(SharedPrefKeys.userPhone);
-    String? otpCode = _shdPre.getString(SharedPrefKeys.otpCode);
-    String? userTypeId = _shdPre.getString(SharedPrefKeys.userTypeId);
+    int? _isProfileCompleted = _shdPre.getInt(SharedPrefKeys.isProfileCompleted);
+
 
     print("is logged in=======$_isLoggedin");
     print("is isWalked in=======$isWalked");
     print("_isDefaultVehicleAvailable ============ $_isDefaultVehicleAvailable");
-    print("_isWorkProfileCompleted ============ $_isWorkProfileCompleted");
+
     print("User Type ============ $userType");
     print("User userCategory ============ $userCategory");
+    print("User _isProfileCompleted ============ $_isProfileCompleted");
 
     var _token = _shdPre.getString(SharedPrefKeys.token);
 
@@ -64,62 +62,27 @@ class _SplashScreenState extends State<SplashScreen> {
     if (_isLoggedin != null && _isLoggedin == true) {
       print("chechingggg 01 $userType");
 
-      if (userType == TextStrings.user_customer) {
-        if(_isDefaultVehicleAvailable != null && _isDefaultVehicleAvailable == 2){
-          Navigator.pushReplacement(
-            context,
-             MaterialPageRoute(
-                builder: (context) =>
-                    AddCarScreen(userCategory:userCategory! ,userType: userType!,fromPage: "1",)),
-          );
-        }else if(_isDefaultVehicleAvailable != null && _isDefaultVehicleAvailable == 1){
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => OtpVerificationScreen(
-                    userType: userType!,
-                    userCategory: userCategory!,
-                    phoneNumber: phoneNo!,
-                    otpNumber:otpCode!,
-                    userTypeId: userTypeId!,
-                    fromPage: "1",
-                  )));
-        }else{
-
+      if (userType == TextStrings.user_customer && _isProfileCompleted == "3") {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) =>  CustomerMainLandingScreen()));
-        }
       }
       else{
-        if(_isWorkProfileCompleted != null && _isWorkProfileCompleted == 2){
-          Navigator.pushReplacement(
-            context,
-            new MaterialPageRoute(
-                builder: (context) =>
-                    WorkSelectionScreen(userCategory:userCategory! ,userType: userType!,)),
-          );
-        }else if(_isWorkProfileCompleted != null && _isWorkProfileCompleted == 1)
-        {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => OtpVerificationScreen(
-                    userType : userType!,
-                    userCategory : userCategory!,
-                    phoneNumber : phoneNo!,
-                    otpNumber : otpCode!,
-                    userTypeId : userTypeId!,
-                    fromPage : "1",
-                  )));
-        }else {
+         if (userType == TextStrings.user_mechanic && _isProfileCompleted == "3") {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) =>  MechanicHomeScreen()));
         }
+         else{
+           Navigator.pushReplacement(
+               context,
+               MaterialPageRoute(
+                   builder: (context) =>  LoginScreen()));
+         }
       }
+
     } else {
       if (isWalked == null || isWalked == false) {
         print('WalkThroughPages');

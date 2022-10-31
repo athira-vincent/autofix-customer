@@ -58,6 +58,7 @@ class SignIn {
     required this.generalCustomer,
     required this.genMechanic,
     required this.genVendor,
+    required this.message,
   });
 
   String? token;
@@ -67,6 +68,7 @@ class SignIn {
   GeneralCustomer? generalCustomer;
   GenMechanic? genMechanic;
   dynamic genVendor;
+  String message;
 
   factory SignIn.fromJson(Map<String, dynamic> json) => SignIn(
     token: json["token"] == null ? null : json["token"],
@@ -76,6 +78,7 @@ class SignIn {
     generalCustomer: json["generalCustomer"] == null ? null : GeneralCustomer.fromMap(json["generalCustomer"]),
     genMechanic: json["genMechanic"] == null ? null : GenMechanic.fromMap(json["genMechanic"]),
     genVendor: json["genVendor"],
+    message: json["message"] == null ? null : json["message"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -86,7 +89,7 @@ class SignIn {
     "generalCustomer": generalCustomer == null ? null : generalCustomer!.toMap(),
     "genMechanic": genMechanic == null ? null : genMechanic!.toMap(),
     "genVendor": genVendor,
-
+    "message": message == null ? null : message,
   };
 }
 
@@ -105,6 +108,9 @@ class User {
     required this.otpCode,
     required this.isProfile,
     required this.otpVerified,
+    required this.customer,
+    required this.mechanic,
+    required this.vendor,
   });
 
   int id;
@@ -120,6 +126,9 @@ class User {
   dynamic otpCode;
   int isProfile;
   int otpVerified;
+  dynamic customer;
+  dynamic mechanic;
+  dynamic vendor;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
     id: json["id"] == null ? null : json["id"],
@@ -135,6 +144,9 @@ class User {
     otpCode: json["otpCode"],
     isProfile: json["isProfile"] == null ? null : json["isProfile"],
     otpVerified: json["otpVerified"] == null ? null : json["otpVerified"],
+    customer: json["customer"],
+    mechanic: json["mechanic"],
+    vendor: json["vendor"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -151,7 +163,10 @@ class User {
     "otpCode": otpCode,
     "isProfile": isProfile == null ? null : isProfile,
     "otpVerified": otpVerified == null ? null : otpVerified,
-  };
+    "customer": customer,
+    "mechanic": mechanic,
+    "vendor": vendor,
+};
 }
 
 class GenMechanic {

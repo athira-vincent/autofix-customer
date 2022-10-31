@@ -25,6 +25,7 @@ class SignupApiProvider {
       ministryName, hod, latitude, longitude, yearExp, shopName,);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
+      print(">>>>>>>> Api Provider ${_resp}");
       if (_resp['status'] == "error") {
         final errorMsg = SignUpMdl(status: "error", message: _resp['message'], data: null);
         return errorMsg;
@@ -40,11 +41,9 @@ class SignupApiProvider {
 
 
   Future<OtpVerificationMdl> postOtpVerificationRequest(
-      token,
       otp,
       userTypeId) async {
     Map<String, dynamic> _resp = await _queryProvider.postOtpVerificationRequest(
-      token,
       otp,
       userTypeId);
     // ignore: unnecessary_null_comparison

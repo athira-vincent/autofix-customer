@@ -1,13 +1,19 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/error_strings.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/phone_login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
+import 'package:auto_fix/Utility/check_network.dart';
+import 'package:auto_fix/Utility/network_error_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
@@ -58,9 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return value * per + value;
   }
 
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
+  CheckInternet _checkInternet = CheckInternet();
 
   bool language_en_ar=true;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -319,35 +323,51 @@ class _LoginScreenState extends State<LoginScreen> {
                                             )
                                                 : Container(
 
-                                                child: MaterialButton(
-                                                onPressed: () {
+                                                  child: MaterialButton(
+                                                    onPressed: () {
 
-                                                  if (_formKey.currentState!.validate()) {
-                                                    setState(() {
-                                                      _isLoading = true;
-                                                      _signinBloc.postSignInRequest(_userNameController.text, _passwordController.text);
-                                                    });
-                                                  } else {
-                                                    setState(() => _autoValidate =
-                                                        AutovalidateMode.always);
-                                                  }
-                                                },
-                                                child: Container(
-                                                  height: 45,
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                    children: [
-                                                      Text(
-                                                        AppLocalizations.of(context)!.login,  //'Login',
-                                                        textAlign: TextAlign.center,
-                                                        style: Styles.textButtonLabelSubTitle,
+                                                      _checkInternet.check().then((intenet) {
+                                                        if (intenet != null && intenet) {
+                                                          // setState(() {
+                                                          //   _isLoading = true;
+                                                          // });
+                                                          if (_formKey.currentState!.validate()) {
+                                                            setState(() {
+                                                              _isLoading = true;
+                                                              _signinBloc.postSignInRequest(_userNameController.text, _passwordController.text);
+                                                            });
+                                                          } else {
+                                                            setState(() => _autoValidate =
+                                                                AutovalidateMode.always);
+                                                          }
+                                                        } else {
+
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      NetworkErrorScreen())).then((value) {
+                                                            /// ----------- repeat the work
+                                                          });
+                                                        }
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      height: 45,
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        children: [
+                                                          Text(
+                                                            AppLocalizations.of(context)!.login,  //'Login',
+                                                            textAlign: TextAlign.center,
+                                                            style: Styles.textButtonLabelSubTitle,
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                color: CustColors.materialBlue,
-                                                shape: RoundedRectangleBorder(
+                                                    ),
+                                                    color: CustColors.materialBlue,
+                                                    shape: RoundedRectangleBorder(
                                                     borderRadius: BorderRadius.circular(
                                                         _setValue(13))),
                                               ),
@@ -401,14 +421,26 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       fit: BoxFit.fill,
                                                       allowDrawingOutsideViewBox: true,
                                                     ),
-                                                    onPressed: () async {
+                                                    onPressed: () {
                                                       print('result');
-                                                      await signInWithGoogle().then((result) {
-                                                        print(result);
-                                                        if (result != null) {
-                                                          print("result sucess  $result");
-                                                        } else if (result == null) {
-                                                          print("result sucess  0");
+                                                      _checkInternet.check().then((intenet) async {
+                                                        if (intenet != null && intenet) {
+                                                          await signInWithGoogle().then((result) {
+                                                            print(result);
+                                                            if (result != null) {
+                                                              print("result sucess  $result");
+                                                            } else if (result == null) {
+                                                              print("result sucess  0");
+                                                            }
+                                                          });
+                                                        } else {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      NetworkErrorScreen())).then((value) {
+                                                            /// ----------- repeat the work
+                                                          });
                                                         }
                                                       });
                                                     },
@@ -474,7 +506,6 @@ class _LoginScreenState extends State<LoginScreen> {
     //_signinBloc.dispose();
   }
 
-
   Future<void> setFcmToken(String Authtoken) async {
     FirebaseMessaging.instance.getToken().then((value) {
       String? token = value;
@@ -490,66 +521,135 @@ class _LoginScreenState extends State<LoginScreen> {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
-          SnackBarWidget().setMaterialSnackBar(value.message.toString().split(":").last,_scaffoldKey);
         });
+        if(value.message == ErrorStrings.error_no_network){
+          SnackBarWidget().setMaterialSnackBar(ErrorStrings.error_no_network, _scaffoldKey);
+        }else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_207){
+          SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_207, _scaffoldKey);
+        }else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_208){
+          SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_208, _scaffoldKey);
+        }else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_202){
+          SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_202, _scaffoldKey);
+        }else{
+          SnackBarWidget().setMaterialSnackBar("${value.message.toString().split(":").last}", _scaffoldKey);
+        }
       } else {
        if(mounted) setState(() {
           _isLoading = false;
         });
-          //SnackBarWidget().setSnackBar("Login Successful",context);
-          if(value.data!.signIn!.user!.userTypeId.toString() == "1"){
-            _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 3);
-            _signinBloc.userDefault(
-                value.data!.signIn!.token.toString(),
-                TextStrings.user_customer,
-                value.data!.signIn!.generalCustomer!.custType.toString() == "1"
-                    ? TextStrings.user_category_individual
-                    : value.data!.signIn!.generalCustomer!.custType.toString() == "2"
-                    ? TextStrings.user_category_corporate : TextStrings.user_category_government,
-                "",                      //----- profile image url should b updated
-                //value.data!.signIn!.user!.firstName.toString() + value.data!.signIn!.user!.lastName.toString(),
-                value.data!.signIn!.user!.firstName.toString(),
-                value.data!.signIn!.user!.id.toString(),
-                "0"
-            );
-            setFcmToken(value.data!.signIn!.token.toString());
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => CustomerMainLandingScreen()));
-            SnackBarWidget().setSnackBar("Customer Login Successful",context);
 
-          }else {     //if(value.data!.signIn!.user!.userTypeId == "2"
-            _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 3);
-            _signinBloc.userDefault(
-                value.data!.signIn!.token.toString(),
-                TextStrings.user_mechanic,
-                value.data!.signIn!.genMechanic!.mechType.toString() == "1"
-                    ? TextStrings.user_category_individual
-                    : TextStrings.user_category_corporate ,
-                "",           //----- profile image url should b updated
-                value.data!.signIn!.user!.firstName.toString(),
-                value.data!.signIn!.user!.id.toString(),
-                "0"
-            );
-            setFcmToken(value.data!.signIn!.token.toString());
+       if(value.data!.signIn!.message == ErrorStrings.error_206){
+         if(value.data!.signIn!.user!.userTypeId.toString() == "1"){
+           _shdPre.setInt(SharedPrefKeys.isProfileCompleted, 3);
+           _signinBloc.userDefault(
+               value.data!.signIn!.token.toString(),
+               TextStrings.user_customer,
+               value.data!.signIn!.generalCustomer!.custType.toString() == "1"
+                   ? TextStrings.user_category_individual
+                   : value.data!.signIn!.generalCustomer!.custType.toString() == "2"
+                   ? TextStrings.user_category_corporate : TextStrings.user_category_government,
+               "",                      //----- profile image url should b updated
+               //value.data!.signIn!.user!.firstName.toString() + value.data!.signIn!.user!.lastName.toString(),
+               value.data!.signIn!.user!.firstName.toString(),
+               value.data!.signIn!.user!.id.toString(),
+               "0"
+           );
+           setFcmToken(value.data!.signIn!.token.toString());
+           Navigator.pushReplacement(
+               context,
+               MaterialPageRoute(
+                   builder: (context) => CustomerMainLandingScreen()));
+           SnackBarWidget().setSnackBar("Customer Login Successful",context);
 
-            Navigator.of(context).pushReplacement(
+         }else {     //if(value.data!.signIn!.user!.userTypeId == "2"
+           _shdPre.setInt(SharedPrefKeys.isProfileCompleted, 3);
+           _signinBloc.userDefault(
+               value.data!.signIn!.token.toString(),
+               TextStrings.user_mechanic,
+               value.data!.signIn!.genMechanic!.mechType.toString() == "1"
+                   ? TextStrings.user_category_individual
+                   : TextStrings.user_category_corporate ,
+               "",           //----- profile image url should b updated
+               value.data!.signIn!.user!.firstName.toString(),
+               value.data!.signIn!.user!.id.toString(),
+               "0"
+           );
+           setFcmToken(value.data!.signIn!.token.toString());
 
-                MaterialPageRoute(
-                    builder: (context) {
-                      return MechanicHomeScreen();}
-                ));
+           Navigator.of(context).pushReplacement(
 
-            SnackBarWidget().setSnackBar("Mechanic Login Successful",context);
-            /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+               MaterialPageRoute(
+                   builder: (context) {
+                     return MechanicHomeScreen();}
+               ));
+
+           SnackBarWidget().setSnackBar("Mechanic Login Successful",context);
+           /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text("Mechanic Login Successful",
                   style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
               duration: Duration(seconds: 3),
               backgroundColor: CustColors.light_navy,
             ));*/
-            //SnackBarWidget().setSnackBar("Mechanic Login Successful",context);
-          }
+           //SnackBarWidget().setSnackBar("Mechanic Login Successful",context);
+         }
+       }else if(value.data!.signIn!.message == ErrorStrings.error_205){
+         if(value.data!.signIn!.user!.userTypeId.toString() == "1"){
+           Navigator.pushReplacement(
+               context,
+               MaterialPageRoute(
+                   builder: (context) => OtpVerificationScreen(
+                     userType: TextStrings.user_customer,
+                     userCategory: value.data!.signIn!.generalCustomer!.custType == "1"
+                         ? TextStrings.user_category_individual
+                         : value.data!.signIn!.generalCustomer!.custType == "2"
+                            ? TextStrings.user_category_corporate
+                            : TextStrings.user_category_government,
+                     phoneNumber: "${value.data!.signIn!.user?.phoneNo.toString()}",
+                     otpNumber: "${value.data!.signIn!.user?.otpCode.toString()}",
+                     userTypeId: '${value.data!.signIn!.user!.userTypeId}',
+                     fromPage: "1",
+                   )));
+         } else{
+           Navigator.pushReplacement(
+               context,
+               MaterialPageRoute(
+                   builder: (context) => OtpVerificationScreen(
+                     userType: TextStrings.user_mechanic,
+                     userCategory: value.data!.signIn!.genMechanic!.mechType == "1"
+                         ? TextStrings.user_category_individual
+                         : TextStrings.user_category_corporate,
+                     phoneNumber: "${value.data!.signIn!.user?.phoneNo.toString()}",
+                     otpNumber: "${value.data!.signIn!.user?.otpCode.toString()}",
+                     userTypeId: '${value.data!.signIn!.user!.userTypeId}',
+                     fromPage: "1",
+                   )));
+         }
+       }else if(value.data!.signIn!.message == ErrorStrings.error_204){
+         if(value.data!.signIn!.user!.userTypeId.toString() == "1"){
+           Navigator.pushReplacement(
+               context,
+               MaterialPageRoute(
+                   builder: (context) => AddCarScreen(
+                     userType: TextStrings.user_customer,
+                     userCategory: value.data!.signIn!.generalCustomer!.custType == "1"
+                         ? TextStrings.user_category_individual
+                         : value.data!.signIn!.generalCustomer!.custType == "2"
+                         ? TextStrings.user_category_corporate
+                         : TextStrings.user_category_government,
+                     fromPage: '1',
+                   )));
+         } else{
+           Navigator.pushReplacement(
+               context,
+               MaterialPageRoute(
+                   builder: (context) => WorkSelectionScreen(
+                     userType: TextStrings.user_mechanic,
+                     userCategory: value.data!.signIn!.genMechanic!.mechType == "1"
+                         ? TextStrings.user_category_individual
+                         : TextStrings.user_category_corporate,
+                   )));
+         }
+       }
       }
     });
 
@@ -648,7 +748,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     if (user != null) {
-      print("result sucess user ${user.uid}");
+      print("result success user ${user.uid}");
       setState(() {
         socialLoginIsLoading = true;
         _signinBloc.socialLogin(user.email.toString(), "");

@@ -74,9 +74,8 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   TextEditingController _yearOfExistenceController = TextEditingController();
   FocusNode _yearOfExistenceFocusNode = FocusNode();
 
-
-  TextEditingController _photoController = TextEditingController();
-  FocusNode _photoFocusNode = FocusNode();
+  TextEditingController _pswdController = TextEditingController();
+  FocusNode _pswdFocusNode = FocusNode();
 
   TextEditingController _phoneController = TextEditingController();
   FocusNode _phoneFocusNode = FocusNode();
@@ -222,6 +221,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     _orgTypeController.text = value.data!.mechanicDetails!.mechanic![0].orgType.toString();
     _userName = value.data!.mechanicDetails!.firstName.toString();
     _imageUrl = value.data!.mechanicDetails!.mechanic![0].profilePic.toString();
+
     print("fkjhkhkjhkhk $_imageUrl");
 
     print(">>>>>>>>>>>>> _userType : " + _userType);

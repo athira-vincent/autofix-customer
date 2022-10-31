@@ -14,7 +14,7 @@ class SharedPrefKeys {
   static const preferredLatitude = "preferredLatitude";
   static const preferredLongitude = "preferredLongitude";
   static const preferredAddress = "preferredAddress";
-
+  static const isProfileCompleted = "isProfileCompleted";
 
   //---------------------Customer
   static const isUserLoggedIn = "is_Logged_In";

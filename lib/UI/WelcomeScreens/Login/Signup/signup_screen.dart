@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/error_strings.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
@@ -10,6 +11,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dar
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
 import 'package:auto_fix/Utility/check_network.dart';
+import 'package:auto_fix/Utility/network_error_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/indicator_widget.dart';
 
@@ -27,6 +29,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart' as path;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignupScreen extends StatefulWidget {
   final String userType;
@@ -183,82 +186,95 @@ class _SignupScreenState extends State<SignupScreen> {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
-          SnackBarWidget().setMaterialSnackBar(
-              "${value.message.toString().split(":").last}", _scaffoldKey);
-          /*SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpMechanic >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpMechanic >>>>>>>  ${value.status}");
-          _isLoading = false;*/
         });
+        if(value.message == ErrorStrings.error_no_network){
+          SnackBarWidget().setMaterialSnackBar(ErrorStrings.error_no_network, _scaffoldKey);
+        }else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_210){
+          SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_210, _scaffoldKey);
+        }else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_201){
+          SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_201, _scaffoldKey);
+        }else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_203){
+          SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_203, _scaffoldKey);
+        }else{
+            SnackBarWidget().setMaterialSnackBar("${value.message.toString().split(":").last}", _scaffoldKey);
+        }
       } else {
         setState(() {
-          SnackBarWidget()
-              .setMaterialSnackBar("Successfully Registered", _scaffoldKey);
-          print("success postSignUpMechanic >>>>>>>  ${value.status}");
-          print(
-              "success Auth token >>>>>>>  ${value.data!.signUp!.token.toString()}");
           _isLoading = false;
-         /* _signupBloc.userDefault(
+        });
+        if(value.data!.signUp!.message == ErrorStrings.error_209
+            || value.data!.signUp!.message == ErrorStrings.error_205 ){
+          setState(() {
+            SnackBarWidget().setMaterialSnackBar("Successfully Registered", _scaffoldKey);
+            print("success postSignUpMechanic >>>>>>>  ${value.status}");
+            print("success Auth token >>>>>>>  ${value.data!.signUp!.token.toString()}");
+             /*_signupBloc.userDefault(
             value.data!.signUp!.token.toString(),
             TextStrings.user_mechanic,
             value.data!.signUp!.customer.toString(),
             value.data!.signUp!.token.toString(),
           );*/
-          if (value.data?.signUp?.customer == null) {
-            _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 1);
-            _signupBloc.userDefault(
-              value.data!.signUp!.token.toString(),
-              TextStrings.user_mechanic,
-              "${value.data!.signUp!.mechanic?.firstName.toString()}",
-              "${value.data!.signUp!.mechanic?.id.toString()}",
-              "${value.data!.signUp!.mechanic?.userCode.toString()}",
-              "${value.data!.signUp!.mechanic?.phoneNo.toString()}",
-              "${value.data!.signUp!.mechanic?.otpCode.toString()}",
-              "${value.data!.signUp!.mechanic?.userTypeId.toString()}",
-            );
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => OtpVerificationScreen(
-                          userType: widget.userType,
-                          userCategory: widget.userCategory,
-                          phoneNumber:
-                              "${value.data!.signUp!.mechanic?.phoneNo.toString()}",
-                          otpNumber:
-                              "${value.data!.signUp!.mechanic?.otpCode.toString()}",
-                          userTypeId:
-                              "${value.data!.signUp!.mechanic?.userTypeId.toString()}",
-                          fromPage: "1",
-                        )));
-          } else {
-            _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 1);
-            _signupBloc.userDefault(
-              value.data!.signUp!.token.toString(),
-              TextStrings.user_customer,
-              "${value.data!.signUp!.customer?.firstName.toString()}",
-              "${value.data!.signUp!.customer?.id.toString()}",
-              "${value.data!.signUp!.customer?.userCode.toString()}",
-              "${value.data!.signUp!.customer?.phoneNo.toString()}",
-              "${value.data!.signUp!.customer?.otpCode.toString()}",
-              "${value.data!.signUp!.customer?.userTypeId.toString()}",
-            );
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => OtpVerificationScreen(
-                          userType: widget.userType,
-                          userCategory: widget.userCategory,
-                          phoneNumber:
-                              "${value.data!.signUp!.customer?.phoneNo.toString()}",
-                          otpNumber:
-                              "${value.data!.signUp!.customer?.otpCode.toString()}",
-                          userTypeId:
-                              "${value.data!.signUp!.customer?.userTypeId.toString()}",
-                          fromPage: "1",
-                        )));
-          }
-          FocusScope.of(context).unfocus();
-        });
+            if (value.data?.signUp?.customer == null) {
+              _shdPre.setInt(SharedPrefKeys.isProfileCompleted, 1);
+              //_shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 1);
+              _signupBloc.userDefault(
+                value.data!.signUp!.token.toString(),
+                TextStrings.user_mechanic,
+                "${value.data!.signUp!.mechanic?.firstName.toString()}",
+                "${value.data!.signUp!.mechanic?.id.toString()}",
+                "${value.data!.signUp!.mechanic?.userCode.toString()}",
+                "${value.data!.signUp!.mechanic?.phoneNo.toString()}",
+                "${value.data!.signUp!.mechanic?.otpCode.toString()}",
+                "${value.data!.signUp!.mechanic?.userTypeId.toString()}",
+              );
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OtpVerificationScreen(
+                        userType: widget.userType,
+                        userCategory: widget.userCategory,
+                        phoneNumber:
+                        "${value.data!.signUp!.mechanic?.phoneNo.toString()}",
+                        otpNumber:
+                        "${value.data!.signUp!.mechanic?.otpCode.toString()}",
+                        userTypeId:
+                        "${value.data!.signUp!.mechanic?.userTypeId.toString()}",
+                        fromPage: "1",
+                      )));
+            } else {
+              _shdPre.setInt(SharedPrefKeys.isProfileCompleted, 1);
+              //_shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 1);
+              _signupBloc.userDefault(
+                value.data!.signUp!.token.toString(),
+                TextStrings.user_customer,
+                "${value.data!.signUp!.customer?.firstName.toString()}",
+                "${value.data!.signUp!.customer?.id.toString()}",
+                "${value.data!.signUp!.customer?.userCode.toString()}",
+                "${value.data!.signUp!.customer?.phoneNo.toString()}",
+                "${value.data!.signUp!.customer?.otpCode.toString()}",
+                "${value.data!.signUp!.customer?.userTypeId.toString()}",
+              );
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OtpVerificationScreen(
+                        userType: widget.userType,
+                        userCategory: widget.userCategory,
+                        phoneNumber:
+                        "${value.data!.signUp!.customer?.phoneNo.toString()}",
+                        otpNumber:
+                        "${value.data!.signUp!.customer?.otpCode.toString()}",
+                        userTypeId:
+                        "${value.data!.signUp!.customer?.userTypeId.toString()}",
+                        fromPage: "1",
+                      )));
+            }
+            FocusScope.of(context).unfocus();
+          });
+        }else{
+          SnackBarWidget().setMaterialSnackBar("Something went wrong. Try Again", _scaffoldKey);
+        }
+
       }
     });
   }
@@ -1678,44 +1694,58 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       child: MaterialButton(
                                                         onPressed: () {
                                                           print(">>>>>>>>>>>>>>>> imageFirebaseUrl " +
-                                                              imageFirebaseUrl
-                                                                  .toString());
-                                                          if (_formKey.currentState!.validate()) {
-                                                            print(
-                                                                "_formKey.currentState!.validate()");
-                                                            widget.userCategory ==
-                                                                        TextStrings
-                                                                            .user_category_individual &&
+                                                              imageFirebaseUrl.toString());
+
+                                                          _checkInternet.check().then((intenet) {
+                                                            if (intenet != null && intenet) {
+                                                              setState(() {
+                                                                _isLoading = true;
+                                                              });
+                                                              if (_formKey.currentState!.validate()) {
+                                                                print("_formKey.currentState!.validate()");
+                                                                widget.userCategory ==
+                                                                    TextStrings
+                                                                        .user_category_individual &&
                                                                     widget.userType ==
                                                                         TextStrings
                                                                             .user_customer
-                                                                ? signUpCustomerIndividual(
+                                                                    ? signUpCustomerIndividual(
                                                                     context)
-                                                                : widget.userCategory ==
-                                                                            TextStrings
-                                                                                .user_category_individual &&
-                                                                        widget.userType ==
-                                                                            TextStrings
-                                                                                .user_mechanic
+                                                                    : widget.userCategory ==
+                                                                    TextStrings
+                                                                        .user_category_individual &&
+                                                                    widget.userType ==
+                                                                        TextStrings
+                                                                            .user_mechanic
                                                                     ? signUpMechanicIndividual(
-                                                                        context)
+                                                                    context)
                                                                     : widget.userCategory == TextStrings.user_category_corporate &&
-                                                                            widget.userType ==
-                                                                                TextStrings
-                                                                                    .user_customer
-                                                                        ? signUpCustomerCorporate(
-                                                                            context)
-                                                                        : widget.userCategory == TextStrings.user_category_corporate &&
-                                                                                widget.userType == TextStrings.user_mechanic
-                                                                            ? signUpMechanicCorporate(context)
-                                                                            : signUpCustomerGovernment(context);
-                                                          } else {
-                                                            print("_formKey.currentState!.validate() - else");
-                                                            setState(() =>
+                                                                    widget.userType ==
+                                                                        TextStrings
+                                                                            .user_customer
+                                                                    ? signUpCustomerCorporate(
+                                                                    context)
+                                                                    : widget.userCategory == TextStrings.user_category_corporate &&
+                                                                    widget.userType == TextStrings.user_mechanic
+                                                                    ? signUpMechanicCorporate(context)
+                                                                    : signUpCustomerGovernment(context);
+                                                              } else {
+                                                                print("_formKey.currentState!.validate() - else");
+                                                                setState(() =>
                                                                 _autoValidate =
                                                                     AutovalidateMode
                                                                         .always);
-                                                          }
+                                                              }
+                                                            } else {
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) =>
+                                                                          NetworkErrorScreen())).then((value) {
+                                                                /// ----------- repeat the work
+                                                              });
+                                                            }
+                                                          });
                                                         },
                                                         child: Container(
                                                           height: 45,

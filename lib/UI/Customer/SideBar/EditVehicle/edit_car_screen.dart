@@ -5,9 +5,11 @@ import 'package:another_xlider/another_xlider.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_bloc.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/brand_model_engine/modelDetails_Mdl.dart';
 import 'package:auto_fix/Utility/check_network.dart';
+import 'package:auto_fix/Utility/network_error_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -18,37 +20,27 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
-import 'brand_model_engine/makeBrandDetails_Mdl.dart';
-import 'brand_model_engine/modelDetails_Mdl.dart';
 import 'package:path/path.dart' as path;
 
+class EditCarScreen extends StatefulWidget {
+  final CustVehicleList vehicleData;
 
-
-class AddCarScreen extends StatefulWidget {
-
-  final String userType;
-  final String userCategory;
-  final String fromPage;
-
-
-
-  AddCarScreen({required this.userType,required this.userCategory,required this.fromPage});
+  EditCarScreen({required this.vehicleData,});
 
   @override
   State<StatefulWidget> createState() {
-    return _AddCarScreenState();
+    return _EditCarScreenState();
   }
 }
 
-class _AddCarScreenState extends State<AddCarScreen> {
+class _EditCarScreenState extends State<EditCarScreen> {
 
   String authToken="";
   final AddCarBloc _addCarBloc = AddCarBloc();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isLoading = false;
   bool _isAddMore = false;
-  String imageFirebaseUrl="";
+  String imageFirebaseUrl = "";
   FirebaseStorage storage = FirebaseStorage.instance;
   double? _progress;
 
@@ -85,9 +77,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
   double _setValue(double value) {
     return value * per + value;
   }
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
   CheckInternet _checkInternet = CheckInternet();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
@@ -117,6 +106,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
   String? selectedBrandName = '' ;
 
 
+
   List<String> modelList = [];
   String? selectedmodel = '' ;
   String? selectedModelName = '' ;
@@ -142,6 +132,19 @@ class _AddCarScreenState extends State<AddCarScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print(">>>> abcd ${widget.vehicleData.id + widget.vehicleData.brand}");
+    _brandController.text = widget.vehicleData.brand.toString();
+    _modelController.text = widget.vehicleData.model.toString();
+    _engineTypeController.text = widget.vehicleData.engine.toString();
+    _yearController.text = widget.vehicleData.year.toString();
+    _vehicleColorController.text = widget.vehicleData.color.toString();
+    _plateNumberController.text = widget.vehicleData.plateNo.toString();
+    _lastMaintenanceController.text = widget.vehicleData.lastMaintenance.toString();
+    _lowerValue = double.parse(widget.vehicleData.milege.toString());
+    imageFirebaseUrl = widget.vehicleData.vehiclePic ;
+
+    print(">>>> imageFirebaseUrl " + imageFirebaseUrl);
+
     for(int i = 0; i <= 11; i++ ){
       monthList.add(allMonthList[i]);
     }
@@ -206,34 +209,11 @@ class _AddCarScreenState extends State<AddCarScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
-      _addCarBloc.postModelDetailRequest(authToken,"");
     });
   }
 
   _listenAddCarResponse() {
-    _addCarBloc.postModelDetail.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-         // SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          _isLoading = false;
-          _isAddMore = false;
-        });
-
-      } else {
-
-        for(int i = 0; i<value.data!.modelDetails!.length;i++)
-          {
-            if(brandList.contains("${value.data!.modelDetails![i].brandName}") == false)
-            {
-              brandList.add("${value.data!.modelDetails![i].brandName}");
-            }
-          }
-
-      }
-    });
-    _addCarBloc.addCarResponse.listen((value) {
+    _addCarBloc.editCarResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
@@ -241,54 +221,17 @@ class _AddCarScreenState extends State<AddCarScreen> {
           print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
           _isAddMore = false;
-
         });
-
       } else {
 
         setState(() async {
           print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
-          SharedPreferences _shdPre = await SharedPreferences.getInstance();
-           if(_isAddMore==true)
-             {
-                 _formKey.currentState?.reset();
-                 _brandController.text='';
-                 _modelController.text='';
-                 _engineTypeController.text='';
-                 _yearController.text='';
-                 _lastMaintenanceController.text='';
-                 _plateNumberController.text='';
-                 imageFirebaseUrl="";
-                 _images = null;
-                 _isAddMore = false;
-             }
-           else
-             {
+          Navigator.pop(context);
+          FocusScope.of(context).unfocus();
+          _isAddMore = false;
 
-               if(widget.fromPage == "2")
-                 {
-                   Navigator.pop(context);
-                 }
-               else
-                 {
-                   _shdPre.setInt(SharedPrefKeys.isProfileCompleted, 3);
-                   _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 3);
-                   _shdPre.setString(SharedPrefKeys.defaultBrandID, value.data!.vehicleCreate!.brand.toString());
-                   Navigator.pushReplacement(
-                       context,
-                       MaterialPageRoute(
-                           builder: (context) =>
-                               CustomerMainLandingScreen()));
-                 }
-
-               FocusScope.of(context).unfocus();
-               _isAddMore = false;
-             }
-
-
-          SnackBarWidget().setMaterialSnackBar( "Successfully Created", _scaffoldKey);
-
+          SnackBarWidget().setMaterialSnackBar( "Successfully Updated", _scaffoldKey);
 
         });
       }
@@ -360,7 +303,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
       padding: const EdgeInsets.only(top: 20),
       child: Container(
         child: const Text(
-          'Complete your profile',
+          'Edit Vehicle Details',
           style: Styles.textCompleteYourProfile,
         ),
       ),
@@ -414,27 +357,27 @@ class _AddCarScreenState extends State<AddCarScreen> {
                               height: 100.0,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(20.0),
-                                child: _images == null
+                                child: imageFirebaseUrl == null || imageFirebaseUrl == ""
                                     ? CircleAvatar(
-                                    radius: 50,
-                                    backgroundColor: Colors.white,
-                                    child: ClipOval(
+                                      radius: 50,
+                                      backgroundColor: Colors.white,
+                                      child: ClipOval(
                                       child:  SvgPicture.asset('assets/image/CustomerType/upload_car_avathar.svg'),
                                     ))
                                     : SizedBox(
                                       height: 100,
                                       width: 100,
-                                      child: CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        backgroundImage: FileImage(_images!),
-                                      ),
-                                      ),
+                                      child: FadeInImage.assetNetwork(
+                                        placeholder: 'assets/image/CustomerType/dummyCar.png',
+                                        image:'$imageFirebaseUrl',
+                                        fit: BoxFit.fill,
+                                      )
+                                     ),
                               ),
                             ),
                           ),
                           InkWell(
                             onTap: () {
-
                               _showDialogSelectPhoto();
                             },
                             child: Row(
@@ -468,406 +411,272 @@ class _AddCarScreenState extends State<AddCarScreen> {
   }
 
   Widget brandTextSelection() {
-    return  InkWell(
-      onTap: (){
-        _showDialogForBrands();
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: _setValue(0.5)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Brand",
-                    style: Styles.textLabelTitle,
-                  ),
-                  const Spacer(),
-                  const Icon(
-                    Icons.keyboard_arrow_down_sharp,
-                    color: Colors.white,
-                    size: 28.0,
-                  ),
-
-                ],
-              ),
-            ),
-            TextFormField(
-              textAlignVertical: TextAlignVertical.center,
-              maxLines: 1,
-              style: Styles.textLabelSubTitle,
-              focusNode: _brandFocusNode,
-              enabled: false,
-              keyboardType: TextInputType.name,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(
-                    RegExp('[a-zA-Z ]')),
+    return  Container(
+      margin: EdgeInsets.only(top: _setValue(0.4)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  "Brand",
+                  style: Styles.textLabelTitle,
+                ),
+                const Spacer(),
               ],
-              validator: InputValidator(
-                  ch : 'Brand name' ).nameCheckingWithNumeric,
-              controller: _brandController,
-              cursorColor: CustColors.light_navy,
-              decoration: InputDecoration(
-                suffixIconConstraints: const BoxConstraints(
-                  minWidth: 25,
-                  minHeight: 25,
-                ),
-                suffixIcon: Container(
-                  width: 5,
-                  height: 10,
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    iconSize: 22,
-                    padding: EdgeInsets.zero,
-                    icon: const Icon(
-                      Icons.keyboard_arrow_down_sharp,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () {
-                    },
-                  ),
-                ),
-                isDense: true,
-                hintText:
-                "Select your vehicle brand",
-                border: const UnderlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                focusedBorder: const UnderlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                enabledBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 12.8,
-                  horizontal: 0.0,
-                ),
-                errorStyle: Styles.textLabelSubTitleRed,
-                hintStyle: Styles.textLabelSubTitle,),
             ),
-          ],
-        ),
+          ),
+          TextFormField(
+            textAlignVertical: TextAlignVertical.center,
+            maxLines: 1,
+            style: Styles.textLabelSubTitle,
+            focusNode: _brandFocusNode,
+            enabled: false,
+            keyboardType: TextInputType.name,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                  RegExp('[a-zA-Z ]')),
+            ],
+            validator: InputValidator(
+                ch : 'Brand name' ).nameCheckingWithNumeric,
+            controller: _brandController,
+            cursorColor: CustColors.light_navy,
+            decoration: InputDecoration(
+              isDense: true,
+              hintText:
+              "Select your vehicle brand",
+              border: const UnderlineInputBorder(
+                borderSide: const BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: const BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              enabledBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 12.8,
+                horizontal: 0.0,
+              ),
+              errorStyle: Styles.textLabelSubTitleRed,
+              hintStyle: Styles.textLabelSubTitle,),
+          ),
+        ],
       ),
     );
   }
 
   Widget modelTextSelection() {
-    return  InkWell(
-      onTap: () async {
-
-        if(selectedBrand=='')
-          {
-            SnackBarWidget().setMaterialSnackBar( "Please select brand first", _scaffoldKey);
-          }
-        else
-          {
-            _showDialogForModel1();
-
-          }
-
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: _setValue(15.5)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Model",
-                    style: Styles.textLabelTitle,
-                  ),
-                  const Spacer(),
-                  const Icon(
-                    Icons.keyboard_arrow_down_sharp,
-                    color: Colors.white,
-                    size: 28.0,
-                  ),
-
-                ],
-              ),
-            ),
-            TextFormField(
-              textAlignVertical: TextAlignVertical.center,
-              maxLines: 1,
-              style: Styles.textLabelSubTitle,
-              focusNode: _modelFocusNode,
-              keyboardType: TextInputType.name,
-              enabled: false,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(
-                    RegExp('[a-zA-Z ]')),
+    return  Container(
+      margin: EdgeInsets.only(top: _setValue(12.5)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  "Model",
+                  style: Styles.textLabelTitle,
+                ),
+                const Spacer(),
               ],
-              validator: InputValidator(
-                  ch :
-                  'Model name'  ).nameCheckingWithNumeric,
-              controller: _modelController,
-              cursorColor: CustColors.light_navy,
-              decoration: InputDecoration(
-                suffixIconConstraints: const BoxConstraints(
-                  minWidth: 25,
-                  minHeight: 25,
-                ),
-                suffixIcon: Container(
-                  width: 5,
-                  height: 10,
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    iconSize: 22,
-                    padding: EdgeInsets.zero,
-                    icon: const Icon(
-                      Icons.keyboard_arrow_down_sharp,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () {
-                    },
-                  ),
-                ),
-                isDense: true,
-                hintText:
-                "Select your car variant",
-                border: const UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                enabledBorder: const UnderlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 12.8,
-                  horizontal: 0.0,
-                ),
-                errorStyle: Styles.textLabelSubTitleRed,
-                hintStyle: Styles.textLabelSubTitle,),
             ),
-          ],
-        ),
-      ) ,
+          ),
+          TextFormField(
+            textAlignVertical: TextAlignVertical.center,
+            maxLines: 1,
+            style: Styles.textLabelSubTitle,
+            focusNode: _modelFocusNode,
+            keyboardType: TextInputType.name,
+            enabled: false,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                  RegExp('[a-zA-Z ]')),
+            ],
+            validator: InputValidator(
+                ch :
+                'Model name'  ).nameCheckingWithNumeric,
+            controller: _modelController,
+            cursorColor: CustColors.light_navy,
+            decoration: InputDecoration(
+              isDense: true,
+              hintText:
+              "Select your car variant",
+              border: const UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              enabledBorder: const UnderlineInputBorder(
+                borderSide: const BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 12.8,
+                horizontal: 0.0,
+              ),
+              errorStyle: Styles.textLabelSubTitleRed,
+              hintStyle: Styles.textLabelSubTitle,),
+          ),
+        ],
+      ),
     );
   }
 
   Widget engineTypeTextSelection() {
-    return  InkWell(
-      onTap: (){
-       /* if(selectedmodel=='')
-        {
-          SnackBarWidget().setMaterialSnackBar( "Please select model first", _scaffoldKey);
-        }
-        else
-        {
-          _showDialogForEngineType1(engineList);
-        }*/
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: _setValue(15.5)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-
-              "Engine Type",
-              style: Styles.textLabelTitle,
-            ),
-            TextFormField(
-              textAlignVertical: TextAlignVertical.center,
-              maxLines: 1,
-              style: Styles.textLabelSubTitle,
-              focusNode: _engineTypeFocusNode,
-              enabled: false,
-              keyboardType: TextInputType.name,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(
-                    RegExp('[a-zA-Z ]')),
-              ],
-              validator: InputValidator(
-                  ch :
-                  'Engine Type' ).nameCheckingWithNumericAndBracket,
-              controller: _engineTypeController,
-              cursorColor: CustColors.light_navy,
-              decoration: const InputDecoration(
-               /* suffixIconConstraints: BoxConstraints(
-                  minWidth: 25,
-                  minHeight: 25,
-                ),
-                suffixIcon: Container(
-                  width: 5,
-                  height: 10,
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    iconSize: 22,
-                    padding: EdgeInsets.zero,
-                    icon: Icon(
-                      Icons.keyboard_arrow_down_sharp,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () {
-                    },
-                  ),
-                ),*/
-                isDense: true,
-                hintText:
-                "Select your engine model",
-                border:  UnderlineInputBorder(
-                  borderSide:  BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                focusedBorder:  UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                enabledBorder:  UnderlineInputBorder(
-                  borderSide:  BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                contentPadding:  EdgeInsets.symmetric(
-                  vertical: 12.8,
-                  horizontal: 0.0,
-                ),
-                errorStyle: Styles.textLabelSubTitleRed,
-                hintStyle: Styles.textLabelSubTitle,),
-            ),
-          ],
-        ),
-      ) ,
-    );
-  }
-
-  Widget yearTypeTextSelection() {
-    return  InkWell(
-      onTap: (){
-       /* if(selectedmodel=='')
-        {
-          SnackBarWidget().setMaterialSnackBar( "Please select model first", _scaffoldKey);
-        }
-        else
-        {
-          _showDialogForYear1(yearTypeList);
-        }*/
-
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: _setValue(15.5)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Year",
-              style: Styles.textLabelTitle,
-            ),
-            TextFormField(
-              textAlignVertical: TextAlignVertical.center,
-              maxLines: 1,
-              style: Styles.textLabelSubTitle,
-              focusNode: _yearControllerFocusNode,
-              keyboardType: TextInputType.name,
-              enabled: false,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(
-                    RegExp('[a-zA-Z ]')),
-              ],
-              validator: InputValidator(
-                  ch :
-                  'Year' ).nameCheckingWithNumeric,
-              controller: _yearController,
-              cursorColor: CustColors.light_navy,
-              decoration: const InputDecoration(
-                /*suffixIconConstraints: BoxConstraints(
-                  minWidth: 25,
-                  minHeight: 25,
-                ),
-                suffixIcon: Container(
-                  width: 5,
-                  height: 10,
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    iconSize: 22,
-                    padding: EdgeInsets.zero,
-                    icon: Icon(
-                      Icons.keyboard_arrow_down_sharp,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () {
-                    },
-                  ),
-                ),*/
-                isDense: true,
-                hintText:
-                "Select your vehicle manufacture date",
-                border: const UnderlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                enabledBorder: const UnderlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: CustColors.greyish,
-                    width: .5,
-                  ),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 12.8,
-                  horizontal: 0.0,
-                ),
-                errorStyle: Styles.textLabelSubTitleRed,
-                hintStyle: Styles.textLabelSubTitle,),
-            ),
-          ],
-        ),
-      ) ,
-    );
-  }
-
-  Widget vehicleColorText() {
-    return   Container(
-      margin: EdgeInsets.only(top: _setValue(15.5)),
+    return  Container(
+      margin: EdgeInsets.only(top: _setValue(12.5)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
+            "Engine Type",
+            style: Styles.textLabelTitle,
+          ),
+          TextFormField(
+            textAlignVertical: TextAlignVertical.center,
+            maxLines: 1,
+            style: Styles.textLabelSubTitle,
+            focusNode: _engineTypeFocusNode,
+            enabled: false,
+            keyboardType: TextInputType.name,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                  RegExp('[a-zA-Z ]')),
+            ],
+            validator: InputValidator(
+                ch :
+                'Engine Type' ).nameCheckingWithNumericAndBracket,
+            controller: _engineTypeController,
+            cursorColor: CustColors.light_navy,
+            decoration: const InputDecoration(
+              isDense: true,
+              hintText:
+              "Select your engine model",
+              border:  UnderlineInputBorder(
+                borderSide:  BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              focusedBorder:  UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              enabledBorder:  UnderlineInputBorder(
+                borderSide:  BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              contentPadding:  EdgeInsets.symmetric(
+                vertical: 12.8,
+                horizontal: 0.0,
+              ),
+              errorStyle: Styles.textLabelSubTitleRed,
+              hintStyle: Styles.textLabelSubTitle,),
+          ),
+        ],
+      ),
+    );
+  }
 
+  Widget yearTypeTextSelection() {
+    return  Container(
+      margin: EdgeInsets.only(top: _setValue(12.5)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Year",
+            style: Styles.textLabelTitle,
+          ),
+          TextFormField(
+            textAlignVertical: TextAlignVertical.center,
+            maxLines: 1,
+            style: Styles.textLabelSubTitle,
+            focusNode: _yearControllerFocusNode,
+            keyboardType: TextInputType.name,
+            enabled: false,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                  RegExp('[a-zA-Z ]')),
+            ],
+            validator: InputValidator(
+                ch :
+                'Year' ).nameCheckingWithNumeric,
+            controller: _yearController,
+            cursorColor: CustColors.light_navy,
+            decoration: const InputDecoration(
+              isDense: true,
+              hintText:
+              "Select your vehicle manufacture date",
+              border: const UnderlineInputBorder(
+                borderSide: const BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              enabledBorder: const UnderlineInputBorder(
+                borderSide: const BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 12.8,
+                horizontal: 0.0,
+              ),
+              errorStyle: Styles.textLabelSubTitleRed,
+              hintStyle: Styles.textLabelSubTitle,),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget vehicleColorText() {
+    return Container(
+      margin: EdgeInsets.only(top: _setValue(12.5)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
             "Color",
             style: Styles.textLabelTitle,
           ),
           TextFormField(
+            enabled: false,
             textAlignVertical: TextAlignVertical.center,
             maxLines: 1,
             style: Styles.textLabelSubTitle,
@@ -880,18 +689,17 @@ class _AddCarScreenState extends State<AddCarScreen> {
             validator: InputValidator(
                 ch :'Vehicle color').emptyChecking,
             controller: _vehicleColorController,
-            onChanged: (value){
+            /*onChanged: (value){
               setState(() {
                 if (_formKey.currentState!.validate()) {
                 } else {
                 }
               });
-            },
+            },*/
             cursorColor: CustColors.light_navy,
             decoration: const InputDecoration(
               isDense: true,
-              hintText:
-              "Enter your Vehicle color",
+              hintText: "Enter your Vehicle color",
               border: const UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: CustColors.greyish,
@@ -923,8 +731,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
   }
 
   Widget plateNumberTextSelection() {
-    return   Container(
-      margin: EdgeInsets.only(top: _setValue(15.5)),
+    return Container(
+      margin: EdgeInsets.only(top: _setValue(12.5)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -934,6 +742,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
             style: Styles.textLabelTitle,
           ),
           TextFormField(
+            enabled: false,
             textAlignVertical: TextAlignVertical.center,
             maxLines: 1,
             style: Styles.textLabelSubTitle,
@@ -946,13 +755,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
             validator: InputValidator(
                 ch :'Plate number').nameCheckingWithNumeric,
             controller: _plateNumberController,
-            onChanged: (value){
+            /*onChanged: (value){
               setState(() {
                 if (_formKey.currentState!.validate()) {
                 } else {
                 }
               });
-            },
+            },*/
             cursorColor: CustColors.light_navy,
             decoration: const InputDecoration(
               isDense: true,
@@ -989,7 +798,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
   }
 
   Widget lastMaintenanceTextSelection() {
-    return  InkWell(
+    return InkWell(
       onTap: (){
         showDialog(
             context: context,
@@ -1008,7 +817,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
             });
       },
       child: Container(
-        margin: EdgeInsets.only(top: _setValue(15.5)),
+        margin: EdgeInsets.only(top: _setValue(12.5)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1093,7 +902,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
   }
 
   Widget approximateMilageSelection() {
-    return  Container(
+    return Container(
       width: double.infinity,
       margin: EdgeInsets.only(top: _setValue(15.5),bottom: _setValue(15.5)),
       child: Column(
@@ -1121,12 +930,52 @@ class _AddCarScreenState extends State<AddCarScreen> {
               // ignore: missing_required_param
                 child: FlutterSlider(
                   values: [_lowerValue],
-                  max: 500,
-                  min: 0,
+                  max: 150000,
+                  min: 500,
+                  step: FlutterSliderStep(step: 500),
+                   handlerHeight: _setValue(25),
+                   handlerWidth: _setValue(25),
+                  // tooltip: FlutterSliderTooltip(
+                  //     custom: (value) {
+                  //       return Text(value.toString());
+                  //     }
+                  // ),
                   tooltip: FlutterSliderTooltip(
-                      custom: (value) {
-                        return Text(value.toString());
+                    custom: (value) {
+                      int intVal = double.parse(value.toString()).round();
+                      if (intVal <= 99000) {
+                        int data = (intVal / 1000).round();
+                        return Text(
+                          '$data' + " K",
+                          style: TextStyle(
+                              fontFamily:
+                              "Montserrat_SemiBold",
+                              fontSize: 10,
+                              color: CustColors.blue),
+                        );
+                      } else {
+                        var data = (intVal / 100000).toStringAsFixed(1);
+                        return Text(
+                          '$data' + " L",
+                          style: TextStyle(
+                              fontFamily:
+                              "Montserrat_SemiBold",
+                              fontSize: 10,
+                              color: CustColors.blue),
+                        );
                       }
+                    },
+                    alwaysShowTooltip: true,
+                    boxStyle: FlutterSliderTooltipBox(
+                        decoration: BoxDecoration(
+                            color: Colors.transparent)),
+                    positionOffset:
+                    FlutterSliderTooltipPositionOffset(
+                        top: 41),
+                    textStyle: TextStyle(
+                        fontFamily: "Corbel_Regular",
+                        fontSize: 10,
+                        color: CustColors.blue),
                   ),
                   trackBar: FlutterSliderTrackBar(
                     inactiveTrackBar: BoxDecoration(
@@ -1207,64 +1056,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                         ),
                       ),
                   )
-                  : Container(
-                      height: 45,
-                      width: 160,
-                      child: MaterialButton(
-                        onPressed: () {
-                          setState(() {
-                            _isAddMore = true;
-                            _isLoading = false;
-                            print('true');
-                          });
-                          if (_formKey.currentState!.validate()) {
-                            setState(() {
-                              print('sucess');
-                              _addCarBloc. postAddCarRequest(
-                                  authToken,
-                                  _brandController.text.toString(),
-                                  _modelController.text.toString(),
-                                  _engineTypeController.text.toString(),
-                                  _yearController.text.toString(),
-                                  _plateNumberController.text,
-                                  _lastMaintenanceController.text,
-                                  _lowerValue.toString(),
-                                  imageFirebaseUrl,
-                                  _vehicleColorController.text,
-                                  latitude,
-                                  longitude
-                              );
-                            });
-                          } else {
-                            setState(() {
-                              _isAddMore = false;
-                              _isLoading = false;
-                              print('error');
-                            });
-                          }
-
-
-                        },
-                        child: SizedBox(
-                          height: 45,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const[
-                               Text(
-                                'Add more vehicles',
-                                textAlign: TextAlign.center,
-                                style: Styles.textButtonLabelSubTitle12,
-                              ),
-                            ],
-                          ),
-                        ),
-                        color: CustColors.materialBlue,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                _setValue(10))),
-                      ),
-                    ),
+                  : Container(),
             ),
           ),
           const Spacer(),
@@ -1293,47 +1085,57 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     )
                   : SizedBox(
                     height: 45,
-                    width: 80,
+                    width: 90,
                     child: MaterialButton(
                       onPressed: () {
-                        print('${authToken   + _brandController.text.toString() + _modelController.text.toString()
-                            + selectedengine.toString() + selectedYearType.toString() +
-                            _plateNumberController.text +
-                            _lastMaintenanceController.text +
-                            _lowerValue.toString() +
-                            imageFirebaseUrl +
-                            latitude +
-                            longitude}' );
-                        setState(() {
-                          _isLoading = true;
-                          _isAddMore = false;
-                          print('true');
-                        });
-                        if (_formKey.currentState!.validate()) {
 
+                      _checkInternet.check().then((intenet) {
+                        if (intenet != null && intenet) {
+                          print('${authToken   + _brandController.text.toString() + _modelController.text.toString()
+                              + selectedengine.toString() + selectedYearType.toString() +
+                              _plateNumberController.text +
+                              _lastMaintenanceController.text +
+                              _lowerValue.toString() +
+                              imageFirebaseUrl +
+                              latitude +
+                              longitude}' );
                           setState(() {
-                            print('sucess');
-                              _addCarBloc. postAddCarRequest(
-                              authToken,
-                              _brandController.text.toString(),
-                              _modelController.text.toString(),
-                              _engineTypeController.text.toString(),
-                                  _yearController.text.toString(),
-                                  _plateNumberController.text,
-                              _lastMaintenanceController.text,
-                              _lowerValue.toString(),
-                              imageFirebaseUrl,
-                              _vehicleColorController.text,
-                              latitude,
-                              longitude
-                            );
+                            _isLoading = true;
+                            _isAddMore = false;
+                            print('true');
                           });
+                          if (_formKey.currentState!.validate()) {
+
+                            setState(() {
+                              print('success');
+                              _addCarBloc.postEditCarRequest(
+                                authToken,
+                                widget.vehicleData.id.toString(),
+                                _yearController.text.toString(),
+                                _lastMaintenanceController.text,
+                                _lowerValue.toString(),
+                                imageFirebaseUrl,
+                                _vehicleColorController.text,
+                              );
+                            });
+                          } else {
+                            setState(() {
+                              _isLoading = false;
+                              print('error');
+                            });
+                          }
                         } else {
-                          setState(() {
-                            _isLoading = false;
-                            print('error');
+
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      NetworkErrorScreen())).then((value) {
+                            /// ----------- repeat the work
                           });
+
                         }
+                      });
                       },
                       child: Container(
                         height: 45,
@@ -1342,7 +1144,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const Text(
-                              'Finish',
+                              'Update',
                               textAlign: TextAlign.center,
                               style: Styles.textButtonLabelSubTitle12,
                             ),

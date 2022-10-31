@@ -9,7 +9,8 @@ class GqlClient {
   //int lanCode = 0;
   Future<String> getLanguage() async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
-    String? lan = shdPre.getString(SharedPrefKeys.userLanguageCode);
+    String? lan = shdPre.getString(SharedPrefKeys.userLanguageCode) ?? 'en';
+    print(">>>> $lan");
     /*if(lan == "ig"){
       lanCode = 1;
     }else if(lan == "en"){
@@ -58,6 +59,7 @@ class GqlClient {
 
   /// Methods
   Future<void> config({required String token}) async {
+    String langCode01 = await getLanguage();
     if (token == "") {
       HttpClient _httpClient = HttpClient();
       _httpClient.badCertificateCallback =
@@ -68,7 +70,7 @@ class GqlClient {
         //"https://athiras-82.workspace.techwarelab.com/graphql",
         defaultHeaders: <String, String>{
           'x-token': token,
-          'language' : "${getLanguage()}"
+          'language' : "$langCode01"
         },
         httpClient: _ioClient,
       );
@@ -88,7 +90,7 @@ class GqlClient {
         //"https://athiras-82.workspace.techwarelab.com/graphql",
         defaultHeaders: <String, String>{
           'x-token': token,
-          'language' : "${getLanguage()}"
+          'language' : "$langCode01"
         },
         httpClient: _ioClient,
       );
@@ -101,6 +103,7 @@ class GqlClient {
 
   Future<dynamic> query(String query,
       {bool enableDebug = false, required bool isTokenThere}) async {
+    String langCode01 = await getLanguage();
     try {
       if (enableDebug) {
         print('Query ===========> $query');
@@ -116,7 +119,7 @@ class GqlClient {
               //"https://athiras-82.workspace.techwarelab.com/graphql",
               defaultHeaders: <String, String>{
                 'x-token': "",
-                'language' : "${getLanguage()}"
+                'language' : "$langCode01"
               },
               httpClient: _ioClient));
       final QueryResult resp = await _graphClient
@@ -167,7 +170,7 @@ class GqlClient {
 
   Future<dynamic> query01(String query, String token,
       {bool enableDebug = false, required bool isTokenThere}) async {
-    String langCode = await getLanguage();
+    String langCode01 = await getLanguage();
     try {
       if (enableDebug) {
         print('Query ===========> $query');
@@ -183,7 +186,7 @@ class GqlClient {
               //"https://athiras-82.workspace.techwarelab.com/graphql",
               defaultHeaders: <String, String>{
                 'x-token': token,
-                'language' : "${getLanguage()}"
+                'language' : "$langCode01"
               },
               httpClient: _ioClient));
       final QueryResult resp = await _graphClient
@@ -236,7 +239,7 @@ class GqlClient {
       {bool enableDebug = false,
       required Map<String, dynamic> variables,
       required bool isTokenThere}) async {
-    String langCode = await getLanguage();
+    String langCode01 = await getLanguage();
     try {
       if (enableDebug) {
         _showDebugMessage(query, 'GraphQL Query');
@@ -260,7 +263,7 @@ class GqlClient {
               //"https://athiras-82.workspace.techwarelab.com/graphql",
               defaultHeaders: <String, String>{
                 'x-token': "",
-                'language' : "${getLanguage()}"
+                'language' : "$langCode01"
               },
               httpClient: _ioClient));
 
@@ -321,6 +324,7 @@ class GqlClient {
         required Map<String, dynamic> variables,
         required String token,
         required bool isTokenThere}) async {
+    String langCode01 = await getLanguage();
     try {
       if (enableDebug) {
         _showDebugMessage(query, 'GraphQL Query');
@@ -344,7 +348,7 @@ class GqlClient {
               //"https://athiras-82.workspace.techwarelab.com/graphql",
               defaultHeaders: <String, String>{
                 'x-token': token,
-                'language' : "${getLanguage()}"
+                'language' : "$langCode01"
               },
               httpClient: _ioClient));
 
@@ -404,6 +408,7 @@ class GqlClient {
       {bool enableDebug = false,
       required Map<String, dynamic> variables,
       required bool isTokenThere}) async {
+    String langCode01 = await getLanguage();
     try {
       if (enableDebug) {
         _showDebugMessage(query, 'GraphQL Query');

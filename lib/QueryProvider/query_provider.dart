@@ -27,7 +27,6 @@ class QueryProvider {
         otpVerified
       customer{
         id
-        
       }
       mechanic{
         id
@@ -111,6 +110,7 @@ class QueryProvider {
       totalEarning
       status
     }
+    message
   }
 }
     """;
@@ -424,6 +424,7 @@ class QueryProvider {
             shopName
             status
           }
+          message
         }
       }
 
@@ -505,6 +506,35 @@ class QueryProvider {
             }
           }
   
+          """;
+    log(_query);
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
+  }
+
+  postEditCarRequest(
+      token,
+      vehicleId,
+      year,
+      lastMaintenance,
+      milege,
+      vehiclePic,
+      color,
+      ) async {
+    String _query = """ 
+          mutation {
+        vehicle_Update(
+          id: $vehicleId
+          year: "$year"
+          lastMaintenance: "$lastMaintenance"
+          milege: "$milege"
+          color: "$color"
+          vehiclePic: "$vehiclePic"
+          status: 1
+        ) {
+          message
+        }
+      }
           """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
@@ -651,7 +681,7 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  postOtpVerificationRequest(token, otp, userTypeId) async {
+  postOtpVerificationRequest( otp, userTypeId) async {
     String _query = """ 
        mutation {
           otp_Verification(otpCode: "$otp", userTypeId: ${int.parse(userTypeId.toString())}) {

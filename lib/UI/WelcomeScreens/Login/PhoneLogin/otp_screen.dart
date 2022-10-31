@@ -250,6 +250,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           }
           else if( widget.userType == TextStrings.user_customer)
           {
+            _signupBloc.setProfileStatus(2);
             Navigator.pushReplacement(
               context,
               new MaterialPageRoute(
@@ -259,6 +260,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           }
           else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_corporate)
           {
+            _signupBloc.setProfileStatus(2);
             Navigator.pushReplacement(
               context,
               new MaterialPageRoute(
@@ -585,7 +587,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   _verifyOtpCode() {
     _signupBloc.postOtpVerificationRequest(
-        "",
         textEditingController.text.toString(),
         userTypeId
     );

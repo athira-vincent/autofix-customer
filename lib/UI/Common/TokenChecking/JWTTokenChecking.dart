@@ -19,8 +19,8 @@ class JWTTokenChecking {
       GqlClient.I.config(token: shdPre.getString(SharedPrefKeys.token).toString());
       //Navigator.pop(context);
       Fluttertoast.showToast(msg: "Session Expired Login Again !!",fontSize: 18);
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      await preferences.clear();
+      // SharedPreferences preferences = await SharedPreferences.getInstance();
+      // await preferences.clear();
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -38,8 +38,8 @@ class JWTTokenChecking {
         shdPre.setString(SharedPrefKeys.userID, "");
         GqlClient.I.config(token: shdPre.getString(SharedPrefKeys.token).toString());
         //Navigator.pop(context);
-        SharedPreferences preferences = await SharedPreferences.getInstance();
-        await preferences.clear();
+        // SharedPreferences preferences = await SharedPreferences.getInstance();
+        // await preferences.clear();
         Fluttertoast.showToast(msg: "Session Expired Login Again !!",fontSize: 18);
         Navigator.pushAndRemoveUntil(
           context,
