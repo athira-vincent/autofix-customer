@@ -12,10 +12,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../SpareParts/purchase_response_screen.dart';
 
 class Payment_Main_Screen extends StatefulWidget {
-  final String amount, orderid;
+  final String amount, orderid,customerid,customername,customeremail,customerphone;
 
   const Payment_Main_Screen(
-      {Key? key, required this.amount, required this.orderid})
+      {Key? key, required this.amount, required this.orderid, required this.customerid, required this.customername, required this.customeremail, required this.customerphone})
       : super(key: key);
 
   @override
@@ -41,7 +41,10 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>  PurchaseResponseScreen(isSuccess: true,)));
+                          builder: (context) =>  PurchaseResponseScreen(isSuccess: true,
+
+
+                          )));
 
                 }
               }
@@ -92,7 +95,12 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => DemoPayment()));
+                                      builder: (context) => DemoPayment(
+                                          amount:widget.amount,
+                                          customerid:widget.customerid,
+                                          customername:widget.customername,
+                                          customeremail:widget.customeremail,
+                                          customerphone:widget.customerphone)));
                             }
                           },
                         )

@@ -3682,13 +3682,15 @@ class QueryProvider {
       status
       customer{
         id
+        emailId
+        firstName
+        phoneNo
         address{
           fullName
           phoneNo
           pincode
           city
           state
-          
         }
       }
       product{

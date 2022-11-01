@@ -23,7 +23,7 @@ import 'MyCart/placeallorderbloc/place_oder_all_state.dart';
 import 'MyCart/placeallorderbloc/place_order_all_event.dart';
 
 class ChangeDeliveryAddressScreen extends StatefulWidget {
-  final String quantity, productprice, productid;
+  final String quantity, productprice, productid,customerid,customername,customeremail,customerphone;
   final bool allitems;
 
   ChangeDeliveryAddressScreen(
@@ -31,7 +31,7 @@ class ChangeDeliveryAddressScreen extends StatefulWidget {
       required this.quantity,
       required this.productprice,
       required this.productid,
-      required this.allitems})
+      required this.allitems, required this.customerid, required this.customername, required this.customeremail, required this.customerphone})
       : super(key: key);
 
   @override
@@ -57,6 +57,9 @@ class _ChangeDeliveryAddressScreenState
     // TODO: implement initState
     super.initState();
     isAddressSelected = false;
+
+    print("newemail");
+    print(widget.customeremail);
   }
 
   int selectedindex = -1;
@@ -97,7 +100,14 @@ class _ChangeDeliveryAddressScreenState
                                 amount: widget.productprice,
                                 orderid: state
                                     .placeorderModel.data!.placeOrder.first.id
-                                    .toString())));
+                                    .toString(),
+                                customerid:widget.customerid,
+                                customername:widget.customername,
+                                customeremail:widget.customeremail,
+                                customerphone:widget.customerphone
+
+
+                            )));
                   }
                 }
               },
@@ -113,7 +123,11 @@ class _ChangeDeliveryAddressScreenState
                                 amount: null.toString(),
                                 orderid: state
                                     .placeorderModel.data!.placeOrder.first.id
-                                    .toString())));
+                                    .toString(),
+                                customerid:widget.customerid,
+                                customername:widget.customername,
+                                customeremail:widget.customeremail,
+                                customerphone:widget.customerphone)));
                   }
                 }
               },

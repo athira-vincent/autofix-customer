@@ -34,6 +34,10 @@ class _MyCartScreenState extends State<MyCartScreen> {
   double per = .10;
   double perfont = .10;
   bool allitems = false;
+  String id="";
+  String name="";
+  String email="";
+  String phone="";
 
   double _setValue(double value) {
     return value * per + value;
@@ -160,6 +164,15 @@ class _MyCartScreenState extends State<MyCartScreen> {
                             .customer.address.first.city;
                         pincode = state.cartlistmodel.data!.cartList.data[index]
                             .customer.address.first.pincode;
+
+                        id=state.cartlistmodel.data!.cartList.data[index].customer.id.toString();
+                        name=state.cartlistmodel.data!.cartList.data[index].customer.firstName;
+                        email=state.cartlistmodel.data!.cartList.data[index].customer.emailId;
+                        phone=state.cartlistmodel.data!.cartList.data[index].customer.phoneNo;
+
+
+
+
                       });
 
                       print("nocunter");
@@ -679,7 +692,12 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                                     .id
                                                                     .toString(),
                                                                 allitems:
-                                                                    false)));
+                                                                    false,
+                                                            customerid:state.cartlistmodel.data!.cartList.data[index].customer.id.toString(),
+                                                            customername:state.cartlistmodel.data!.cartList.data[index].customer.firstName,
+                                                            customeremail:state.cartlistmodel.data!.cartList.data[index].customer.emailId,
+                                                            customerphone:state.cartlistmodel.data!.cartList.data[index].customer.phoneNo))
+                                                );
                                               },
                                               child: Container(
                                                 height: MediaQuery.of(context)
@@ -868,45 +886,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                   ),
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8),
-              //   child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.end,
-              //     crossAxisAlignment: CrossAxisAlignment.end,
-              //     children: [
-              //       Padding(
-              //         padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-              //         child: InkWell(
-              //           onTap: () {
-              //             Navigator.push(
-              //                 context,
-              //                 MaterialPageRoute(
-              //                     builder: (context) =>
-              //                         ChangeDeliveryAddressScreen(
-              //                           quantity: "",
-              //                           productprice: "",
-              //                           productid: "",
-              //                             allitems:false
-              //                         )));
-              //           },
-              //           child: Container(
-              //             height: 25,
-              //             width: 60,
-              //             alignment: Alignment.center,
-              //             decoration: BoxDecoration(
-              //                 color: Colors.white,
-              //                 border: Border.all(color: CustColors.light_navy),
-              //                 borderRadius: BorderRadius.circular(4)),
-              //             child: const Text(
-              //               "Change",
-              //               style: Styles.homeActiveTextStyle,
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
+
             ],
           )),
     );
@@ -1071,7 +1051,11 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                   quantity: "",
                                   productprice: "",
                                   productid: "",
-                                  allitems: true)));
+                                  allitems: true,
+                                  customerid:id,
+                                  customername:name,
+                                  customeremail:email,
+                                  customerphone:phone)));
 
                       Fluttertoast.showToast(msg: "Confirm Address");
                     },
