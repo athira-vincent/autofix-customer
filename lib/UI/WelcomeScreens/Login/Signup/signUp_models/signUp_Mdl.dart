@@ -58,6 +58,8 @@ class SignUp {
     required this.generalCustomer,
     required this.genMechanic,
     required this.genVendor,
+    required this.message,
+
   });
 
   String token;
@@ -67,6 +69,7 @@ class SignUp {
   GeneralCustomer? generalCustomer;
   GenMechanic? genMechanic;
   dynamic genVendor;
+  String message;
 
   factory SignUp.fromJson(Map<String, dynamic> json) => SignUp(
     token: json["token"] == null ? null : json["token"],
@@ -75,6 +78,7 @@ class SignUp {
     vendor: json["vendor"],
     generalCustomer: json["generalCustomer"] == null ? null : GeneralCustomer.fromJson(json["generalCustomer"]),
     genMechanic: json["genMechanic"] == null ? null : GenMechanic.fromJson(json["genMechanic"]),
+    message: json["message"] == null ? null : json["message"],
     genVendor: json["genVendor"],
   );
 
@@ -85,6 +89,7 @@ class SignUp {
     "vendor": vendor,
     "generalCustomer": generalCustomer == null ? null : generalCustomer?.toJson(),
     "genMechanic": genMechanic == null ? null : genMechanic?.toJson(),
+    "message": message == null ? null : message,
     "genVendor": genVendor,
   };
 }

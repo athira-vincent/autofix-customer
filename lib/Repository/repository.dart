@@ -1,5 +1,7 @@
 import 'package:auto_fix/ApiProvider/customer_apiProvider.dart';
 import 'package:auto_fix/ApiProvider/mechanic_api_provider.dart';
+import 'package:auto_fix/Constants/GlobelTime/timeApiProvider.dart';
+import 'package:auto_fix/Constants/GlobelTime/timeMdl.dart';
 import 'package:auto_fix/Models/cod_model/cod_model.dart';
 import 'package:auto_fix/Models/customer_models/add_address_model/add_address_model.dart';
 import 'package:auto_fix/Models/customer_models/add_cart_model/add_cart_model.dart';
@@ -19,7 +21,6 @@ import 'package:auto_fix/Models/wallet_history_model/wallet_history_model.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_api_provider.dart';
-import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_password_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault_api_provider.dart';
@@ -27,6 +28,7 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_api_pr
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyJobReview/my_job_review_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_api_provider.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/ChangePassword/change_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CategoryList/category_list_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CompleteProfile/mechanic_complete_profile_api_provider.dart';
@@ -85,6 +87,7 @@ class Repository {
   final _customerratingprovider=CustomerApiProvider();
   final _notificationprovider = CustomerApiProvider();
   final _vendornotificationprovider = MechanicApiProvider();
+  final _apiTimeProvider = WorldTimeApiProvider();
 
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>
@@ -183,19 +186,37 @@ class Repository {
         longitude,
       );
 
+  //EditCar Of Customer
+  Future<dynamic> postEditCarRequest(
+      token,
+      vehicleId, year,
+      lastMaintenance, milege,
+      vehiclePic, color,
+      ) =>
+      _addCarApiProvider.postEditCarRequest(
+        token,
+        vehicleId, year,
+        lastMaintenance, milege,
+        vehiclePic, color,
+      );
+
   //Update Default Vehicle
   Future<dynamic> postUpdateDefaultVehicle(token, vehicleId, customerId) =>
       _addCarApiProvider.postUpdateDefaultVehicle(token, vehicleId, customerId);
 
   //Otp Verification
-  Future<dynamic> postOtpVerificationRequest(token, otp, userTypeId) =>
-      _signupApiProvider.postOtpVerificationRequest(token, otp, userTypeId);
+  Future<dynamic> postOtpVerificationRequest( otp, userTypeId) =>
+      _signupApiProvider.postOtpVerificationRequest( otp, userTypeId);
+
+  //Resend OTP
+  Future<dynamic> postResentOtpRequest(email, phone) =>
+      _signupApiProvider.postResendOtpRequest(email, phone);
 
   //Phone Login Otp Verification
   Future<dynamic> postPhoneLoginOtpVerificationRequest(
-          token, otp, userTypeId) =>
+           otp, userTypeId) =>
       _signupApiProvider.postPhoneLoginOtpVerificationRequest(
-          token, otp, userTypeId);
+           otp, userTypeId);
 
   /// =============== Mechanics Regular Service Booking Id  ================== ///
 
@@ -690,5 +711,8 @@ class Repository {
 
   Future<NotificationModel> vendornotification() =>
       _vendornotificationprovider.vendornotification();
+
+  Future<TimeModel> getCurrentWorldTime(parameter) =>
+      _apiTimeProvider.getTimeRequest(parameter);
 
 }

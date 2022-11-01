@@ -134,7 +134,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           },*//*
         ),*/
 
-        /*ListTile(
+        ListTile(
           contentPadding: EdgeInsets.only(left: 20.4),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
@@ -152,12 +152,12 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               height: 20.76,
             ),
           ),
-         *//* onTap: () {
+          /*onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CustomerBookNowScreen()));
-          },*//*
-        ),*/
+                MaterialPageRoute(builder: (context) => ()));
+          },*/
+        ),
 
         ListTile(
           contentPadding: EdgeInsets.only(left: 20.4),

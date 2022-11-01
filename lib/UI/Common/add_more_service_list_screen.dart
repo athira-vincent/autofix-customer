@@ -92,49 +92,46 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: SafeArea(
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          height: size.height,
+          width: size.width,
           child: Container(
-            height: size.height,
-            width: size.width,
-            child: Container(
-              margin: EdgeInsets.only(
-                left: size.width * 6 / 100,
-                right: size.width * 6 / 100,
-                top: size.height * 3.3 / 100,
-                bottom: size.height * 2 / 100,
-              ),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text("Add additional service",
-                      style: TextStyle(
-                        fontSize: 15.3,
-                        fontFamily: "Samsung_SharpSans_Medium",
-                        fontWeight: FontWeight.w600,
-                        color: CustColors.light_navy,
-                      ),
+            margin: EdgeInsets.only(
+              left: size.width * 6 / 100,
+              right: size.width * 6 / 100,
+              top: size.height * 3.3 / 100,
+              bottom: size.height * 2 / 100,
+            ),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Add additional service",
+                    style: TextStyle(
+                      fontSize: 15.3,
+                      fontFamily: "Samsung_SharpSans_Medium",
+                      fontWeight: FontWeight.w600,
+                      color: CustColors.light_navy,
                     ),
                   ),
+                ),
 
-                  addServicesSearchArea(size),
+                addServicesSearchArea(size),
 
-                  servicesListArea(size,context),
+                servicesListArea(size,context),
 
-                  widget.isAddService
-                      ? InkWell(
-                          onTap: (){
-                            print("selected service list - length >>>>>>>>" + selectedServiceList!.length.toString());
-                            Navigator.pop(context,selectedServiceList);
-                          },
-                            child: nextButton(size)
-                        )
-                      : Container(),
-                ],
-              ),
+                widget.isAddService
+                    ? InkWell(
+                    onTap: (){
+                      print("selected service list - length >>>>>>>>" + selectedServiceList!.length.toString());
+                      Navigator.pop(context,selectedServiceList);
+                    },
+                    child: nextButton(size)
+                )
+                    : Container(),
+              ],
             ),
           ),
         ),

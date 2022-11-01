@@ -113,28 +113,25 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
 
     Size size = MediaQuery.of(context).size;
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: SafeArea(
-             child: SingleChildScrollView(
-               child: Container(
-                 width: size.width,
-                 height: size.height,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        titleWidget(size),
-                        InfoTextWidget(size),
-                        customerTitleImageWidget(size),
-                        warningTextWidget(size),
-                        paymentReceivedButton(size)
-                      ]
-                  ),
-               ),
-             )
-          )
-        ),
+    return Scaffold(
+        body: SafeArea(
+            child: SingleChildScrollView(
+              child: Container(
+                width: size.width,
+                height: size.height,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      titleWidget(size),
+                      InfoTextWidget(size),
+                      customerTitleImageWidget(size),
+                      warningTextWidget(size),
+                      paymentReceivedButton(size)
+                    ]
+                ),
+              ),
+            )
+        )
     );
   }
 

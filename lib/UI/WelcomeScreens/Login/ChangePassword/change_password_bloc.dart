@@ -1,5 +1,6 @@
 import 'package:auto_fix/Repository/repository.dart';
-import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_password_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/ChangePassword/change_password_mdl.dart';
+
 
 import 'package:rxdart/rxdart.dart';
 

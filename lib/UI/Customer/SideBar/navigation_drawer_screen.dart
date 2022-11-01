@@ -10,7 +10,6 @@ import 'package:auto_fix/UI/Customer/SideBar/CustomerNotifications/cust_notifica
 import 'package:auto_fix/UI/Customer/SideBar/MyOrders/my_orders_list.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyWallet/my_wallet.dart';
-import 'package:auto_fix/UI/Customer/SideBar/OrderDetails/cust_order_details.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -5,9 +5,11 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
+import 'package:auto_fix/UI/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_mdl.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_bloc.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/ChangePassword/change_password_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
@@ -50,7 +52,9 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   TextEditingController _stateController = TextEditingController();
   TextEditingController _orgTypeController = TextEditingController();
   TextEditingController _ministryGovtController = TextEditingController();
+  TextEditingController _pswdController = TextEditingController();
 
+  FocusNode _pswdFocusNode = FocusNode();
   FocusNode _nameFocusNode = FocusNode();
   FocusNode _orgNameNode = FocusNode();
   FocusNode _emailFocusNode = FocusNode();
@@ -127,6 +131,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   final picker = ImagePicker();
   File? _images;
   BuildContext? dialogContext;
+  String email = "";
 
   @override
   void initState() {
@@ -142,7 +147,8 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      print('userFamilyId CustomerMyProfileScreen' + authToken.toString());
+      JWTTokenChecking.checking(authToken, context);
+      print('userFamilyId CustomerMyProfileScreen'+authToken.toString());
     });
     String id = shdPre
         .getString(
@@ -291,8 +297,9 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     _userName = value.data!.customerDetails!.firstName.toString();
     _imageUrl = value.data!.customerDetails!.customer![0].profilePic.toString();
     _userType = value.data!.customerDetails!.customer![0].custType.toString();
-    _orgNameController.text =
-        value.data!.customerDetails!.customer![0].orgName.toString();
+    _orgNameController.text = value.data!.customerDetails!.customer![0].orgName.toString();
+    email = value.data!.customerDetails!.emailId.toString();
+    _pswdController.text = "Password@123";
 
     _signinBloc.userDefaultData(
       authToken,
@@ -349,9 +356,8 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                 EmailTextUi(size),
                                 PhoneTextUi(size),
                                 StateTextUi(size),
-                                editProfileEnabled == true
-                                    ? corporateSaveChangeButton(size)
-                                    : Container(),
+                                PasswordTextUi(size),
+                                editProfileEnabled == true ? individualSaveChangeButton(size) : Container(),
                               ],
                             )
                           : Column(
@@ -361,13 +367,26 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                 NameTextUi(size),
                                 EmailTextUi(size),
                                 PhoneTextUi(size),
-                                editProfileEnabled == true
-                                    ? governmentSaveChangeButton(size)
-                                    : Container(),
+                                StateTextUi(size),
+                                PasswordTextUi(size),
+                                editProfileEnabled == true ? corporateSaveChangeButton(size) : Container(),
                               ],
-                            ),
-                ),
-              ],
+                            )
+                              :
+                          Column(
+                            children: [
+                              StateTextUi(size),
+                              ministryTextUi(size),
+                              NameTextUi(size),
+                              EmailTextUi(size),
+                              PhoneTextUi(size),
+                              PasswordTextUi(size),
+                              editProfileEnabled == true ? governmentSaveChangeButton(size) : Container(),
+                            ],
+                          ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -749,6 +768,112 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+            child: Divider(),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget PasswordTextUi(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: () async {
+              if(editProfileEnabled == true){
+                /*final result = await*/ Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChangePasswordScreen(email: email,),
+                    ));
+                print("Change Password");
+              }
+            },
+            child: Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: CustColors.whiteBlueish,
+                      borderRadius: BorderRadius.circular(11.0)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: SvgPicture.asset('assets/image/ic_lock.svg',
+                      height: size.height * 2.5 / 100,
+                      width: size.width * 2.5 / 100,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: TextFormField(
+                            readOnly: true,
+                            enabled: false,
+                            obscureText: true,
+                            obscuringCharacter: '*',
+                            textAlignVertical: TextAlignVertical.center,
+                            maxLines: 1,
+                            style: Styles.appBarTextBlack15,
+                            focusNode: _pswdFocusNode,
+                            keyboardType: TextInputType.name,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[a-zA-Z ]')),
+                            ],
+                            validator: InputValidator(
+                                ch :'Password').emptyChecking,
+                            controller: _pswdController,
+                            cursorColor: CustColors.light_navy,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              hintText:  'Password',
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 2.8,
+                                horizontal: 0.0,
+                              ),
+                              hintStyle: Styles.appBarTextBlack15,),
+                          ),
+                        ),
+                        editProfileEnabled != true
+                            ?
+                        Text(
+                          'Your Password ',
+                          textAlign: TextAlign.center,
+                          style: Styles.textLabelSubTitle,
+                        )
+                            :
+                        Container(),
+                      ],
+                    ),
+                  ),
+                ),
+                //Spacer(),
+                editProfileEnabled == true
+                    ? Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                    )
+                )
+                    : Container(),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,5,0,5),
             child: Divider(),
           )
         ],

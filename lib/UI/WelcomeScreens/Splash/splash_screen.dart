@@ -41,18 +41,16 @@ class _SplashScreenState extends State<SplashScreen> {
     String? userType = _shdPre.getString(SharedPrefKeys.userType);
     String? userCategory = _shdPre.getString(SharedPrefKeys.userCategory);
     int? _isDefaultVehicleAvailable = _shdPre.getInt(SharedPrefKeys.isDefaultVehicleAvailable);
-    int? _isWorkProfileCompleted = _shdPre.getInt(SharedPrefKeys.isWorkProfileCompleted);
-    //String? defaultVehicle = _shdPre.getString(SharedPrefKeys.defaultBrandID);
-    String? phoneNo = _shdPre.getString(SharedPrefKeys.userPhone);
-    String? otpCode = _shdPre.getString(SharedPrefKeys.otpCode);
-    String? userTypeId = _shdPre.getString(SharedPrefKeys.userTypeId);
+    int? _isProfileCompleted = _shdPre.getInt(SharedPrefKeys.isProfileCompleted);
+
 
     print("is logged in=======$_isLoggedin");
     print("is isWalked in=======$isWalked");
     print("_isDefaultVehicleAvailable ============ $_isDefaultVehicleAvailable");
-    print("_isWorkProfileCompleted ============ $_isWorkProfileCompleted");
+
     print("User Type ============ $userType");
     print("User userCategory ============ $userCategory");
+    print("User _isProfileCompleted ============ $_isProfileCompleted");
 
     var _token = _shdPre.getString(SharedPrefKeys.token);
 
@@ -64,67 +62,32 @@ class _SplashScreenState extends State<SplashScreen> {
     if (_isLoggedin != null && _isLoggedin == true) {
       print("chechingggg 01 $userType");
 
-      if (userType == TextStrings.user_customer) {
-        if(_isDefaultVehicleAvailable != null && _isDefaultVehicleAvailable == 2){
-          Navigator.pushReplacement(
-            context,
-             MaterialPageRoute(
-                builder: (context) =>
-                    AddCarScreen(userCategory:userCategory! ,userType: userType!,fromPage: "1",)),
-          );
-        }else if(_isDefaultVehicleAvailable != null && _isDefaultVehicleAvailable == 1){
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => OtpVerificationScreen(
-                    userType: userType!,
-                    userCategory: userCategory!,
-                    phoneNumber: phoneNo!,
-                    otpNumber:otpCode!,
-                    userTypeId: userTypeId!,
-                    fromPage: "1",
-                  )));
-        }else{
-
+      if (userType == TextStrings.user_customer && _isProfileCompleted == "3") {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) =>  CustomerMainLandingScreen()));
-        }
       }
       else{
-        if(_isWorkProfileCompleted != null && _isWorkProfileCompleted == 2){
-          Navigator.pushReplacement(
-            context,
-            new MaterialPageRoute(
-                builder: (context) =>
-                    WorkSelectionScreen(userCategory:userCategory! ,userType: userType!,)),
-          );
-        }else if(_isWorkProfileCompleted != null && _isWorkProfileCompleted == 1)
-        {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => OtpVerificationScreen(
-                    userType : userType!,
-                    userCategory : userCategory!,
-                    phoneNumber : phoneNo!,
-                    otpNumber : otpCode!,
-                    userTypeId : userTypeId!,
-                    fromPage : "1",
-                  )));
-        }else {
+         if (userType == TextStrings.user_mechanic && _isProfileCompleted == "3") {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) =>  MechanicHomeScreen()));
         }
+         else{
+           Navigator.pushReplacement(
+               context,
+               MaterialPageRoute(
+                   builder: (context) =>  LoginScreen()));
+         }
       }
+
     } else {
       if (isWalked == null || isWalked == false) {
         print('WalkThroughPages');
         Timer(
-            Duration(seconds: 3),
+            Duration(seconds: 5),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) => WalkThroughPages())));
       } else {
@@ -139,65 +102,56 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      /*routes: {
-        // '/CustomerMainLandingScreen': (BuildContext context) => CustomerMainLandingScreen(),
-        "/CustomerMainLandingScreen": (context) => CustomerMainLandingScreen(),
-        "/MechanicHomeScreen" : (context) => MechanicHomeScreen(),
-        "/IncomingJobRequestScreen" : (context) => IncomingJobRequestScreen(),
-      },*/
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.326,
+              //margin: EdgeInsets.only(left: 0, right:  0, top: 0, bottom: 0),
+              child: Image.asset(
+                "assets/image/splash_bg_top.png",
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.326,
-                //margin: EdgeInsets.only(left: 0, right:  0, top: 0, bottom: 0),
-                child: Image.asset(
-                  "assets/image/splash_bg_top.png",
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.contain,
-                ),
+                height: double.infinity,
+                fit: BoxFit.contain,
               ),
+            ),
 
-              Stack(
-                children: [
-                  Container(
+            Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.562,
+                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.053,bottom: 0),
+                  child: Image.asset(
+                    "assets/image/splash_bg_bottom.png",
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.562,
-                    margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.053,bottom: 0),
-                    child: Image.asset(
-                      "assets/image/splash_bg_bottom.png",
-                      width: double.infinity,
-                      height: double.infinity,
-                      fit: BoxFit.fill,
-                    ),
+                    height: double.infinity,
+                    fit: BoxFit.fill,
                   ),
-                  Container(
-                    margin: EdgeInsets.only(
+                ),
+                Container(
+                  margin: EdgeInsets.only(
                       left: MediaQuery.of(context).size.width * 0.232,
                       right: MediaQuery.of(context).size.width * 0.198
-                    ),
-                    height: MediaQuery.of(context).size.height * 0.118,
-                    width: MediaQuery.of(context).size.height * 0.569,
-                    child: Image.asset(
-                      "assets/image/splash_icon.png",
-                      width: double.infinity,
-                      height: 100,
-                      fit: BoxFit.contain,
-                    ),
                   ),
-                ],
-              )
-            ],
-          ),
+                  height: MediaQuery.of(context).size.height * 0.118,
+                  width: MediaQuery.of(context).size.height * 0.569,
+                  child: Image.asset(
+                    "assets/image/splash_icon.png",
+                    width: double.infinity,
+                    height: 100,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );

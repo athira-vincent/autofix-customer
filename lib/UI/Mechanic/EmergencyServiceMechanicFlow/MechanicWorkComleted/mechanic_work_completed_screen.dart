@@ -201,21 +201,18 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                appBarCustomUi(size),
-                jobCompletedText(size),
-                estimatedAndTimeTakenUi(size),
-                selectedRepairDetailsUi(size),
-                RequestButton( size,context)
-              ],
-            ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              appBarCustomUi(size),
+              jobCompletedText(size),
+              estimatedAndTimeTakenUi(size),
+              selectedRepairDetailsUi(size),
+              RequestButton( size,context)
+            ],
           ),
         ),
       ),

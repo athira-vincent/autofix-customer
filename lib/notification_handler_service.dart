@@ -3,12 +3,15 @@ import 'dart:convert';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
+import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,10 +28,17 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
+  String screen = message.data['screen'];
+  if(screen.toString() == "IncomingJobOfferScreen") {
+    //_showTimeoutNotification(message);
+    //goToNextScreen_OnAppWorking(message.data);
+  }
+  print('Handling a background message ${message.messageId}');
 }
 
-void setupFcm() {
-
+Future<void> setupFcm() async {
+  Fluttertoast.showToast(
+      msg: "setupFcm");
   var initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
   var initializationSettingsIOs = const IOSInitializationSettings(
     requestSoundPermission: true,
@@ -42,34 +52,25 @@ void setupFcm() {
 
   //when the app is in foreground state and you click on notification.
   flutterLocalNotificationsPlugin.initialize(initializationSettings,
-
       onSelectNotification: (String? payload){
         Fluttertoast.showToast(
             msg:
-            "Notification onselect notification", timeInSecForIosWeb: 15);
+            "Notification onselect notification01", timeInSecForIosWeb: 15);
         if (payload != null) {
           Map<String, dynamic> data = json.decode(payload);
-          goToNextScreen(data);
+          goToNextScreen_OnClickNotification(data);
         }
       }
-      /*onDidReceiveNotificationResponse: (NotificationResponse notificationResponse){
-        final String? payload = notificationResponse.payload;
-        if (payload != null) {
-          Map<String, dynamic> data = json.decode(payload);
-          goToNextScreen(data);
-        }
-      },*/
-
     //onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
   );
   //When the app is terminated, i.e., app is neither in foreground or background.
   FirebaseMessaging.instance.getInitialMessage().then((value){
     Fluttertoast.showToast(
-        msg:
-        "get initial message");
+        msg: "get initial message");
     //Its compulsory to check if RemoteMessage instance is null or not.
     if(value != null){
-      goToNextScreen(value.data);
+
+      goToNextScreen_OnClickNotification(value.data);
     }
   });
 
@@ -77,72 +78,82 @@ void setupFcm() {
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
     Fluttertoast.showToast(
         msg:
-        "Notification on message opened");
-    goToNextScreen(event.data);
+        "Notification on message opened 02");
+    goToNextScreen_OnClickNotification(event.data);
   },
     cancelOnError: false,
     onDone: () {},
   );
 
   FirebaseMessaging.onMessage.listen((RemoteMessage remoteMessage) async {
-    Fluttertoast.showToast(
-        msg:
-        "Notification on message listen");
-    RemoteNotification? notification = remoteMessage.notification;
-    AndroidNotification? android = remoteMessage.notification?.android;
-    if (notification != null && android != null) {
-      if (remoteMessage.notification?.android!.imageUrl != null
-          && remoteMessage.notification!.android!.imageUrl!.trim().isNotEmpty) {
-        final String largeIcon = await _base64encodedImage(
-          remoteMessage.notification!.android!.imageUrl!,
-        );
 
-        final BigPictureStyleInformation bigPictureStyleInformation =
-        BigPictureStyleInformation(
-          ByteArrayAndroidBitmap.fromBase64String(largeIcon),
-          largeIcon: ByteArrayAndroidBitmap.fromBase64String(largeIcon),
-          contentTitle: remoteMessage.notification!.title,
-          htmlFormatContentTitle: true,
-          summaryText: remoteMessage.notification!.body,
-          htmlFormatSummaryText: true,
-          hideExpandedLargeIcon: true,
-        );
-        flutterLocalNotificationsPlugin.show(
-          remoteMessage.hashCode,
-          remoteMessage.notification!.title,
-          remoteMessage.notification!.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channelDescription: channel.description,
-              icon: 'mipmap/ic_launcher',
-              importance: Importance.max,
-              priority: Priority.high,
-              largeIcon: ByteArrayAndroidBitmap.fromBase64String(largeIcon),
-              styleInformation: bigPictureStyleInformation,
-            ),
-          ),
-          payload: json.encode(remoteMessage.data),
-        );
-      }
-      else {
-        flutterLocalNotificationsPlugin.show(
-          remoteMessage.hashCode,
-          remoteMessage.notification!.title,
-          remoteMessage.notification!.body,
-          NotificationDetails(
+    String screen = remoteMessage.data['screen'];
+    if(screen.toString() == "IncomingJobOfferScreen"){
+      Fluttertoast.showToast(
+          msg:
+          "Notification on message listen 10");
+      goToNextScreen_OnAppWorking(remoteMessage.data);
+    }
+    else{
+      Fluttertoast.showToast(
+          msg:
+          "Notification on message listen 03");
+      RemoteNotification? notification = remoteMessage.notification;
+      AndroidNotification? android = remoteMessage.notification?.android;
+      if (notification != null && android != null) {
+        if (remoteMessage.notification?.android!.imageUrl != null
+            && remoteMessage.notification!.android!.imageUrl!.trim().isNotEmpty) {
+          final String largeIcon = await _base64encodedImage(
+            remoteMessage.notification!.android!.imageUrl!,
+          );
+
+          final BigPictureStyleInformation bigPictureStyleInformation =
+          BigPictureStyleInformation(
+            ByteArrayAndroidBitmap.fromBase64String(largeIcon),
+            largeIcon: ByteArrayAndroidBitmap.fromBase64String(largeIcon),
+            contentTitle: remoteMessage.notification!.title,
+            htmlFormatContentTitle: true,
+            summaryText: remoteMessage.notification!.body,
+            htmlFormatSummaryText: true,
+            hideExpandedLargeIcon: true,
+          );
+          flutterLocalNotificationsPlugin.show(
+            remoteMessage.hashCode,
+            remoteMessage.notification!.title,
+            remoteMessage.notification!.body,
+            NotificationDetails(
               android: AndroidNotificationDetails(
                 channel.id,
                 channel.name,
                 channelDescription: channel.description,
+                icon: 'mipmap/ic_launcher',
                 importance: Importance.max,
                 priority: Priority.high,
+                largeIcon: ByteArrayAndroidBitmap.fromBase64String(largeIcon),
+                styleInformation: bigPictureStyleInformation,
               ),
-              iOS: IOSNotificationDetails()
-          ),
-          payload: json.encode(remoteMessage.data),
-        );
+            ),
+            payload: json.encode(remoteMessage.data),
+          );
+        }
+        else {
+          flutterLocalNotificationsPlugin.show(
+            remoteMessage.hashCode,
+            remoteMessage.notification!.title,
+            remoteMessage.notification!.body,
+            NotificationDetails(
+                android: AndroidNotificationDetails(
+                  channel.id,
+                  channel.name,
+                  channelDescription: channel.description,
+                  importance: Importance.max,
+                  priority: Priority.high,
+                ),
+                iOS: IOSNotificationDetails()
+            ),
+            payload: json.encode(remoteMessage.data),
+          );
+        }
       }
     }
   });
@@ -157,26 +168,31 @@ Future<String> getFcmToken() async {
   return Future.value(token);
 }
 
-Future<void> goToNextScreen(Map<String, dynamic> data) async {
+Future<void> goToNextScreen_OnClickNotification(Map<String, dynamic> data) async {
   Fluttertoast.showToast(
       msg: "goToNextScreen",
       timeInSecForIosWeb: 15
   );
   SharedPreferences _shdPre = await SharedPreferences.getInstance();
-  String? _token = _shdPre.getString(SharedPrefKeys.token.toString());
   String? userType = _shdPre.getString(SharedPrefKeys.userType);
-  print(' $userType ============= ');
+  print(' $userType ============= 01');
 
   if (data['click_action'] != null) {
 
-    /*Fluttertoast.showToast(
-        msg: "Notification hit on change screen",
-      timeInSecForIosWeb: 15
-    );*/
-    if(userType.toString() == TextStrings.user_customer){
+    String screen = data['screen'];
+    if(screen.toString() == "IncomingJobOfferScreen"){
+      NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(data);
+
+      String bookingId = data['bookingId'];
+      print("bookingId >>>>> " + bookingId );
+      notificationNavigatorKey.currentState!.pushNamed('/IncomingJobRequestScreen',arguments: notificationPayloadMdl);
+    } else if(userType.toString() == TextStrings.user_customer){
       notificationNavigatorKey.currentState!.pushNamed('/custNotificationList',);
-    }else{
+    }else if (userType.toString() == TextStrings.user_mechanic){
       notificationNavigatorKey.currentState!.pushNamed('/mechNotificationList',);
+    }else{
+      Fluttertoast.showToast(
+          msg: "Notification else part");
     }
     /*switch (data['click_action']) {
       case "first_screen":
@@ -190,11 +206,53 @@ Future<void> goToNextScreen(Map<String, dynamic> data) async {
     }*/
     return;
   }
-  Fluttertoast.showToast(
-      msg:
-      "Notification else part");
   //If the payload is empty or no click_action key found then go to Notification Screen if your app has one.
   //navigatorKey.currentState.pushNamed(NotificationPage.routeName,);
+}
+
+Future<void> goToNextScreen_OnAppBackground(Map<String, dynamic> data) async {
+  Fluttertoast.showToast(
+      msg: "goToNextScreen_OnAppBackground",
+      timeInSecForIosWeb: 15
+  );
+  SharedPreferences _shdPre = await SharedPreferences.getInstance();
+  String? userType = _shdPre.getString(SharedPrefKeys.userType);
+  print(' $userType ============= 02');
+
+    String screen = data['screen'];
+    if(screen.toString() == "IncomingJobOfferScreen"){
+      NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(data);
+
+      String bookingId = data['bookingId'];
+      print("bookingId >>>>> " + bookingId );
+      notificationNavigatorKey.currentState!.pushNamed('/IncomingJobRequestScreen',arguments: notificationPayloadMdl);
+    } else{
+
+    }
+}
+
+Future<void> goToNextScreen_OnAppWorking(Map<String, dynamic> data) async {
+  Fluttertoast.showToast(
+      msg: "goToNextScreen_OnAppWorking",
+      timeInSecForIosWeb: 15
+  );
+  SharedPreferences _shdPre = await SharedPreferences.getInstance();
+  String? userType = _shdPre.getString(SharedPrefKeys.userType);
+  print(' $userType ============= 03');
+
+  String screen = data['screen'];
+  if(screen.toString() == "IncomingJobOfferScreen"){
+    NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(data);
+
+    String bookingId = data['bookingId'];
+    print("bookingId >>>>> " + bookingId );
+    notificationNavigatorKey.currentState!.pushNamed('/IncomingJobRequestScreen',arguments: notificationPayloadMdl);
+  } else{
+    Fluttertoast.showToast(
+        msg: "Notification hit on change screen",
+      timeInSecForIosWeb: 15
+    );
+  }
 }
 
 Future<String> _base64encodedImage(String url) async {
@@ -341,5 +399,32 @@ showSimpleNotification(RemoteMessage remoteMessage) async {
           payload: json.encode(remoteMessage.data),
         );
   }
+}
+
+///-------- method to show notification with time out ---------------
+Future<void> _showTimeoutNotification(RemoteMessage remoteMessage) async {
+  //Map<String, dynamic> data = json.decode(remoteMessage.data[0]);
+
+  print("_showTimeoutNotification data >>>> ${json.encode(remoteMessage.data)}");
+  Fluttertoast.showToast(
+      msg: "Notification onSelect notification 04", timeInSecForIosWeb: 15);
+   AndroidNotificationDetails androidNotificationDetails =
+  AndroidNotificationDetails(
+      channel.id,
+      channel.name,
+      channelDescription: channel.description,
+      importance: Importance.max,
+      priority: Priority.high,
+      timeoutAfter: 50000,
+      styleInformation: DefaultStyleInformation(true, true));
+   NotificationDetails notificationDetails =
+  NotificationDetails(android: androidNotificationDetails);
+  await flutterLocalNotificationsPlugin.show(
+      remoteMessage.hashCode,
+      remoteMessage.notification!.title,
+      remoteMessage.notification!.body,
+      notificationDetails,
+    payload: json.encode(remoteMessage.data),
+  );
 }
 

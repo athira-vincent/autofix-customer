@@ -436,25 +436,23 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
    // _listenNotification(context);
     //_notificationListener.listenNotification(context);
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                appBarCustomUi(size),
-                profileImageAndKmAndReviewCount(size),
-                timeAndLocationUi(size),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              appBarCustomUi(size),
+              profileImageAndKmAndReviewCount(size),
+              timeAndLocationUi(size),
 
-                _mechanicDetailsMdl == null
-                    ? Container()
-                    : reviewsUi(size),
-                selectedServiceDetailsUi(size),
-                widget.isEmergency ? acceptAndSendRequestButton( size,context) : acceptAndContinueButton(size, context),
-              ],
-            ),
+              _mechanicDetailsMdl == null
+                  ? Container()
+                  : reviewsUi(size),
+              selectedServiceDetailsUi(size),
+              acceptAndSendRequestButton( size,context) ,
+              // Accept $ Send Request - Emergency service
+            ],
           ),
         ),
       ),
@@ -1015,69 +1013,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     );
   }
 
-  Widget acceptAndContinueButton(Size size, BuildContext context) {
-    return InkWell(
-      onTap: (){
-        print("on press acceptAndContinueButton");
-        if(widget.serviceModel == "Pick up & Drop off"){
-
-        }
-        if(widget.serviceModel == "Mobile Mechanic"){
-          _showMechanicAcceptanceDialog(context);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MobileMechTrackingScreen()));
-        }
-        if(widget.serviceModel == "Take Vehicle to Mechanic"){
-          _showMechanicAcceptanceDialog(context);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BookingSuccessScreen(
-                    bookingDate: "Mar 5, 2022",
-                  )));
-        }
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
-        child: Row(
-          children: [
-            Spacer(),
-            Container(
-              height: 45,
-              width:200,
-              alignment: Alignment.center,
-              margin: const EdgeInsets.only(top: 8, bottom: 6,left: 20,right: 20),
-              //padding: EdgeInsets.only(left: 20, right: 20),
-              decoration: BoxDecoration(
-                color: CustColors.light_navy,
-                border: Border.all(
-                  color: CustColors.blue,
-                  style: BorderStyle.solid,
-                  width: 0.70,
-                ),
-                borderRadius: BorderRadius.circular(7),
-              ),
-              child:  Text(
-                "Accept & continue",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Corbel_Bold',
-                    fontSize:
-                    ScreenSize().setValueFont(14.5),
-                    fontWeight: FontWeight.w800),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   _showMechanicAcceptanceDialog(BuildContext context) async {
-    Future.delayed(const Duration(seconds: 35), () {
-
+    Future.delayed(const Duration(seconds: 40), () {
 
       setState(() {
         print('_showMechanicAcceptanceDialog');

@@ -3,6 +3,7 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/ResetPasswordScreen/create_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -31,15 +32,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   TextStyle _lableStyleConfirmPwd = const TextStyle();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   double per = .10;
   double perfont = .10;
   double _setValue(double value) {
     return value * per + value;
   }
   bool _isLoading = false;
-  bool _passwordVisible = false;
-  bool _confirmPasswordVisible= false;
+  bool _passwordVisible = true;
+  bool _confirmPasswordVisible= true;
 
 
   @override
@@ -65,24 +66,25 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.message.toString(),
-                style: const TextStyle(
-                    fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.light_navy,
-          ));
+          SnackBarWidget().setMaterialSnackBar( value.message.toString(), _scaffoldKey);
+          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //   content: Text(value.message.toString(),
+          //       style: const TextStyle(
+          //           fontFamily: 'Roboto_Regular', fontSize: 14)),
+          //   duration: const Duration(seconds: 2),
+          //   backgroundColor: CustColors.light_navy,
+          // ));
         });
       } else {
         setState(() {
           _isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Password Reset Successful",
-                style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: Duration(seconds: 2),
-            backgroundColor: CustColors.light_navy,
-          ));
-
+          // ScaffoldMessenger.of().showSnackBar(const SnackBar(
+          //   content: Text("Password Reset Successful",
+          //       style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
+          //   duration: Duration(seconds: 2),
+          //   backgroundColor: CustColors.light_navy,
+          // ));
+          SnackBarWidget().setMaterialSnackBar( "Password Reset Successful", _scaffoldKey);
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -109,6 +111,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.white,
         body: ScrollConfiguration(
           behavior: MyBehavior(),

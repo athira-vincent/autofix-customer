@@ -36,9 +36,7 @@ class _WaitAdminApprovalScreenState extends State<WaitAdminApprovalScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
         body: Container(
           width: MediaQuery.of(context).size.width,
@@ -56,7 +54,7 @@ class _WaitAdminApprovalScreenState extends State<WaitAdminApprovalScreen> {
                         top: size.height * 0.335,
                         left: size.width * 0.135,
                         right: size.width * 0.135
-                        /*bottom: size.height * 0.455*/),
+                      /*bottom: size.height * 0.455*/),
                     child: Image.asset("assets/image/img_admin_approval.png"),
                   ),
                   Container(
@@ -74,18 +72,18 @@ class _WaitAdminApprovalScreenState extends State<WaitAdminApprovalScreen> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(
-                      left: size.width * 0.080,
-                      right: size.width * 0.080,
-                      top: size.height * 0.022,
-                    ),
+                      margin: EdgeInsets.only(
+                        left: size.width * 0.080,
+                        right: size.width * 0.080,
+                        top: size.height * 0.022,
+                      ),
                       child: Text("Your reference no: ${widget.refNumber}",style: Styles.textSuccessfulTitle02Style,)),
                   Expanded(
                     child: Container(
-                      margin: EdgeInsets.only(
-                        bottom: size.height * 0.048
-                      ),
-                      alignment: Alignment.bottomCenter,
+                        margin: EdgeInsets.only(
+                            bottom: size.height * 0.048
+                        ),
+                        alignment: Alignment.bottomCenter,
                         child: Text("Wait for Approval from admin!  ",style: Styles.textSuccessfulTitle03Style,)
                     ),
                   )
@@ -94,7 +92,6 @@ class _WaitAdminApprovalScreenState extends State<WaitAdminApprovalScreen> {
             ),
           ),
         )
-      ),
     );
   }
 

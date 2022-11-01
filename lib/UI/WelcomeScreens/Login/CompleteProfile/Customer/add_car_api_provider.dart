@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:auto_fix/Models/customer_models/default_vechicle_model/updateDefaultVehicleMdl.dart';
+import 'package:auto_fix/Models/customer_models/edit_vechicle_model/editVehicleMdl.dart';
 import 'package:auto_fix/Models/customer_models/vehicle_update_model/vehicleUpdateMdl.dart';
 import 'package:auto_fix/QueryProvider/query_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/vehicleCreate_Mdl.dart';
@@ -117,5 +118,29 @@ class AddCarApiProvider {
     }
   }
 
+  Future<EditVehicleMdl> postEditCarRequest(
+      token,
+      vehicleId, year,
+      lastMaintenance, milege,
+      vehiclePic, color,) async {
+    Map<String, dynamic> _resp = await _queryProvider.postEditCarRequest(
+      token, vehicleId,
+      year, lastMaintenance,
+      milege, vehiclePic,
+      color,);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = EditVehicleMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return EditVehicleMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = EditVehicleMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
 
 }

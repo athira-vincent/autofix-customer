@@ -186,9 +186,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
     _homeCustomerBloc.regularServiceListResponse.listen((value) {
       if (value.status == "error") {
-        setState(() {});
+        /*setState(() {});*/
       } else {
-        setState(() {});
+        /*setState(() {});*/
       }
     });
 

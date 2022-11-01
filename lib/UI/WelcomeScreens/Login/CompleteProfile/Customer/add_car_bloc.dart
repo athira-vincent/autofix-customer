@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Models/customer_models/default_vechicle_model/updateDefaultVehicleMdl.dart';
+import 'package:auto_fix/Models/customer_models/edit_vechicle_model/editVehicleMdl.dart';
 import 'package:auto_fix/Models/customer_models/vehicle_update_model/vehicleUpdateMdl.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/vehicleCreate_Mdl.dart';
@@ -70,6 +71,22 @@ class AddCarBloc {
   }
 
 
+  final postEditCar = PublishSubject<EditVehicleMdl>();
+  Stream<EditVehicleMdl> get editCarResponse => postEditCar.stream;
+
+  postEditCarRequest(
+      token,
+      vehicleId, year,
+      lastMaintenance, milege,
+      vehiclePic, color,
+      ) async {
+    EditVehicleMdl editVehicleMdl = await repository.postEditCarRequest(
+      token,
+      vehicleId, year,
+      lastMaintenance, milege,
+      vehiclePic, color,);
+    postEditCar.sink.add(editVehicleMdl);
+  }
 
 
   dispose() {

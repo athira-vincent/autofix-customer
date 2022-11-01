@@ -21,40 +21,37 @@ class _BookingSuccessScreenState extends State<BookingSuccessScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Container(
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+            child: Container(
                 width: size.width,
                 height: size.height,
                 //color: Colors.green,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       titleWidget(size),
                       infoTextWidget(size),
                       titleImageWidget(size),
                       warningTextWidget(size),
                       InkWell(
-                        onTap: (){
-                          /*Navigator.pushAndRemoveUntil(
+                          onTap: (){
+                            /*Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => CustomerMainLandingScreen()),
                               ModalRoute.withName("/CustomerMainLandingScreen")
                           );*/
-                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                              CustomerMainLandingScreen()), (Route<dynamic> route) => false);
-                        },
+                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                                CustomerMainLandingScreen()), (Route<dynamic> route) => false);
+                          },
                           child: backToHomeButton(size))
                     ]
                 )
-              )
-            ),
-          ),
+            )
         ),
+      ),
     );
   }
 

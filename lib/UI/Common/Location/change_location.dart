@@ -148,123 +148,120 @@ class _ChangeLocationScreenState extends State<ChangeLocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: Container(
-            child: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Container(
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
 
-                GoogleMap(
+              GoogleMap(
 
-                  //Map widget from google_maps_flutter package
-                  zoomGesturesEnabled: true,
-                  //enable Zoom in, out on map
-                  initialCameraPosition: _kGooglePlex!,
-                  markers: markers, //markers to show on map
-                  mapType: MapType.normal, //map type
-                  onMapCreated: (controller) { //method called when map is created
-                    setState(() {
-                      controller.setMapStyle(_mapStyle);
-                      mapController = controller;
-                    });
-                  },
-                  onLongPress: (result){
-                    setState(() {
-                      selectedLatLng = result;
-                      print("Print Val >>> " + result.toString());
-                      customerMarker(result.latitude, result.longitude);
-                      ///----------------------- address change here
-                      //locationAddress = result
-                      mapController!.animateCamera(
-                          CameraUpdate.newCameraPosition(
-                              CameraPosition(
-                                  target: LatLng(
-                                      result.latitude,
-                                      result.longitude,),
+                //Map widget from google_maps_flutter package
+                zoomGesturesEnabled: true,
+                //enable Zoom in, out on map
+                initialCameraPosition: _kGooglePlex!,
+                markers: markers, //markers to show on map
+                mapType: MapType.normal, //map type
+                onMapCreated: (controller) { //method called when map is created
+                  setState(() {
+                    controller.setMapStyle(_mapStyle);
+                    mapController = controller;
+                  });
+                },
+                onLongPress: (result){
+                  setState(() {
+                    selectedLatLng = result;
+                    print("Print Val >>> " + result.toString());
+                    customerMarker(result.latitude, result.longitude);
+                    ///----------------------- address change here
+                    //locationAddress = result
+                    mapController!.animateCamera(
+                        CameraUpdate.newCameraPosition(
+                            CameraPosition(
+                                target: LatLng(
+                                  result.latitude,
+                                  result.longitude,),
                                 zoom: 13)
-                          )
-                      );
-                      GetAddressFromLatLong(result);
+                        )
+                    );
+                    GetAddressFromLatLong(result);
 
-                      //getGoogleMapCameraPosition(LatLng(result.latitude, result.longitude));
-                    });
-                  },
-                ),
+                    //getGoogleMapCameraPosition(LatLng(result.latitude, result.longitude));
+                  });
+                },
+              ),
 
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20,20,20,50),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    /*Container(
+              Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20,20,20,50),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  /*Container(
                                       child: Icon(Icons.arrow_back, color: Colors.black),
                                     ),*/
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(15,0,15,0),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          /*TextFormField(
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(15,0,15,0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        /*TextFormField(
                                             controller: _locationChangeController,
                                           ),*/
-                                          Text(
-                                            "${locationAddress}",
-                                            textAlign: TextAlign.start,
-                                            style: Styles.waitingTextBlack17,
-                                          ),
-                                        ],
-                                      ),
+                                        Text(
+                                          "${locationAddress}",
+                                          textAlign: TextAlign.start,
+                                          style: Styles.waitingTextBlack17,
+                                        ),
+                                      ],
                                     ),
-                                    /*TextFormField(
+                                  ),
+                                  /*TextFormField(
                                             controller: _locationChangeController,
                                           ),*/
-                                  ],
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              //Navigator.of(context).pop();
-              SharedPreferences shdPre = await SharedPreferences.getInstance();
-              shdPre.setString(SharedPrefKeys.preferredLatitude, selectedLatLng.latitude.toString());
-              shdPre.setString(SharedPrefKeys.preferredLongitude, selectedLatLng.longitude.toString());
-              shdPre.setString(SharedPrefKeys.preferredAddress, Address);
-              Navigator.pop(context,selectedLatLng);
-            },
-            backgroundColor: CustColors.light_navy,
-            child: const Icon(Icons.done),
-          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            //Navigator.of(context).pop();
+            SharedPreferences shdPre = await SharedPreferences.getInstance();
+            shdPre.setString(SharedPrefKeys.preferredLatitude, selectedLatLng.latitude.toString());
+            shdPre.setString(SharedPrefKeys.preferredLongitude, selectedLatLng.longitude.toString());
+            shdPre.setString(SharedPrefKeys.preferredAddress, Address);
+            Navigator.pop(context,selectedLatLng);
+          },
+          backgroundColor: CustColors.light_navy,
+          child: const Icon(Icons.done),
         ),
       ),
     );

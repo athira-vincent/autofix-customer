@@ -73,7 +73,22 @@
     "text_check_mail_screen_desc": "Jọwọ ṣayẹwo imeeli rẹ, a ti fi imeeli \n ranṣẹ si ọ ti o ni ọna asopọ kan lati tun ọrọ igbaniwọle rẹ ṣe. ",
     "text_btn_go_to_mail": "Lọ si imeeli",
     "text_check_spam": "Ko gba imeeli naa? Ṣayẹwo àwúrúju àlẹmọ Tabi ",
-    "text_try_another": "gbiyanju adirẹsi imeeli miiran "
+    "text_try_another": "gbiyanju adirẹsi imeeli miiran ",
+    "error_201" : "This email already exists",
+      "error_200" : "codeSuccess",
+      "error_404" : "codeError",
+      "error_207" : "Password is incorrect!!!",
+      "error_202" : "This account does not exist! Please try again",
+      "error_203" : "Phone number already exists!!",
+      "error_204" : "Please complete your profile",
+      "error_205" : "Otp is not verified",
+      "error_206" : "Successfully logged in",
+      "error_208" : "Cannot login.Mechanic is not approved yet!!!",
+      "error_209" : "Successfully registered",
+      "error_210" : "Account Exist.Please Login!",
+      "error_211" : "OTP Not Verified! Try Again!",
+      "error_213" : "User Not Registered",
+      "error_301" : "Profile Not Completed! Try Login with username Password"
 
 
 
