@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/error_strings.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
@@ -114,11 +115,20 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   _listenOtpVerificationResponse() {
     _signupBloc.postOtpVerification.listen((value) {
       if (value.status == "error") {
+
         setState(() {
           _isLoading = false;
+        });
+        if(value.message == ErrorStrings.error_no_network){
+          SnackBarWidget().setMaterialSnackBar(ErrorStrings.error_no_network, _scaffoldKey);
+        }
+        else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_202){
+          SnackBarWidget().setMaterialSnackBar(ErrorStrings.error_202, _scaffoldKey);
+        } else{
           SnackBarWidget().setMaterialSnackBar(
               "${value.message.toString().split(":").last}", _scaffoldKey);
-        });
+        }
+
       } else {
 
         if(value.data!.otpVerification!.verified == 1){
@@ -321,8 +331,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     _forgotPasswordBloc.dispose();
     SmsVerification.stopListening();
   }
-
-
 
   void onFocusChange() {
     setState(() {
@@ -559,6 +567,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   _onSubmitOtp() {
     setState(() {
+      _isLoading = !_isLoading;
       _isLoadingButton = !_isLoadingButton;
       _verifyOtpCode();
     });
@@ -574,10 +583,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       this._otpCode = otpCode;
       if (otpCode.length == _otpCodeLength && isAutofill) {
         _enableButton = false;
+        _isLoading = true;
         _isLoadingButton = true;
         _verifyOtpCode();
       } else if (otpCode.length == _otpCodeLength && !isAutofill) {
         _enableButton = true;
+        _isLoading = false;
         _isLoadingButton = false;
       }else{
         _enableButton = false;
@@ -593,6 +604,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     FocusScope.of(context).requestFocus(new FocusNode());
     Timer(Duration(milliseconds: 4000), () {
       setState(() {
+        _isLoading = false;
         _isLoadingButton = false;
         _enableButton = false;
       });

@@ -85,7 +85,10 @@
       "error_206" : "Successfully logged in",
       "error_208" : "Cannot login.Mechanic is not approved yet!!!",
       "error_209" : "Successfully registered",
-      "error_210" : "Account Exist.Please Login!"
+      "error_210" : "Account Exist.Please Login!",
+      "error_211" : "OTP Not Verified! Try Again!",
+      "error_213" : "User Not Registered",
+      "error_301" : "Profile Not Completed! Try Login with username Password"
 
 
 

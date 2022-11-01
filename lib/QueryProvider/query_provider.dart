@@ -282,21 +282,26 @@ class QueryProvider {
 
   phoneLogin(phoneNumber) async {
     String _query = """
-        mutation {
-          signIn_phoneNo(phoneNo: "$phoneNumber", platformId: 1) {
-            otp
-            phoneNo
-            id
-            lastName
-            fcmToken
-            firstName
-            emailId
-            status
-            userTypeId
-            jwtToken
-          }
-        }
-
+      mutation {
+    signIn_phoneNo(phoneNo: "$phoneNumber", platformId: 1) {
+      token
+      userData {
+        otp
+        phoneNo
+        id
+        userTypeId
+        jwtToken
+        firstName
+        lastName
+        emailId
+        fcmToken
+        status
+        isProfile
+        otpVerified
+      }
+      message
+    }
+  }
     """;
 
     return await GqlClient.I.mutation(_query,

@@ -31,5 +31,9 @@ class ErrorStrings {
   static const error_208 = "208";             /// ----------- mechanic not approved
   static const error_209 = "209";             /// ----------- Successfully registered
   static const error_210 = "210";             /// ----------- Account Exist.Please Login!
+  static const error_211 = "211";             /// ----------- OTP Not Verified! Try Again!
+  static const error_213 = "213";             /// ----------- User Not Registered! Create Account!
+  static const error_212 = "212";             /// ----------- socialLogin_not_Applicable_login_manually
+
 
 }

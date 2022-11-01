@@ -659,9 +659,15 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _isLoading = false;
           socialLoginIsLoading = false;
-          //SnackBarWidget().setMaterialSnackBar(value.message.toString().split(":").last,_scaffoldKey);
           SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
+        if(value.message == ErrorStrings.error_no_network){
+          SnackBarWidget().setMaterialSnackBar(ErrorStrings.error_no_network, _scaffoldKey);
+        }else if(value.message == ErrorStrings.error_213){
+          SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_213, _scaffoldKey);
+        }else if(value.message == ErrorStrings.error_212){
+          SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_301, _scaffoldKey);
+        }
       } else {
         print('value.status succes 11111 >>>>>>>>>>>>>>>>+++${value.data!.socialLogin!.user!.userTypeId}');
         setState(() {

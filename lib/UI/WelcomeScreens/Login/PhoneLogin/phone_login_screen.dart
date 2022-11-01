@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/error_strings.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
@@ -11,6 +12,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../../main.dart';
 
@@ -70,6 +72,10 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
             // String msg = value.message.split(":").last.toString();
             SnackBarWidget().setMaterialSnackBar("Account doesn't exist",_scaffoldKey);
           }
+          else if(value.message.contains(ErrorStrings.error_202) ){
+            // String msg = value.message.split(":").last.toString();
+            SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_202,_scaffoldKey);
+          }
           else{
             SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
           }
@@ -85,20 +91,32 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
           //   value.data!.signInPhoneNo!.id.toString(),
           //                //----- profile image url should b updated
           //     );
-          Navigator.push(
-            context,
-            MaterialPageRoute(
+          if(value.data!.signInPhoneNo!.message.contains(ErrorStrings.error_205) ){
+            SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_205,_scaffoldKey);
+          }
+          else if(value.data!.signInPhoneNo!.userData!.isProfile.toString() == "0" ){
+            SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_301,_scaffoldKey);
+          }
+          else if(value.data!.signInPhoneNo!.message.contains(ErrorStrings.error_206) ){
+            SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_206,_scaffoldKey);
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
                 builder: (context) =>
                     OtpVerificationScreen(
                       userType: "0",
                       userCategory: "0",
                       phoneNumber: "${_phoneNoController.text}",
-                      otpNumber: "${value.data?.signInPhoneNo?.otp}",
-                      userTypeId: "${value.data?.signInPhoneNo?.userTypeId}",
+                      otpNumber: "${value.data?.signInPhoneNo?.userData!.otp}",
+                      userTypeId: "${value.data?.signInPhoneNo?.userData!.userTypeId}",
                       fromPage: "2",
                     ),
-            ),
-          );
+              ),
+            );
+          }else {
+            SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+          }
         });
       }
     });
