@@ -148,7 +148,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       JWTTokenChecking.checking(authToken, context);
-      print('userFamilyId CustomerMyProfileScreen'+authToken.toString());
+      print('userFamilyId CustomerMyProfileScreen' + authToken.toString());
     });
     String id = shdPre
         .getString(
@@ -297,7 +297,8 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     _userName = value.data!.customerDetails!.firstName.toString();
     _imageUrl = value.data!.customerDetails!.customer![0].profilePic.toString();
     _userType = value.data!.customerDetails!.customer![0].custType.toString();
-    _orgNameController.text = value.data!.customerDetails!.customer![0].orgName.toString();
+    _orgNameController.text =
+        value.data!.customerDetails!.customer![0].orgName.toString();
     email = value.data!.customerDetails!.emailId.toString();
     _pswdController.text = "Password@123";
 
@@ -324,56 +325,44 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Container(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                //appBarCustomUi(size),
-                profileImageAndKmAndReviewCount(size),
-                Form(
-                  autovalidateMode: _autoValidate,
-                  key: _formKey,
-                  child: _userType == "1"
-                      ? Column(
-                          children: [
-                            NameTextUi(size),
-                            EmailTextUi(size),
-                            PhoneTextUi(size),
-                            StateTextUi(size),
-                            editProfileEnabled == true
-                                ? individualSaveChangeButton(size)
-                                : Container(),
-                          ],
-                        )
-                      : _userType == "2"
-                          ? Column(
-                              children: [
-                                OrgNameTextUi(size),
-                                OrganisationTypeTextUi(size),
-                                // --------------------- Industry
-                                NameTextUi(size),
-                                EmailTextUi(size),
-                                PhoneTextUi(size),
-                                StateTextUi(size),
-                                PasswordTextUi(size),
-                                editProfileEnabled == true ? individualSaveChangeButton(size) : Container(),
-                              ],
-                            )
-                          : Column(
-                              children: [
-                                StateTextUi(size),
-                                ministryTextUi(size),
-                                NameTextUi(size),
-                                EmailTextUi(size),
-                                PhoneTextUi(size),
-                                StateTextUi(size),
-                                PasswordTextUi(size),
-                                editProfileEnabled == true ? corporateSaveChangeButton(size) : Container(),
-                              ],
-                            )
-                              :
-                          Column(
+      body: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              //appBarCustomUi(size),
+              profileImageAndKmAndReviewCount(size),
+              Form(
+                autovalidateMode: _autoValidate,
+                key: _formKey,
+                child: _userType == "1"
+                    ? Column(
+                        children: [
+                          NameTextUi(size),
+                          EmailTextUi(size),
+                          PhoneTextUi(size),
+                          StateTextUi(size),
+                          editProfileEnabled == true
+                              ? individualSaveChangeButton(size)
+                              : Container(),
+                        ],
+                      )
+                    : _userType == "2"
+                        ? Column(
+                            children: [
+                              OrgNameTextUi(size),
+                              OrganisationTypeTextUi(size),
+                              // --------------------- Industry
+                              NameTextUi(size),
+                              EmailTextUi(size),
+                              PhoneTextUi(size),
+                              StateTextUi(size),
+                              PasswordTextUi(size),
+                              editProfileEnabled == true
+                                  ? corporateSaveChangeButton(size)
+                                  : Container(),
+                            ],
+                          )
+                        : Column(
                             children: [
                               StateTextUi(size),
                               ministryTextUi(size),
@@ -381,13 +370,13 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                               EmailTextUi(size),
                               PhoneTextUi(size),
                               PasswordTextUi(size),
-                              editProfileEnabled == true ? governmentSaveChangeButton(size) : Container(),
+                              editProfileEnabled == true
+                                  ? governmentSaveChangeButton(size)
+                                  : Container(),
                             ],
                           ),
-                  ),
-                ],
               ),
-            ),
+            ],
           ),
         ),
       ),
@@ -777,16 +766,18 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
   Widget PasswordTextUi(Size size) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
       child: Column(
         children: [
           InkWell(
             onTap: () async {
-              if(editProfileEnabled == true){
+              if (editProfileEnabled == true) {
                 /*final result = await*/ Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChangePasswordScreen(email: email,),
+                      builder: (context) => ChangePasswordScreen(
+                        email: email,
+                      ),
                     ));
                 print("Change Password");
               }
@@ -796,11 +787,11 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 Container(
                   decoration: BoxDecoration(
                       color: CustColors.whiteBlueish,
-                      borderRadius: BorderRadius.circular(11.0)
-                  ),
+                      borderRadius: BorderRadius.circular(11.0)),
                   child: Padding(
                     padding: const EdgeInsets.all(15),
-                    child: SvgPicture.asset('assets/image/ic_lock.svg',
+                    child: SvgPicture.asset(
+                      'assets/image/ic_lock.svg',
                       height: size.height * 2.5 / 100,
                       width: size.width * 2.5 / 100,
                     ),
@@ -808,7 +799,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -828,13 +819,13 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                               FilteringTextInputFormatter.allow(
                                   RegExp('[a-zA-Z ]')),
                             ],
-                            validator: InputValidator(
-                                ch :'Password').emptyChecking,
+                            validator:
+                                InputValidator(ch: 'Password').emptyChecking,
                             controller: _pswdController,
                             cursorColor: CustColors.light_navy,
                             decoration: InputDecoration(
                               isDense: true,
-                              hintText:  'Password',
+                              hintText: 'Password',
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
@@ -844,18 +835,17 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                 vertical: 2.8,
                                 horizontal: 0.0,
                               ),
-                              hintStyle: Styles.appBarTextBlack15,),
+                              hintStyle: Styles.appBarTextBlack15,
+                            ),
                           ),
                         ),
                         editProfileEnabled != true
-                            ?
-                        Text(
-                          'Your Password ',
-                          textAlign: TextAlign.center,
-                          style: Styles.textLabelSubTitle,
-                        )
-                            :
-                        Container(),
+                            ? Text(
+                                'Your Password ',
+                                textAlign: TextAlign.center,
+                                style: Styles.textLabelSubTitle,
+                              )
+                            : Container(),
                       ],
                     ),
                   ),
@@ -863,17 +853,17 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 //Spacer(),
                 editProfileEnabled == true
                     ? Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                    )
-                )
+                        child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child:
+                            Icon(Icons.edit, size: 15, color: CustColors.blue),
+                      ))
                     : Container(),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
             child: Divider(),
           )
         ],
