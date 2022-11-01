@@ -1,9 +1,13 @@
+import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:isw_mobile_sdk/isw_mobile_sdk.dart';
 
+import 'Constants/styles.dart';
+
 class DemoPayment extends StatefulWidget {
-  const DemoPayment({Key? key}) : super(key: key);
+  final String amount,customerid,customername,customeremail,customerphone;
+  const DemoPayment({Key? key, required this.amount, required this.customerid, required this.customername, required this.customeremail, required this.customerphone}) : super(key: key);
 
   @override
   State<DemoPayment> createState() => _DemoPaymentState();
@@ -13,49 +17,38 @@ class _DemoPaymentState extends State<DemoPayment> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _amountString = '';
+  TextEditingController amountcontroller=TextEditingController();
 
   @override
   void initState() {
+    amountcontroller.text=widget.amount;
     super.initState();
+
     initPlatformState();
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Charity Fortune'),
+        title: Row(
+          children: const [
+            Padding(
+              padding: EdgeInsets.all(15),
+              child: Text(
+                'Payment',
+                textAlign: TextAlign.center,
+                style: Styles.appBarTextBlue,
+              ),
+            ),
+            Spacer(),
+          ],
+        ),
         backgroundColor: Colors.black,
       ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'Amount'),
-                  keyboardType: TextInputType.number,
-                  onChanged: (String val) {
-                   _amountString = val;
-                  },
-                ),
-                Builder(
-                  builder: (ctx) => SizedBox(
-                    width: MediaQuery.of(ctx).size.width,
-                    child: RaisedButton(
-                      child: const Text(
-                        "Pay",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () => pay(ctx),
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: Container(),
         ),
       ),
     );
@@ -63,10 +56,11 @@ class _DemoPaymentState extends State<DemoPayment> {
 
   Future<void> initPlatformState() async {
     // Platform messages may fail, so we use a try/catch PlatformException.
+    pay(context);
     try {
-      String merchantId = "IKIAB23A4E2756605C1ABC33CE3C287E27267F660D61";
-      String merchantCode = "MX6072";
-      String merchantKey = "secret";
+      String merchantId = "IKIABFC88BB635BAE1C834A37CF63FB68B4D19CE8742";
+     String  merchantCode = "MX104222";
+      String merchantKey = "ELjqMeFJxYHAPDM";
 
       var config =
        IswSdkConfig(merchantId, merchantKey, merchantCode, "566");
@@ -81,24 +75,74 @@ class _DemoPaymentState extends State<DemoPayment> {
 
 
 
-  /// paynow
+  // /// paynow
+  // Future<void> pay(BuildContext context) async {
+  //   // save form
+  //   _formKey.currentState?.save();
+  //
+  //
+  //   String customerId = widget.customerid,
+  //       customerName = widget.customeremail, //replace with your customer Name
+  //       customerEmail = widget.customeremail, //replace with your customer Email
+  //       customerMobile = widget.customerphone, //replace with your customer Mobile Nu
+  //       reference = "pay" + DateTime.now().millisecond.toString();
+  //
+  //   int amount;
+  //   // initialize amount
+  //   if (_amountString.isEmpty) {
+  //     amount = 2500 * 100;
+  //   } else {
+  //     amount = int.parse(_amountString) * 100;
+  //   }
+  //
+  //   // create payment info
+  //   IswPaymentInfo iswPaymentInfo =  IswPaymentInfo(customerId, customerName,
+  //       customerEmail, customerMobile, reference, amount);
+  //   print("rinho");
+  //   print(iswPaymentInfo);
+  //
+  //   // trigger payment
+  //   var result = await IswMobileSdk.pay(iswPaymentInfo);
+  //
+  //   var message;
+  //   if (result.hasValue) {
+  //     print("transactioncredntials");
+  //     print(result.value.channel.name);
+  //     print(result.value.channel.index);
+  //     print(result.value.amount);
+  //     print(result.value.isSuccessful);
+  //     print(result.value.responseCode);
+  //     print(result.value.responseDescription);
+  //     print(result.value.transactionReference);
+  //     message = "You completed txn using: " + result.value.channel.name;
+  //
+  //   } else {
+  //     message = "You cancelled the transaction pls try again";
+  //   }
+  //   Scaffold.of(context).showSnackBar( SnackBar(
+  //     content:  Text(message),
+  //     duration: const Duration(seconds: 3),
+  //   ));
+  // }
+
   Future<void> pay(BuildContext context) async {
     // save form
-    _formKey.currentState?.save();
+   // _formKey.currentState?.save();
 
 
-    String customerId = "your+customer+id",
-        customerName = "Muraino Yakubu", //replace with your customer Name
-        customerEmail = "murainoy@yahoo.com", //replace with your customer Email
-        customerMobile = "08133506869", //replace with your customer Mobile Nu
+    String customerId = widget.customerid,
+        customerName = widget.customeremail, //replace with your customer Name
+        customerEmail = widget.customeremail, //replace with your customer Email
+        customerMobile = widget.customerphone, //replace with your customer Mobile Nu
         reference = "pay" + DateTime.now().millisecond.toString();
 
     int amount;
     // initialize amount
-    if (_amountString.isEmpty) {
-      amount = 2500 * 100;
+    if (widget.amount.isEmpty) {
+      //amount = 2500 * 100;
+      amount=0;
     } else {
-      amount = int.parse(_amountString) * 100;
+      amount = int.parse(widget.amount) * 100;
     }
 
     // create payment info
@@ -112,13 +156,26 @@ class _DemoPaymentState extends State<DemoPayment> {
 
     var message;
     if (result.hasValue) {
-      message = "You completed txn using: " + result.value.channel.toString();
+
+      message = "You completed txn using: " + result.value.channel.name+result.value.channel.index.toString()+
+          result.value.amount.toString()+result.value.isSuccessful.toString()+result.value.responseCode+result.value.responseDescription+result.value.transactionReference;
+
     } else {
       message = "You cancelled the transaction pls try again";
     }
-    Scaffold.of(context).showSnackBar( SnackBar(
-      content:  Text(message),
-      duration: const Duration(seconds: 3),
-    ));
+    // print("transactioncredntials");
+    // print(result.value.channel.name);
+    // print(result.value.amount);
+    // print(result.value.isSuccessful);
+    // print(result.value.responseCode);
+    // print(result.value.responseDescription);
+    // print(result.value.transactionReference);
+    // Scaffold.of(context).showSnackBar( SnackBar(
+    //   content:  Text(message),
+    //   duration: const Duration(seconds: 3),
+    // ));
+
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CustomerMainLandingScreen()));
+
   }
 }
