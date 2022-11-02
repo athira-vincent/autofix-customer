@@ -464,6 +464,27 @@ class QueryProvider {
     );
   }
 
+  postMechBrandDetailsRequest(token, mechanicId) async {
+    String _query = """ 
+         {
+    mechanicBrandList(mechanicId: $mechanicId) {
+      id
+      brandName
+      icon
+      status
+      inBrand
+    }
+  }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
   postAddCarRequest(
     token,
     brand,

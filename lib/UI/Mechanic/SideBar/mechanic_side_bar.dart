@@ -7,6 +7,7 @@ import 'package:auto_fix/UI/Common/TermsAndCondition/terms_and_conditions.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyServices/mechanic_my_services.dart';
+import 'package:auto_fix/UI/Mechanic/SideBar/BrandSpecialization/brand_specialization_screen.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MechanicNotifications/mech_notification_list.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
@@ -152,11 +153,11 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               height: 20.76,
             ),
           ),
-          /*onTap: () {
+          onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ()));
-          },*/
+                MaterialPageRoute(builder: (context) => BrandSpecializationScreen()));
+          },
         ),
 
         ListTile(
