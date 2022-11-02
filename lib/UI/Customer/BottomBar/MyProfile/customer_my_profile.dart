@@ -341,6 +341,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                           EmailTextUi(size),
                           PhoneTextUi(size),
                           StateTextUi(size),
+                          PasswordTextUi(size),
                           editProfileEnabled == true
                               ? individualSaveChangeButton(size)
                               : Container(),
