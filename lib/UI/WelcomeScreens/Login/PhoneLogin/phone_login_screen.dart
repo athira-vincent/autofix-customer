@@ -75,8 +75,9 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
           else if(value.message.contains(ErrorStrings.error_202) ){
             // String msg = value.message.split(":").last.toString();
             SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_202,_scaffoldKey);
-          }
-          else{
+          }else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_208){
+            SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_208, _scaffoldKey);
+          } else{
             SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
           }
         });
@@ -96,6 +97,21 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
           }
           else if(value.data!.signInPhoneNo!.userData!.isProfile.toString() == "0" ){
             SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_301,_scaffoldKey);
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    OtpVerificationScreen(
+                      userType: "0",
+                      userCategory: "0",
+                      phoneNumber: "${_phoneNoController.text}",
+                      otpNumber: "${value.data?.signInPhoneNo?.userData!.otp}",
+                      userTypeId: "${value.data?.signInPhoneNo?.userData!.userTypeId}",
+                      fromPage: "2",
+                    ),
+              ),
+            );
           }
           else if(value.data!.signInPhoneNo!.message.contains(ErrorStrings.error_206) ){
             SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_206,_scaffoldKey);

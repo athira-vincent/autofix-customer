@@ -198,23 +198,45 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           value.data!.signInOtp!.user!.otpCode.toString(),
           value.data!.signInOtp!.user!.userTypeId.toString()
             );
+
         if(widget.fromPage=="2")
         {
           _isLoading = true;
           if(textEditingController.text == widget.otpNumber){
             print(widget.userTypeId.toString() + '>>>>>>>>>>>>>>>>widget.userTypeId');
-            if(widget.userTypeId.toString() == "1")
-            {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>  CustomerMainLandingScreen()));
-            }
-            else{
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MechanicHomeScreen()));
+            if(value.data!.signInOtp!.user!.isProfile.toString() == "1" ) {
+              if(widget.userTypeId.toString() == "1")
+              {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>  CustomerMainLandingScreen()));
+              }
+              else{
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MechanicHomeScreen()));
+              }
+            }else{
+              if(widget.userTypeId.toString() == "1")
+              {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddCarScreen(userCategory: "0",
+                          userType: "0",fromPage: "1",)));
+              }
+              else{
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => WorkSelectionScreen(
+                          userCategory: value.data!.signInOtp!.genMechanic!.mechType.toString() == "1"
+                              ? TextStrings.user_category_individual
+                              : TextStrings.user_category_corporate,
+                          userType: "0",)));
+              }
             }
           }
           else

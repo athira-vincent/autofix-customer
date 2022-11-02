@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
     String? userType = _shdPre.getString(SharedPrefKeys.userType);
     String? userCategory = _shdPre.getString(SharedPrefKeys.userCategory);
     int? _isDefaultVehicleAvailable = _shdPre.getInt(SharedPrefKeys.isDefaultVehicleAvailable);
-    int? _isProfileCompleted = _shdPre.getInt(SharedPrefKeys.isProfileCompleted);
+    String? _isProfileCompleted = _shdPre.getInt(SharedPrefKeys.isProfileCompleted).toString();
 
 
     print("is logged in=======$_isLoggedin");

@@ -1122,7 +1122,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 child: FlutterSlider(
                   values: [_lowerValue],
                   max: 150000,
-                  min: 500,
+                  min: 0,
                   step: FlutterSliderStep(step: 500),
                   handlerHeight: _setValue(25),
                   handlerWidth: _setValue(25),

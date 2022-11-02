@@ -53,91 +53,83 @@ class SocialLogin {
   SocialLogin({
     required this.token,
     required this.user,
-    required this.generalCustomer,
+    required this.genCustomer,
     required this.genMechanic,
+    required this.genVendor,
   });
 
   String token;
   User? user;
-  GeneralCustomer? generalCustomer;
+  GenCustomer? genCustomer;
   GenMechanic? genMechanic;
+  dynamic genVendor;
 
   factory SocialLogin.fromJson(Map<String, dynamic> json) => SocialLogin(
     token: json["token"] == null ? null : json["token"],
     user: json["user"] == null ? null : User.fromJson(json["user"]),
-    generalCustomer: json["generalCustomer"] == null ? null : GeneralCustomer.fromMap(json["generalCustomer"]),
-    genMechanic: json["genMechanic"] == null ? null : GenMechanic.fromMap(json["genMechanic"]),
+    genCustomer: json["genCustomer"] == null ? null : GenCustomer.fromJson(json["genCustomer"]),
+    genMechanic: json["genMechanic"] == null ? null : GenMechanic.fromJson(json["genMechanic"]),
+    genVendor: json["genVendor"],
   );
 
   Map<String, dynamic> toJson() => {
     "token": token == null ? null : token,
     "user": user == null ? null : user!.toJson(),
-    "generalCustomer": generalCustomer == null ? null : generalCustomer!.toMap(),
-    "genMechanic": genMechanic == null ? null : genMechanic!.toMap(),
+    "genCustomer": genCustomer == null ? null : genCustomer!.toJson(),
+    "genMechanic": genMechanic == null ? null : genMechanic!.toJson(),
+    "genVendor": genVendor,
   };
 }
 
-class User {
-  User({
+class GenCustomer {
+  GenCustomer({
     required this.id,
-    required this.userCode,
-    required this.firstName,
-    required this.lastName,
-    required this.emailId,
-    required this.phoneNo,
+    required this.custType,
+    required this.orgName,
+    required this.orgType,
+    required this.userId,
+    required this.profilePic,
+    required this.state,
+    required this.ministryName,
+    required this.hod,
     required this.status,
-    required this.userTypeId,
-    required this.jwtToken,
-    required this.fcmToken,
-    required this.otpCode,
-    required this.isProfile,
-    required this.otpVerified,
   });
 
-  int id;
-  String userCode;
-  String firstName;
-  String lastName;
-  String emailId;
-  String phoneNo;
+  String id;
+  String custType;
+  dynamic orgName;
+  dynamic orgType;
+  int userId;
+  String profilePic;
+  String state;
+  dynamic ministryName;
+  dynamic hod;
   int status;
-  int userTypeId;
-  String jwtToken;
-  dynamic fcmToken;
-  dynamic otpCode;
-  int isProfile;
-  int otpVerified;
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
+  factory GenCustomer.fromJson(Map<String, dynamic> json) => GenCustomer(
     id: json["id"] == null ? null : json["id"],
-    userCode: json["userCode"] == null ? null : json["userCode"],
-    firstName: json["firstName"] == null ? null : json["firstName"],
-    lastName: json["lastName"] == null ? null : json["lastName"],
-    emailId: json["emailId"] == null ? null : json["emailId"],
-    phoneNo: json["phoneNo"] == null ? null : json["phoneNo"],
+    custType: json["custType"] == null ? null : json["custType"],
+    orgName: json["orgName"],
+    orgType: json["orgType"],
+    userId: json["userId"] == null ? null : json["userId"],
+    profilePic: json["profilePic"] == null ? null : json["profilePic"],
+    state: json["state"] == null ? null : json["state"],
+    ministryName: json["ministryName"],
+    hod: json["hod"],
     status: json["status"] == null ? null : json["status"],
-    userTypeId: json["userTypeId"] == null ? null : json["userTypeId"],
-    jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
-    fcmToken: json["fcmToken"],
-    otpCode: json["otpCode"],
-    isProfile: json["isProfile"] == null ? null : json["isProfile"],
-    otpVerified: json["otpVerified"] == null ? null : json["otpVerified"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
-    "userCode": userCode == null ? null : userCode,
-    "firstName": firstName == null ? null : firstName,
-    "lastName": lastName == null ? null : lastName,
-    "emailId": emailId == null ? null : emailId,
-    "phoneNo": phoneNo == null ? null : phoneNo,
+    "custType": custType == null ? null : custType,
+    "orgName": orgName,
+    "orgType": orgType,
+    "userId": userId == null ? null : userId,
+    "profilePic": profilePic == null ? null : profilePic,
+    "state": state == null ? null : state,
+    "ministryName": ministryName,
+    "hod": hod,
     "status": status == null ? null : status,
-    "userTypeId": userTypeId == null ? null : userTypeId,
-    "jwtToken": jwtToken == null ? null : jwtToken,
-    "fcmToken": fcmToken,
-    "otpCode": otpCode,
-    "isProfile": isProfile == null ? null : isProfile,
-    "otpVerified": otpVerified == null ? null : otpVerified,
   };
 }
 
@@ -186,7 +178,7 @@ class GenMechanic {
   int status;
   String brands;
 
-  factory GenMechanic.fromMap(Map<String, dynamic> json) => GenMechanic(
+  factory GenMechanic.fromJson(Map<String, dynamic> json) => GenMechanic(
     id: json["id"] == null ? null : json["id"],
     orgName: json["orgName"],
     orgType: json["orgType"],
@@ -209,7 +201,7 @@ class GenMechanic {
     brands: json["brands"] == null ? null : json["brands"],
   );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
     "orgName": orgName,
     "orgType": orgType,
@@ -233,54 +225,78 @@ class GenMechanic {
   };
 }
 
-class GeneralCustomer {
-  GeneralCustomer({
+class User {
+  User({
     required this.id,
-    required this.custType,
-    required this.orgName,
-    required this.orgType,
-    required this.userId,
-    required this.profilePic,
-    required this.state,
-    required this.ministryName,
-    required this.hod,
+    required this.userCode,
+    required this.firstName,
+    required this.lastName,
+    required this.emailId,
+    required this.phoneNo,
     required this.status,
+    required this.userTypeId,
+    required this.jwtToken,
+    required this.fcmToken,
+    required this.otpCode,
+    required this.isProfile,
+    required this.otpVerified,
+    required this.customer,
+    required this.mechanic,
+    required this.vendor,
   });
 
-  String id;
-  String custType;
-  dynamic orgName;
-  dynamic orgType;
-  int userId;
-  String profilePic;
-  String state;
-  dynamic ministryName;
-  dynamic hod;
+  int id;
+  String userCode;
+  String firstName;
+  String lastName;
+  String emailId;
+  String phoneNo;
   int status;
+  int userTypeId;
+  String jwtToken;
+  String fcmToken;
+  dynamic otpCode;
+  int isProfile;
+  int otpVerified;
+  dynamic customer;
+  dynamic mechanic;
+  dynamic vendor;
 
-  factory GeneralCustomer.fromMap(Map<String, dynamic> json) => GeneralCustomer(
+  factory User.fromJson(Map<String, dynamic> json) => User(
     id: json["id"] == null ? null : json["id"],
-    custType: json["custType"] == null ? null : json["custType"],
-    orgName: json["orgName"],
-    orgType: json["orgType"],
-    userId: json["userId"] == null ? null : json["userId"],
-    profilePic: json["profilePic"] == null ? null : json["profilePic"],
-    state: json["state"] == null ? null : json["state"],
-    ministryName: json["ministryName"],
-    hod: json["hod"],
+    userCode: json["userCode"] == null ? null : json["userCode"],
+    firstName: json["firstName"] == null ? null : json["firstName"],
+    lastName: json["lastName"] == null ? null : json["lastName"],
+    emailId: json["emailId"] == null ? null : json["emailId"],
+    phoneNo: json["phoneNo"] == null ? null : json["phoneNo"],
     status: json["status"] == null ? null : json["status"],
+    userTypeId: json["userTypeId"] == null ? null : json["userTypeId"],
+    jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
+    fcmToken: json["fcmToken"] == null ? null : json["fcmToken"],
+    otpCode: json["otpCode"],
+    isProfile: json["isProfile"] == null ? null : json["isProfile"],
+    otpVerified: json["otpVerified"] == null ? null : json["otpVerified"],
+    customer: json["customer"],
+    mechanic: json["mechanic"],
+    vendor: json["vendor"],
   );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
-    "custType": custType == null ? null : custType,
-    "orgName": orgName,
-    "orgType": orgType,
-    "userId": userId == null ? null : userId,
-    "profilePic": profilePic == null ? null : profilePic,
-    "state": state == null ? null : state,
-    "ministryName": ministryName,
-    "hod": hod,
+    "userCode": userCode == null ? null : userCode,
+    "firstName": firstName == null ? null : firstName,
+    "lastName": lastName == null ? null : lastName,
+    "emailId": emailId == null ? null : emailId,
+    "phoneNo": phoneNo == null ? null : phoneNo,
     "status": status == null ? null : status,
+    "userTypeId": userTypeId == null ? null : userTypeId,
+    "jwtToken": jwtToken == null ? null : jwtToken,
+    "fcmToken": fcmToken == null ? null : fcmToken,
+    "otpCode": otpCode,
+    "isProfile": isProfile == null ? null : isProfile,
+    "otpVerified": otpVerified == null ? null : otpVerified,
+    "customer": customer,
+    "mechanic": mechanic,
+    "vendor": vendor,
   };
 }

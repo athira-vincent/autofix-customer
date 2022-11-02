@@ -665,7 +665,9 @@ class _LoginScreenState extends State<LoginScreen> {
           SnackBarWidget().setMaterialSnackBar(ErrorStrings.error_no_network, _scaffoldKey);
         }else if(value.message == ErrorStrings.error_213){
           SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_213, _scaffoldKey);
-        }else if(value.message == ErrorStrings.error_212){
+        }else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_208){
+          SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_208, _scaffoldKey);
+        } else if(value.message == ErrorStrings.error_212){
           SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_301, _scaffoldKey);
         }
       } else {
@@ -680,9 +682,9 @@ class _LoginScreenState extends State<LoginScreen> {
             _signinBloc.userDefault(
                 value.data!.socialLogin!.token.toString(),
                 TextStrings.user_customer,
-                value.data!.socialLogin!.generalCustomer!.custType.toString() == "1"
+                value.data!.socialLogin!.genCustomer!.custType.toString() == "1"
                     ? TextStrings.user_category_individual
-                    : value.data!.socialLogin!.generalCustomer!.custType.toString() == "2"
+                    : value.data!.socialLogin!.genCustomer!.custType.toString() == "2"
                     ? TextStrings.user_category_corporate : TextStrings.user_category_government,
                 "",                        //----- profile image url should b updated
                 value.data!.socialLogin!.user!.firstName.toString(),
