@@ -1,3 +1,4 @@
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,8 +7,8 @@ import 'package:isw_mobile_sdk/isw_mobile_sdk.dart';
 import 'Constants/styles.dart';
 
 class DemoPayment extends StatefulWidget {
-  final String amount,customerid,customername,customeremail,customerphone;
-  const DemoPayment({Key? key, required this.amount, required this.customerid, required this.customername, required this.customeremail, required this.customerphone}) : super(key: key);
+  final String amount,customerid,customername,customeremail,customerphone,customerorderid;
+  const DemoPayment({Key? key, required this.amount, required this.customerid, required this.customername, required this.customeremail, required this.customerphone, required this.customerorderid}) : super(key: key);
 
   @override
   State<DemoPayment> createState() => _DemoPaymentState();
@@ -28,27 +29,32 @@ class _DemoPaymentState extends State<DemoPayment> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: const [
-            Padding(
-              padding: EdgeInsets.all(15),
-              child: Text(
-                'Payment',
-                textAlign: TextAlign.center,
-                style: Styles.appBarTextBlue,
+    return SafeArea(
+
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+
+          title: Row(
+            children: const [
+              Padding(
+                padding: EdgeInsets.all(15),
+                child: Text(
+                  'Payment',
+                  textAlign: TextAlign.center,
+                  style: Styles.appBarTextBlue,
+                ),
               ),
-            ),
-            Spacer(),
-          ],
+              Spacer(),
+            ],
+          ),
+          backgroundColor: Colors.black,
         ),
-        backgroundColor: Colors.black,
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Container(),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Container(),
+          ),
         ),
       ),
     );
@@ -160,6 +166,20 @@ class _DemoPaymentState extends State<DemoPayment> {
       message = "You completed txn using: " + result.value.channel.name+result.value.channel.index.toString()+
           result.value.amount.toString()+result.value.isSuccessful.toString()+result.value.responseCode+result.value.responseDescription+result.value.transactionReference;
 
+      Repository().fetchpaymentsucess("2", result.value.amount.toString(), "2", result.value.transactionReference, widget.customerorderid).then((value) => {
+
+        if(value.data!.paymentCreate.id.toString().isNotEmpty){
+
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => CustomerMainLandingScreen()))
+        }
+        else{
+          Navigator.pop(context)
+        }
+
+
+
+      });
+
     } else {
       message = "You cancelled the transaction pls try again";
     }
@@ -175,7 +195,12 @@ class _DemoPaymentState extends State<DemoPayment> {
     //   duration: const Duration(seconds: 3),
     // ));
 
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CustomerMainLandingScreen()));
+
+    
+
+
+
+
 
   }
 }

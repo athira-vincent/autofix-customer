@@ -100,7 +100,8 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
                                           customerid:widget.customerid,
                                           customername:widget.customername,
                                           customeremail:widget.customeremail,
-                                          customerphone:widget.customerphone)));
+                                          customerphone:widget.customerphone,
+                                          customerorderid:widget.orderid)));
                             }
                           },
                         )
