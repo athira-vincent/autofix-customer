@@ -6,10 +6,14 @@ import 'package:auto_fix/UI/SpareParts/MyCart/cod_bloc/cod_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/cod_bloc/cod_state.dart';
 import 'package:auto_fix/demo_payment.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:isw_mobile_sdk/isw_mobile_sdk.dart';
 
+import '../../Repository/repository.dart';
 import '../SpareParts/purchase_response_screen.dart';
+import 'MainLandingPageCustomer/customer_main_landing_screen.dart';
 
 class Payment_Main_Screen extends StatefulWidget {
   final String amount, orderid,customerid,customername,customeremail,customerphone;
@@ -92,16 +96,18 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
                               codBloc.add(
                                   FetchCodEvent(widget.amount, widget.orderid));
                             } else {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => DemoPayment(
-                                          amount:widget.amount,
-                                          customerid:widget.customerid,
-                                          customername:widget.customername,
-                                          customeremail:widget.customeremail,
-                                          customerphone:widget.customerphone,
-                                          customerorderid:widget.orderid)));
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => DemoPayment(
+                              //             amount:widget.amount,
+                              //             customerid:widget.customerid,
+                              //             customername:widget.customername,
+                              //             customeremail:widget.customeremail,
+                              //             customerphone:widget.customerphone,
+                              //             customerorderid:widget.orderid)));
+
+                              initPlatformState();
                             }
                           },
                         )
@@ -248,5 +254,93 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
         ),
       ),
     );
+  }
+
+  Future<void> initPlatformState() async {
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    pay(context);
+    try {
+      String merchantId = "IKIABFC88BB635BAE1C834A37CF63FB68B4D19CE8742";
+      String merchantCode = "MX104222";
+      String merchantKey = "ELjqMeFJxYHAPDM";
+
+      var config = IswSdkConfig(merchantId, merchantKey, merchantCode, "566");
+
+      // initialize the sdk
+      // await IswMobileSdk.initialize(config);
+      // intialize with environment, default is Environment.TEST
+      await IswMobileSdk.initialize(config, Environment.TEST);
+    } on PlatformException {}
+  }
+
+  Future<void> pay(BuildContext context) async {
+    // save form
+    // _formKey.currentState?.save();
+
+    String customerId = widget.customerid,
+        customerName = widget.customeremail, //replace with your customer Name
+        customerEmail = widget.customeremail, //replace with your customer Email
+        customerMobile =
+            widget.customerphone, //replace with your customer Mobile Nu
+        reference = "pay" + DateTime.now().millisecond.toString();
+
+    int amount;
+    // initialize amount
+    if (widget.amount.isEmpty) {
+      //amount = 2500 * 100;
+      amount = 0;
+    } else {
+      amount = int.parse(widget.amount) * 100;
+    }
+
+    // create payment info
+    IswPaymentInfo iswPaymentInfo = IswPaymentInfo(customerId, customerName,
+        customerEmail, customerMobile, reference, amount);
+    print("rinho");
+    print(iswPaymentInfo);
+
+    // trigger payment
+    var result = await IswMobileSdk.pay(iswPaymentInfo);
+
+    var message;
+    if (result.hasValue) {
+      Repository()
+          .fetchpaymentsucess("2", widget.amount, "2",
+          result.value.transactionReference, widget.orderid)
+          .then((value) async => {
+        setState(() {
+          if (value.data!.paymentCreate.id.toString().isNotEmpty) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => CustomerMainLandingScreen()));
+          } else {
+            print("popcontext");
+            Navigator.pop(context);
+          }
+        })
+      });
+    } else {
+      message = "You cancelled the transaction pls try again";
+    }
+
+    message = "You completed txn using: " +
+        result.value.channel.name +
+        result.value.channel.index.toString() +
+        result.value.amount.toString() +
+        result.value.isSuccessful.toString() +
+        result.value.responseCode +
+        result.value.responseDescription +
+        result.value.transactionReference;
+
+    // print("transactioncredntials");
+    // print(result.value.channel.name);
+    // print(result.value.amount);
+    // print(result.value.isSuccessful);
+    // print(result.value.responseCode);
+    // print(result.value.responseDescription);
+    // print(result.value.transactionReference);
+    // Scaffold.of(context).showSnackBar( SnackBar(
+    //   content:  Text(message),
+    //   duration: const Duration(seconds: 3),
+    // ));
   }
 }

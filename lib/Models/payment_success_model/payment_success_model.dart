@@ -23,14 +23,14 @@ class PaymentSuccessModel {
 
   factory PaymentSuccessModel.fromMap(Map<String, dynamic> json) =>
       PaymentSuccessModel(
-        status: json["status"] == null ? null : json["status"],
-        message: json["message"] == null ? null : json["message"],
+        status: json["status"],
+        message: json["message"],
         data: Data.fromMap(json["data"]),
       );
 
   Map<String, dynamic> toMap() => {
-        "status": status == null ? null : status,
-        "message": message == null ? null : message,
+        "status": status,
+        "message": message,
         "data": data!.toMap(),
       };
 }

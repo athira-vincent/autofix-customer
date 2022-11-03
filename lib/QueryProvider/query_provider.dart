@@ -4699,13 +4699,13 @@ class QueryProvider {
     String _query = """
  mutation {
   paymentCreate(
-    transType: $transtype
+    transType:$transtype
     amount:$amount
-    paymentType: $paymenttype
-    transId: $transid
-    transData: "string"
-    orderId: $orderid
-    userId: $userid
+    paymentType:$paymenttype
+    transId:"$transid"
+    transData:"string"
+    orderId:$orderid
+    userId:$userid
   ) {
     id
     transType

@@ -43,33 +43,7 @@ class _DemoPaymentState extends State<DemoPayment> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Row(
-            children: const [
-              Padding(
-                padding: EdgeInsets.all(15),
-                child: Text(
-                  'Payment',
-                  textAlign: TextAlign.center,
-                  style: Styles.appBarTextBlue,
-                ),
-              ),
-              Spacer(),
-            ],
-          ),
-          backgroundColor: Colors.black,
-        ),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Container(),
-          ),
-        ),
-      ),
-    );
+    return Scaffold();
   }
 
   Future<void> initPlatformState() async {
@@ -170,30 +144,33 @@ class _DemoPaymentState extends State<DemoPayment> {
 
     var message;
     if (result.hasValue) {
-      message = "You completed txn using: " +
-          result.value.channel.name +
-          result.value.channel.index.toString() +
-          result.value.amount.toString() +
-          result.value.isSuccessful.toString() +
-          result.value.responseCode +
-          result.value.responseDescription +
-          result.value.transactionReference;
-
       Repository()
-          .fetchpaymentsucess("2", result.value.amount.toString(), "2",
+          .fetchpaymentsucess("2", widget.amount, "2",
               result.value.transactionReference, widget.customerorderid)
-          .then((value) => {
-                if (value.data!.paymentCreate.id.toString().isNotEmpty)
-                  {
+          .then((value) async => {
+                setState(() {
+                  if (value.data!.paymentCreate.id.toString().isNotEmpty) {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => CustomerMainLandingScreen()))
+                        builder: (context) => CustomerMainLandingScreen()));
+                  } else {
+                    print("popcontext");
+                    Navigator.pop(context);
                   }
-                else
-                  {Navigator.pop(context)}
+                })
               });
     } else {
       message = "You cancelled the transaction pls try again";
     }
+
+    message = "You completed txn using: " +
+        result.value.channel.name +
+        result.value.channel.index.toString() +
+        result.value.amount.toString() +
+        result.value.isSuccessful.toString() +
+        result.value.responseCode +
+        result.value.responseDescription +
+        result.value.transactionReference;
+
     // print("transactioncredntials");
     // print(result.value.channel.name);
     // print(result.value.amount);
