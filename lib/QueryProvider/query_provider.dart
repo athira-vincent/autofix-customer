@@ -485,6 +485,45 @@ class QueryProvider {
     );
   }
 
+  postMechBrandUpdateRequest(token, mechanicId, brandNames) async {
+    String _query = """ 
+        mutation {
+    mechBrandUpdate(mechanicId: $mechanicId, brandName: "$brandNames") {
+      message
+      data {
+        id
+        orgName
+        orgType
+        yearExp
+        mechType
+        workType
+        numMech
+        rcNumber
+        address
+        apprentice_cert
+        identification_cert
+        yearExist
+        rate
+        reviewCount
+        adminApprove
+        userId
+        profilePic
+        state
+        status
+        brands
+      }
+    }
+  }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
   postAddCarRequest(
     token,
     brand,

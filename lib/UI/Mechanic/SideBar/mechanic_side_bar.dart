@@ -142,7 +142,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             alignment: Alignment(-1.45, 0),
             //alignment: Alignment.centerLeft,
             child: Text(
-              "My brand specialization",
+              "Brand specialization",
               style: Styles.navDrawerTextStyle02,
             ),
           ),
@@ -392,10 +392,15 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/image/ic_home_white_outline.png',
-                  width: 20,
-                  height: 20,
+                InkWell(
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                  child: Image.asset(
+                    'assets/image/ic_home_white_outline.png',
+                    width: 20,
+                    height: 20,
+                  ),
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 14.6, top: 4),

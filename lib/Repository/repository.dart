@@ -402,6 +402,9 @@ class Repository {
   Future<dynamic> postMechBrandDetailsRequest(token, userId) =>
       _vehicleSpecializationApiProvider.postMechBrandDetailsRequest(token, userId);
 
+  Future<dynamic> postMechBrandUpdateDetailsRequest(token, userId, brandNames) =>
+      _vehicleSpecializationApiProvider.postMechBrandUpdateRequest(token, userId, brandNames);
+
   // Get vehicleSpecialization
   Future<dynamic> getvehicleSpecializationList() =>
       _vehicleSpecializationApiProvider.getVehicleSpecialization();

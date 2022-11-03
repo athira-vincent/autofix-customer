@@ -667,7 +667,7 @@ class _LoginScreenState extends State<LoginScreen> {
           SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_213, _scaffoldKey);
         }else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_208){
           SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_208, _scaffoldKey);
-        } else if(value.message == ErrorStrings.error_212){
+        } else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_212){
           SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_301, _scaffoldKey);
         }
       } else {

@@ -1,6 +1,7 @@
 import 'package:auto_fix/Models/customer_models/brand_list_model/brandListMdl.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/BrandSpecialization/brand_specialization_mdl.dart';
+import 'package:auto_fix/UI/Mechanic/SideBar/BrandSpecialization/brand_specialization_update_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicleSpecialization_mdl.dart';
 
 
@@ -30,6 +31,16 @@ class brandSpecializationBloc {
     BrandSpecializationMdl _mechanicIncomingRequestMdl = await repository.postMechBrandDetailsRequest(
         token,userId);
     postBrandListRequest.sink.add(_mechanicIncomingRequestMdl);
+  }
+
+  final postUpdateBrandListRequest = PublishSubject<UpdateBrandSpecializationMdl>();
+  Stream<UpdateBrandSpecializationMdl> get postUpdateBrandListResponse => postUpdateBrandListRequest.stream;
+
+  postUpdateBrandDetailsRequest(
+      token,userId, brandNames)  async {
+    UpdateBrandSpecializationMdl _updateBrandSpecializationMdl = await repository.postMechBrandUpdateDetailsRequest(
+        token,userId, brandNames);
+    postUpdateBrandListRequest.sink.add(_updateBrandSpecializationMdl);
   }
 
 
