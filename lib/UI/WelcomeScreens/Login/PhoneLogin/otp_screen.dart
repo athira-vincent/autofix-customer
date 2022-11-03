@@ -123,8 +123,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           SnackBarWidget().setMaterialSnackBar(ErrorStrings.error_no_network, _scaffoldKey);
         }
         else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_202){
-          SnackBarWidget().setMaterialSnackBar(ErrorStrings.error_202, _scaffoldKey);
-        } else{
+          SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_202, _scaffoldKey);
+        }
+        else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_211){
+          SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_211, _scaffoldKey);
+        }else{
           SnackBarWidget().setMaterialSnackBar(
               "${value.message.toString().split(":").last}", _scaffoldKey);
         }
