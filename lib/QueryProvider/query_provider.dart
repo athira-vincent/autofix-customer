@@ -4674,4 +4674,58 @@ class QueryProvider {
       isTokenThere: false,
     );
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /// payment success response
+  fetchpaymentsucess(transtype, amount, paymenttype,transid,orderid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String userid = shdPre.getString(SharedPrefKeys.userID).toString();
+    String _query = """
+ mutation {
+  paymentCreate(
+    transType: $transtype
+    amount:$amount
+    paymentType: $paymenttype
+    transId: $transid
+    transData: "string"
+    orderId: $orderid
+    userId: $userid
+  ) {
+    id
+    transType
+    amount
+    paymentType
+    transId
+    transData
+    status
+    userId
+ 
+  }
+}
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
 }

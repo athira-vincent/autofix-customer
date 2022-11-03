@@ -1,3 +1,4 @@
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,49 +7,66 @@ import 'package:isw_mobile_sdk/isw_mobile_sdk.dart';
 import 'Constants/styles.dart';
 
 class DemoPayment extends StatefulWidget {
-  final String amount,customerid,customername,customeremail,customerphone;
-  const DemoPayment({Key? key, required this.amount, required this.customerid, required this.customername, required this.customeremail, required this.customerphone}) : super(key: key);
+  final String amount,
+      customerid,
+      customername,
+      customeremail,
+      customerphone,
+      customerorderid;
+
+  const DemoPayment(
+      {Key? key,
+      required this.amount,
+      required this.customerid,
+      required this.customername,
+      required this.customeremail,
+      required this.customerphone,
+      required this.customerorderid})
+      : super(key: key);
 
   @override
   State<DemoPayment> createState() => _DemoPaymentState();
 }
 
 class _DemoPaymentState extends State<DemoPayment> {
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _amountString = '';
-  TextEditingController amountcontroller=TextEditingController();
+  TextEditingController amountcontroller = TextEditingController();
 
   @override
   void initState() {
-    amountcontroller.text=widget.amount;
+    amountcontroller.text = widget.amount;
     super.initState();
 
     initPlatformState();
   }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: const [
-            Padding(
-              padding: EdgeInsets.all(15),
-              child: Text(
-                'Payment',
-                textAlign: TextAlign.center,
-                style: Styles.appBarTextBlue,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Row(
+            children: const [
+              Padding(
+                padding: EdgeInsets.all(15),
+                child: Text(
+                  'Payment',
+                  textAlign: TextAlign.center,
+                  style: Styles.appBarTextBlue,
+                ),
               ),
-            ),
-            Spacer(),
-          ],
+              Spacer(),
+            ],
+          ),
+          backgroundColor: Colors.black,
         ),
-        backgroundColor: Colors.black,
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Container(),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Container(),
+          ),
         ),
       ),
     );
@@ -59,21 +77,17 @@ class _DemoPaymentState extends State<DemoPayment> {
     pay(context);
     try {
       String merchantId = "IKIABFC88BB635BAE1C834A37CF63FB68B4D19CE8742";
-     String  merchantCode = "MX104222";
+      String merchantCode = "MX104222";
       String merchantKey = "ELjqMeFJxYHAPDM";
 
-      var config =
-       IswSdkConfig(merchantId, merchantKey, merchantCode, "566");
+      var config = IswSdkConfig(merchantId, merchantKey, merchantCode, "566");
 
       // initialize the sdk
       // await IswMobileSdk.initialize(config);
       // intialize with environment, default is Environment.TEST
-      await  IswMobileSdk.initialize(config, Environment.TEST);
-
+      await IswMobileSdk.initialize(config, Environment.TEST);
     } on PlatformException {}
   }
-
-
 
   // /// paynow
   // Future<void> pay(BuildContext context) async {
@@ -127,26 +141,26 @@ class _DemoPaymentState extends State<DemoPayment> {
 
   Future<void> pay(BuildContext context) async {
     // save form
-   // _formKey.currentState?.save();
-
+    // _formKey.currentState?.save();
 
     String customerId = widget.customerid,
         customerName = widget.customeremail, //replace with your customer Name
         customerEmail = widget.customeremail, //replace with your customer Email
-        customerMobile = widget.customerphone, //replace with your customer Mobile Nu
+        customerMobile =
+            widget.customerphone, //replace with your customer Mobile Nu
         reference = "pay" + DateTime.now().millisecond.toString();
 
     int amount;
     // initialize amount
     if (widget.amount.isEmpty) {
       //amount = 2500 * 100;
-      amount=0;
+      amount = 0;
     } else {
       amount = int.parse(widget.amount) * 100;
     }
 
     // create payment info
-    IswPaymentInfo iswPaymentInfo =  IswPaymentInfo(customerId, customerName,
+    IswPaymentInfo iswPaymentInfo = IswPaymentInfo(customerId, customerName,
         customerEmail, customerMobile, reference, amount);
     print("rinho");
     print(iswPaymentInfo);
@@ -156,10 +170,27 @@ class _DemoPaymentState extends State<DemoPayment> {
 
     var message;
     if (result.hasValue) {
+      message = "You completed txn using: " +
+          result.value.channel.name +
+          result.value.channel.index.toString() +
+          result.value.amount.toString() +
+          result.value.isSuccessful.toString() +
+          result.value.responseCode +
+          result.value.responseDescription +
+          result.value.transactionReference;
 
-      message = "You completed txn using: " + result.value.channel.name+result.value.channel.index.toString()+
-          result.value.amount.toString()+result.value.isSuccessful.toString()+result.value.responseCode+result.value.responseDescription+result.value.transactionReference;
-
+      Repository()
+          .fetchpaymentsucess("2", result.value.amount.toString(), "2",
+              result.value.transactionReference, widget.customerorderid)
+          .then((value) => {
+                if (value.data!.paymentCreate.id.toString().isNotEmpty)
+                  {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => CustomerMainLandingScreen()))
+                  }
+                else
+                  {Navigator.pop(context)}
+              });
     } else {
       message = "You cancelled the transaction pls try again";
     }
@@ -174,8 +205,5 @@ class _DemoPaymentState extends State<DemoPayment> {
     //   content:  Text(message),
     //   duration: const Duration(seconds: 3),
     // ));
-
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CustomerMainLandingScreen()));
-
   }
 }
