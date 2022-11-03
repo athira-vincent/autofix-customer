@@ -658,6 +658,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                                         ),
                                                         InkWell(
                                                           onTap: () async {
+                                                            //FocusManager.instance.primaryFocus?.unfocus();
+                                                            //_emailFocusNode.unfocus();
+
                                                             print(
                                                                 "on tap state ");
                                                             _awaitReturnValueFromSecondScreen(
@@ -1698,9 +1701,6 @@ class _SignupScreenState extends State<SignupScreen> {
 
                                                           _checkInternet.check().then((intenet) {
                                                             if (intenet != null && intenet) {
-                                                              setState(() {
-                                                                _isLoading = true;
-                                                              });
                                                               if (_formKey.currentState!.validate()) {
                                                                 print("_formKey.currentState!.validate()");
                                                                 widget.userCategory ==

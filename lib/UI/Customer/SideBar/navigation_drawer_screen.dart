@@ -419,10 +419,15 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/image/ic_home_white_outline.png',
-                  width: 20,
-                  height: 20,
+                InkWell(
+                  onTap :(){
+                    Navigator.pop(context);
+                  },
+                  child: Image.asset(
+                    'assets/image/ic_home_white_outline.png',
+                    width: 20,
+                    height: 20,
+                  ),
                 ),
                 Container(
                   margin: const EdgeInsets.only(left: 14.6, top: 4),

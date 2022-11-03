@@ -136,6 +136,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   @override
   void initState() {
     super.initState();
+    isloading = true;
     editProfileEnabled = widget.isEnableEditing;
     getSharedPrefData();
     _listenFetchProfileResponse();
@@ -155,6 +156,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
           SharedPrefKeys.userID,
         )
         .toString();
+
     _fetchProfileBloc.postCustomerProfileRequest(authToken, id);
   }
 
@@ -162,7 +164,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     _fetchProfileBloc.postCustomerProfile.listen((value) {
       if (value.status == "error") {
         setState(() {
-          // _isLoading = false;
+          isloading  = false;
           /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(value.message.toString(),
                   style: const TextStyle(
@@ -173,7 +175,6 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
         });
       } else {
         setState(() {
-          //_isLoading = false;
           /*ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text("Password Reset Enabled.\nCheck Your mail",
                   style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
@@ -301,6 +302,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
         value.data!.customerDetails!.customer![0].orgName.toString();
     email = value.data!.customerDetails!.emailId.toString();
     _pswdController.text = "Password@123";
+    isloading = false;
 
     _signinBloc.userDefaultData(
       authToken,
