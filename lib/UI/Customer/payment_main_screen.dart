@@ -16,7 +16,8 @@ import '../SpareParts/purchase_response_screen.dart';
 import 'MainLandingPageCustomer/customer_main_landing_screen.dart';
 
 class Payment_Main_Screen extends StatefulWidget {
-  final String amount, orderid,customerid,customername,customeremail,customerphone;
+  final String amount, orderid, customerid, customername, customeremail,
+      customerphone;
 
   const Payment_Main_Screen(
       {Key? key, required this.amount, required this.orderid, required this.customerid, required this.customername, required this.customeremail, required this.customerphone})
@@ -31,7 +32,9 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return SafeArea(
       child: MultiBlocListener(
         listeners: [
@@ -45,11 +48,11 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>  PurchaseResponseScreen(isSuccess: true,
+                          builder: (context) =>
+                              PurchaseResponseScreen(isSuccess: true,
 
 
-                          )));
-
+                              )));
                 }
               }
             },
@@ -173,8 +176,8 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
     );
   }
 
-  Widget paymentOptions(
-      Size size, String optionName, String imagePath, int radioValue) {
+  Widget paymentOptions(Size size, String optionName, String imagePath,
+      int radioValue) {
     return Container(
       margin: EdgeInsets.only(
         left: size.width * 6 / 100,
@@ -282,7 +285,10 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
         customerEmail = widget.customeremail, //replace with your customer Email
         customerMobile =
             widget.customerphone, //replace with your customer Mobile Nu
-        reference = "pay" + DateTime.now().millisecond.toString();
+        reference = "pay" + DateTime
+            .now()
+            .millisecond
+            .toString();
 
     int amount;
     // initialize amount
@@ -296,8 +302,7 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
     // create payment info
     IswPaymentInfo iswPaymentInfo = IswPaymentInfo(customerId, customerName,
         customerEmail, customerMobile, reference, amount);
-    print("rinho");
-    print(iswPaymentInfo);
+
 
     // trigger payment
     var result = await IswMobileSdk.pay(iswPaymentInfo);
@@ -307,40 +312,41 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
       Repository()
           .fetchpaymentsucess("2", widget.amount, "2",
           result.value.transactionReference, widget.orderid)
-          .then((value) async => {
-        setState(() {
-          if (value.data!.paymentCreate.id.toString().isNotEmpty) {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => CustomerMainLandingScreen()));
-          } else {
-            print("popcontext");
-            Navigator.pop(context);
-          }
-        })
-      });
+          .then((value) => {
+
+      if (value.data!.paymentCreate.id.toString().isNotEmpty) {
+          Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => CustomerMainLandingScreen()))
     } else {
-      message = "You cancelled the transaction pls try again";
+      print("popcontext"),
+      Navigator.pop(context)
+    }
+  });
+    } else {
+    message = "You cancelled the transaction pls try again";
     }
 
     message = "You completed txn using: " +
-        result.value.channel.name +
-        result.value.channel.index.toString() +
-        result.value.amount.toString() +
-        result.value.isSuccessful.toString() +
-        result.value.responseCode +
-        result.value.responseDescription +
-        result.value.transactionReference;
+    result.value.channel.name +
+    result.value.channel.index.toString() +
+    result.value.amount.toString() +
+    result.value.isSuccessful.toString() +
+    result.value.responseCode +
+    result.value.responseDescription +
+    result.value
+    .
+    transactionReference;
 
-    // print("transactioncredntials");
-    // print(result.value.channel.name);
-    // print(result.value.amount);
-    // print(result.value.isSuccessful);
-    // print(result.value.responseCode);
-    // print(result.value.responseDescription);
-    // print(result.value.transactionReference);
-    // Scaffold.of(context).showSnackBar( SnackBar(
-    //   content:  Text(message),
-    //   duration: const Duration(seconds: 3),
-    // ));
+    print("transactioncredntials");
+    print(result.value.channel.name);
+    print(result.value.amount);
+    print(result.value.isSuccessful);
+    print(result.value.responseCode);
+    print(result.value.responseDescription);
+    print(result.value.transactionReference);
+    Scaffold.of(context).showSnackBar( SnackBar(
+      content:  Text(message),
+      duration: const Duration(seconds: 3),
+    ));
   }
 }
