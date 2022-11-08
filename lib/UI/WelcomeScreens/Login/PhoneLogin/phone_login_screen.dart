@@ -5,6 +5,7 @@ import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
@@ -357,7 +358,9 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                                         context,
                                                         MaterialPageRoute(
                                                             builder: (context) =>
-                                                                SignupScreen( userType: '1', userCategory: '1',)),
+                                                            UserSelectionScreen()
+                                                          //SignupScreen( userType: '1', userCategory: '1',)
+                                                        ),
                                                       );
                                                     }),
                                             ],
