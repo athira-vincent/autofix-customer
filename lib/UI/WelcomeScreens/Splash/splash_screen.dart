@@ -11,6 +11,8 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_s
 import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen.dart';
+import 'package:auto_fix/Utility/check_network.dart';
+import 'package:auto_fix/Utility/network_error_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,6 +27,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  CheckInternet _checkInternet = CheckInternet();
   @override
   void initState() {
     super.initState();
@@ -63,17 +66,53 @@ class _SplashScreenState extends State<SplashScreen> {
       print("chechingggg 01 $userType");
 
       if (userType == TextStrings.user_customer && _isProfileCompleted == "3") {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>  CustomerMainLandingScreen()));
+
+        _checkInternet.check().then((intenet) {
+          if (intenet != null && intenet) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  CustomerMainLandingScreen()));
+          } else {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        NetworkErrorScreen())).then((value) {
+              /// ----------- repeat the work
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>  CustomerMainLandingScreen()));
+            });
+          }
+        });
+
       }
       else{
          if (userType == TextStrings.user_mechanic && _isProfileCompleted == "3") {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>  MechanicHomeScreen()));
+
+           _checkInternet.check().then((intenet) {
+             if (intenet != null && intenet) {
+               Navigator.pushReplacement(
+                   context,
+                   MaterialPageRoute(
+                       builder: (context) => MechanicHomeScreen()));
+             } else {
+               Navigator.push(
+                   context,
+                   MaterialPageRoute(
+                       builder: (context) =>
+                           NetworkErrorScreen())).then((value) {
+                 /// ----------- repeat the work
+                 Navigator.pushReplacement(
+                     context,
+                     MaterialPageRoute(
+                         builder: (context) =>  MechanicHomeScreen()));
+               });
+             }
+           });
+
         }
          else{
            Navigator.pushReplacement(

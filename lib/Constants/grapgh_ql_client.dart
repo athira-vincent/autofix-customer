@@ -10,7 +10,7 @@ class GqlClient {
   Future<String> getLanguage() async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String? lan = shdPre.getString(SharedPrefKeys.userLanguageCode) ?? 'en';
-    print(">>>> $lan");
+    print(">>>>lan : $lan");
     /*if(lan == "ig"){
       lanCode = 1;
     }else if(lan == "en"){

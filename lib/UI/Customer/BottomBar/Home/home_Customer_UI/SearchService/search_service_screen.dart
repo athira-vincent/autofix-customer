@@ -360,7 +360,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                                 });
 
                                               },
-                                              child: snapshot.data?.data?.serviceListAll?[index].category?.catType.toString() =='1' && snapshot.data?.data?.serviceListAll?[index].category?.catType != null
+                                              child: snapshot.data?.data?.serviceListAll?[index].category![0].catType.toString() =='1' && snapshot.data?.data?.serviceListAll?[index].category![0].catType != null
                                                   ? Container(
                                                       child: Padding(
                                                         padding: const EdgeInsets.fromLTRB(30,0,30,0),
@@ -640,7 +640,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                       print(">>>>>>>>>> Longitude  $CurrentLongitude");
                       print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
                       print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
-                      serviceIds = '${service.category!.id}';
+                      serviceIds = '${service.category![0].id}';
                       print(">>>>>>>>>> ServiceId  $serviceIds");
 
 

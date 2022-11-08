@@ -154,7 +154,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
           getSharedPrefData();
 
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Service Added',
+            content: Text('Service List Updated',
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),

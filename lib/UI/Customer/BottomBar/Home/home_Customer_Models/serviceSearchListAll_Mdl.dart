@@ -70,7 +70,7 @@ class ServiceListAll {
   String maxPrice;
   int categoryId;
   int status;
-  Category? category;
+  List<Category>? category;
 
   factory ServiceListAll.fromJson(Map<String, dynamic> json) => ServiceListAll(
     id: json["id"] == null ? null : json["id"],
@@ -81,7 +81,7 @@ class ServiceListAll {
     maxPrice: json["maxPrice"] == null ? null : json["maxPrice"],
     categoryId: json["categoryId"] == null ? null : json["categoryId"],
     status: json["status"] == null ? null : json["status"],
-    category: json["category"] == null ? null : Category.fromJson(json["category"]),
+    category: json["category"] == null ? null : List<Category>.from(json["category"].map((x) => Category.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -93,7 +93,7 @@ class ServiceListAll {
     "maxPrice": maxPrice == null ? null : maxPrice,
     "categoryId": categoryId == null ? null : categoryId,
     "status": status == null ? null : status,
-    "category": category == null ? null : category?.toJson(),
+    "category": category == null ? null : List<dynamic>.from(category!.map((x) => x.toJson())),
   };
 }
 

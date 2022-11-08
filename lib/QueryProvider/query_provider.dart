@@ -2378,149 +2378,42 @@ class QueryProvider {
     );
   }
 
-  postMechanicUpcomingServiceRequest(token, type, mechanicId) async {
+  postMechanicUpcomingServiceRequest(token, type, mechanicId, page, size) async {
     String _query;
     if (type.toString() == "undefined") {
       _query = """
       {
-      UpcomingCompletedServices(type: null, mechanicId: $mechanicId) 
-        {
-          id
-          bookingCode
-          reqType
-          bookStatus
-          totalPrice
-          tax
-          commission
-          serviceCharge
-          totalTime
-          serviceTime
-          latitude
-          longitude
-          mechLatitude
-          mechLongitude
-          extend
-          totalExt
-          extendTime
-          bookedDate
-          bookedTime
-          isRated
-          status
-          customerId
-          mechanicId
-          vehicleId
-          regularType
-          mechanic {
-            id
-            userCode
-            firstName
-            lastName
-            emailId
-            phoneNo
-            status
-            userTypeId
-            jwtToken
-            fcmToken
-            otpCode
-            isProfile
-            otpVerified
-            customer{
-              id
-            }
-            mechanic{
-              id
-            }
-            vendor{
-              id
-            }
-          }
-          customer {
-            id
-            userCode
-            firstName
-            lastName
-            emailId
-            phoneNo
-            status
-            userTypeId
-            jwtToken
-            fcmToken
-            otpCode
-            isProfile
-            otpVerified
-            customer{
-              id
-            }
-            mechanic{
-              id
-            }
-            vendor{
-              id
-            }
-          }
-          vehicle {
-            id
-            brand
-            model
-            engine
-            year
-            plateNo
-            lastMaintenance
-            milege
-            vehiclePic
-            latitude
-            longitude
-            defaultVehicle
-            status
-            userId
-          }
-          bookService {
-            id
-            mechanicId
-            customerId
-            status
-            serviceId
-            bookMechanicId
-            service{
-              id
-              serviceName
-              minPrice
-            }
-          }
-        }
-    }
-    """;
-    } else {
-      _query = """
+      UpcomingCompletedServices(type: null, mechanicId: $mechanicId, page: 0, size: 100) 
       {
-      UpcomingCompletedServices(type: $type, mechanicId: $mechanicId) {
+      totalItems
+    data {
+      id
+      bookingCode
+      reqType
+      bookStatus
+      totalPrice
+      tax
+      commission
+      serviceCharge
+      totalTime
+      serviceTime
+      latitude
+      longitude
+      mechLatitude
+      mechLongitude
+      extend
+      totalExt
+      extendTime
+      bookedDate
+      bookedTime
+      isRated
+      status
+      customerId
+      mechanicId
+      vehicleId
+      regularType
+      mechanic{
         id
-        bookingCode
-        reqType
-        bookStatus
-        totalPrice
-        tax
-        commission
-        serviceCharge
-        totalTime
-        serviceTime
-        latitude
-        longitude
-        mechLatitude
-        mechLongitude
-        extend
-        totalExt
-        extendTime
-        bookedDate
-        bookedTime
-        isRated
-        status
-        customerId
-        mechanicId
-        vehicleId
-        regularType
-        mechanic {
-          id
           userCode
           firstName
           lastName
@@ -2542,9 +2435,9 @@ class QueryProvider {
           vendor{
             id
           }
-        }
-        customer {
-          id
+      }
+      customer{
+        id
           userCode
           firstName
           lastName
@@ -2566,9 +2459,9 @@ class QueryProvider {
           vendor{
             id
           }
-        }
-        vehicle {
-          id
+      }
+      vehicle{
+        id
           brand
           model
           engine
@@ -2582,9 +2475,9 @@ class QueryProvider {
           defaultVehicle
           status
           userId
-        }
-        bookService {
-          id
+      }
+      bookService{
+        id
           mechanicId
           customerId
           status
@@ -2595,7 +2488,124 @@ class QueryProvider {
             serviceName
             minPrice
           }
-        }
+      }
+    }
+    totalPages
+    currentPage
+     }
+    }
+    """;
+    } else {
+      _query = """
+      {
+      UpcomingCompletedServices(type: $type, mechanicId: $mechanicId, page: 0, size: 100) {
+        totalItems
+    data {
+      id
+      bookingCode
+      reqType
+      bookStatus
+      totalPrice
+      tax
+      commission
+      serviceCharge
+      totalTime
+      serviceTime
+      latitude
+      longitude
+      mechLatitude
+      mechLongitude
+      extend
+      totalExt
+      extendTime
+      bookedDate
+      bookedTime
+      isRated
+      status
+      customerId
+      mechanicId
+      vehicleId
+      regularType
+      mechanic{
+        id
+          userCode
+          firstName
+          lastName
+          emailId
+          phoneNo
+          status
+          userTypeId
+          jwtToken
+          fcmToken
+          otpCode
+          isProfile
+          otpVerified
+          customer{
+            id
+          }
+          mechanic{
+            id
+          }
+          vendor{
+            id
+          }
+      }
+      customer{
+        id
+          userCode
+          firstName
+          lastName
+          emailId
+          phoneNo
+          status
+          userTypeId
+          jwtToken
+          fcmToken
+          otpCode
+          isProfile
+          otpVerified
+          customer{
+            id
+          }
+          mechanic{
+            id
+          }
+          vendor{
+            id
+          }
+      }
+      vehicle{
+        id
+          brand
+          model
+          engine
+          year
+          plateNo
+          lastMaintenance
+          milege
+          vehiclePic
+          latitude
+          longitude
+          defaultVehicle
+          status
+          userId
+      }
+      bookService{
+        id
+          mechanicId
+          customerId
+          status
+          serviceId
+          bookMechanicId
+          service{
+            id
+            serviceName
+            minPrice
+          }
+      }
+    }
+    totalPages
+    currentPage
       }
     }
     """;

@@ -61,10 +61,10 @@ class HomeMechanicBloc {
   Stream<MechanicUpcomingServiceMdl> get postMechanicUpComingServiceResponse => postMechanicUpComingService.stream;
 
   postMechanicUpComingServiceRequest(
-      token, type, mechanicId) async {
+      token, type, mechanicId, page, size) async {
 
     MechanicUpcomingServiceMdl _mechanicUpComingServiceMdl = await repository.postMechanicUpComingServiceRequest(
-        token, type, mechanicId);
+        token, type, mechanicId, page, size);
     postMechanicUpComingService.sink.add(_mechanicUpComingServiceMdl);
   }
 
@@ -74,10 +74,10 @@ class HomeMechanicBloc {
   Stream<MechanicUpcomingServiceMdl> get postMechanicCompletedServiceResponse => postMechanicCompletedService.stream;
 
   postMechanicCompletedServiceRequest(
-      token, type, mechanicId) async {
+      token, type, mechanicId, page, size) async {
 
     MechanicUpcomingServiceMdl _mechanicUpComingServiceMdl = await repository.postMechanicUpComingServiceRequest(
-        token, type, mechanicId);
+        token, type, mechanicId, page, size);
     postMechanicCompletedService.sink.add(_mechanicUpComingServiceMdl);
   }
 
@@ -87,10 +87,10 @@ class HomeMechanicBloc {
   Stream<MechanicUpcomingServiceMdl> get postMechanicAllServiceResponse => postMechanicAllService.stream;
 
   postMechanicAllServiceRequest(
-      token, type, mechanicId) async {
+      token, type, mechanicId, page, size) async {
 
     MechanicUpcomingServiceMdl _mechanicUpComingServiceMdl = await repository.postMechanicUpComingServiceRequest(
-        token, type, mechanicId);
+        token, type, mechanicId, page, size);
     postMechanicAllService.sink.add(_mechanicUpComingServiceMdl);
   }
 
