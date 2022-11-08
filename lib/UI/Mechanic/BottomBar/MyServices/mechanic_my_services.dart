@@ -74,9 +74,9 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
       mechanicId = shdPre.getString(SharedPrefKeys.userID).toString();
 
       print('userFamilyId'+authToken.toString());
-      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "2", mechanicId);
-      _mechanicHomeBloc.postMechanicCompletedServiceRequest("$authToken", "0", mechanicId);
-      _mechanicHomeBloc.postMechanicAllServiceRequest("$authToken", "undefined", mechanicId);
+      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "2", mechanicId, 0, 200);
+      _mechanicHomeBloc.postMechanicCompletedServiceRequest("$authToken", "0", mechanicId, 0, 200);
+      _mechanicHomeBloc.postMechanicAllServiceRequest("$authToken", "undefined", mechanicId, 0, 200);
     });
   }
 
@@ -335,7 +335,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
           isLoadingUpcomingServices == true
               ? progressBarDarkBlue()
               : Container(
-                 child: CustomerUpcomingServicesList?.upcomingCompletedServices?.length == 0 || CustomerUpcomingServicesList?.upcomingCompletedServices?.length == null
+                 child: CustomerUpcomingServicesList?.upcomingCompletedServices?.data?.length == 0 || CustomerUpcomingServicesList?.upcomingCompletedServices?.data?.length == null
                 ? Container(
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -369,7 +369,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                   ),
                 )
                 : ListView.builder(
-                  itemCount:CustomerUpcomingServicesList?.upcomingCompletedServices?.length,
+                  itemCount:CustomerUpcomingServicesList?.upcomingCompletedServices?.data?.length,
                   shrinkWrap: true,
                   // physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context,index,) {
@@ -379,10 +379,10 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => MechServiceRegularDetailsScreen(
-                                bookingId: '${CustomerUpcomingServicesList?.upcomingCompletedServices?[index].id}',
-                                firebaseCollection: CustomerUpcomingServicesList?.upcomingCompletedServices?[index].regularType.toString() == "1"
+                                bookingId: '${CustomerUpcomingServicesList?.upcomingCompletedServices?.data?[index].id}',
+                                firebaseCollection: CustomerUpcomingServicesList?.upcomingCompletedServices?.data?[index].regularType.toString() == "1"
                                     ? TextStrings.firebase_pick_up :
-                                CustomerUpcomingServicesList?.upcomingCompletedServices?[index].regularType.toString() == "2"
+                                CustomerUpcomingServicesList?.upcomingCompletedServices?.data?[index].regularType.toString() == "2"
                                     ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
                               ),
                             ));
@@ -418,7 +418,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                       ),
                                       SizedBox(height: 5,),
                                       Container(
-                                        child: Text('${CustomerUpcomingServicesList?.upcomingCompletedServices?[index].customer?.firstName} ${CustomerUpcomingServicesList?.upcomingCompletedServices?[index].customer?.lastName}',
+                                        child: Text('${CustomerUpcomingServicesList?.upcomingCompletedServices?.data?[index].customer?.firstName} ${CustomerUpcomingServicesList?.upcomingCompletedServices?.data?[index].customer?.lastName}',
                                           maxLines: 2,
                                           textAlign: TextAlign.start,
                                           overflow: TextOverflow.visible,
@@ -489,7 +489,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                               SizedBox(height: 5,),
                                               Container(
                                                 width: 100,
-                                                child: Text('${CustomerUpcomingServicesList?.upcomingCompletedServices?[index].vehicle?.brand}',
+                                                child: Text('${CustomerUpcomingServicesList?.upcomingCompletedServices?.data?[index].vehicle?.brand}',
                                                   maxLines: 2,
                                                   textAlign: TextAlign.start,
                                                   overflow: TextOverflow.visible,
@@ -507,7 +507,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                               ),
                                               SizedBox(height: 5,),
                                               Container(
-                                                child: Text('${CustomerUpcomingServicesList?.upcomingCompletedServices?[index].totalPrice}',
+                                                child: Text('${CustomerUpcomingServicesList?.upcomingCompletedServices?.data?[index].totalPrice}',
                                                   maxLines: 2,
                                                   textAlign: TextAlign.start,
                                                   overflow: TextOverflow.visible,
@@ -523,7 +523,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                               padding: const EdgeInsets.all(0),
                                               child: Column(
                                                 children: [
-                                                  CustomerUpcomingServicesList?.upcomingCompletedServices?[index].reqType == 1 ?
+                                                  CustomerUpcomingServicesList?.upcomingCompletedServices?.data?[index].reqType == 1 ?
                                                   Container(
                                                     height: 25,
                                                     width: 50,
@@ -561,7 +561,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                       Padding(
                                                         padding: const EdgeInsets.all(8.0),
                                                         child: Text(
-                                                          '${_mechanicHomeBloc.dateMonthConverter02(CustomerUpcomingServicesList?.upcomingCompletedServices?[index].bookedDate).toString()}',
+                                                          '${_mechanicHomeBloc.dateMonthConverter02(CustomerUpcomingServicesList?.upcomingCompletedServices?.data?[index].bookedDate).toString()}',
                                                           //'22/03/22',
                                                           textAlign: TextAlign.center,
                                                           style: Styles.badgeTextStyle1,
@@ -611,7 +611,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
               ? progressBarDarkBlue()
               : Container(
                   child:
-                  CustomerCompletedServicesList?.upcomingCompletedServices?.length == 0 || CustomerCompletedServicesList?.upcomingCompletedServices?.length == null
+                  CustomerCompletedServicesList?.upcomingCompletedServices?.data?.length == 0 || CustomerCompletedServicesList?.upcomingCompletedServices?.data?.length == null
                       ? Container(
                         child: Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -645,7 +645,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                     ),
                   )
                       : ListView.builder(
-                        itemCount:CustomerCompletedServicesList?.upcomingCompletedServices?.length,
+                        itemCount:CustomerCompletedServicesList?.upcomingCompletedServices?.data?.length,
                         shrinkWrap: true,
                         // physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context,index,) {
@@ -655,10 +655,10 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => MechServiceRegularDetailsScreen(
-                                    bookingId: '${CustomerCompletedServicesList?.upcomingCompletedServices?[index].id}',
-                                    firebaseCollection: CustomerCompletedServicesList?.upcomingCompletedServices?[index].regularType.toString() == "1"
+                                    bookingId: '${CustomerCompletedServicesList?.upcomingCompletedServices?.data?[index].id}',
+                                    firebaseCollection: CustomerCompletedServicesList?.upcomingCompletedServices?.data?[index].regularType.toString() == "1"
                                         ? TextStrings.firebase_pick_up :
-                                    CustomerCompletedServicesList?.upcomingCompletedServices?[index].regularType.toString() == "2"
+                                    CustomerCompletedServicesList?.upcomingCompletedServices?.data?[index].regularType.toString() == "2"
                                         ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
                                   ),
                                 ));
@@ -694,7 +694,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                           ),
                                           SizedBox(height: 5,),
                                           Container(
-                                            child: Text('${CustomerCompletedServicesList?.upcomingCompletedServices?[index].customer?.firstName} ${CustomerCompletedServicesList?.upcomingCompletedServices?[index].customer?.lastName.toString()} ',
+                                            child: Text('${CustomerCompletedServicesList?.upcomingCompletedServices?.data?[index].customer?.firstName} ${CustomerCompletedServicesList?.upcomingCompletedServices?.data?[index].customer?.lastName.toString()} ',
                                               maxLines: 2,
                                               textAlign: TextAlign.start,
                                               overflow: TextOverflow.visible,
@@ -765,7 +765,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                   SizedBox(height: 5,),
                                                   Container(
                                                     width: 100,
-                                                    child: Text('${CustomerCompletedServicesList?.upcomingCompletedServices?[index].vehicle?.brand}',
+                                                    child: Text('${CustomerCompletedServicesList?.upcomingCompletedServices?.data?[index].vehicle?.brand}',
                                                       maxLines: 2,
                                                       textAlign: TextAlign.start,
                                                       overflow: TextOverflow.visible,
@@ -783,7 +783,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                   ),
                                                   SizedBox(height: 5,),
                                                   Container(
-                                                    child: Text('${CustomerCompletedServicesList?.upcomingCompletedServices?[index].totalPrice}',
+                                                    child: Text('${CustomerCompletedServicesList?.upcomingCompletedServices?.data?[index].totalPrice}',
                                                       maxLines: 2,
                                                       textAlign: TextAlign.start,
                                                       overflow: TextOverflow.visible,
@@ -799,7 +799,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                   padding: const EdgeInsets.all(0),
                                                   child: Column(
                                                     children: [
-                                                      CustomerCompletedServicesList?.upcomingCompletedServices?[index].reqType == 1 ?
+                                                      CustomerCompletedServicesList?.upcomingCompletedServices?.data?[index].reqType == 1 ?
                                                       Container(
                                                         height: 25,
                                                         width: 50,
@@ -837,7 +837,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                           Padding(
                                                             padding: const EdgeInsets.all(8.0),
                                                             child: Text(
-                                                              '${_mechanicHomeBloc.dateMonthConverter02(CustomerCompletedServicesList?.upcomingCompletedServices?[index].bookedDate).toString()}',
+                                                              '${_mechanicHomeBloc.dateMonthConverter02(CustomerCompletedServicesList?.upcomingCompletedServices?.data?[index].bookedDate).toString()}',
                                                               textAlign: TextAlign.center,
                                                               style: Styles.badgeTextStyle1,
                                                             ),
@@ -885,7 +885,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
           isLoadingAllServices == true
               ? progressBarDarkBlue()
               : Container(
-                child: CustomerAllServicesList?.upcomingCompletedServices?.length == 0 || CustomerAllServicesList?.upcomingCompletedServices?.length == null
+                child: CustomerAllServicesList?.upcomingCompletedServices?.data?.length == 0 || CustomerAllServicesList?.upcomingCompletedServices?.data?.length == null
                   ? Container(
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
@@ -919,7 +919,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                 ),
               )
                   : ListView.builder(
-                    itemCount:CustomerAllServicesList?.upcomingCompletedServices?.length,
+                    itemCount:CustomerAllServicesList?.upcomingCompletedServices?.data?.length,
                     shrinkWrap: true,
                     // physics: NeverScrollableScrollPhysics(),
                     itemBuilder: (context,index,) {
@@ -929,10 +929,10 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => MechServiceRegularDetailsScreen(
-                                  bookingId: '${CustomerAllServicesList?.upcomingCompletedServices?[index].id}',
-                                  firebaseCollection: CustomerAllServicesList?.upcomingCompletedServices?[index].regularType.toString() == "1"
+                                  bookingId: '${CustomerAllServicesList?.upcomingCompletedServices?.data?[index].id}',
+                                  firebaseCollection: CustomerAllServicesList?.upcomingCompletedServices?.data?[index].regularType.toString() == "1"
                                       ? TextStrings.firebase_pick_up :
-                                  CustomerAllServicesList?.upcomingCompletedServices?[index].regularType.toString() == "2"
+                                  CustomerAllServicesList?.upcomingCompletedServices?.data?[index].regularType.toString() == "2"
                                       ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
                                 ),
                               ));
@@ -968,7 +968,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                             ),
                                             SizedBox(height: 5,),
                                             Container(
-                                              child: Text('${CustomerAllServicesList?.upcomingCompletedServices?[index].customer?.firstName} ${CustomerAllServicesList?.upcomingCompletedServices?[index].customer?.lastName}',
+                                              child: Text('${CustomerAllServicesList?.upcomingCompletedServices?.data?[index].customer?.firstName} ${CustomerAllServicesList?.upcomingCompletedServices?.data?[index].customer?.lastName}',
                                                 maxLines: 2,
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.visible,
@@ -1039,7 +1039,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                     SizedBox(height: 5,),
                                                     Container(
                                                       width: 100,
-                                                      child: Text('${CustomerAllServicesList?.upcomingCompletedServices?[index].vehicle?.brand}',
+                                                      child: Text('${CustomerAllServicesList?.upcomingCompletedServices?.data?[index].vehicle?.brand}',
                                                         maxLines: 2,
                                                         textAlign: TextAlign.start,
                                                         overflow: TextOverflow.visible,
@@ -1057,7 +1057,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                     ),
                                                     SizedBox(height: 5,),
                                                     Container(
-                                                      child: Text('${CustomerAllServicesList?.upcomingCompletedServices?[index].totalPrice}',
+                                                      child: Text('${CustomerAllServicesList?.upcomingCompletedServices?.data?[index].totalPrice}',
                                                         maxLines: 2,
                                                         textAlign: TextAlign.start,
                                                         overflow: TextOverflow.visible,
@@ -1073,7 +1073,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                     padding: const EdgeInsets.all(0),
                                                     child: Column(
                                                       children: [
-                                                        CustomerAllServicesList?.upcomingCompletedServices![index].reqType == 1 ?
+                                                        CustomerAllServicesList?.upcomingCompletedServices!.data?[index].reqType == 1 ?
                                                         Container(
                                                           height: 25,
                                                           width: 50,
@@ -1111,7 +1111,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                             Padding(
                                                               padding: const EdgeInsets.all(8.0),
                                                               child: Text(
-                                                                '${_mechanicHomeBloc.dateMonthConverter02(CustomerAllServicesList?.upcomingCompletedServices?[index].bookedDate).toString()}',
+                                                                '${_mechanicHomeBloc.dateMonthConverter02(CustomerAllServicesList?.upcomingCompletedServices?.data?[index].bookedDate).toString()}',
                                                                 //'22/03/22',
                                                                 textAlign: TextAlign.center,
                                                                 style: Styles.badgeTextStyle1,

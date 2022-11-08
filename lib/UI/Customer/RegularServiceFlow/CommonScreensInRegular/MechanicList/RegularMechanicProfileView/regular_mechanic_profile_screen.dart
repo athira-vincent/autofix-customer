@@ -80,18 +80,18 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
-  final ServiceStatusUpdateBloc _serviceStatusUpdateBloc = ServiceStatusUpdateBloc();
+  //final ServiceStatusUpdateBloc _serviceStatusUpdateBloc = ServiceStatusUpdateBloc();
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   List yourItemList = [];
 
   int? reviewLength = 0;
-
+  bool _isLoading = false;
   double height = 0;
   String selectedState = "";
   double totalFees = 0.0;
-
+  bool isExpanded = false;
   String? FcmToken="";
   String authToken="";
   String userName="", userId = "";
@@ -127,6 +127,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
     print(' >>>>>>>>>>>>>> mechanicListData \n ${widget.mechanicListData} >>>>>>>_RegularMechanicProfileViewScreenState mechanicListData');
 
     getSharedPrefData();
+    _isLoading = true;
     _listen();
 
     //_listenNotification(context);
@@ -160,14 +161,16 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
     _homeCustomerBloc.MechanicProfileDetailsResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
+          _isLoading = false;
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
         });
       } else {
         setState(() {
+          _isLoading = false;
           _mechanicDetailsMdl = value;
           reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}') >= 2 ? 2 : _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length;
-
+          print(">>>> ${_mechanicDetailsMdl!.data!.mechanicDetails!.mechanicReviewsData}");
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
         });
@@ -185,7 +188,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
           print("mechanicsRegularBookingIDResponse success >>>");
           print("mechanicsRegularBookingIDResponse success booking id >>> " + '${value.data!.mechanicBooking!.id.toString()}' );
 
-          _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, value.data!.mechanicBooking!.id, "0");
+          //_serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, value.data!.mechanicBooking!.id, "0");
 
           if(widget.regularServiceType == TextStrings.txt_pick_up){
             updateToCloudFirestoreDBPickUp(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
@@ -194,7 +197,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
           }else{
             updateToCloudFirestoreDBTakeVehicle(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
           }
-          callOnFcmApiSendPushNotifications(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
+          //callOnFcmApiSendPushNotifications(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -464,19 +467,37 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              appBarCustomUi(size),
-              profileImageAndKmAndReviewCount(size),
-              timeAndLocationUi(size),
+          child:
+              _isLoading
+                  ? Visibility(
+                    visible: true,
+                    child: Container(
+                      height: size.height,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              CustColors.light_navy),
+                        ),
+                      ),
+                    ),
+                  )
+                  : Column(
+                children: [
+                  appBarCustomUi(size),
+                  profileImageAndKmAndReviewCount(size),
+                  timeAndLocationUi(size),
 
-              _mechanicDetailsMdl == null
-                  ? Container()
-                  : reviewsUi(size),
-              selectedServiceDetailsUi(size),
-              acceptAndSendRequestButton( size,context)
-            ],
-          ),
+                  /*_mechanicDetailsMdl == null
+                    ? Container()
+                    : reviewsUi(size),*/
+
+                  _mechanicDetailsMdl!.data!.mechanicDetails!.mechanicReviewsData.toString() == '[]'
+                      ? Container()
+                      : reviewsUi(size),
+                  selectedServiceDetailsUi(size),
+                  acceptAndSendRequestButton( size,context)
+                ],
+              ),
         ),
       ),
     );
@@ -825,9 +846,19 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
             InkWell(
               onTap: (){
                 setState(() {
-                  reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}');
+
+                  if(!isExpanded){
+                    reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}');
+                    isExpanded = true;
+                  }else{
+                    reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}') >= 2 ? 2 : _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length;
+                    isExpanded = false;
+                  }
+
                   print('reviewLength $reviewLength');
                   print('reviewLength ${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}');
+
+
                 });
               },
               child: Row(
@@ -842,7 +873,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text('Load more',
+                    child: Text( isExpanded ? 'Show less' : 'Load more',
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.visible,

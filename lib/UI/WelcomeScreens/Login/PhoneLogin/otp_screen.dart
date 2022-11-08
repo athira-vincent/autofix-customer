@@ -106,10 +106,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     getSharedPrefData();
     _phoneNoController.addListener(onFocusChange);
     //textEditingController.text = widget.otpNumber;
-    _listenOtpVerificationResponse();
-
     _getSignatureCode();
     _startListeningSms();
+    _listenOtpVerificationResponse();
+
   }
 
   _listenOtpVerificationResponse() {

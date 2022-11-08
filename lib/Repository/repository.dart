@@ -470,9 +470,9 @@ class Repository {
           token, brandName);
 
   // Fetch Mechanic Upcoming Service Request
-  Future<dynamic> postMechanicUpComingServiceRequest(token, type, mechanicId) =>
+  Future<dynamic> postMechanicUpComingServiceRequest(token, type, mechanicId, page, size) =>
       _mechanicApiProvider.postMechanicUpcomingServiceRequest(
-          token, type, mechanicId);
+          token, type, mechanicId, page, size);
 
   // Fetch Mechanic Active Service Request
   Future<dynamic> postMechanicActiveServiceRequest(token, mechanicId) =>

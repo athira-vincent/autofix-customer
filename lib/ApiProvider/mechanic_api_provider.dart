@@ -73,9 +73,9 @@ class MechanicApiProvider {
   }
 
   Future<MechanicUpcomingServiceMdl> postMechanicUpcomingServiceRequest(
-      token, type, mechanicId )async {
+      token, type, mechanicId,page, size )async {
     Map<String, dynamic> _resp = await _queryProvider.postMechanicUpcomingServiceRequest(
-        token, type, mechanicId);
+        token, type, mechanicId,page, size);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
