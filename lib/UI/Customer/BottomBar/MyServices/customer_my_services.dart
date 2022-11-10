@@ -559,7 +559,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                           height: 25,
                                                           width: 50,
                                                           alignment: Alignment.center,
-                                                          color: CustColors.blue,
+                                                          color: CustColors.light_navy,
                                                           child: Text('Emergency Service',
                                                             textAlign: TextAlign.center,
                                                             style: Styles.badgeTextStyle2,
@@ -570,20 +570,20 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                           height: 25,
                                                           width: 50,
                                                           alignment: Alignment.center,
-                                                          color: CustColors.blue,
+                                                          color: CustColors.light_navy,
                                                           child: Text('Regular Service',
                                                             textAlign: TextAlign.center,
                                                             style: Styles.badgeTextStyle2,
                                                           ),
                                                         ),
-                                                        SizedBox(height: 5,),
+                                                        SizedBox(height: 3,),
                                                         Stack(
                                                           alignment: Alignment.topCenter,
                                                           children: [
                                                             Container(
                                                               height: 50,
                                                               width: 50,
-                                                              color: Colors.white,
+                                                              color: CustColors.light_navy,
                                                               child: CustomPaint(
                                                                 painter: CurvePainter(),
                                                               ),
@@ -865,7 +865,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                             height: 25,
                                                             width: 50,
                                                             alignment: Alignment.center,
-                                                            color: CustColors.blue,
+                                                            color: CustColors.cloudy_blue,
                                                             child: Text('Emergency Service',
                                                               textAlign: TextAlign.center,
                                                               style: Styles.badgeTextStyle2,
@@ -876,13 +876,13 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                             height: 25,
                                                             width: 50,
                                                             alignment: Alignment.center,
-                                                            color: CustColors.blue,
+                                                            color: CustColors.cloudy_blue,
                                                             child: Text('Regular Service',
                                                               textAlign: TextAlign.center,
                                                               style: Styles.badgeTextStyle2,
                                                             ),
                                                           ),
-                                                          SizedBox(height: 5,),
+                                                          SizedBox(height: 3,),
                                                           Stack(
                                                             alignment: Alignment.topCenter,
                                                             children: [
@@ -890,7 +890,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                               Container(
                                                                 height: 50,
                                                                 width: 50,
-                                                                color: Colors.white,
+                                                                color: CustColors.cloudy_blue,
                                                                 child: CustomPaint(
                                                                   painter: CurvePainter(),
                                                                 ),
@@ -1170,7 +1170,8 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                           height: 25,
                                                           width: 50,
                                                           alignment: Alignment.center,
-                                                          color: CustColors.blue,
+                                                          color: CustomerAllServicesList?.custCompletedOrders![index01].bookStatus == "8"
+                                                              ? CustColors.cloudy_blue : CustColors.light_navy,
                                                           child: Text('Emergency Service',
                                                             textAlign: TextAlign.center,
                                                             style: Styles.badgeTextStyle2,
@@ -1181,13 +1182,14 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                           height: 25,
                                                           width: 50,
                                                           alignment: Alignment.center,
-                                                          color: CustColors.blue,
+                                                          color: CustomerAllServicesList?.custCompletedOrders![index01].bookStatus == "8"
+                                                              ? CustColors.cloudy_blue : CustColors.light_navy,
                                                           child: Text('Regular Service',
                                                             textAlign: TextAlign.center,
                                                             style: Styles.badgeTextStyle2,
                                                           ),
                                                         ),
-                                                        SizedBox(height: 5,),
+                                                        SizedBox(height: 3,),
                                                         Stack(
                                                           alignment: Alignment.topCenter,
                                                           children: [
@@ -1195,7 +1197,8 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                             Container(
                                                               height: 50,
                                                               width: 50,
-                                                              color: Colors.white,
+                                                              color: CustomerAllServicesList?.custCompletedOrders![index01].bookStatus == "8"
+                                                                  ? CustColors.cloudy_blue : CustColors.light_navy,
                                                               child: CustomPaint(
                                                                 painter: CurvePainter(),
                                                               ),
