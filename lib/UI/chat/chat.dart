@@ -26,6 +26,8 @@ class ChatScreen extends StatefulWidget {
   final String bookingId;
   final String currentUserId;
   final String collectionName;
+  final String myImageUrl;
+  final String peerImageUrl;
   /*final String peerAvatar;
   final String peerNickname;
   final String userAvatar;*/
@@ -39,6 +41,8 @@ class ChatScreen extends StatefulWidget {
     required this.bookingId,
     required this.currentUserId,
     required this.collectionName,
+    required this.myImageUrl,
+    required this.peerImageUrl,
   }) : super(key: key);
 
   @override
@@ -52,7 +56,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   List<QueryDocumentSnapshot> listMessages = [];
 
- final  int _limit = 20;
+ final  int _limit = 40;
   final int _limitIncrement = 20;
   String groupChatId = 'messages';
 
@@ -137,54 +141,59 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget buildMessageInput() {
-    return SizedBox(
-      width: double.infinity,
-      height: 45,
-      child: Row(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(right: 5),
-            decoration: BoxDecoration(
-              color: CustColors.white_05,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: IconButton(
-              onPressed: getImage,
-              icon: const Icon(
-                Icons.camera_alt,
-                size: 20,
+    return Container(
+      margin: EdgeInsets.only(
+        bottom: 12,
+      ),
+      child: SizedBox(
+        width: double.infinity,
+        height: 45,
+        child: Row(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(right: 5),
+              decoration: BoxDecoration(
+                color: CustColors.white_05,
+                borderRadius: BorderRadius.circular(30),
               ),
-              color: CustColors.warm_grey03,
+              child: IconButton(
+                onPressed: getImage,
+                icon: const Icon(
+                  Icons.camera_alt,
+                  size: 20,
+                ),
+                color: CustColors.warm_grey03,
+              ),
             ),
-          ),
-          Flexible(
-              child: TextField(
-            focusNode: focusNode,
-            textInputAction: TextInputAction.send,
-            keyboardType: TextInputType.multiline,
-            textCapitalization: TextCapitalization.sentences,
-            controller: textEditingController,
-            decoration:
-                kTextInputDecoration.copyWith(hintText: 'write here...'),
-            onSubmitted: (value) {
-              onSendMessage(textEditingController.text, MessageType.text);
-            },
-          )),
-          Container(
-            margin: const EdgeInsets.only(left: 4),
-            decoration: BoxDecoration(
-              color: CustColors.light_navy,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: IconButton(
-              onPressed: () {
+            Flexible(
+                child: TextField(
+              focusNode: focusNode,
+              textInputAction: TextInputAction.send,
+              keyboardType: TextInputType.multiline,
+              textCapitalization: TextCapitalization.sentences,
+              controller: textEditingController,
+              decoration:
+                  kTextInputDecoration.copyWith(hintText: 'type here...'),
+              onSubmitted: (value) {
                 onSendMessage(textEditingController.text, MessageType.text);
               },
-              icon: const Icon(Icons.send_rounded),
-              color: Colors.white,
+            )),
+            Container(
+              margin: const EdgeInsets.only(left: 4),
+              decoration: BoxDecoration(
+                color: CustColors.light_navy,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: IconButton(
+                onPressed: () {
+                  onSendMessage(textEditingController.text, MessageType.text);
+                },
+                icon: const Icon(Icons.send_rounded),
+                color: Colors.white,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -221,7 +230,11 @@ class _ChatScreenState extends State<ChatScreen> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Image.network(
-                          "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHYAAAB2CAMAAAAqeZcjAAAAMFBMVEXk5ueutLeqsLPo6era3d6xt7q4vcDq7O27wMLW2dvJzc/e4eLFycu1ur3T1tjN0dNC/DypAAACiUlEQVRoge2ZDXKsIBCEgQFFUbn/bQOb7Ctrn8qM6dmkUvQFvpo/YBpjurq6urq6urq6uv6eiMiklAyN9D6mmZYh2KoQszdvIZNfrHP2KedCTupg8sOO+UW2i27EZJZX5ic4bIpcSuGQWsGLGpemM2jlrkrcS2qVCpd8g2qDCrdFtXbAc6kJLfWd0Vw6npxXbgJjE4da0oylUmRRrcMeG80ufgo6vdxgS7gTEJu4VGsjLlzK3BwX4ZqZBj7VbTCs4VOtxV1FXoKF9bKotNaCqOVglFBhPcWf2odQkyvDwlpZMj9I7A9FK8PCaivrZI/CzqK5hR3K248cF5J7D3rzBT4V+HqU9BTyedFaQ3YKOKogy9AXumCEoA90bi+D11xuuPBthEdF717t7bYKv+FyVj6n4BTR2qSq2DXUGF78Us3hunlUodZnxnl9XdYzxE7vBLd6TfuvWo5H2IWU3U6a1hev09mob7EaGnfOrivpze8xlKt3nrZ5iTEueTJv88+Jxp20q1qBhfIIdA0lzzXT6xDn7M2oFjON5Odo//POa4WdG2aNdNOYcjwi7tnr7KEZp5Rfp+aEHOYEIhNNJbVt5nOihg0AJtpW0SpS/yvm705yPZNk0M+Qv3WEUDo+gTkRT/e5LOv6DBzvBXzx6cME5xv3/ijbpY8DFsd79ZDgc630RrzTwEdgGRfCfHAlHQ2jFi7/kSXwDHBcSDftFFhboNCFYojz9df8LpWLtaVAC/vFbZaX94UoVTPNIsONrdYKKvTn2Wqs+TrBtsLFD89Tl9VtGwW3dXVmiL63RLrauoXfWyLF86fGqNTHD11Eq3BC/dNFcRWpF39wySkqn0dLijqndnV1df06fQBDZxuwbCYKtwAAAABJRU5ErkJggg==",
+                          widget.myImageUrl == ""
+                              ?
+                          "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHYAAAB2CAMAAAAqeZcjAAAAMFBMVEXk5ueutLeqsLPo6era3d6xt7q4vcDq7O27wMLW2dvJzc/e4eLFycu1ur3T1tjN0dNC/DypAAACiUlEQVRoge2ZDXKsIBCEgQFFUbn/bQOb7Ctrn8qM6dmkUvQFvpo/YBpjurq6urq6urq6uv6eiMiklAyN9D6mmZYh2KoQszdvIZNfrHP2KedCTupg8sOO+UW2i27EZJZX5ic4bIpcSuGQWsGLGpemM2jlrkrcS2qVCpd8g2qDCrdFtXbAc6kJLfWd0Vw6npxXbgJjE4da0oylUmRRrcMeG80ufgo6vdxgS7gTEJu4VGsjLlzK3BwX4ZqZBj7VbTCs4VOtxV1FXoKF9bKotNaCqOVglFBhPcWf2odQkyvDwlpZMj9I7A9FK8PCaivrZI/CzqK5hR3K248cF5J7D3rzBT4V+HqU9BTyedFaQ3YKOKogy9AXumCEoA90bi+D11xuuPBthEdF717t7bYKv+FyVj6n4BTR2qSq2DXUGF78Us3hunlUodZnxnl9XdYzxE7vBLd6TfuvWo5H2IWU3U6a1hev09mob7EaGnfOrivpze8xlKt3nrZ5iTEueTJv88+Jxp20q1qBhfIIdA0lzzXT6xDn7M2oFjON5Odo//POa4WdG2aNdNOYcjwi7tnr7KEZp5Rfp+aEHOYEIhNNJbVt5nOihg0AJtpW0SpS/yvm705yPZNk0M+Qv3WEUDo+gTkRT/e5LOv6DBzvBXzx6cME5xv3/ijbpY8DFsd79ZDgc630RrzTwEdgGRfCfHAlHQ2jFi7/kSXwDHBcSDftFFhboNCFYojz9df8LpWLtaVAC/vFbZaX94UoVTPNIsONrdYKKvTn2Wqs+TrBtsLFD89Tl9VtGwW3dXVmiL63RLrauoXfWyLF86fGqNTHD11Eq3BC/dNFcRWpF39wySkqn0dLijqndnV1df06fQBDZxuwbCYKtwAAAABJRU5ErkJggg=="
+                              :
+                          '${widget.myImageUrl}',
                           width: 40,
                           height: 40,
                           fit: BoxFit.cover,
@@ -260,7 +273,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     margin: const EdgeInsets.only(right: 50, top: 6, bottom: 8),
                     child: Text(
                       DateFormat('dd MMM yyyy, hh:mm a').format(
-                        DateTime.fromMillisecondsSinceEpoch(
+                        DateTime.fromMicrosecondsSinceEpoch(
                           int.parse(chatMessages.timestamp),
                         ),
                       ),
@@ -288,7 +301,11 @@ class _ChatScreenState extends State<ChatScreen> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Image.network(
-                          "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHYAAAB2CAMAAAAqeZcjAAAAMFBMVEXk5ueutLeqsLPo6era3d6xt7q4vcDq7O27wMLW2dvJzc/e4eLFycu1ur3T1tjN0dNC/DypAAACiUlEQVRoge2ZDXKsIBCEgQFFUbn/bQOb7Ctrn8qM6dmkUvQFvpo/YBpjurq6urq6urq6uv6eiMiklAyN9D6mmZYh2KoQszdvIZNfrHP2KedCTupg8sOO+UW2i27EZJZX5ic4bIpcSuGQWsGLGpemM2jlrkrcS2qVCpd8g2qDCrdFtXbAc6kJLfWd0Vw6npxXbgJjE4da0oylUmRRrcMeG80ufgo6vdxgS7gTEJu4VGsjLlzK3BwX4ZqZBj7VbTCs4VOtxV1FXoKF9bKotNaCqOVglFBhPcWf2odQkyvDwlpZMj9I7A9FK8PCaivrZI/CzqK5hR3K248cF5J7D3rzBT4V+HqU9BTyedFaQ3YKOKogy9AXumCEoA90bi+D11xuuPBthEdF717t7bYKv+FyVj6n4BTR2qSq2DXUGF78Us3hunlUodZnxnl9XdYzxE7vBLd6TfuvWo5H2IWU3U6a1hev09mob7EaGnfOrivpze8xlKt3nrZ5iTEueTJv88+Jxp20q1qBhfIIdA0lzzXT6xDn7M2oFjON5Odo//POa4WdG2aNdNOYcjwi7tnr7KEZp5Rfp+aEHOYEIhNNJbVt5nOihg0AJtpW0SpS/yvm705yPZNk0M+Qv3WEUDo+gTkRT/e5LOv6DBzvBXzx6cME5xv3/ijbpY8DFsd79ZDgc630RrzTwEdgGRfCfHAlHQ2jFi7/kSXwDHBcSDftFFhboNCFYojz9df8LpWLtaVAC/vFbZaX94UoVTPNIsONrdYKKvTn2Wqs+TrBtsLFD89Tl9VtGwW3dXVmiL63RLrauoXfWyLF86fGqNTHD11Eq3BC/dNFcRWpF39wySkqn0dLijqndnV1df06fQBDZxuwbCYKtwAAAABJRU5ErkJggg==",
+                          widget.peerImageUrl == ""
+                              ?
+                          "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHYAAAB2CAMAAAAqeZcjAAAAMFBMVEXk5ueutLeqsLPo6era3d6xt7q4vcDq7O27wMLW2dvJzc/e4eLFycu1ur3T1tjN0dNC/DypAAACiUlEQVRoge2ZDXKsIBCEgQFFUbn/bQOb7Ctrn8qM6dmkUvQFvpo/YBpjurq6urq6urq6uv6eiMiklAyN9D6mmZYh2KoQszdvIZNfrHP2KedCTupg8sOO+UW2i27EZJZX5ic4bIpcSuGQWsGLGpemM2jlrkrcS2qVCpd8g2qDCrdFtXbAc6kJLfWd0Vw6npxXbgJjE4da0oylUmRRrcMeG80ufgo6vdxgS7gTEJu4VGsjLlzK3BwX4ZqZBj7VbTCs4VOtxV1FXoKF9bKotNaCqOVglFBhPcWf2odQkyvDwlpZMj9I7A9FK8PCaivrZI/CzqK5hR3K248cF5J7D3rzBT4V+HqU9BTyedFaQ3YKOKogy9AXumCEoA90bi+D11xuuPBthEdF717t7bYKv+FyVj6n4BTR2qSq2DXUGF78Us3hunlUodZnxnl9XdYzxE7vBLd6TfuvWo5H2IWU3U6a1hev09mob7EaGnfOrivpze8xlKt3nrZ5iTEueTJv88+Jxp20q1qBhfIIdA0lzzXT6xDn7M2oFjON5Odo//POa4WdG2aNdNOYcjwi7tnr7KEZp5Rfp+aEHOYEIhNNJbVt5nOihg0AJtpW0SpS/yvm705yPZNk0M+Qv3WEUDo+gTkRT/e5LOv6DBzvBXzx6cME5xv3/ijbpY8DFsd79ZDgc630RrzTwEdgGRfCfHAlHQ2jFi7/kSXwDHBcSDftFFhboNCFYojz9df8LpWLtaVAC/vFbZaX94UoVTPNIsONrdYKKvTn2Wqs+TrBtsLFD89Tl9VtGwW3dXVmiL63RLrauoXfWyLF86fGqNTHD11Eq3BC/dNFcRWpF39wySkqn0dLijqndnV1df06fQBDZxuwbCYKtwAAAABJRU5ErkJggg=="
+                              :
+                          "${widget.peerImageUrl}",
                           //widget.peerAvatar,
                           width: 40,
                           height: 40,
@@ -342,7 +359,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     margin: const EdgeInsets.only(left: 50, top: 6, bottom: 8),
                     child: Text(
                       DateFormat('dd MMM yyyy, hh:mm a').format(
-                        DateTime.fromMillisecondsSinceEpoch(
+                        DateTime.fromMicrosecondsSinceEpoch(
                           int.parse(chatMessages.timestamp),
                         ),
                       ),
@@ -491,7 +508,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void uploadImageFile() async {
-    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    String fileName = DateTime.now().microsecondsSinceEpoch.toString();
     UploadTask uploadTask = chatProvider.uploadImageFile(imageFile!, fileName);
     try {
       TaskSnapshot snapshot = await uploadTask;

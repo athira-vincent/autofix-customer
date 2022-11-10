@@ -38,47 +38,19 @@ class Data {
     required this.upcomingCompletedServices,
   });
 
-  UpcomingCompletedServices? upcomingCompletedServices;
+  List<UpcomingCompletedService>? upcomingCompletedServices;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    upcomingCompletedServices: json["UpcomingCompletedServices"] == null ? null : UpcomingCompletedServices.fromJson(json["UpcomingCompletedServices"]),
+    upcomingCompletedServices: json["UpcomingCompletedServices"] == null ? null : List<UpcomingCompletedService>.from(json["UpcomingCompletedServices"].map((x) => UpcomingCompletedService.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "UpcomingCompletedServices": upcomingCompletedServices == null ? null : upcomingCompletedServices!.toJson(),
+    "UpcomingCompletedServices": upcomingCompletedServices == null ? null : List<dynamic>.from(upcomingCompletedServices!.map((x) => x.toJson())),
   };
 }
 
-class UpcomingCompletedServices {
-  UpcomingCompletedServices({
-    required this.totalItems,
-    required this.data,
-    required this.totalPages,
-    required this.currentPage,
-  });
-
-  int totalItems;
-  List<Datum>? data;
-  int totalPages;
-  int currentPage;
-
-  factory UpcomingCompletedServices.fromJson(Map<String, dynamic> json) => UpcomingCompletedServices(
-    totalItems: json["totalItems"] == null ? null : json["totalItems"],
-    data: json["data"] == null ? null : List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-    totalPages: json["totalPages"] == null ? null : json["totalPages"],
-    currentPage: json["currentPage"] == null ? null : json["currentPage"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "totalItems": totalItems == null ? null : totalItems,
-    "data": data == null ? null : List<dynamic>.from(data!.map((x) => x.toJson())),
-    "totalPages": totalPages == null ? null : totalPages,
-    "currentPage": currentPage == null ? null : currentPage,
-  };
-}
-
-class Datum {
-  Datum({
+class UpcomingCompletedService {
+  UpcomingCompletedService({
     required this.id,
     required this.bookingCode,
     required this.reqType,
@@ -116,7 +88,7 @@ class Datum {
   int bookStatus;
   int totalPrice;
   double tax;
-  double commission;
+  dynamic commission;
   double serviceCharge;
   dynamic totalTime;
   String serviceTime;
@@ -140,14 +112,14 @@ class Datum {
   Vehicle? vehicle;
   List<BookService>? bookService;
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory UpcomingCompletedService.fromJson(Map<String, dynamic> json) => UpcomingCompletedService(
     id: json["id"] == null ? null : json["id"],
     bookingCode: json["bookingCode"] == null ? null : json["bookingCode"],
     reqType: json["reqType"] == null ? null : json["reqType"],
     bookStatus: json["bookStatus"] == null ? null : json["bookStatus"],
     totalPrice: json["totalPrice"] == null ? null : json["totalPrice"],
     tax: json["tax"] == null ? null : json["tax"].toDouble(),
-    commission: json["commission"] == null ? null : json["commission"].toDouble(),
+    commission: json["commission"] == null ? null : json["commission"],
     serviceCharge: json["serviceCharge"] == null ? null : json["serviceCharge"].toDouble(),
     totalTime: json["totalTime"],
     serviceTime: json["serviceTime"] == null ? null : json["serviceTime"],

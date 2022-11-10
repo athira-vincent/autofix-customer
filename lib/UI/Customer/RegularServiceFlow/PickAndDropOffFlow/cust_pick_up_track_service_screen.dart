@@ -110,7 +110,6 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                   onTap: (){
                     launchMapsUrl(double.parse(widget.latitude),double.parse(widget.longitude),
                         10.056346, 76.291722);
-                    //openMap(context,double.parse(widget.latitude),double.parse(widget.longitude));
                   },
                   child: Container(
                       color: CustColors.cherry,
