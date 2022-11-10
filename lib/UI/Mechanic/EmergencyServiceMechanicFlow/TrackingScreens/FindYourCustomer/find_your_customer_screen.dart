@@ -81,7 +81,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   String location ='';
   String Address = '';
   String authToken="", bookingId = "", carName = "", customerAddress = "", plateNumber = "", carColor = "";
-  String customerId = "", mechanicId = "", customerName = "";
+  String customerId = "", mechanicId = "", customerName = "", customerProfileUrl = "", mechanicProfileUrl = "";
   bool isArrived = false;
 
   @override
@@ -180,6 +180,8 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
       print('bookingId FindYourCustomerScreen '+bookingId.toString());
       updateToCloudFirestoreMechanicCurrentScreenDB();
       _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
+        mechanicProfileUrl = event.get('mechanicProfileUrl');
+        customerProfileUrl = event.get('customerProfileUrl');
         carName = event.get('carName');
         customerAddress = event.get('customerAddress');
         plateNumber =  event.get('carPlateNumber');
@@ -683,6 +685,8 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                                           collectionName: 'ResolMech',
                                           currentUserId: mechanicId,
                                           peerName: customerName,
+                                          peerImageUrl: customerProfileUrl,
+                                          myImageUrl: mechanicProfileUrl,
                                         )));
                               },
                               child: Container(

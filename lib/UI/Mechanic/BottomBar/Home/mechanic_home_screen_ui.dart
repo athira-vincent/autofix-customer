@@ -386,7 +386,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                           );
                         default:
                           return
-                            snapshot.data?.data?.upcomingCompletedServices?.data!.length != 0 && snapshot.data?.data?.upcomingCompletedServices?.data!.length != null
+                            snapshot.data?.data?.upcomingCompletedServices?.length != 0 && snapshot.data?.data?.upcomingCompletedServices?.length != null
                                 ? upcomingServicesList(size,snapshot,context)
                                 : Container(
                                   margin: const EdgeInsets.all(10),
@@ -431,7 +431,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   Widget upcomingServicesList(Size size, AsyncSnapshot<MechanicUpcomingServiceMdl> snapshot,BuildContext context){
     return  Container(
       child: ListView.builder(
-        itemCount: snapshot.data?.data?.upcomingCompletedServices?.data!.length,
+        itemCount: snapshot.data?.data?.upcomingCompletedServices?.length,
         scrollDirection: Axis.horizontal,
           itemBuilder: (context1, i, ){
               return Padding(
@@ -444,10 +444,10 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => MechServiceRegularDetailsScreen(
-                              bookingId: snapshot.data!.data!.upcomingCompletedServices!.data![i].id.toString(),
-                              firebaseCollection: snapshot.data!.data!.upcomingCompletedServices!.data![i].regularType.toString() == "1"
+                              bookingId: snapshot.data!.data!.upcomingCompletedServices![i].id.toString(),
+                              firebaseCollection: snapshot.data!.data!.upcomingCompletedServices![i].regularType.toString() == "1"
                                   ? TextStrings.firebase_pick_up :
-                              snapshot.data!.data!.upcomingCompletedServices!.data![i].regularType.toString() == "2"
+                              snapshot.data!.data!.upcomingCompletedServices![i].regularType.toString() == "2"
                                   ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
                             ),
                           ));
@@ -481,7 +481,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                        _mechanicHomeBloc.dateConverter(snapshot.data!.data!.upcomingCompletedServices!.data![i].bookedDate!),
+                                          _mechanicHomeBloc.dateConverter(snapshot.data!.data!.upcomingCompletedServices![i].bookedDate!),
                                          // "02-12-2021",
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w400,
@@ -490,7 +490,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                               fontSize: 15
                                           ),),
                                         Text(
-                                          _mechanicHomeBloc.timeConvert(new DateFormat("hh:mm:ss").parse(snapshot.data!.data!.upcomingCompletedServices!.data![i].bookedTime)).toString(),
+                                          _mechanicHomeBloc.timeConvert(new DateFormat("hh:mm:ss").parse(snapshot.data!.data!.upcomingCompletedServices![i].bookedTime)).toString(),
                                           //"09:30 AM",
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w400,
@@ -512,7 +512,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                       children: [
                                         Text(
                                           "Service from " +
-                                          snapshot.data!.data!.upcomingCompletedServices!.data![i].customer!.firstName.toString(),
+                                              snapshot.data!.data!.upcomingCompletedServices![i].customer!.firstName.toString(),
                                           //"Service from Eric John. ",
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w400,
@@ -523,7 +523,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
                                         Text(
                                           " [ " +
-                                          snapshot.data!.data!.upcomingCompletedServices!.data![i].vehicle!.brand.toString()
+                                              snapshot.data!.data!.upcomingCompletedServices![i].vehicle!.brand.toString()
                                           + " ] ",
                                           //" [ HONDA CITY ]",
                                           style: const TextStyle(
@@ -535,7 +535,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                       ],
                                     ),
                                   ),
-                                  snapshot.data!.data!.upcomingCompletedServices!.data![i].reqType.toString() == "1"
+                                  snapshot.data!.data!.upcomingCompletedServices![i].reqType.toString() == "1"
                                       ?
                                   Container(
                                     margin: EdgeInsets.only(
@@ -579,9 +579,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                           ),),
 
                                         Text(
-                                          snapshot.data!.data!.upcomingCompletedServices!.data![i].regularType.toString() == "1"
+                                          snapshot.data!.data!.upcomingCompletedServices![i].regularType.toString() == "1"
                                               ? "Pick Up & Drop Off" :
-                                          snapshot.data!.data!.upcomingCompletedServices!.data![i].regularType.toString() == "2"
+                                          snapshot.data!.data!.upcomingCompletedServices![i].regularType.toString() == "2"
                                               ? "Mobile Mechanic" : "Take Vehicle to Mechanic",
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w400,
