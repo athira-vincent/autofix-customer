@@ -1116,11 +1116,9 @@ class QueryProvider {
               otpCode
               isProfile
               otpVerified
-              customer{
-                id
-              }
               mechanic{
                 id
+                profilePic
               }
               vendor{
                 id
@@ -1142,6 +1140,7 @@ class QueryProvider {
               otpVerified
               customer{
                 id
+                profilePic
               }
               mechanic{
                 id

@@ -118,7 +118,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       setFcmToken(authToken);
       _getCurrentMechanicLocation();
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken, mechanicId);
-      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "2", mechanicId);
+      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "2", mechanicId, 0, 200);
     });
   }
 
@@ -481,7 +481,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                        _mechanicHomeBloc.dateConverter(snapshot.data!.data!.upcomingCompletedServices![i].bookedDate!),
+                                          _mechanicHomeBloc.dateConverter(snapshot.data!.data!.upcomingCompletedServices![i].bookedDate!),
                                          // "02-12-2021",
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w400,
@@ -512,7 +512,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                       children: [
                                         Text(
                                           "Service from " +
-                                          snapshot.data!.data!.upcomingCompletedServices![i].customer!.firstName.toString(),
+                                              snapshot.data!.data!.upcomingCompletedServices![i].customer!.firstName.toString(),
                                           //"Service from Eric John. ",
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w400,
@@ -523,7 +523,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
                                         Text(
                                           " [ " +
-                                          snapshot.data!.data!.upcomingCompletedServices![i].vehicle!.brand.toString()
+                                              snapshot.data!.data!.upcomingCompletedServices![i].vehicle!.brand.toString()
                                           + " ] ",
                                           //" [ HONDA CITY ]",
                                           style: const TextStyle(

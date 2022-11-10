@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
@@ -11,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustPickUpTrackScreen extends StatefulWidget{
 
@@ -103,7 +106,15 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                 appBarCustomui(size),
                 trackServiceBoxUi(size),
                 serviceBookedDateUi(size),
-
+                InkWell(
+                  onTap: (){
+                    launchMapsUrl(double.parse(widget.latitude),double.parse(widget.longitude),
+                        10.056346, 76.291722);
+                  },
+                  child: Container(
+                      color: CustColors.cherry,
+                      child: Text(" Map ")),
+                ),
                 mechanicStartedToCustomerLoationUi(size),
                 mechanicReachedNearCustomerForPickUpUi(size),
                 mechanicPickedYourVehicleUi(size),
@@ -1873,5 +1884,46 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
 
     );
   }
+
+  static Future<void> openMap(BuildContext context, double lat, double lng) async {
+    String url = '';
+    String urlAppleMaps = '';
+    if (Platform.isAndroid) {
+      url = 'https://www.google.com/maps/search/?api=1&query=$lat,$lng&directionsmode=driving';
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url));
+      } else {
+        throw 'Could not launch $url';
+      }
+    } else {
+      urlAppleMaps = 'https://maps.apple.com/?q=$lat,$lng';
+      url = 'comgooglemaps://?saddr=&daddr=$lat,$lng&directionsmode=driving';
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url));
+      } else if (await canLaunchUrl(Uri.parse(urlAppleMaps))) {
+        await launchUrl(Uri.parse(urlAppleMaps));
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+  }
+
+  static void launchMapsUrl(
+      sourceLatitude,
+      sourceLongitude,
+      destinationLatitude,
+      destinationLongitude) async {
+    String mapOptions = [
+      'saddr=$sourceLatitude,$sourceLongitude',
+      'daddr=$destinationLatitude,$destinationLongitude',
+      'dir_action=navigate'
+    ].join('&');
+
+    final url = 'https://www.google.com/maps?$mapOptions';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }  }
 
 }

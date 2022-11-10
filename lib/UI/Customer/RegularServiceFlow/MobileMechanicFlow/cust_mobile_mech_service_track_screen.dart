@@ -6,12 +6,14 @@ import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularServicePayment/regular_payment_screen.dart';
+import 'package:auto_fix/UI/chat/chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustMobileTrackScreen extends StatefulWidget{
 
@@ -45,6 +47,8 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
   String customerAddress = "", mechanicAddress = "";
   String isCompleted = "-1";
   bool isLoading = true;
+  String customerId = "", mechanicId = "", customerProfileUrl = "", mechanicProfileUrl = "";
+  String callPhoneNumber = "";
 
   @override
   void initState() {
@@ -65,6 +69,8 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
 
       setState(() {
         //bookingDate = event.get("bookingDate");
+        mechanicProfileUrl = event.get('mechanicProfileUrl');
+        customerProfileUrl = event.get('customerProfileUrl');
         customerName = event.get("customerName");
         customerAddress = event.get("customerAddress");
         scheduledTime = event.get("scheduledTime");
@@ -83,6 +89,9 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
         isWorkFinishedTime = event.get("isWorkFinishedTime");
         isPayment = event.get("isPayment");
         isPaymentTime = event.get("isPaymentTime");
+        customerId = event.get('customerId');
+        mechanicId = event.get('mechanicId');
+        callPhoneNumber = event.get('mechanicPhone');
       });
 
       if(scheduledDate.isNotEmpty){
@@ -144,91 +153,147 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
             height: size.height,
             child: Center(child: CircularProgressIndicator(color: CustColors.light_navy)))
             :
-        Container(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                appBarCustomerUi(size),
-                trackServiceBoxUi(size),
-                serviceBookedUi(size),
-                isDriveStarted == "-1" ? driveStartedInactiveUi(size) : driveStartedCompletedUi(size),
-                isArrived == "-1" ? mechanicArrivedInactiveUi(size) : mechanicArrivedCompletedUi(size),
-                isWorkStarted == "-1" ? workStartedInactiveUi(size) : workStartedCompletedUi(size),
-                isWorkFinished == "-1" ? workFinishedInactiveUi(size) : workFinishedCompletedUi(size),
+        Column(
+          children: [
+            appBarCustomerUi(size),
+            Container(
+              height: size.height - 120,
+              child: ListView(
+                children: [
+                  serviceBookedUi(size),
+                  isDriveStarted == "-1" ? driveStartedInactiveUi(size) : driveStartedCompletedUi(size),
+                  isArrived == "-1" ? mechanicArrivedInactiveUi(size) : mechanicArrivedCompletedUi(size),
+                  isWorkStarted == "-1" ? workStartedInactiveUi(size) : workStartedCompletedUi(size),
+                  isWorkFinished == "-1" ? workFinishedInactiveUi(size) : workFinishedCompletedUi(size),
 
-                isWorkFinished == "-1" && isPayment == "-1" ?
-                paymentOptionInActiveUi(size)
-                    : isWorkFinished == "0" && isPayment == "5" ?
-                        paymentOptionFinishedUi(size)
-                    : paymentOptionActiveUi(size),
+                  isWorkFinished == "-1" && isPayment == "-1" ?
+                  paymentOptionInActiveUi(size)
+                      : isWorkFinished == "0" && isPayment == "5" ?
+                  paymentOptionFinishedUi(size)
+                      : paymentOptionActiveUi(size),
 
-                // one more widget on processing payment or waiting payment
+                  // one more widget on processing payment or waiting payment
 
-                completedUi(size),
+                  completedUi(size),
 
-                textButtonUi(size),
-              ],
+                  textButtonUi(size),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
   }
 
   Widget appBarCustomerUi(Size size){
-    return Container(
-      margin: EdgeInsets.only(
-         // left: size.width * 10 / 100,
-          //top: size.height * 3.3 / 100
-      ),
-      child: Stack(
-        children: [
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.arrow_back, color: const Color(0xff707070)),
-                  onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          )
-        ],
-      ),
+    return Row(
+      children: [
+        trackServiceBoxUi(size),
+      ],
     );
   }
 
   Widget trackServiceBoxUi(Size size){
-    return Padding(
-      padding: const EdgeInsets.only(left: 22.0,right: 22.0),
-      child: Container(
-        height: 83,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: CustColors.light_navy,
-        ),
-          child: Row(
+    return Container(
+      height: 90,
+      width: size.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(0),
+        color: CustColors.light_navy,
+      ),
+        child: ListTile(
+
+          leading: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: Container(
-                    height: 50,
-                    width:50,
-                    child: Image.asset('assets/image/ic_clock.png')),
+              Container(
+                margin: EdgeInsets.only(
+                  // left: size.width * 10 / 100,
+                  top: size.height * 2.5 / 100
+                ),
+                child: Stack(
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.arrow_back, color: const Color(0xffffffff)),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: Text('TRACK SERVICE',
-                style: TextStyle(
-                  fontFamily: 'SamsungSharpSans-Medium',
-                  fontSize: 16,
-                  //height: 30
-                  color: Colors.white,
-                ),),
+              Container(
+                  margin: EdgeInsets.only(
+                    // left: size.width * 10 / 100,
+                      top: size.height * 2.5 / 100
+                  ),
+                  height: 45,
+                  width: 45,
+                  child: Image.asset('assets/image/ic_clock.png')),
+            ],
+          ),
+          title: Container(
+            margin: EdgeInsets.only(
+              // left: size.width * 10 / 100,
+                top: size.height * 2.5 / 100
+            ),
+            child: Text('TRACK SERVICE',
+              style: TextStyle(
+                fontFamily: 'SamsungSharpSans-Medium',
+                fontSize: 16,
+                //height: 30
+                color: Colors.white,
+              ),),
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              InkWell(
+                onTap: (){
+                  //String callPhoneNumber = "90488878777";
+                  _callPhoneNumber(callPhoneNumber);
+                },
+                child: Container(
+                    margin: EdgeInsets.only(
+                        top: size.height * 2.5 / 100,
+                      right: size.height * 2.5 / 100
+                    ),
+                    child: Image.asset("assets/image/ic_call_blue_white.png")
+                ),
+              ),
+              InkWell(
+                onTap: (){
+                  print("chat mechanicId : $mechanicId  widget.bookingId '${widget.bookingId}' customerId : $customerId");
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ChatScreen(
+                            peerId: mechanicId,
+                            bookingId: '${widget.bookingId}',
+                            collectionName: 'Regular-MobileMech',
+                            currentUserId: customerId,
+                            peerName: mechanicName,
+                            peerImageUrl: mechanicProfileUrl,
+                            myImageUrl: customerProfileUrl,
+                          )));
+                },
+                child: Container(
+                    margin: EdgeInsets.only(
+                      // left: size.width * 10 / 100,
+                        top: size.height * 2.5 / 100
+                    ),
+                    child: Image.asset("assets/image/ic_chat_blue_white.png")
+                ),
               ),
             ],
           ),
+
         ),
-      //),
-    );
+      );
   }
 
   Widget serviceBookedUi(Size size){
@@ -1416,6 +1481,15 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
       ),
 
     );
+  }
+
+  void _callPhoneNumber(String phoneNumber) async {
+    var url = 'tel://$phoneNumber';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Error Occurred';
+    }
   }
 
   @override

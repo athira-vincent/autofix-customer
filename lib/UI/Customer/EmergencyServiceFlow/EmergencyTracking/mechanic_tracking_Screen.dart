@@ -71,7 +71,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
   String bookingIdEmergency="";
-  String customerId = "", mechanicId = "", mechanicName = "";
+  String customerId = "", mechanicId = "", mechanicName = "", mechanicProfileUrl = "", customerProfileUrl = "";
 
   @override
   void initState() {
@@ -111,6 +111,8 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         mechanicId = querySnapshot.get('mechanicID');
         mechanicName = querySnapshot.get('mechanicName');
         mechanicArrivalState = querySnapshot.get("mechanicArrivalState");
+        mechanicProfileUrl = querySnapshot.get('mechanicProfileUrl');
+        customerProfileUrl = querySnapshot.get('customerProfileUrl');
         print('mechanicArrivalState ++++ $mechanicArrivalState');
         if(mechanicArrivalState =="1")
           {
@@ -438,6 +440,8 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                                               collectionName: 'ResolMech',
                                               currentUserId: customerId,
                                               peerName: mechanicName,
+                                              myImageUrl: customerProfileUrl,
+                                              peerImageUrl: mechanicProfileUrl,
                                             )));
                                   },
                                   child: Column(

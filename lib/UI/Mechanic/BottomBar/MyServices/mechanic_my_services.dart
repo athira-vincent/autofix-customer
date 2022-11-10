@@ -74,9 +74,9 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
       mechanicId = shdPre.getString(SharedPrefKeys.userID).toString();
 
       print('userFamilyId'+authToken.toString());
-      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "2", mechanicId);
-      _mechanicHomeBloc.postMechanicCompletedServiceRequest("$authToken", "0", mechanicId);
-      _mechanicHomeBloc.postMechanicAllServiceRequest("$authToken", "undefined", mechanicId);
+      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "2", mechanicId, 0, 200);
+      _mechanicHomeBloc.postMechanicCompletedServiceRequest("$authToken", "0", mechanicId, 0, 200);
+      _mechanicHomeBloc.postMechanicAllServiceRequest("$authToken", "undefined", mechanicId, 0, 200);
     });
   }
 

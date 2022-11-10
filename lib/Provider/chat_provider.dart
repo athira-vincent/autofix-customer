@@ -38,7 +38,7 @@ class ChatProvider {
         .doc(groupChatId)
         //.collection(groupChatId)
         .collection("messages")
-        .orderBy(FirestoreConstants.timestamp, descending: true)
+        .orderBy(FirestoreConstants.timestamp, descending: true,)
         .limit(limit)
         .snapshots();
   }
@@ -78,7 +78,7 @@ class ChatProvider {
       'idTo': peerId,
       'type': type,
       'timestamp': DateTime.now()
-          .millisecondsSinceEpoch
+          .microsecondsSinceEpoch
           .toString(),
     });
   }

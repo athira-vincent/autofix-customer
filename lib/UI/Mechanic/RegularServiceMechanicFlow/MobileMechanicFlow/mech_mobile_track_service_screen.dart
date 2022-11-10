@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MechMobileTrackScreen extends StatefulWidget{
   final String bookingId;
@@ -315,7 +316,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20.0),
-                child: Text('TRACK SERVICE',
+                child: Text('TRACK SERVICE ***',
                 style: TextStyle(
                   fontFamily: 'SamsungSharpSans-Medium',
                   fontSize: 16,
@@ -558,7 +559,8 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     child: TextButton(
                       onPressed: () {
                         updateToCloudFirestoreDB("isDriveStarted","0");
-                        _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "9");
+                        _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "2");
+
                         //updateToCloudFirestoreDB("isDriveStartedTime","${DateFormat("hh:mm a").format(DateTime.now())}");
                         //------------------ take the current date and time & Update Firebase, change the status to
                       },
