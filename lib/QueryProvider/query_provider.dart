@@ -1327,71 +1327,141 @@ class QueryProvider {
     token,
     bookingId,
   ) async {
-    String _query = """        
-      {
-        bookingDetails(bookingId: ${int.parse(bookingId.toString())}) {
-          id
-          bookedDate
-          bookedTime
-          latitude
-          longitude
-          demoMechanicId
-          customerId
-          status
-          vehicleId
-          serviceId
-          bookService {
-            id
-            mechanicId
-            customerId
-            status
-            serviceId
-            bookMechanicId
-          }
-          vehicle {
-            id
-            brand
-            model
-            engine
-            year
-            plateNo
-            color
-            lastMaintenance
-            milege
-            vehiclePic
-            latitude
-            longitude
-            defaultVehicle
-            status
-          }
-          mechanic {
-            id
-            userCode
-            firstName
-            lastName
-            emailId
-            phoneNo
-            accountType
-            status
-            jwtToken
-            fcmToken
-            otpCode
-          }
-          customer {
-            id
-            userCode
-            firstName
-            lastName
-            emailId
-            phoneNo
-            accountType
-            status
-            jwtToken
-            fcmToken
-            otpCode
-          }
+    String _query = """
+  {
+  bookingDetails(bookingId: ${int.parse(bookingId.toString())}) {
+    id
+      bookingCode
+      reqType
+      bookStatus
+      totalPrice
+      tax
+      commission
+      serviceCharge
+      totalTime
+      serviceTime
+      latitude
+      longitude
+      extend
+      totalExt
+      extendTime
+      bookedDate
+      bookedTime
+      isRated
+      status
+      regularType
+      mechLatitude
+      mechLongitude
+      customerId
+      vehicleId
+      serviceId
+    bookService {
+        id
+        mechanicId
+        customerId
+        status
+        serviceId
+        bookMechanicId
+      service{
+        id
+          serviceName
+          minPrice
+      }
+    }
+    vehicle {
+      id
+      brand
+      model
+      engine
+      year
+      plateNo
+      lastMaintenance
+      milege
+      vehiclePic
+      color
+      latitude
+      longitude
+      defaultVehicle
+      status
+      userId
+    }
+    mechanic {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      userTypeId
+      accountType
+      jwtToken
+      status
+      mechanic{
+        id
+      }
+      mechanicService{
+        id
+        time
+        fee
+        service{
+          serviceName
         }
       }
+    }
+    customer {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      accountType
+      status
+      jwtToken
+      fcmToken
+      otpCode
+      customer{
+        id
+      }
+    }
+    review {
+      id
+      transType
+      rating
+      feedback
+      bookingId
+      orderId
+      status
+      order
+      {
+        customerId
+        commision
+        deliverDate
+      }
+      bookings{
+        bookedDate
+      }
+      productData{
+        description
+        id
+      }
+    }
+    isRate
+    mechanicService {
+      id
+      fee
+      time
+      service
+      {
+        categoryId
+        serviceName
+      }
+      status
+      userId
+      serviceId
+    }
+  }
+}         
     """;
     log(_query);
     return await GqlClient.I.query01(
@@ -3321,45 +3391,44 @@ class QueryProvider {
 
   postMechServiceDetailsRequest(token, bookingId) async {
     String _query = """
-      {
+    {
     bookingDetails(bookingId: $bookingId) {
       id
-      bookingCode
-      reqType
-      bookStatus
-      totalPrice
-      tax
-      commission
-      serviceCharge
-      totalTime
-      serviceTime
-      latitude
-      longitude
-      extend
-      totalExt
-      extendTime
-      bookedDate
-      bookedTime
-      isRated
-      status
-      regularType
-      mechLatitude
-      mechLongitude
-      demoMechanicId
-      customerId
-      vehicleId
-      serviceId
-      bookService {
-        id
-        mechanicId
-        customerId
+        bookingCode
+        reqType
+        bookStatus
+        totalPrice
+        tax
+        commission
+        serviceCharge
+        totalTime
+        serviceTime
+        latitude
+        longitude
+        extend
+        totalExt
+        extendTime
+        bookedDate
+        bookedTime
+        isRated
         status
+        regularType
+        mechLatitude
+        mechLongitude
+        customerId
+        vehicleId
         serviceId
-        bookMechanicId
+      bookService {
+          id
+          mechanicId
+          customerId
+          status
+          serviceId
+          bookMechanicId
         service{
           id
-          serviceName
-          minPrice
+            serviceName
+            minPrice
         }
       }
       vehicle {
@@ -3372,6 +3441,7 @@ class QueryProvider {
         lastMaintenance
         milege
         vehiclePic
+        color
         latitude
         longitude
         defaultVehicle
@@ -3385,13 +3455,20 @@ class QueryProvider {
         lastName
         emailId
         phoneNo
+        userTypeId
         accountType
-        status
         jwtToken
-        fcmToken
-        otpCode
-        customer{
+        status
+        mechanic{
           id
+        }
+        mechanicService{
+          id
+          time
+          fee
+          service{
+            serviceName
+          }
         }
       }
       customer {
@@ -3409,6 +3486,42 @@ class QueryProvider {
         customer{
           id
         }
+      }
+      review {
+        id
+        transType
+        rating
+        feedback
+        bookingId
+        orderId
+        status
+        order
+        {
+          customerId
+          commision
+          deliverDate
+        }
+        bookings{
+          bookedDate
+        }
+        productData{
+          description
+          id
+        }
+      }
+      isRate
+      mechanicService {
+        id
+        fee
+        time
+        service
+        {
+          categoryId
+          serviceName
+        }
+        status
+        userId
+        serviceId
       }
     }
   }
