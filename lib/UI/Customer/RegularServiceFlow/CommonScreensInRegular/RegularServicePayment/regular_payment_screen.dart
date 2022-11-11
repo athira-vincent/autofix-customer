@@ -8,7 +8,13 @@ import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:isw_mobile_sdk/isw_mobile_sdk.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../../Repository/repository.dart';
+import '../../../MainLandingPageCustomer/customer_main_landing_screen.dart';
 
 class RegularPaymentScreen extends StatefulWidget {
 
@@ -38,6 +44,8 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
   String authToken="";
   String userName="";
 
+  String userid = "";
+
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
 
@@ -54,8 +62,10 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
+
       //bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('PaymentScreen authToken>>>>>>>>> ' + authToken.toString());
+      userid = shdPre.getString(SharedPrefKeys.userID).toString();
       //print('PaymentScreen bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
 
     });
@@ -117,7 +127,9 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
                         onTap: (){
                           print("On Press Continue");
 
-                          changeScreen(_selectedOptionValue);
+                          initPlatformState();
+
+                         // changeScreen(_selectedOptionValue);
                         },
                       )
                     ],
@@ -281,6 +293,88 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     }
 
 
+  }
+
+  Future<void> initPlatformState() async {
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    pay(context);
+    try {
+      String merchantId = "IKIABFC88BB635BAE1C834A37CF63FB68B4D19CE8742";
+      String merchantCode = "MX104222";
+      String merchantKey = "ELjqMeFJxYHAPDM";
+
+      var config = IswSdkConfig(merchantId, merchantKey, merchantCode, "566");
+
+      await IswMobileSdk.initialize(config, Environment.TEST);
+    } on PlatformException {}
+  }
+
+  Future<void> pay(BuildContext context) async {
+    String customerId = userid,
+        customerName = userName, //replace with your customer Name
+        customerEmail = "cust@gmail.com", //replace with your customer Email
+        customerMobile = "8547101855", //replace with your customer Mobile Nu
+        reference = "pay" + DateTime.now().millisecond.toString();
+
+    int amount;
+    // initialize amount
+    // if (_phoneController.text.isEmpty) {
+    //   //amount = 2500 * 100;
+    //   amount = 0;
+    // } else {
+    //   amount = int.parse("100") * 100;
+    // }
+
+    /// here real amount should be added
+
+    amount = int.parse("10") * 100;
+
+
+    // create payment info
+    IswPaymentInfo iswPaymentInfo = IswPaymentInfo(customerId, customerName,
+        customerEmail, customerMobile, reference, amount);
+
+    // trigger payment
+    var result = await IswMobileSdk.pay(iswPaymentInfo);
+
+    var message;
+    if (result.hasValue) {
+      Repository()
+          .fetchpaymentsucess(null, "10", null,
+          result.value.transactionReference, widget.bookingId)
+          .then((value) => {
+        if (value.data!.paymentCreate.id.toString().isNotEmpty)
+          {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => CustomerMainLandingScreen()))
+          }
+        else
+          {print("popcontext"), Navigator.pop(context)}
+      });
+    } else {
+      message = "You cancelled the transaction pls try again";
+    }
+
+    message = "You completed txn using: " +
+        result.value.channel.name +
+        result.value.channel.index.toString() +
+        result.value.amount.toString() +
+        result.value.isSuccessful.toString() +
+        result.value.responseCode +
+        result.value.responseDescription +
+        result.value.transactionReference;
+
+    print("transactioncredntials");
+    print(result.value.channel.name);
+    print(result.value.amount);
+    print(result.value.isSuccessful);
+    print(result.value.responseCode);
+    print(result.value.responseDescription);
+    print(result.value.transactionReference);
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      duration: const Duration(seconds: 3),
+    ));
   }
 
 }
