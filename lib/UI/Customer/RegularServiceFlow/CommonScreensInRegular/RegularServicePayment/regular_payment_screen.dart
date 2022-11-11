@@ -347,6 +347,7 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
           {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => CustomerMainLandingScreen()))
+
           }
         else
           {print("popcontext"), Navigator.pop(context)}
