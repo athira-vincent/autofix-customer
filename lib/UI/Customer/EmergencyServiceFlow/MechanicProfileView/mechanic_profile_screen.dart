@@ -490,6 +490,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                     textAlign: TextAlign.center,
                     style: Styles.experienceTextBlack,
                   ),
+                  SizedBox(height: 3,),
                   Padding(
                     padding: const EdgeInsets.all(4),
                     child: Stack(
@@ -498,7 +499,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                         Container(
                           height: 60,
                           width: 60,
-                          color: Colors.white,
+                          color: CustColors.metallic_blue,
                           child: CustomPaint(
                             painter: CurvePainter(),
                           ),

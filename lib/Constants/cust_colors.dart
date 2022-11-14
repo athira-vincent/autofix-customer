@@ -78,5 +78,7 @@ class CustColors {
   static const chatcolor= Color(0xffE6E6E6);
   static const grey_04= Color(0xffbdc5dc);
   static const addresstilecolor=Color(0xffd4d4d8);
+  static const metallic_blue=Color(0xff4f6b8e);
+
 
 }

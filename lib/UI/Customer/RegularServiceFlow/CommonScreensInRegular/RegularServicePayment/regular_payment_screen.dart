@@ -117,9 +117,9 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
                   padding: EdgeInsets.only(top: size.height * 1 / 100),
                   child: Column(
                     children: [
-                      paymentOptions(size, "Direct payment", "assets/image/img_payment_cash.png",1),
+                        paymentOptions(size, "Direct payment", "assets/image/img_payment_cash.png",1),
                       //  paymentOptions(size, "UPI", "assets/image/img_payment_upi.png",2),
-                      //  paymentOptions(size, "Credit/Debit /Atm cards", "assets/image/img_payment_card.png",3),
+                        paymentOptions(size, "Credit/Debit /Atm cards", "assets/image/img_payment_card.png",3),
                       // paymentOptions(size, "Netbanking", "assets/image/img_payment_netbank.png",4),
 
                       InkWell(
@@ -127,9 +127,7 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
                         onTap: (){
                           print("On Press Continue");
 
-                          initPlatformState();
-
-                         // changeScreen(_selectedOptionValue);
+                          changeScreen(_selectedOptionValue);
                         },
                       )
                     ],
@@ -286,13 +284,13 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
                   firebaseCollection: widget.firebaseCollection,
                   bookingId: widget.bookingId,
                 )));
-      }
+      }else if(selectedOptionValue == 3){
+      initPlatformState();
+    }
     else if( selectedOptionValue == -1)
     {
       SnackBarWidget().setMaterialSnackBar( "Please choose a payment method", scaffoldKey);
     }
-
-
   }
 
   Future<void> initPlatformState() async {

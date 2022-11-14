@@ -149,7 +149,6 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -190,9 +189,9 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                       child: ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: _BookingDetails!.bookService!.length,
+                          itemCount: _BookingDetails!.mechanicService!.length,
                           itemBuilder: (BuildContext context, int index){
-                            return listViewItems(_BookingDetails!.bookService![index]);
+                            return listViewItems(_BookingDetails!.mechanicService![index]);
                           }),
                     ),
                     Container(
@@ -543,7 +542,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
     );
   }
 
-  Widget listViewItems([BookService? bookService]){
+  Widget listViewItems(MechanicService mechanicService){
     return Column(
       children: [
         Padding(
@@ -563,7 +562,8 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                               child: Padding(
                                 padding: const EdgeInsets.only(left:08.0),
                                 child: Text(
-                                  bookService!.service!.serviceName.toString(),    //'Steering',
+                                  mechanicService.service!.serviceName.toString(),
+                                  //bookService!.service!.serviceName.toString(),    //'Steering',
                                   softWrap: true,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -612,8 +612,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                           Padding(
                             padding: const EdgeInsets.only(left: 05.0),
                             child: Text(
-                              // '30',
-                              bookService.service!.minPrice.toString(),
+                              mechanicService.fee.toString(),   //bookService.service!.minPrice.toString(),      // '30',
                               style: TextStyle(
                                   fontSize: 10,
                                   color: Colors.white
