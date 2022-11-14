@@ -114,7 +114,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
   _getLocation() async {
     Position position = await
     Geolocator.getCurrentPosition(desiredAccuracy:
-    LocationAccuracy.high);
+    LocationAccuracy.bestForNavigation);
     debugPrint('location: ${position.latitude}');
     List<Placemark> addresses = await
     placemarkFromCoordinates(position.latitude,position.longitude);

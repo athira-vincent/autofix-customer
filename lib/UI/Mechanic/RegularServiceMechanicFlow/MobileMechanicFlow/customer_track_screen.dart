@@ -74,7 +74,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
   );
   double totalDistance = 0.0;
   double speedOfMechanic = 0.0;
-  final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
+
   final ServiceStatusUpdateBloc _serviceStatusUpdateBloc = ServiceStatusUpdateBloc();
   double _setValue(double value) {
     return value * per + value;
@@ -156,8 +156,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
   }
 
   _listenServiceListResponse() {
-
-    _mechanicOrderStatusUpdateBloc.MechanicOrderStatusUpdateResponse.listen((value) {
+    _serviceStatusUpdateBloc.postStatusUpdate.listen((value) {
       if (value.status == "error") {
         setState(() {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -174,6 +173,14 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
               context,
               MaterialPageRoute(
                   builder: (context) => MechanicStartServiceScreen()));*/
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.data!.regularMechStatusUpdate!.msg.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          ));
+          Navigator.pop(context);
         });
       }
     });
@@ -614,7 +621,6 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
                                                     authToken, bookingId, "3");*/
                                                 _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "3");
                                                 updateToCloudFirestoreDB();
-                                                Navigator.pop(context);
                                               }
                                             },
                                             child: Container(
@@ -838,7 +844,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
   @override
   void dispose() {
     super.dispose();
-    _mechanicOrderStatusUpdateBloc.dispose();
+    _serviceStatusUpdateBloc.dispose();
   }
 
 }

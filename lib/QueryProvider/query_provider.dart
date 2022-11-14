@@ -3550,9 +3550,50 @@ class QueryProvider {
     bookStatus,
   ) async {
     String _query = """
-         mutation {
+        mutation {
       regularMechStatusUpdate(state: $bookStatus, bookId: $bookingId) {
-        message
+        msg {
+          message
+        }
+        bookingData {
+          id
+          bookingCode
+          reqType
+          bookStatus
+          totalPrice
+          tax
+          commission
+          serviceCharge
+          totalTime
+          serviceTime
+          latitude
+          longitude
+          mechLatitude
+          mechLongitude
+          extend
+          totalExt
+          extendTime
+          bookedDate
+          bookedTime
+          isRated
+          status
+          customerId
+          mechanicId
+          vehicleId
+          regularType
+          mechanic{
+            id
+          }
+          customer{
+            id
+          }
+          vehicle{
+            id
+          }
+          bookService{
+            id
+          }
+        }
       }
     }
     """;

@@ -228,132 +228,187 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
             width: size.width,
             height: size.height,
             child: Center(child: CircularProgressIndicator(color: CustColors.light_navy)))
-        :
-        Container(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                appBarCustomerUi(size),
-                trackServiceBoxUi(size),
-                serviceBookedUi(size),
-                isBookedDate == "-1" && isDriveStarted == "-1"?
+          :
+        Column(
+          children: [
+            appBarCustomerUi(size),
+            Container(
+              height: size.height - 120,
+              child: ListView(
+                children: [
+                  serviceBookedUi(size),
+                  isBookedDate == "-1" && isDriveStarted == "-1"?
                   goToCustomerInactiveUi(size)
-                    : isBookedDate == "0" && isDriveStarted == "-1"?
-                        goToCustomerActiveWaitingUi(size)                       // show ready for service button
-                       // : isBookedDate == "0" && isDriveStarted == "0" ?
-                        //  goToCustomerActiveTrackUi(size)                     // show map button
-                          : goToCustomerFinishedUi(size),                       // show the details like start time and location
-                isDriveStarted == "-1" && isArrived == "-1" ?
+                      : isBookedDate == "0" && isDriveStarted == "-1"?
+                  goToCustomerActiveWaitingUi(size)                       // show ready for service button
+                  // : isBookedDate == "0" && isDriveStarted == "0" ?
+                  //  goToCustomerActiveTrackUi(size)                     // show map button
+                      : goToCustomerFinishedUi(size),                       // show the details like start time and location
+                  isDriveStarted == "-1" && isArrived == "-1" ?
                   mechanicIsArrivedInActiveUi(size)
-                  :  isDriveStarted == "0" && isArrived == "-1" ?
-                      mechanicIsArrivedActiveUi(size)
+                      :  isDriveStarted == "0" && isArrived == "-1" ?
+                  mechanicIsArrivedActiveUi(size)
                       : mechanicIsArrivedFinishedUi(size),
-                isArrived == "-1" && isWorkStarted == "-1"  ?
+                  isArrived == "-1" && isWorkStarted == "-1"  ?
                   startWorkInActiveUi(size)
-                    : isArrived == "0" && isWorkStarted == "-1" ?
-                      startWorkActiveUi(size)
-                    : startWorkFinishedUi(size),
+                      : isArrived == "0" && isWorkStarted == "-1" ?
+                  startWorkActiveUi(size)
+                      : startWorkFinishedUi(size),
 
-                isWorkStarted == "-1" && isWorkFinished == "-1" ?
-                    finishedWorkInActiveUi(size)
-                    : isWorkStarted == "0" && isWorkFinished == "-1" ?
-                      finishedWorkActiveUi(size)
-                    : finishedWorkFinishedUi(size),
+                  isWorkStarted == "-1" && isWorkFinished == "-1" ?
+                  finishedWorkInActiveUi(size)
+                      : isWorkStarted == "0" && isWorkFinished == "-1" ?
+                  finishedWorkActiveUi(size)
+                      : finishedWorkFinishedUi(size),
 
-                isWorkFinished == "-1" && isPaymentRequested == "-1" ?
-                      requestPaymentInActiveUi(size)
-                    : isWorkFinished == "0" && isPaymentRequested == "-1" ?
-                      requestPaymentActiveUi(size)
-                    : requestPaymentFinishedUi(size),
+                  isWorkFinished == "-1" && isPaymentRequested == "-1" ?
+                  requestPaymentInActiveUi(size)
+                      : isWorkFinished == "0" && isPaymentRequested == "-1" ?
+                  requestPaymentActiveUi(size)
+                      : requestPaymentFinishedUi(size),
 
-                isPaymentRequested == "-1" && isPayment == "-1" ?
+                  isPaymentRequested == "-1" && isPayment == "-1" ?
                   paymentOptionInActiveUi(size)
-                  : isPaymentRequested == "0" && isPayment == "-1" ?
-                    paymentOptionWaitingActiveUi(size)
-                  : isPaymentRequested == "0" && isPayment == "1" ?
-                    paymentOptionActiveUi(size)
-                  : paymentOptionFinishedUi(size),
+                      : isPaymentRequested == "0" && isPayment == "-1" ?
+                  paymentOptionWaitingActiveUi(size)
+                      : isPaymentRequested == "0" && isPayment == "1" ?
+                  paymentOptionActiveUi(size)
+                      : paymentOptionFinishedUi(size),
 
-                /*isWorkFinished == "-1" && isPaymentRequested == "-1" ?
-                requestPaymentInActiveUi(size)
-                    : isWorkFinished == "0" && isPaymentRequested == "-1" ?
-                requestPaymentActiveUi(size)
-                    : isWorkFinished == "0" && isPayment == "0" ?*/
-                /*paymentOptionWaitingActiveUi(size)
-                    : isWorkFinished == "0" && isPayment == "1" ?
-                paymentOptionActiveUi(size)
-                    : paymentOptionFinishedUi(size),*/
+                  /*isWorkFinished == "-1" && isPaymentRequested == "-1" ?
+                  requestPaymentInActiveUi(size)
+                      : isWorkFinished == "0" && isPaymentRequested == "-1" ?
+                  requestPaymentActiveUi(size)
+                      : isWorkFinished == "0" && isPayment == "0" ?*/
+                  /*paymentOptionWaitingActiveUi(size)
+                      : isWorkFinished == "0" && isPayment == "1" ?
+                  paymentOptionActiveUi(size)
+                      : paymentOptionFinishedUi(size),*/
 
-                /*isWorkFinished == "-1" && isPayment == "-1" ?
-                paymentOptionInActiveUi(size)
-                    : (isWorkFinished == "0" && isPayment == "-1") || (isWorkFinished == "0" && isPayment == "0") ?
-                paymentOptionWaitingActiveUi(size)
-                    : isWorkFinished == "0" && isPayment == "1" ?
-                paymentOptionActiveUi(size)
-                    : paymentOptionFinishedUi(size),*/
-                completedUi(size),
-                textButtonUi(size),
-              ],
-            ),
-          ),
+                  /*isWorkFinished == "-1" && isPayment == "-1" ?
+                  paymentOptionInActiveUi(size)
+                      : (isWorkFinished == "0" && isPayment == "-1") || (isWorkFinished == "0" && isPayment == "0") ?
+                  paymentOptionWaitingActiveUi(size)
+                      : isWorkFinished == "0" && isPayment == "1" ?
+                  paymentOptionActiveUi(size)
+                      : paymentOptionFinishedUi(size),*/
+                  completedUi(size),
+                  textButtonUi(size),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );
   }
 
   Widget appBarCustomerUi(Size size){
-    return Container(
-      margin: EdgeInsets.only(
-         // left: size.width * 10 / 100,
-          //top: size.height * 3.3 / 100
-      ),
-      child: Stack(
-        children: [
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.arrow_back, color: const Color(0xff707070)),
-                onPressed: () { Navigator.pop(context); },
-              )
-            ],
-          )
-        ],
-      ),
+    return Row(
+      children: [
+        trackServiceBoxUi(size),
+      ],
     );
   }
 
   Widget trackServiceBoxUi(Size size){
-    return Padding(
-      padding: const EdgeInsets.only(left: 22.0,right: 22.0),
-      child: Container(
-        height: 83,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: CustColors.light_navy,
+    return Container(
+      height: 80,
+      width: size.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(0),
+        color: CustColors.light_navy,
+      ),
+      child: ListTile(
+
+        leading: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              margin: EdgeInsets.only(
+                // left: size.width * 10 / 100,
+                  top: size.height * 2.5 / 100
+              ),
+              child: Stack(
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.arrow_back, color: const Color(0xffffffff)),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Container(
+                margin: EdgeInsets.only(
+                  // left: size.width * 10 / 100,
+                    top: size.height * 2.5 / 100
+                ),
+                height: 45,
+                width: 45,
+                child: Image.asset('assets/image/ic_clock.png')),
+          ],
         ),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: Container(
-                    height: 50,
-                    width:50,
-                    child: Image.asset('assets/image/ic_clock.png')),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: Text('TRACK SERVICE ***',
-                style: TextStyle(
-                  fontFamily: 'SamsungSharpSans-Medium',
-                  fontSize: 16,
-                  //height: 30
-                  color: Colors.white,
-                ),),
-              ),
-            ],
+        title: Container(
+          margin: EdgeInsets.only(
+            // left: size.width * 10 / 100,
+              top: size.height * 2.5 / 100
           ),
+          child: Text('TRACK SERVICE',
+            style: TextStyle(
+              fontFamily: 'SamsungSharpSans-Medium',
+              fontSize: 16,
+              //height: 30
+              color: Colors.white,
+            ),),
         ),
-      //),
+        /*trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            InkWell(
+              onTap: (){
+                //String callPhoneNumber = "90488878777";
+                _callPhoneNumber(callPhoneNumber);
+              },
+              child: Container(
+                  margin: EdgeInsets.only(
+                      top: size.height * 2.5 / 100,
+                      right: size.height * 2.5 / 100
+                  ),
+                  child: Image.asset("assets/image/ic_call_blue_white.png")
+              ),
+            ),
+            InkWell(
+              onTap: (){
+                print("chat mechanicId : $mechanicId  widget.bookingId '${widget.bookingId}' customerId : $customerId");
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ChatScreen(
+                          peerId: mechanicId,
+                          bookingId: '${widget.bookingId}',
+                          collectionName: 'Regular-MobileMech',
+                          currentUserId: customerId,
+                          peerName: mechanicName,
+                          peerImageUrl: mechanicProfileUrl,
+                          myImageUrl: customerProfileUrl,
+                        )));
+              },
+              child: Container(
+                  margin: EdgeInsets.only(
+                    // left: size.width * 10 / 100,
+                      top: size.height * 2.5 / 100
+                  ),
+                  child: Image.asset("assets/image/ic_chat_blue_white.png")
+              ),
+            ),
+          ],
+        ),*/
+      ),
     );
   }
 
