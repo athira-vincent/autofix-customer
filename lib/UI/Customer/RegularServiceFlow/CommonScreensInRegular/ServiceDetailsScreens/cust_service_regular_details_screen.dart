@@ -2,8 +2,10 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularRateMechanic/regular_rate_mechanic_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/cust_mobile_mech_service_track_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/cust_pick_up_track_service_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/x_cust_pick_up_track_service_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_track_service_screen.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_bloc.dart';
@@ -141,10 +143,9 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
 
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
-
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -184,9 +185,9 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                           child: ListView.builder(
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: _BookingDetails!.bookService!.length,
+                              itemCount: _BookingDetails!.mechanicService!.length,
                               itemBuilder: (BuildContext context, int index){
-                                return listViewItems(_BookingDetails!.bookService![index]);
+                                return listViewItems(_BookingDetails!.mechanicService![index]);
                               }),
                         ),
                         Container(
@@ -468,9 +469,49 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                       child:Image.asset('assets/image/group_2974.png'),
                     ),
                   ),
-                  _BookingDetails!.reqType == 2 ?
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+
+                      _BookingDetails!.bookStatus.toString() == "8" && _BookingDetails!.isRate == false
+                          ? Padding(
+                        padding: const EdgeInsets.only(left: 12.0,right: 0.0,top: 60.0),
+                        child: SizedBox(
+                          width:100,
+                          height: 40,
+                          child: TextButton(
+                            onPressed: () async {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => RegularRateMechanicScreen(
+                                        bookingId: widget.bookingId,
+                                        firebaseCollection: widget.firebaseCollection,
+                                      )));
+                            }, child: Text('RATE',
+                            style: TextStyle(
+                              fontFamily: 'SamsungSharpSans-Medium',
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
+                          ),
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              primary: CustColors.light_navy,
+                              shape:
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                          : Container(),
+
+                      _BookingDetails!.reqType == 2 ?
                       Padding(
-                        padding: const EdgeInsets.only(left: 255.0,right: 22.0,top: 60.0),
+                        padding: const EdgeInsets.only(left: 0.0,right: 12.0,top: 60.0),
                         child: SizedBox(
                           width:100,
                           height: 40,
@@ -481,15 +522,8 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => CustPickUpTrackScreen(
-                                        bookedId: "${widget.bookingId}",
-                                        //bookedDate: '${_BookingDetails!.bookedDate}',
-                                        //bookedDate: _homeCustomerBloc.dateMonthConverter(DateFormat().parse('${_BookingDetails!.bookedDate}')),
-                                        bookedDate: bookingDate,
-                                        latitude: '${_BookingDetails!.latitude}',
-                                        longitude:'${_BookingDetails!.longitude}',
-                                        //mechanicAddress: '${_BookingDetails!.mechanic!.firstName}',
-                                        mechanicName:  '${_BookingDetails!.mechanic!.firstName}',
-                                        pickingDate: bookingDate,
+                                        bookingId: _BookingDetails!.id.toString(),
+                                        bookingDate: bookingDate,
                                       ),
                                     ));
                               }else if(_BookingDetails!.regularType.toString() == "2"){       //mobile Mechanic
@@ -536,10 +570,13 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                             ),
                           ),
                         ),
-                  )
-                        :
+                      )
+                          :
                       Container(),
-                  SizedBox(height: 50)
+                    ],
+                  ),
+
+                  //SizedBox(height: 50)
               ],
           ),
         ),
@@ -548,7 +585,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
   }
 
 
-  Widget listViewItems([BookService? bookService]){
+  Widget listViewItems(MechanicService mechanicService){
     return Column(
       children: [
         Padding(
@@ -568,7 +605,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                               child: Padding(
                                 padding: const EdgeInsets.only(left:08.0),
                                 child: Text(
-                                  bookService!.service!.serviceName.toString(),    //'Steering',
+                                  mechanicService.service!.serviceName.toString(), //bookService!.service!.serviceName.toString(),    //'Steering',
                                   softWrap: true,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -617,8 +654,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                           Padding(
                             padding: const EdgeInsets.only(left: 05.0),
                             child: Text(
-                              // '30',
-                              bookService.service!.minPrice.toString(),
+                              mechanicService.fee.toString(),   //bookService.service!.minPrice.toString(),  // '30',
                               style: TextStyle(
                                   fontSize: 10,
                                   color: Colors.white
@@ -633,7 +669,6 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
             ],
           ),
         ),
-        //),
       ],
     );
   }

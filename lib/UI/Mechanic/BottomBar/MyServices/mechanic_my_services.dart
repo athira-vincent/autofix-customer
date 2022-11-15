@@ -1097,7 +1097,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                             style: Styles.badgeTextStyle2,
                                                           ),
                                                         ),
-                                                        SizedBox(height: 5,),
+                                                        SizedBox(height: 3,),
                                                         Stack(
                                                           alignment: Alignment.topCenter,
                                                           children: [

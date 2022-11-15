@@ -116,11 +116,17 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       yourItemList.add({
         "serviceCategoryId": '${widget.selectedService[i].categoryId}',
         "serviceId" : '${widget.selectedService[i].id}',
+        "serviceName" : '${widget.mechanicListData!.mechanicService[i].service!.serviceName}',
+        "serviceCost" : '${widget.mechanicListData!.mechanicService[i].fee}'
+      });
+      totalAmount = totalAmount + int.parse(widget.mechanicListData!.mechanicService[i].fee);
+    }
+    /*yourItemList.add({
+        "serviceCategoryId": '${widget.selectedService[i].categoryId}',
+        "serviceId" : '${widget.selectedService[i].id}',
         "serviceName" : '${widget.selectedService[i].serviceName}',
         "serviceCost" : '${widget.selectedService[i].maxPrice}'
-      });
-      totalAmount = totalAmount + int.parse(widget.selectedService[i].maxPrice);
-    }
+      });*/
 
     print(' >>>>>>>>>>>>>> yourItemList \n $yourItemList >>>_RegularMechanicProfileViewScreenState yourItemList');
 
@@ -251,7 +257,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         "mechanicFcmToken" : "${widget.mechanicListData!.fcmToken}",
         "serviceList" : FieldValue.arrayUnion(yourItemList),
         "serviceTotalAmount" : '${totalAmount}',
-        "vehicleId": "${mechanicBooking!.vehicle!.id}",
+        "vehicleId": "${mechanicBooking.vehicle!.id}",
         "vehicleName": "${mechanicBooking.vehicle!.brand} [ ${mechanicBooking.vehicle!.model} ]",
         "vehiclePlateNumber" : "${mechanicBooking.vehicle!.plateNo}",
         "vehicleColor" : "${mechanicBooking.vehicle!.color}",
@@ -265,6 +271,8 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         'isStartedFromLocationForDropOff': "-1",
         'isDropOff': "-1",
         'isPayment': "-1",
+        'isPaymentRequested': "-1",
+        'isPaymentRequestedTime': "",
         'latitude': '${widget.latitude}',
         'longitude': '${widget.longitude}'
       })
@@ -328,6 +336,8 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "isWorkStartedTime" : "",
       "isWorkFinished" : "-1",
       "isWorkFinishedTime" : "",
+      'isPaymentRequested': "-1",
+      'isPaymentRequestedTime': "",
       "isPayment": "-1",
       "isPaymentTime": "",
     })
@@ -387,6 +397,8 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "isWorkStarted" : "-1",
       "isWorkFinished" : "-1",
       "isPickedUpVehicle": "-1",
+      'isPaymentRequested': "-1",
+      'isPaymentRequestedTime': "",
       "isPayment": "-1",
       "paymentRecieved" : "-1",
       "completed" : "-1",
@@ -546,6 +558,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                     textAlign: TextAlign.center,
                     style: Styles.experienceTextBlack,
                   ),
+                  SizedBox(height: 3,),
                   Padding(
                     padding: const EdgeInsets.all(4),
                     child: Stack(
@@ -555,7 +568,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                         Container(
                           height: 60,
                           width: 60,
-                          color: Colors.white,
+                          color: CustColors.metallic_blue,
                           child: CustomPaint(
                             painter: CurvePainter(),
                           ),
@@ -946,7 +959,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                             children: [
                               Row(
                                 children: [
-                                  Text('${widget.mechanicListData?.mechanicService?[index].service?.serviceName}',
+                                  Text('${widget.mechanicListData?.mechanicService[index].service?.serviceName}',
                                     maxLines: 2,
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.visible,

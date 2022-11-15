@@ -1328,8 +1328,8 @@ class QueryProvider {
     bookingId,
   ) async {
     String _query = """
-  {
-  bookingDetails(bookingId: ${int.parse(bookingId.toString())}) {
+{
+  bookingDetails(bookingId: $bookingId) {
     id
       bookingCode
       reqType
@@ -1357,15 +1357,13 @@ class QueryProvider {
       serviceId
     bookService {
         id
-        mechanicId
-        customerId
         status
         serviceId
         bookMechanicId
       service{
         id
-          serviceName
-          minPrice
+        serviceName
+        minPrice
       }
     }
     vehicle {
@@ -1401,11 +1399,6 @@ class QueryProvider {
       }
       mechanicService{
         id
-        time
-        fee
-        service{
-          serviceName
-        }
       }
     }
     customer {
@@ -1461,7 +1454,7 @@ class QueryProvider {
       serviceId
     }
   }
-}         
+}        
     """;
     log(_query);
     return await GqlClient.I.query01(
@@ -3420,15 +3413,13 @@ class QueryProvider {
         serviceId
       bookService {
           id
-          mechanicId
-          customerId
           status
           serviceId
           bookMechanicId
         service{
           id
-            serviceName
-            minPrice
+          serviceName
+          minPrice
         }
       }
       vehicle {
@@ -3464,11 +3455,6 @@ class QueryProvider {
         }
         mechanicService{
           id
-          time
-          fee
-          service{
-            serviceName
-          }
         }
       }
       customer {
@@ -3564,9 +3550,50 @@ class QueryProvider {
     bookStatus,
   ) async {
     String _query = """
-         mutation {
+        mutation {
       regularMechStatusUpdate(state: $bookStatus, bookId: $bookingId) {
-        message
+        msg {
+          message
+        }
+        bookingData {
+          id
+          bookingCode
+          reqType
+          bookStatus
+          totalPrice
+          tax
+          commission
+          serviceCharge
+          totalTime
+          serviceTime
+          latitude
+          longitude
+          mechLatitude
+          mechLongitude
+          extend
+          totalExt
+          extendTime
+          bookedDate
+          bookedTime
+          isRated
+          status
+          customerId
+          mechanicId
+          vehicleId
+          regularType
+          mechanic{
+            id
+          }
+          customer{
+            id
+          }
+          vehicle{
+            id
+          }
+          bookService{
+            id
+          }
+        }
       }
     }
     """;

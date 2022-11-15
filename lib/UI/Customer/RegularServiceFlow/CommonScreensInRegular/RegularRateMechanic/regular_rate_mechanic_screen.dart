@@ -92,6 +92,13 @@ class _RegularRateMechanicScreenState extends State<RegularRateMechanicScreen> {
       }else{
         setState(() {
           //_isLoadingPage = true;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.data!.addRating!.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          ));
           setDeactivate();
 
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
@@ -108,6 +115,7 @@ class _RegularRateMechanicScreenState extends State<RegularRateMechanicScreen> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(

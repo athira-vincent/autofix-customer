@@ -49,18 +49,19 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
   bool isLoading = true;
   String customerId = "", mechanicId = "", customerProfileUrl = "", mechanicProfileUrl = "";
   String callPhoneNumber = "";
+  String isPaymentRequested = "-1", isPaymentRequestedTime = "";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    listenToCloudFirestoreDB();
+    bookingDate = widget.bookingDate;
     Timer(const Duration(seconds: 2), () {
       setState(() {
         isLoading = false;
       });
     });
-    listenToCloudFirestoreDB();
-    bookingDate = widget.bookingDate;
   }
 
   Future<void> listenToCloudFirestoreDB() async {
@@ -92,6 +93,8 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
         customerId = event.get('customerId');
         mechanicId = event.get('mechanicId');
         callPhoneNumber = event.get('mechanicPhone');
+        isPaymentRequested = event.get("isPaymentRequested");
+        isPaymentRequestedTime = event.get("isPaymentRequestedTime");
       });
 
       if(scheduledDate.isNotEmpty){
@@ -166,10 +169,12 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                   isWorkStarted == "-1" ? workStartedInactiveUi(size) : workStartedCompletedUi(size),
                   isWorkFinished == "-1" ? workFinishedInactiveUi(size) : workFinishedCompletedUi(size),
 
-                  isWorkFinished == "-1" && isPayment == "-1" ?
-                  paymentOptionInActiveUi(size)
-                      : isWorkFinished == "0" && isPayment == "5" ?
-                  paymentOptionFinishedUi(size)
+                  isWorkFinished == "-1" && isPaymentRequested == "-1" ?
+                    paymentOptionInActiveUi(size)
+                      : isWorkFinished == "0" && isPaymentRequested == "-1" ?
+                        paymentOptionWaitingUi(size)
+                      : isPaymentRequested == "0" && isPayment == "5" ?
+                        paymentOptionFinishedUi(size)
                       : paymentOptionActiveUi(size),
 
                   // one more widget on processing payment or waiting payment
@@ -196,7 +201,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
 
   Widget trackServiceBoxUi(Size size){
     return Container(
-      height: 90,
+      height: 80,
       width: size.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(0),
@@ -291,7 +296,6 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
               ),
             ],
           ),
-
         ),
       );
   }
@@ -1181,12 +1185,19 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Payment ',
+                      Text('Payment Requested',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
                       SizedBox(height: 05),
+                      Text('at $isPaymentRequestedTime',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)
                     ],
                   ),
                 ),
@@ -1232,6 +1243,67 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                 ),
               ),
               SizedBox(height: 20)
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
+            child: FDottedLine(
+              color: CustColors.light_navy05,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget paymentOptionWaitingUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_w.svg',
+                        fit: BoxFit.contain,),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex:200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Payment',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
           Padding(
