@@ -547,7 +547,7 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
           .fetchpaymentsucess(null, _phoneController.text, null,
               result.value.transactionReference, null)
           .then((value) => {
-                if (value.data!.paymentCreate.id.toString().isNotEmpty)
+                if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty)
                   {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => CustomerMainLandingScreen()))

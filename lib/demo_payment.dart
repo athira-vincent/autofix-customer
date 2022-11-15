@@ -149,7 +149,7 @@ class _DemoPaymentState extends State<DemoPayment> {
               result.value.transactionReference, widget.customerorderid)
           .then((value) async => {
                 setState(() {
-                  if (value.data!.paymentCreate.id.toString().isNotEmpty) {
+                  if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty) {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => CustomerMainLandingScreen()));
                   } else {

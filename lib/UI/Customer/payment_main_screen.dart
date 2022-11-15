@@ -314,7 +314,7 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
           result.value.transactionReference, widget.orderid)
           .then((value) => {
 
-      if (value.data!.paymentCreate.id.toString().isNotEmpty) {
+      if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty) {
           Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => CustomerMainLandingScreen()))
     } else {

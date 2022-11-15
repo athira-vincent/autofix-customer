@@ -273,7 +273,7 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     );
   }
 
-  void changeScreen(int selectedOptionValue){
+  Future<void> changeScreen(int selectedOptionValue) async {
     print(selectedOptionValue);
     if( selectedOptionValue == 1)
       {
@@ -293,7 +293,7 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
 
 
       
-      Repository().fetchwalletcheckbalance(widget.bookingId).then((value) => {
+    await  Repository().fetchwalletcheckbalance(widget.bookingId).then((value) => {
 
         if(value.data!.walletStatus.data.remain==0){
 
@@ -303,7 +303,7 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
           "", widget.bookingId)
           .then((value) => {
 
-        if (value.data!.paymentCreate.id.toString().isNotEmpty) {
+        if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty) {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => CustomerMainLandingScreen()))
         } else {
@@ -314,7 +314,9 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
         }
         else{
           Fluttertoast.showToast(msg: "Insufficient wallet balance"),
-          setBottomsheet(value.data!.walletStatus.data.wallet,value.data!.walletStatus.data.remain)
+          setBottomsheet(value.data!.walletStatus.data.wallet,
+            value.data!.walletStatus.data.remain,
+              value.data!.walletStatus.data.wallet + value.data!.walletStatus.data.remain)
         }
       });
 
@@ -373,7 +375,7 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
           .fetchpaymentsucess(null, "10", null,
           result.value.transactionReference, widget.bookingId)
           .then((value) => {
-        if (value.data!.paymentCreate.id.toString().isNotEmpty)
+        if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty)
           {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => CustomerMainLandingScreen()))
@@ -408,7 +410,7 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     ));
   }
 
-  setBottomsheet(int amount, int remain) {
+  setBottomsheet(int amount, int remain, int total) {
 
     return showModalBottomSheet(
       context: context,
@@ -439,7 +441,7 @@ SizedBox(height: 10,),
                     fontFamily: "Samsung_SharpSans_Medium",
                     color: CustColors.light_navy,
                   )),
-                    trailing:   Text("₹ $amount"),
+                    trailing:   Text("₹ $total"),
                   ),
                 ),
 
@@ -521,7 +523,7 @@ SizedBox(height: 10,),
                       Fluttertoast.showToast(msg: "Recharge wallet");
                     }
                     else{
-                      walletrecharge(amount);
+                      walletrecharge(remain);
                     }
                   },
                   child: Padding(
@@ -599,7 +601,7 @@ SizedBox(height: 10,),
           .fetchpaymentsucess(null, amountwallet, null,
           result.value.transactionReference, null)
           .then((value) => {
-        if (value.data!.paymentCreate.id.toString().isNotEmpty)
+        if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty)
           {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => CustomerMainLandingScreen()))
