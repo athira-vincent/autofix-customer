@@ -41,15 +41,17 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
       scheduledTime = "", isDriveStarted = "",
       isArrived = "", isWorkStarted = "",
       isWorkFinished = "", isPayment = "";
+  String isPickedUpVehicle = "-1";
+  String isStartedFromLocation = "-1";
   String bookingDate = "", customerName = "", mechanicName = "";
   DateTime dateToday = DateTime.now();
   String isDriveStartedTime = "", isArrivedTime = "", isWorkStartedTime = "", isWorkFinishedTime = "", isPaymentTime = "";
   String customerAddress = "", mechanicAddress = "";
-  String isCompleted = "-1";
+  String isCompleted = "-1";String isStartedFromLocationForDropOff = "-1";
   bool isLoading = true;
   String customerId = "", mechanicId = "", customerProfileUrl = "", mechanicProfileUrl = "";
-  String callPhoneNumber = "";
-  String isPaymentRequested = "-1", isPaymentRequestedTime = "";
+  String callPhoneNumber = "";String isReachedServiceCenter = "-1";
+  String isPaymentRequested = "-1", isPaymentRequestedTime = "";String isDropOff = "-1";
 
   @override
   void initState() {
@@ -66,10 +68,15 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
 
   Future<void> listenToCloudFirestoreDB() async {
    // _firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
-   await _firestore.collection("${TextStrings.firebase_mobile_mech}").doc('${widget.bookingId}').snapshots().listen((event) {
+   await _firestore.collection("${TextStrings.firebase_pick_up}").doc('${widget.bookingId}').snapshots().listen((event) {
 
       setState(() {
-        //bookingDate = event.get("bookingDate");
+        bookingDate = event.get("bookingDate");
+        isStartedFromLocation = event.get("isStartedFromLocation");
+        isPickedUpVehicle = event.get("isPickedUpVehicle");
+        isReachedServiceCenter = event.get("isReachedServiceCenter");
+        isStartedFromLocationForDropOff = event.get("isStartedFromLocationForDropOff");
+        isDropOff = event.get("isDropOff");
         mechanicProfileUrl = event.get('mechanicProfileUrl');
         customerProfileUrl = event.get('customerProfileUrl');
         customerName = event.get("customerName");
@@ -164,10 +171,15 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
               child: ListView(
                 children: [
                   serviceBookedUi(size),
-                  isDriveStarted == "-1" ? driveStartedInactiveUi(size) : driveStartedCompletedUi(size),
+
+                  isStartedFromLocation == "-1" ? driveStartedInactiveUi(size) : driveStartedCompletedUi(size),
                   isArrived == "-1" ? mechanicArrivedInactiveUi(size) : mechanicArrivedCompletedUi(size),
+                  isPickedUpVehicle == "-1" ? mechanicPickedUpInactiveUi(size) : mechanicPickedUpCompletedUi(size),
+                  isReachedServiceCenter == "-1" ? mechanicReachedWorkShopInactiveUi(size) :mechanicReachedWorkShopCompletedUi(size),
                   isWorkStarted == "-1" ? workStartedInactiveUi(size) : workStartedCompletedUi(size),
                   isWorkFinished == "-1" ? workFinishedInactiveUi(size) : workFinishedCompletedUi(size),
+                  isStartedFromLocationForDropOff == "-1" ? startedForDropOffInactiveUi(size) : startedForDropOffCompletedUi(size),
+                  isDropOff == "-1" ? mechanicDropOffInactiveUi(size) : mechanicDropOffCompletedUi(size),
 
                   isWorkFinished == "-1" && isPaymentRequested == "-1" ?
                     paymentOptionInActiveUi(size)
@@ -398,7 +410,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                         Container(
                           height: 25,
                           width: 25,
-                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drive_started_w.svg',
+                          child: SvgPicture.asset('assets/image/ic_car1.svg',
                             fit: BoxFit.contain,
                             //color: Colors.white,
                           ),
@@ -515,7 +527,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                         Container(
                           height: 25,
                           width: 25,
-                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drive_started_b.svg',
+                          child: SvgPicture.asset('assets/image/ic_car1.svg',
                             fit: BoxFit.contain,
                             //color: Colors.white,
                           ),
@@ -703,6 +715,340 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text( isDriveStarted == "-1" ? 'Drive not started' : "Expected to reach",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      /*SizedBox(height: 02),
+                      isDriveStarted != "-1" ? Text('Expected to reach',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),) : Container(),*/
+                      isDriveStarted != "-1" ? SizedBox(height: 02) : Container(),
+                      isDriveStarted != "-1" ? Text('before $scheduledTime',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),) : Container()
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,0,5,5),
+            child: FDottedLine(
+              color: CustColors.light_navy05,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget mechanicPickedUpCompletedUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 22.0,top: 00),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_vehicle_picked_w.svg',
+                            fit: BoxFit.contain,
+                            //color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                flex: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('$mechanicName reached',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      /*SizedBox(height: 02),
+                      Text('Savannah estate, plot 176',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),),*/
+                      SizedBox(height: 02),
+                      Text('at ${isArrivedTime}',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,0,5,5),
+            child: FDottedLine(
+              color: CustColors.light_navy,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget mechanicPickedUpInactiveUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 22.0,top: 00),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy05,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_vehicle_picked_b.svg',
+                            fit: BoxFit.contain,
+                            //color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  //Expanded(child: child)
+                ],
+              ),
+              Expanded(
+                flex: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 01),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text( "Picked Up Vehicle",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      /*SizedBox(height: 02),
+                      isDriveStarted != "-1" ? Text('Expected to reach',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),) : Container(),*/
+                      isDriveStarted != "-1" ? SizedBox(height: 02) : Container(),
+                      isDriveStarted != "-1" ? Text('before $scheduledTime',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),) : Container()
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,0,5,5),
+            child: FDottedLine(
+              color: CustColors.light_navy05,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget mechanicReachedWorkShopCompletedUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 22.0,top: 00),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_reached_work_shop_w.svg',
+                            fit: BoxFit.contain,
+                            //color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                flex: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('$mechanicName reached',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      /*SizedBox(height: 02),
+                      Text('Savannah estate, plot 176',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),),*/
+                      SizedBox(height: 02),
+                      Text('at ${isArrivedTime}',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,0,5,5),
+            child: FDottedLine(
+              color: CustColors.light_navy,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget mechanicReachedWorkShopInactiveUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 22.0,top: 00),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy05,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_reached_work_shop_b.svg',
+                            fit: BoxFit.contain,
+                            //color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  //Expanded(child: child)
+                ],
+              ),
+              Expanded(
+                flex: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 01),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text( "Picked Up Vehicle",
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
@@ -1040,6 +1386,340 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
             padding: const EdgeInsets.fromLTRB(45,5,5,0),
             child: FDottedLine(
               color: CustColors.light_navy,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget startedForDropOffCompletedUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 22.0,top: 00),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drive_started_w.svg',
+                            fit: BoxFit.contain,
+                            //color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                flex: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('$mechanicName reached',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      /*SizedBox(height: 02),
+                      Text('Savannah estate, plot 176',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),),*/
+                      SizedBox(height: 02),
+                      Text('at ${isArrivedTime}',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,0,5,5),
+            child: FDottedLine(
+              color: CustColors.light_navy,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget startedForDropOffInactiveUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 22.0,top: 00),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy05,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drive_started_b.svg',
+                            fit: BoxFit.contain,
+                            //color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  //Expanded(child: child)
+                ],
+              ),
+              Expanded(
+                flex: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 01),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text( "Picked Up Vehicle",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      /*SizedBox(height: 02),
+                      isDriveStarted != "-1" ? Text('Expected to reach',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),) : Container(),*/
+                      isDriveStarted != "-1" ? SizedBox(height: 02) : Container(),
+                      isDriveStarted != "-1" ? Text('before $scheduledTime',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),) : Container()
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,0,5,5),
+            child: FDottedLine(
+              color: CustColors.light_navy05,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget mechanicDropOffCompletedUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 22.0,top: 00),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drop_off_w.svg',
+                            fit: BoxFit.contain,
+                            //color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                flex: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('$mechanicName reached',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      /*SizedBox(height: 02),
+                      Text('Savannah estate, plot 176',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),),*/
+                      SizedBox(height: 02),
+                      Text('at ${isArrivedTime}',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,0,5,5),
+            child: FDottedLine(
+              color: CustColors.light_navy,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget mechanicDropOffInactiveUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 22.0,top: 00),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy05,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drop_off_b.svg',
+                            fit: BoxFit.contain,
+                            //color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  //Expanded(child: child)
+                ],
+              ),
+              Expanded(
+                flex: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 01),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text( "Picked Up Vehicle",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      /*SizedBox(height: 02),
+                      isDriveStarted != "-1" ? Text('Expected to reach',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),) : Container(),*/
+                      isDriveStarted != "-1" ? SizedBox(height: 02) : Container(),
+                      isDriveStarted != "-1" ? Text('before $scheduledTime',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),) : Container()
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,0,5,5),
+            child: FDottedLine(
+              color: CustColors.light_navy05,
               height: 50.0,
             ),
           ),
