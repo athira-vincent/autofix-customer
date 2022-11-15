@@ -38,6 +38,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_api_provider.dart';
 import '../Models/payment_success_model/payment_success_model.dart';
+import '../Models/wallet_check_balance_model.dart';
 import '../UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_api_provider.dart';
 import '../UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_api_provider.dart';
 import '../UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicleSpecialization_api_provider.dart';
@@ -765,5 +766,9 @@ class Repository {
 
   Future<PaymentSuccessModel> fetchpaymentsucess(transtype, amount, paymenttype, transid, orderid) =>
       _paymentsuccessprovider.fetchpaymentsucess(transtype, amount, paymenttype, transid, orderid);
+
+
+  Future<WalletCheckBalanceModel> fetchwalletcheckbalance(bookingid) =>
+      _paymentsuccessprovider.fetchwalletcheckbalance(bookingid);
 
 }
