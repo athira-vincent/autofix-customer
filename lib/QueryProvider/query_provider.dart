@@ -578,14 +578,14 @@ class QueryProvider {
   }
 
   postEditCarRequest(
-      token,
-      vehicleId,
-      year,
-      lastMaintenance,
-      milege,
-      vehiclePic,
-      color,
-      ) async {
+    token,
+    vehicleId,
+    year,
+    lastMaintenance,
+    milege,
+    vehiclePic,
+    color,
+  ) async {
     String _query = """ 
           mutation {
         vehicle_Update(
@@ -746,7 +746,7 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  postOtpVerificationRequest( otp, userTypeId) async {
+  postOtpVerificationRequest(otp, userTypeId) async {
     String _query = """ 
        mutation {
           otp_Verification(otpCode: "$otp", userTypeId: ${int.parse(userTypeId.toString())}) {
@@ -759,7 +759,7 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  postResendOtpRequest( email, phone) async {
+  postResendOtpRequest(email, phone) async {
     String _query = """ 
        mutation {
         resendOtp(emailId: "$email", phoneNo: "$phone") {
@@ -4814,24 +4814,8 @@ class QueryProvider {
     );
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   /// payment success response
-  fetchpaymentsucess(transtype, amount, paymenttype,transid,orderid) async {
+  fetchpaymentsucess(transtype, amount, paymenttype, transid, orderid) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
     String userid = shdPre.getString(SharedPrefKeys.userID).toString();
@@ -4855,6 +4839,33 @@ class QueryProvider {
     status
     userId
  
+  }
+}
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  /// walletcheckbalance response
+  fetchwalletcheckbalance(bookingid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String userid = shdPre.getString(SharedPrefKeys.userID).toString();
+    String _query = """
+ mutation {
+  walletStatus(bookingId: $bookingid) {
+    status
+    data {
+      amount
+      wallet
+      remain
+    }
   }
 }
 
