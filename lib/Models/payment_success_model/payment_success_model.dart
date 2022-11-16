@@ -2,13 +2,12 @@
 //
 //     final paymentSuccessModel = paymentSuccessModelFromMap(jsonString);
 
+import 'package:meta/meta.dart';
 import 'dart:convert';
 
-PaymentSuccessModel paymentSuccessModelFromMap(String str) =>
-    PaymentSuccessModel.fromMap(json.decode(str));
+PaymentSuccessModel paymentSuccessModelFromMap(String str) => PaymentSuccessModel.fromMap(json.decode(str));
 
-String paymentSuccessModelToMap(PaymentSuccessModel data) =>
-    json.encode(data.toMap());
+String paymentSuccessModelToMap(PaymentSuccessModel data) => json.encode(data.toMap());
 
 class PaymentSuccessModel {
   PaymentSuccessModel({
@@ -21,18 +20,17 @@ class PaymentSuccessModel {
   String? message;
   Data? data;
 
-  factory PaymentSuccessModel.fromMap(Map<String, dynamic> json) =>
-      PaymentSuccessModel(
-        status: json["status"],
-        message: json["message"],
-        data: Data.fromMap(json["data"]),
-      );
+  factory PaymentSuccessModel.fromMap(Map<String, dynamic> json) => PaymentSuccessModel(
+    status: json["status"],
+    message: json["message"],
+    data: Data.fromMap(json["data"]),
+  );
 
   Map<String, dynamic> toMap() => {
-        "status": status,
-        "message": message,
-        "data": data!.toMap(),
-      };
+    "status": status,
+    "message": message,
+    "data": data!.toMap(),
+  };
 }
 
 class Data {
@@ -43,16 +41,36 @@ class Data {
   PaymentCreate paymentCreate;
 
   factory Data.fromMap(Map<String, dynamic> json) => Data(
-        paymentCreate: PaymentCreate.fromMap(json["paymentCreate"]),
-      );
+    paymentCreate: PaymentCreate.fromMap(json["paymentCreate"]),
+  );
 
   Map<String, dynamic> toMap() => {
-        "paymentCreate": paymentCreate.toMap(),
-      };
+    "paymentCreate": paymentCreate.toMap(),
+  };
 }
 
 class PaymentCreate {
   PaymentCreate({
+    required this.paymentData,
+    required this.msg,
+  });
+
+  PaymentData? paymentData;
+  dynamic msg;
+
+  factory PaymentCreate.fromMap(Map<String, dynamic> json) => PaymentCreate(
+    paymentData: json["paymentData"] == null ? null : PaymentData.fromMap(json["paymentData"]),
+    msg: json["msg"],
+  );
+
+  Map<String, dynamic> toMap() => {
+    "paymentData": paymentData == null ? null : paymentData!.toMap(),
+    "msg": msg,
+  };
+}
+
+class PaymentData {
+  PaymentData({
     required this.id,
     required this.transType,
     required this.amount,
@@ -61,7 +79,7 @@ class PaymentCreate {
     required this.transData,
     required this.status,
     required this.userId,
-    this.user,
+
   });
 
   int id;
@@ -72,29 +90,29 @@ class PaymentCreate {
   String transData;
   int status;
   int userId;
-  dynamic user;
 
-  factory PaymentCreate.fromMap(Map<String, dynamic> json) => PaymentCreate(
-        id: json["id"],
-        transType: json["transType"],
-        amount: json["amount"],
-        paymentType: json["paymentType"],
-        transId: json["transId"],
-        transData: json["transData"],
-        status: json["status"],
-        userId: json["userId"],
-        user: json["user"],
-      );
+
+  factory PaymentData.fromMap(Map<String, dynamic> json) => PaymentData(
+    id: json["id"] == null ? null : json["id"],
+    transType: json["transType"] == null ? null : json["transType"],
+    amount: json["amount"] == null ? null : json["amount"],
+    paymentType: json["paymentType"] == null ? null : json["paymentType"],
+    transId: json["transId"] == null ? null : json["transId"],
+    transData: json["transData"] == null ? null : json["transData"],
+    status: json["status"] == null ? null : json["status"],
+    userId: json["userId"] == null ? null : json["userId"],
+
+  );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "transType": transType,
-        "amount": amount,
-        "paymentType": paymentType,
-        "transId": transId,
-        "transData": transData,
-        "status": status,
-        "userId": userId,
-        "user": user,
-      };
+    "id": id == null ? null : id,
+    "transType": transType == null ? null : transType,
+    "amount": amount == null ? null : amount,
+    "paymentType": paymentType == null ? null : paymentType,
+    "transId": transId == null ? null : transId,
+    "transData": transData == null ? null : transData,
+    "status": status == null ? null : status,
+    "userId": userId == null ? null : userId,
+
+  };
 }
