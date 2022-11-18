@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularServicePayment/regular_direct_payment_screen.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,10 +46,11 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
   String authToken="";
   String userName="";
 
-  String userid = "";
+  String userid = "", totalServiceCost = "";
 
   var scaffoldKey = GlobalKey<ScaffoldState>();
   bool value = false;
+  bool isLoading = true;
 
 
   @override
@@ -56,6 +58,7 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
+    listenToCloudFirestoreDB();
   }
 
   Future<void> getSharedPrefData() async {
@@ -64,11 +67,8 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
-
-      //bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('PaymentScreen authToken>>>>>>>>> ' + authToken.toString());
       userid = shdPre.getString(SharedPrefKeys.userID).toString();
-      //print('PaymentScreen bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
 
     });
   }
@@ -86,6 +86,20 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
         print("Failed to add Location: $error"));
   }
 
+  Future<void> listenToCloudFirestoreDB() async {
+    await _firestore.collection("${widget.firebaseCollection}").doc('${widget.bookingId}').snapshots().listen((event) {
+      setState(() {
+        //bookingDate = event.get("bookingDate");
+        totalServiceCost = event.get('serviceTotalAmount');
+      });
+      Timer(const Duration(seconds: 2), () {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +107,14 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     return Scaffold(
       key: scaffoldKey,
       body: SafeArea(
-        child: Container(
+        child: isLoading == true
+            ?
+        Container(
+            width: size.width,
+            height: size.height,
+            child: Center(child: CircularProgressIndicator(color: CustColors.light_navy)))
+            :
+        Container(
           width: size.width,
           height: size.height,
           color: Colors.white,
@@ -128,7 +149,6 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
                         child: paymentContinueButton(size),
                         onTap: (){
                           print("On Press Continue");
-
                           changeScreen(_selectedOptionValue);
                         },
                       )
@@ -276,45 +296,22 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
   Future<void> changeScreen(int selectedOptionValue) async {
     print(selectedOptionValue);
     if( selectedOptionValue == 1)
-      {
-        updateToCloudFirestoreDB("1");
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => RegularDirectPaymentScreen(
-                  //isMechanicApp: false,isPaymentFailed: false,
-                  firebaseCollection: widget.firebaseCollection,
-                  bookingId: widget.bookingId,
-                )));
-      }else if(selectedOptionValue == 3){
-      initPlatformState();
+    {
+      setCashConfirmationBottomsheet(int.parse(totalServiceCost));
+    }else if(selectedOptionValue == 3){
+      setOnlineConfirmationBottomsheet(int.parse(totalServiceCost));
     }
     else if(_selectedOptionValue ==2){
-
-
       
     await  Repository().fetchwalletcheckbalance(widget.bookingId).then((value) => {
 
         if(value.data!.walletStatus.data.remain==0){
 
-
-          Repository()
-          .fetchpaymentsucess("1", value.data!.walletStatus.data.amount, "3",
-          "", widget.bookingId)
-          .then((value) => {
-
-        if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => CustomerMainLandingScreen()))
-        } else {
-          print("popcontext"),
-          Navigator.pop(context)
-        }
-      })
+          setWalletSufficientConfirmationBottomsheet(int.parse(totalServiceCost))
         }
         else{
           Fluttertoast.showToast(msg: "Insufficient wallet balance"),
-          setBottomsheet(value.data!.walletStatus.data.wallet,
+          setWalletInsufficientBottomsheet(value.data!.walletStatus.data.wallet,
             value.data!.walletStatus.data.remain,
               value.data!.walletStatus.data.wallet + value.data!.walletStatus.data.remain)
         }
@@ -410,7 +407,7 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     ));
   }
 
-  setBottomsheet(int amount, int remain, int total) {
+  setWalletInsufficientBottomsheet(int amount, int remain, int total) {
 
     return showModalBottomSheet(
       context: context,
@@ -424,15 +421,11 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
         ),
       ),
       backgroundColor: Colors.white,
-
-
       builder: (context) =>
           StatefulBuilder(
-
             builder: (context, snapshot) {
               return Wrap(children: <Widget>[
-
-SizedBox(height: 10,),
+                SizedBox(height: 10,),
                 Container(
 
                   child: ListTile(leading: Text("Total Payable ",style: TextStyle(
@@ -441,7 +434,7 @@ SizedBox(height: 10,),
                     fontFamily: "Samsung_SharpSans_Medium",
                     color: CustColors.light_navy,
                   )),
-                    trailing:   Text("₹ $total"),
+                    trailing: Text("₹ $total"),
                   ),
                 ),
 
@@ -506,7 +499,7 @@ SizedBox(height: 10,),
                           activeColor: Colors.white,
                           checkColor: CustColors.light_navy,
                           value: value,
-                          onChanged: ( value) {
+                          onChanged: (value) {
                             snapshot(() {
                               this.value = value!;
                             });
@@ -514,7 +507,6 @@ SizedBox(height: 10,),
                         ),
                       ],
                     ),
-
                   ),
                 ),
                 InkWell(
@@ -554,6 +546,377 @@ SizedBox(height: 10,),
                 )
               ]);
             }
+          ),
+    );
+  }
+
+  setWalletSufficientConfirmationBottomsheet(int totalAmount) {
+    return showModalBottomSheet(
+      context: context,
+      shape:
+      const RoundedRectangleBorder(
+        // <-- SEE HERE
+        borderRadius:
+        BorderRadius.vertical(
+          top: Radius.circular(
+              25.0),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      builder: (context) =>
+          StatefulBuilder(
+              builder: (context, snapshot) {
+                return Wrap(children: <Widget>[
+                  SizedBox(height: 10,),
+                  Container(
+                    child: ListTile(leading: Text("Total Payable ",style: TextStyle(
+                      fontSize: 14.3,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: "Samsung_SharpSans_Medium",
+                      color: CustColors.light_navy,
+                    )),
+                      trailing: Text("₹ $totalAmount"),
+                    ),
+                  ),
+
+                  Divider(thickness: 2,color: CustColors.grey_02,),
+
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: ListTile(
+                      leading:  Image.asset("assets/image/img_payment_upi.png",height: 20,width: 20,),
+                      title: const Text(
+                          'Wallet',
+                          style: TextStyle(
+                            fontSize: 14.3,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Samsung_SharpSans_Medium",
+                            color: CustColors.light_navy,
+                          )
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children:  [
+                          Text("₹ $totalAmount"),
+                          Checkbox(
+                            activeColor: Colors.white,
+                            checkColor: CustColors.light_navy,
+                            value: true,
+                            onChanged: ( value) {
+
+                            },
+                          ),
+                        ],
+                      ),
+
+                    ),
+                  ),
+
+                  /*Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: ListTile(
+                      leading: Image.asset("assets/image/img_payment_card.png",height: 20,width: 20,),
+                      title: const Text(
+                          'Card Payment',
+                          style: TextStyle(
+                            fontSize: 14.3,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Samsung_SharpSans_Medium",
+                            color: CustColors.light_navy,
+                          )
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children:  [
+                          Text("₹ $remain"),
+                          Checkbox(
+                            activeColor: Colors.white,
+                            checkColor: CustColors.light_navy,
+                            value: value,
+                            onChanged: ( value) {
+                              snapshot(() {
+                                this.value = value!;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),*/
+                  InkWell(
+                    onTap: (){
+                      if(value==false){
+                        Fluttertoast.showToast(msg: "Recharge wallet");
+                      }
+                      else{
+                        Repository().fetchpaymentsucess("1", int.parse(totalServiceCost), "3",
+                            "", widget.bookingId)
+                            .then((value) => {
+
+                          if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  content: Text("Payment Success",
+                                      style: const TextStyle(
+                                          fontFamily: 'Roboto_Regular', fontSize: 14)),
+                                  duration: const Duration(seconds: 2),
+                                  backgroundColor: CustColors.light_navy,
+                                ))
+                            /*Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => CustomerMainLandingScreen()))*/
+                          } else {
+                            print("popcontext"),
+                            Navigator.pop(context)
+                          }
+                        });
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(6),
+                            ),
+                            color: CustColors.light_navy
+                        ),
+
+                        child: Center(
+                          child: Text(
+                            "Pay",
+                            style: TextStyle(
+                              fontSize: 14.3,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: "Samsung_SharpSans_Medium",
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ]);
+              }
+          ),
+    );
+  }
+
+  setCashConfirmationBottomsheet(int totalAmount) {
+    return showModalBottomSheet(
+      context: context,
+      shape:
+      const RoundedRectangleBorder(
+        // <-- SEE HERE
+        borderRadius:
+        BorderRadius.vertical(
+          top: Radius.circular(
+              25.0),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      builder: (context) =>
+          StatefulBuilder(
+              builder: (context, snapshot) {
+                return Wrap(children: <Widget>[
+                  SizedBox(height: 10,),
+                  Container(
+                    child: ListTile(leading: Text("Total Payable ",style: TextStyle(
+                      fontSize: 14.3,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: "Samsung_SharpSans_Medium",
+                      color: CustColors.light_navy,
+                    )),
+                      trailing: Text("₹ $totalAmount"),
+                    ),
+                  ),
+                  Divider(thickness: 2,color: CustColors.grey_02,),
+                  Card(
+
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: ListTile(
+                      leading:  Image.asset("assets/image/img_payment_cash.png",height: 20,width: 20,),
+                      title: const Text(
+                          'Direct Payment',
+                          style: TextStyle(
+                            fontSize: 14.3,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Samsung_SharpSans_Medium",
+                            color: CustColors.light_navy,
+                          )
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children:  [
+                          Text("₹ $totalAmount"),
+                          Checkbox(
+                            activeColor: Colors.white,
+                            checkColor: CustColors.light_navy,
+                            value: true,
+                            onChanged: ( value) {
+
+                            },
+                          ),
+                        ],
+                      ),
+
+                    ),
+                  ),
+                  InkWell(
+                    onTap: (){
+                      if(value==false){
+                        Fluttertoast.showToast(msg: "Recharge wallet");
+                      }
+                      else{
+                        updateToCloudFirestoreDB("1");
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RegularDirectPaymentScreen(
+                                  firebaseCollection: widget.firebaseCollection,
+                                  bookingId: widget.bookingId,
+                                )));
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(6),
+                            ),
+                            color: CustColors.light_navy
+                        ),
+
+                        child: Center(
+                          child: Text(
+                            "Click To Continue",
+                            style: TextStyle(
+                              fontSize: 14.3,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: "Samsung_SharpSans_Medium",
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ]);
+              }
+          ),
+    );
+  }
+
+  setOnlineConfirmationBottomsheet(int totalAmount) {
+
+    return showModalBottomSheet(
+      context: context,
+      shape:
+      const RoundedRectangleBorder(
+        // <-- SEE HERE
+        borderRadius:
+        BorderRadius.vertical(
+          top: Radius.circular(
+              25.0),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      builder: (context) =>
+          StatefulBuilder(
+              builder: (context, snapshot) {
+                return Wrap(children: <Widget>[
+
+                  SizedBox(height: 10,),
+                  Container(
+                    child: ListTile(leading: Text("Total Payable ",style: TextStyle(
+                      fontSize: 14.3,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: "Samsung_SharpSans_Medium",
+                      color: CustColors.light_navy,
+                    )),
+                      trailing: Text("₹ $totalAmount"),
+                    ),
+                  ),
+                  Divider(thickness: 2,color: CustColors.grey_02,),
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: ListTile(
+                      leading: Image.asset("assets/image/img_payment_card.png",height: 20,width: 20,),
+                      title: const Text(
+                          'Online',
+                          style: TextStyle(
+                            fontSize: 14.3,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Samsung_SharpSans_Medium",
+                            color: CustColors.light_navy,
+                          )
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children:  [
+                          Text("₹ $totalAmount"),
+                          Checkbox(
+                            activeColor: Colors.white,
+                            checkColor: CustColors.light_navy,
+                            value: true,
+                            onChanged: ( value) {
+
+                            },
+                          ),
+                        ],
+                      ),
+
+                    ),
+                  ),
+
+                  InkWell(
+                    onTap: (){
+                      if(value==false){
+                        Fluttertoast.showToast(msg: "Recharge wallet");
+                      }
+                      else{
+                        initPlatformState();
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(6),
+                            ),
+                            color: CustColors.light_navy
+                        ),
+
+                        child: Center(
+                          child: Text(
+                            "Pay",
+                            style: TextStyle(
+                              fontSize: 14.3,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: "Samsung_SharpSans_Medium",
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ]);
+              }
           ),
     );
   }

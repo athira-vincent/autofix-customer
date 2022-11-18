@@ -439,6 +439,46 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
+  postCityListRequest(token, search) async {
+    String _query = """ 
+         {
+      citiesList(countryCode: "ng") {
+        cityName
+        suburbName
+        postcode
+      }
+    }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  postStatesListRequest(token, search) async {
+    String _query = """ 
+     {
+      statesList(countryCode: "ng") {
+        slug
+        pk
+        countryCode
+        name
+        code
+      }
+    }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
   postBrandDetailsRequest(token, search) async {
     String _query = """ 
        {

@@ -85,7 +85,6 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
         });
       }else{
         setState(() {
-          isLoading = false;
           _BookingDetails = value.data!.bookingDetails;
           /*if(_BookingDetails!.regularType.toString() == "1"){
             firebaseCollection = TextStrings.firebase_pick_up;
@@ -106,6 +105,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
 
       setState(() {
         bookingDate = event.get("bookingDate");
+        isLoading = false;
       });
     });
   }
