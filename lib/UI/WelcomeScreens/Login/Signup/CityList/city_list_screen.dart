@@ -25,6 +25,7 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
   //final SignupBloc _signupBloc = SignupBloc();
   final CityListBloc _cityListBloc = CityListBloc();
   List<CitiesList> _countryData = [];
+  List<CitiesList> _cityDataAll = [];
   String authToken = "";
   String? countryCode;
   String selectedState = "";
@@ -38,9 +39,6 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
     super.initState();
     getSharedPrefData();
     _listenApiResponse();
-    //_signupBloc.dialStatesListRequest();
-    //_populateCountryList();
-    //_signupBloc.searchStates("");
   }
 
   Future<void> getSharedPrefData() async {
@@ -69,6 +67,7 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
       }else{
         setState(() {
           _isLoadingPage = false;
+          _cityDataAll = value.data!.citiesList!;
           _countryData = value.data!.citiesList!;
         });
       }
@@ -79,7 +78,7 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    //_signupBloc.dispose();
+    _cityListBloc.dispose();
   }
 
   @override
@@ -157,11 +156,15 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
                             keyboardType: TextInputType.text,
                             textAlignVertical: TextAlignVertical.center,
                             onChanged: (text) {
-                           setState(() {
-                             _countryData.clear();
-                             isloading = true;
-                           });
-                           //_signupBloc.searchStates(text);
+                              if(text.isNotEmpty){
+                                _countryData = _countryData
+                                    .where((element) => element.cityName
+                                    .toLowerCase()
+                                    .contains(text.toLowerCase()))
+                                    .toList();
+                              }else{
+                                _countryData = _cityDataAll;
+                              }
                          },
                             textAlign: TextAlign.left,
                             style: Styles.textLabelSubTitle10,
@@ -198,7 +201,7 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
                             final stateName = _countryData[index].cityName;
                             final countryDataId = _countryData[index].cityName;
                             print(">>>>>selectedState : " + selectedState);
-                            print(countryDataId! + ">>>>>>>>>" + stateName!);
+                            print(countryDataId + ">>>>>>>>>" + stateName);
 
                            // Navigator.of(context).pop(stateName);
                             Navigator.pop(context,selectedState.toString());
