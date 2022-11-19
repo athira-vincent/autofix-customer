@@ -116,7 +116,6 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
       }
 
       print(" >>>> Date : >>>>>" + dateToday.toString());
-      print("isWorkFinished >>> $isWorkFinished");
 
      /* customerDiagonsisApproval = event.get("customerDiagonsisApproval");
       mechanicName = event.get('mechanicName');
