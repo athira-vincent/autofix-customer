@@ -45,11 +45,11 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
   String isStartedFromLocation = "-1";
   String bookingDate = "", customerName = "", mechanicName = "";
   DateTime dateToday = DateTime.now();
-  String isArrivedTime = "",
+  String isArrivedTime = "", isStartedFromLocationTime = "",
       isPickedUpVehicleTime = "", isWorkStartedTime = "",isStartedFromLocationForDropOff = "",
       isWorkFinishedTime = "", isPaymentTime = "", isReachedServiceCenterTime = "";
-  String customerAddress = "", mechanicAddress = "", isisDropOffTime = "";
-  String isCompleted = "-1";String isStartedFromLocationForDropOffTime = "-1";
+  String customerAddress = "", mechanicAddress = "", isDropOffTime = "";
+  String isCompleted = "-1";String isStartedFromLocationForDropOffTime = "";
   bool isLoading = true;
   String customerId = "", mechanicId = "", customerProfileUrl = "", mechanicProfileUrl = "";
   String callPhoneNumber = "";String isReachedServiceCenter = "-1";
@@ -74,40 +74,42 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
 
       setState(() {
         //bookingDate = event.get("bookingDate");
-        isStartedFromLocation = event.get("isStartedFromLocation");
-        isPickedUpVehicle = event.get("isPickedUpVehicle");
-        isPickedUpVehicleTime = event.get("isPickedUpVehicleTime");
-        isReachedServiceCenter = event.get("isReachedServiceCenter");
-        isReachedServiceCenterTime = event.get("isReachedServiceCenterTime");
-        isStartedFromLocationForDropOff = event.get("isStartedFromLocationForDropOff");
-        isStartedFromLocationForDropOffTime = event.get("isStartedFromLocationForDropOffTime");
-        isDropOff = event.get("isDropOff");
-        isisDropOffTime = event.get("isDropOffTime");
         mechanicProfileUrl = event.get('mechanicProfileUrl');
         customerProfileUrl = event.get('customerProfileUrl');
         customerName = event.get("customerName");
         customerAddress = event.get("customerAddress");
-        scheduledTime = event.get("scheduledTime");
+        customerId = event.get('customerId');
+        mechanicId = event.get('mechanicId');
+        callPhoneNumber = event.get('mechanicPhone');
         mechanicName = event.get("mechanicName");
         mechanicAddress = event.get("mechanicAddress");
+
         isBookedDate = event.get("isBookedDate");
         scheduledDate = event.get("scheduledDate");
-        //scheduledDate = event.get("scheduledDate");
-        //isDriveStarted = event.get("isDriveStarted");     //***
-        //isDriveStartedTime = event.get("isDriveStartedTime");   //****
+        scheduledTime = event.get("scheduledTime");
+        isStartedFromLocation = event.get("isStartedFromLocation");
+        isStartedFromLocationTime = event.get("isStartedFromLocationTime");
         isArrived = event.get("isArrived");
         isArrivedTime = event.get("isArrivedTime");
+        isPickedUpVehicle = event.get("isPickedUpVehicle");
+        isPickedUpVehicleTime = event.get("isPickedUpVehicleTime");
+        isReachedServiceCenter = event.get("isReachedServiceCenter");
+        isReachedServiceCenterTime = event.get("isReachedServiceCenterTime");
         isWorkStarted = event.get("isWorkStarted");
         isWorkStartedTime = event.get("isWorkStartedTime");
         isWorkFinished = event.get("isWorkFinished");
         isWorkFinishedTime = event.get("isWorkFinishedTime");
-        isPayment = event.get("isPayment");
-        isPaymentTime = event.get("isPaymentTime");
-        customerId = event.get('customerId');
-        mechanicId = event.get('mechanicId');
-        callPhoneNumber = event.get('mechanicPhone');
+        isStartedFromLocationForDropOff = event.get("isStartedFromLocationForDropOff");
+        isStartedFromLocationForDropOffTime = event.get("isStartedFromLocationForDropOffTime");
+        isDropOff = event.get("isDropOff");
+        isDropOffTime = event.get("isDropOffTime");
         isPaymentRequested = event.get("isPaymentRequested");
         isPaymentRequestedTime = event.get("isPaymentRequestedTime");
+        //scheduledDate = event.get("scheduledDate");
+        //isDriveStarted = event.get("isDriveStarted");     //***
+        //isDriveStartedTime = event.get("isDriveStartedTime");   //****
+        isPayment = event.get("isPayment");
+        isPaymentTime = event.get("isPaymentTime");
       });
 
       if(scheduledDate.isNotEmpty){
@@ -146,7 +148,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
 
   void updateToCloudFirestoreDB(String key, String value ) {
     _firestore
-        .collection("${TextStrings.firebase_mobile_mech}")
+        .collection("${TextStrings.firebase_pick_up}")
         .doc('${widget.bookingId}')
         .update({
       "$key" : "$value",
@@ -1246,7 +1248,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                 ),
               ),
             ],
-        ),
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(45,5,5,0),
             child: FDottedLine(
@@ -1254,7 +1256,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
               height: 50.0,
             ),
           ),
-    ],
+        ],
       ),
     );
   }
@@ -1523,7 +1525,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
                       SizedBox(height: 02),
-                      Text('at ${isisDropOffTime}',
+                      Text('at ${isDropOffTime}',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -1750,7 +1752,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                             context,
                             MaterialPageRoute(
                                 builder: (context) => RegularPaymentScreen(
-                                  firebaseCollection: TextStrings.firebase_mobile_mech,
+                                  firebaseCollection: TextStrings.firebase_pick_up,
                                   bookingId: widget.bookingId,
                                 )));
                       },

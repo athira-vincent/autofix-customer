@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/MobileMechanicFlow/customer_track_screen.dart';
@@ -49,7 +50,8 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
   String? FcmToken="";
   String authToken="";
   String userName="", userId = "", vehicleName = "";
-  bool isLoading = true;
+  bool isLoading = true;String serviceCost = "";
+  BuildContext? dialogContext;
 
   @override
   void initState() {
@@ -78,7 +80,6 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
   void listenToCloudFirestoreDB() {
     //_firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
     _firestore.collection("Regular-MobileMech").doc('${widget.bookingId}').snapshots().listen((event) {
-
       setState(() {
         bookingDate = event.get("bookingDate");
         customerName = event.get("customerName");
@@ -101,6 +102,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
         isWorkFinishedTime = event.get("isWorkFinishedTime");
         isPaymentRequested = event.get("isPaymentRequested");
         isPaymentRequestedTime = event.get("isPaymentRequestedTime");
+        serviceCost = event.get("serviceTotalAmount");
         isPayment = event.get("isPayment");
         isPaymentTime = event.get("isPaymentTime");
       });
@@ -121,7 +123,6 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
       if(isPayment == "5"){
         setState(() {
           isCompleted = "0";
-          _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "8");
         });
       }
 
@@ -1627,7 +1628,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_finished_b.svg',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_request_payment_b.svg',
                         fit: BoxFit.contain,),
                     ),
                   ],
@@ -1726,7 +1727,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_finished_b.svg',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_request_payment_b.svg',
                         fit: BoxFit.contain,),
                     ),
                   ],
@@ -1822,7 +1823,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_finished_w.svg',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_request_payment_w.svg',
                         fit: BoxFit.contain,
                         //color: Colors.white,
                       ),
@@ -2036,7 +2037,13 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     padding: const EdgeInsets.only(top: 00.0),
                     child: TextButton(
                       onPressed: () {
-                        updateToCloudFirestoreDB("isPayment","5");
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              dialogContext = context;
+                              return confirmPaymentReceivedDialog();
+                            });
                       },
                       child: Text('Received',
                         textAlign: TextAlign.center,
@@ -2369,6 +2376,74 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
     ]
       ),
 
+    );
+  }
+
+  Widget confirmPaymentReceivedDialog() {
+    return CupertinoAlertDialog(
+      title: Text("Confirm Payment?",
+          style: TextStyle(
+            fontFamily: 'Formular',
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: CustColors.materialBlue,
+          )),
+      content: Text("You can confirm payment received?"),
+      actions: <Widget>[
+        CupertinoDialogAction(
+            textStyle: TextStyle(
+              color: CustColors.rusty_red,
+              fontWeight: FontWeight.normal,
+            ),
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(dialogContext!);
+            },
+            child: Text("Cancel")),
+        CupertinoDialogAction(
+            textStyle: TextStyle(
+              color: CustColors.rusty_red,
+              fontWeight: FontWeight.normal,
+            ),
+            isDefaultAction: true,
+            onPressed: () async {
+              setState(() {
+                /// ----------- api call for payment success ----------
+                Repository()
+                    .fetchpaymentsucess(
+                    1, serviceCost, 1, "", '${widget.bookingId}'
+                    )
+                    .then((value) => {
+                  if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty)
+                    {
+                      updateToCloudFirestoreDB("isPayment","5"),
+                      _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "8"),
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("Response updated",
+                                style: const TextStyle(
+                                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+                            duration: const Duration(seconds: 2),
+                            backgroundColor: CustColors.light_navy,
+                          )),
+                    }
+                  else
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("Failed to updated your Response",
+                            style: const TextStyle(
+                                fontFamily: 'Roboto_Regular', fontSize: 14)),
+                        duration: const Duration(seconds: 2),
+                        backgroundColor: CustColors.light_navy,
+                      )),
+                      print("popcontext"),
+                      Navigator.pop(context)
+                    }
+                });
+                Navigator.pop(dialogContext!);
+              });
+            },
+            child: Text("Yes")),
+      ],
     );
   }
 

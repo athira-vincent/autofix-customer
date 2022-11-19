@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
@@ -117,6 +116,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
       }
 
       print(" >>>> Date : >>>>>" + dateToday.toString());
+      print("isWorkFinished >>> $isWorkFinished");
 
      /* customerDiagonsisApproval = event.get("customerDiagonsisApproval");
       mechanicName = event.get('mechanicName');

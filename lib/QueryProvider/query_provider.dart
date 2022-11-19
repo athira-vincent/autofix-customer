@@ -4859,12 +4859,12 @@ class QueryProvider {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
     String userid = shdPre.getString(SharedPrefKeys.userID).toString();
-    String mutation_text = transtype == "1" ? "bookingId:$orderid" : "orderId:$orderid";
+    String mutation_text = transtype.toString() == "1" ? "bookingId: $orderid" : "orderCode: $orderid";
     String _query = """
  mutation {
   paymentCreate(
     transType:$transtype
-    amount:$amount
+    amount: ${double.parse(amount)} 
     paymentType:$paymenttype
     transId:"$transid"
     transData:"string"

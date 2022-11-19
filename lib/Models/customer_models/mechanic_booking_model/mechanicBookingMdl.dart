@@ -87,9 +87,9 @@ class MechanicBooking {
   int reqType;
   int bookStatus;
   var totalPrice;
-  double tax;
+  var tax;
   var commission;
-  double serviceCharge;
+  var serviceCharge;
   dynamic totalTime;
   String serviceTime;
   double latitude;
@@ -318,7 +318,7 @@ class Vehicle {
     lastMaintenance: json["lastMaintenance"] == null ? null : json["lastMaintenance"],
     milege: json["milege"] == null ? null : json["milege"],
     vehiclePic: json["vehiclePic"] == null ? null : json["vehiclePic"],
-    color: json["color"],
+    color: json["color"] == null ? null : json["color"],
     latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
     longitude: json["longitude"] == null ? null : json["longitude"].toDouble(),
     defaultVehicle: json["defaultVehicle"] == null ? null : json["defaultVehicle"],

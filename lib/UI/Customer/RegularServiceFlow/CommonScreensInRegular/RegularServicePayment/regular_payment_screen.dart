@@ -295,15 +295,10 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
 
   Future<void> changeScreen(int selectedOptionValue) async {
     print(selectedOptionValue);
-    if( selectedOptionValue == 1)
-    {
+    if( selectedOptionValue == 1) {
       setCashConfirmationBottomsheet(int.parse(totalServiceCost));
-    }else if(selectedOptionValue == 3){
-      setOnlineConfirmationBottomsheet(int.parse(totalServiceCost));
-    }
-    else if(_selectedOptionValue ==2){
-      
-    await  Repository().fetchwalletcheckbalance(widget.bookingId).then((value) => {
+    } else if(_selectedOptionValue == 2){
+      await  Repository().fetchwalletcheckbalance(widget.bookingId).then((value) => {
 
         if(value.data!.walletStatus.data.remain==0){
 
@@ -312,21 +307,21 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
         else{
           Fluttertoast.showToast(msg: "Insufficient wallet balance"),
           setWalletInsufficientBottomsheet(value.data!.walletStatus.data.wallet,
-            value.data!.walletStatus.data.remain,
+              value.data!.walletStatus.data.remain,
               value.data!.walletStatus.data.wallet + value.data!.walletStatus.data.remain)
         }
       });
-
-    }
-    else if( selectedOptionValue == -1)
+    } else if(selectedOptionValue == 3){
+      setOnlineConfirmationBottomsheet(int.parse(totalServiceCost));
+    } else if( selectedOptionValue == -1)
     {
       SnackBarWidget().setMaterialSnackBar( "Please choose a payment method", scaffoldKey);
     }
   }
 
-  Future<void> initPlatformState() async {
+  Future<void> initPlatformState(int paymentType,String paymentCost) async {
     // Platform messages may fail, so we use a try/catch PlatformException.
-    pay(context);
+    pay(context, paymentType, paymentCost);
     try {
       String merchantId = "IKIABFC88BB635BAE1C834A37CF63FB68B4D19CE8742";
       String merchantCode = "MX104222";
@@ -338,7 +333,7 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     } on PlatformException {}
   }
 
-  Future<void> pay(BuildContext context) async {
+  Future<void> pay(BuildContext context, int paymentType, String paymentCost) async {
     String customerId = userid,
         customerName = userName, //replace with your customer Name
         customerEmail = "cust@gmail.com", //replace with your customer Email
@@ -356,7 +351,7 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
 
     /// here real amount should be added
 
-    amount = int.parse("10") * 100;
+    amount = int.parse('$paymentCost') * 100;
 
 
     // create payment info
@@ -369,8 +364,8 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     var message;
     if (result.hasValue) {
       Repository()
-          .fetchpaymentsucess(null, "10", null,
-          result.value.transactionReference, widget.bookingId)
+          .fetchpaymentsucess(
+          1, result.value.amount, paymentType, result.value.transactionReference, '${widget.bookingId}')
           .then((value) => {
         if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty)
           {
@@ -438,12 +433,9 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
                   ),
                 ),
 
-
                 Divider(thickness: 2,color: CustColors.grey_02,),
 
-
                 Card(
-
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
@@ -736,7 +728,6 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
                   ),
                   Divider(thickness: 2,color: CustColors.grey_02,),
                   Card(
-
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
@@ -765,15 +756,14 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
                           ),
                         ],
                       ),
-
                     ),
                   ),
                   InkWell(
                     onTap: (){
-                      if(value==false){
+                      /*if(value==false){
                         Fluttertoast.showToast(msg: "Recharge wallet");
                       }
-                      else{
+                      else{*/
                         updateToCloudFirestoreDB("1");
                         Navigator.pushReplacement(
                             context,
@@ -782,7 +772,7 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
                                   firebaseCollection: widget.firebaseCollection,
                                   bookingId: widget.bookingId,
                                 )));
-                      }
+                      //}
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -817,7 +807,6 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
   }
 
   setOnlineConfirmationBottomsheet(int totalAmount) {
-
     return showModalBottomSheet(
       context: context,
       shape:
@@ -879,15 +868,15 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
 
                     ),
                   ),
-
                   InkWell(
                     onTap: (){
-                      if(value==false){
+                      initPlatformState(2, totalAmount.toString());
+                      /*if(value==false){
                         Fluttertoast.showToast(msg: "Recharge wallet");
                       }
                       else{
-                        initPlatformState();
-                      }
+                        initPlatformState(2, totalAmount.toString());
+                      }*/
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
