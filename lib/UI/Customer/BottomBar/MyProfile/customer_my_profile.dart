@@ -13,6 +13,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/ChangePassword/change_password_
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StatesList/states_list_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -1473,7 +1474,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SelectStateScreen(),
+          builder: (context) => SelectStatesScreen(),
         ));
     setState(() {
       selectedState = result;
