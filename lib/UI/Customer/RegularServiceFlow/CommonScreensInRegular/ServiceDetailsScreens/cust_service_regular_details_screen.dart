@@ -537,15 +537,10 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => CustTakeVehicleTrackScreen(
-                                        //reachTime: '${_BookingDetails!.bookedTime}',
-                                        bookedDate: bookingDate,
-                                        latitude: '${_BookingDetails!.latitude}',
-                                        longitude: '${_BookingDetails!.longitude}',
-                                        goTime: '${_BookingDetails!.bookedTime}',
-                                        bookedId: '${_BookingDetails!.id.toString()}',
-                                        //mechanicAddress: "${_BookingDetails!.mechanic!.firstName.toString()}",
-                                        //mechanicName: "${_BookingDetails!.mechanic!.firstName.toString()}",
-                                        //pickingDate: 'Mar 8,2022',
+                                        bookingId: _BookingDetails!.id.toString(),
+                                        bookingDate: bookingDate,
+                                        latitude: '${_BookingDetails!.mechLatitude}',
+                                        longitude: '${_BookingDetails!.mechLongitude}',
                                       ),
                                     ));
                               }

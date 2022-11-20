@@ -2388,7 +2388,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
             fontSize: 18,
             color: CustColors.materialBlue,
           )),
-      content: Text("You can confirm payment received?"),
+      content: Text("You can confirm payment received"),
       actions: <Widget>[
         CupertinoDialogAction(
             textStyle: TextStyle(
