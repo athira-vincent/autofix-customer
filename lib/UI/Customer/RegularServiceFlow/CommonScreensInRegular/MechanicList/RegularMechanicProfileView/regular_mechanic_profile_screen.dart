@@ -269,6 +269,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         "isWorkStarted" : "-1", "isWorkStartedTime" : "",
         "isWorkFinished" : "-1", "isWorkFinishedTime" : "",
         "isStartedFromLocationForDropOff" : "-1" , "isStartedFromLocationForDropOffTime" : "",
+        "isReachedLocationForDropOff" : "-1", "isReachedLocationForDropOffTime" : "",
         "isDropOff" : "-1", "isDropOffTime" : "",
         "isPaymentRequested" : "-1", "isPaymentRequestedTime" : "",
         "isPayment" : "-1", "isPaymentTime" : "",

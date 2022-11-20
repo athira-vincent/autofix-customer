@@ -49,7 +49,8 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
       isPickedUpVehicleTime = "", isWorkStartedTime = "",isStartedFromLocationForDropOff = "",
       isWorkFinishedTime = "", isPaymentTime = "", isReachedServiceCenterTime = "";
   String customerAddress = "", mechanicAddress = "", isDropOffTime = "";
-  String isCompleted = "-1";String isStartedFromLocationForDropOffTime = "";
+  String isCompleted = "-1";String isStartedFromLocationForDropOffTime = "",
+      isReachedLocationForDropOff = "-1", isReachedLocationForDropOffTime = "";
   bool isLoading = true;
   String customerId = "", mechanicId = "", customerProfileUrl = "", mechanicProfileUrl = "";
   String callPhoneNumber = "";String isReachedServiceCenter = "-1";
@@ -101,6 +102,8 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
         isWorkFinishedTime = event.get("isWorkFinishedTime");
         isStartedFromLocationForDropOff = event.get("isStartedFromLocationForDropOff");
         isStartedFromLocationForDropOffTime = event.get("isStartedFromLocationForDropOffTime");
+        isReachedLocationForDropOff = event.get('isReachedLocationForDropOff');
+        isReachedLocationForDropOffTime = event.get("isReachedLocationForDropOffTime");
         isDropOff = event.get("isDropOff");
         isDropOffTime = event.get("isDropOffTime");
         isPaymentRequested = event.get("isPaymentRequested");
@@ -187,6 +190,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                   isWorkStarted == "-1" ? workStartedInactiveUi(size) : workStartedCompletedUi(size),
                   isWorkFinished == "-1" ? workFinishedInactiveUi(size) : workFinishedCompletedUi(size),
                   isStartedFromLocationForDropOff == "-1" ? startedForDropOffInactiveUi(size) : startedForDropOffCompletedUi(size),
+                  isReachedLocationForDropOff == "-1" ? reachedForDropOffInactiveUi(size) : reachedForDropOffCompletedUi(size),
                   isDropOff == "-1" ? mechanicDropOffInactiveUi(size) : mechanicDropOffCompletedUi(size),
 
                   isDropOff == "-1" && isPaymentRequested == "-1" ?
@@ -298,7 +302,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                           builder: (context) => ChatScreen(
                             peerId: mechanicId,
                             bookingId: '${widget.bookingId}',
-                            collectionName: 'Regular-MobileMech',
+                            collectionName: '${TextStrings.firebase_pick_up}',
                             currentUserId: customerId,
                             peerName: mechanicName,
                             peerImageUrl: mechanicProfileUrl,
@@ -417,7 +421,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                         Container(
                           height: 25,
                           width: 25,
-                          child: SvgPicture.asset('assets/image/ic_car1.svg',
+                          child: Image.asset('assets/image/ServiceTrackScreen/active_start_from_mech.png',
                             fit: BoxFit.contain,
                             //color: Colors.white,
                           ),
@@ -451,7 +455,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                         ),),
                       mechanicAddress.isEmpty ? Container(): SizedBox(height: 02),
                       Text('on ${_mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(scheduledDate))}'
-                          + '\nat ${scheduledTime}',
+                          + '\nat ${isStartedFromLocationTime}',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -1044,7 +1048,6 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-
                     ],
                   ),
                 ),
@@ -1375,12 +1378,11 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('$mechanicName reached for drop down',
+                      Text('$mechanicName started for drop off',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-
                       SizedBox(height: 02),
                       Text('at ${isStartedFromLocationForDropOffTime}',
                         textAlign: TextAlign.start,
@@ -1453,6 +1455,149 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text( "Start for Drop Down",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,0,5,5),
+            child: FDottedLine(
+              color: CustColors.light_navy05,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget reachedForDropOffCompletedUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 22.0,top: 00),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_arrived_w.svg',
+                            fit: BoxFit.contain,
+                            //color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                flex: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('$mechanicName reached for drop down',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 02),
+                      Text('at ${isReachedLocationForDropOffTime}',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,0,5,5),
+            child: FDottedLine(
+              color: CustColors.light_navy,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget reachedForDropOffInactiveUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 22.0,top: 00),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy05,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_arrived_b.svg',
+                            fit: BoxFit.contain,
+                            //color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  //Expanded(child: child)
+                ],
+              ),
+              Expanded(
+                flex: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 01),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text( "Reached for Drop Down",
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',

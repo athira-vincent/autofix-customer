@@ -4,6 +4,7 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/MobileMechanicFlow/mech_mobile_track_service_screen.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/PickAndDropOffFlow/mech_pick_up_track_screen.dart';
+import 'package:auto_fix/UI/aaa_not_used/xxx_mech_pick_up_track_screen.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehicle_track_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -478,15 +479,8 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                             context,
                             MaterialPageRoute(
                               builder: (context) => MechPickUpTrackScreen(
-                                bookedId: "${widget.bookingId}",
-                                //bookedDate: '${_BookingDetails!.bookedDate}',
-                                //bookedDate: _mechHomeBloc.dateMonthConverter(DateFormat().parse('${_BookingDetails!.bookedDate}')),
-                                bookedDate: bookingDate,
-                                latitude: '${_BookingDetails!.latitude}',
-                                longitude:'${_BookingDetails!.longitude}',
-                                mechanicAddress: '${_BookingDetails!.mechanic!.firstName}',
-                                mechanicName:  '${_BookingDetails!.mechanic!.firstName}',
-                                pickingDate: bookingDate,
+                                bookingId: "${widget.bookingId}",
+                                bookingDate: bookingDate,
                                 customerFcmToken: '${_BookingDetails!.customer!.fcmToken}',
                               ),
                             ));
