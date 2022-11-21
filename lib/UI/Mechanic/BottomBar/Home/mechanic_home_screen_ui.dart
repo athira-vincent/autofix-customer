@@ -73,12 +73,15 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
-    _listenApiResponse();
+
     _hasActiveService = false;
     Timer.periodic(const Duration(seconds: 90), (Timer t) {
       _mechanicHomeBloc.postMechanicActiveServiceRequest("$authToken",mechanicId);
       _getCurrentMechanicLocation();
     });
+
+    _listenApiResponse();
+    _getCurrentMechanicLocation();
   }
 
   @override
@@ -132,6 +135,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   }
 
   _listenApiResponse() {
+
     _mechanicProfileBloc.postMechanicProfile.listen((value) {
       if (value.status == "error") {
         setState(() {
@@ -176,6 +180,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           setState(() {
             _hasActiveService = false;
           });
+          print("snackbareerror");
         });
       }else{
         print("hasActiveService>>>> ${value.data?.currentlyWorkingService.toString()}");
