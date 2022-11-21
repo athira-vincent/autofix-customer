@@ -7,12 +7,14 @@ import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_state.dart';
 import 'package:auto_fix/UI/SpareParts/change_delivery_address_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
+import 'package:auto_fix/UI/mycheckoutscreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../../Models/customer_models/cart_list_model/cart_list_model.dart';
 import 'showcartpopbloc/show_cart_pop_event.dart';
 
 class MyCartScreen extends StatefulWidget {
@@ -34,10 +36,10 @@ class _MyCartScreenState extends State<MyCartScreen> {
   double per = .10;
   double perfont = .10;
   bool allitems = false;
-  String id="";
-  String name="";
-  String email="";
-  String phone="";
+  String id = "";
+  String name = "";
+  String email = "";
+  String phone = "";
 
   double _setValue(double value) {
     return value * per + value;
@@ -55,6 +57,8 @@ class _MyCartScreenState extends State<MyCartScreen> {
   String states = "";
   String city = "";
   String pincode = "";
+
+  String newamount = "";
 
   @override
   void initState() {
@@ -165,15 +169,24 @@ class _MyCartScreenState extends State<MyCartScreen> {
                         pincode = state.cartlistmodel.data!.cartList.data[index]
                             .customer.address.first.pincode;
 
-                        id=state.cartlistmodel.data!.cartList.data[index].customer.id.toString();
-                        name=state.cartlistmodel.data!.cartList.data[index].customer.firstName;
-                        email=state.cartlistmodel.data!.cartList.data[index].customer.emailId;
-                        phone=state.cartlistmodel.data!.cartList.data[index].customer.phoneNo;
-
-
-
-
+                        id = state.cartlistmodel.data!.cartList.data[index]
+                            .customer.id
+                            .toString();
+                        name = state.cartlistmodel.data!.cartList.data[index]
+                            .customer.firstName;
+                        email = state.cartlistmodel.data!.cartList.data[index]
+                            .customer.emailId;
+                        phone = state.cartlistmodel.data!.cartList.data[index]
+                            .customer.phoneNo;
                       });
+
+                      int sum = 0;
+                      state.cartlistmodel.data!.cartList.data
+                          .forEach((element) {
+                        sum = sum + element.product.price * element.quantity;
+                      });
+
+                      newamount = sum.toString();
 
                       print("nocunter");
                       print(states);
@@ -359,7 +372,6 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                                     .toString(),
                                                                 "1"));
                                                           } else {
-
                                                             showDialog(
                                                                 context:
                                                                     context,
@@ -671,33 +683,48 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ChangeDeliveryAddressScreen(
-                                                                quantity: state
-                                                                    .cartlistmodel
-                                                                    .data!
-                                                                    .cartList
-                                                                    .data[index]
-                                                                    .quantity
-                                                                    .toString(),
-                                                                productprice:
-                                                                    totalprice
-                                                                        .toString(),
-                                                                productid: state
-                                                                    .cartlistmodel
-                                                                    .data!
-                                                                    .cartList
-                                                                    .data[index]
-                                                                    .product
-                                                                    .id
-                                                                    .toString(),
-                                                                allitems:
-                                                                    false,
-                                                            customerid:state.cartlistmodel.data!.cartList.data[index].customer.id.toString(),
-                                                            customername:state.cartlistmodel.data!.cartList.data[index].customer.firstName,
-                                                            customeremail:state.cartlistmodel.data!.cartList.data[index].customer.emailId,
-                                                            customerphone:state.cartlistmodel.data!.cartList.data[index].customer.phoneNo))
-                                                );
+                                                        builder: (context) => ChangeDeliveryAddressScreen(
+                                                            quantity: state
+                                                                .cartlistmodel
+                                                                .data!
+                                                                .cartList
+                                                                .data[index]
+                                                                .quantity
+                                                                .toString(),
+                                                            productprice: totalprice
+                                                                .toString(),
+                                                            productid: state
+                                                                .cartlistmodel
+                                                                .data!
+                                                                .cartList
+                                                                .data[index]
+                                                                .product
+                                                                .id
+                                                                .toString(),
+                                                            allitems: false,
+                                                            customerid: state
+                                                                .cartlistmodel
+                                                                .data!
+                                                                .cartList
+                                                                .data[index]
+                                                                .customer
+                                                                .id
+                                                                .toString(),
+                                                            customername: state
+                                                                .cartlistmodel
+                                                                .data!
+                                                                .cartList
+                                                                .data[index]
+                                                                .customer
+                                                                .firstName,
+                                                            customeremail: state
+                                                                .cartlistmodel
+                                                                .data!
+                                                                .cartList
+                                                                .data[index]
+                                                                .customer
+                                                                .emailId,
+                                                            customerphone: state.cartlistmodel.data!.cartList.data[index].customer.phoneNo)));
                                               },
                                               child: Container(
                                                 height: MediaQuery.of(context)
@@ -737,7 +764,8 @@ class _MyCartScreenState extends State<MyCartScreen> {
                   //     state.cartlistmodel.data!.cartList.totalItems,
                   //     state.cartlistmodel.data!.cartList.deliveryCharge),
                   const Divider(),
-                  continueButtonUi(),
+                  continueButtonUi(state.cartlistmodel.data!.cartList.data,
+                      state.cartlistmodel.data!.cartList.totalItems.toString()),
                 ],
               )
             : Center(
@@ -857,8 +885,8 @@ class _MyCartScreenState extends State<MyCartScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SvgPicture.asset(
-                'assets/image/home_customer/myCartLocation.svg',
+              Image.asset(
+                'assets/images/home_customer/myCartLocation.png',
                 height: 30,
                 width: 30,
               ),
@@ -878,15 +906,75 @@ class _MyCartScreenState extends State<MyCartScreen> {
                               city +
                               " ," +
                               pincode,
-                          maxLines: 2,
                           style: Styles.sparePartNameTextBlack17,
                         ),
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                              onTap: () {
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             ChangeDeliveryAddressScreen(
+                                //               allitems: false,
+                                //               customerid: '',
+                                //               customeremail: '',
+                                //               customerphone: '',
+                                //               customername: '',
+                                //             )));
+                              },
+                              child: Text(
+                                "Change address",
+                                style: Styles.sparePartNameTextBlack17,
+                              )),
+                        ],
+                      )
                     ],
                   ),
                 ),
               ),
-
+              /*Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ChangeDeliveryAddressScreen(
+                                          quantity: "",
+                                          productprice: "",
+                                          productid: "",
+                                          allitems: false)));
+                        },
+                        child: Container(
+                          height: 25,
+                          width: 60,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border:
+                                  Border.all(color: CustColors.materialBlue),
+                              borderRadius: BorderRadius.circular(4)),
+                          child: const Text(
+                            "Change",
+                            style: Styles.homeActiveTextStyle,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),*/
             ],
           )),
     );
@@ -1018,11 +1106,13 @@ class _MyCartScreenState extends State<MyCartScreen> {
     );
   }
 
-  Widget continueButtonUi() {
+  Widget continueButtonUi(List<Datum> data, String totalitems) {
+    var newid;
+    var newaddressid;
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 5, 20, 10),
+          padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
           child: Container(
             margin: const EdgeInsets.only(top: 5, bottom: 5),
             child: _isLoading
@@ -1032,7 +1122,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                       width: _setValue(28),
                       child: const CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(
-                            CustColors.light_navy),
+                            CustColors.materialBlue),
                       ),
                     ),
                   )
@@ -1041,36 +1131,59 @@ class _MyCartScreenState extends State<MyCartScreen> {
                       // Navigator.push(
                       //     context,
                       //     MaterialPageRoute(
-                      //         builder: (context) => const Payment_Main_Screen(
-                      //             amount: "", orderid: "")));
+                      //         builder: (context) => ChangeDeliveryAddressScreen(
+                      //             quantity: "",
+                      //             productprice: "",
+                      //             productid: "",
+                      //             allitems: true)));
+
+                      List<int> newitems = [];
+
+                      data.forEach((element) {
+                        print(element.id);
+
+                        newid = element.id;
+                        newaddressid = element.customer.address.first.id;
+
+                        newitems.add(element.id);
+                      });
+                      print("newids");
+
+                      print(newitems);
+                      print(newaddressid);
 
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ChangeDeliveryAddressScreen(
-                                  quantity: "",
-                                  productprice: "",
-                                  productid: "",
-                                  allitems: true,
-                                  customerid:id,
-                                  customername:name,
-                                  customeremail:email,
-                                  customerphone:phone)));
-
-                      Fluttertoast.showToast(msg: "Confirm Address");
+                              builder: (context) => MyCheckoutScreen(
+                                    newitems: newitems,
+                                    newaddressid: newaddressid,
+                                  )));
                     },
-                    child: SizedBox(
-                      height: 50,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          Text(
-                            'Continue',
-                            textAlign: TextAlign.center,
-                            style: Styles.textButtonLabelSubTitle,
-                          ),
-                        ],
+                    child: ListTile(
+                      leading: SvgPicture.asset(
+                        "assets/images/ic_selected_blue_white_tick.svg",
+                        height: MediaQuery.of(context).size.height * 10 / 100,
+                        width: MediaQuery.of(context).size.width * 10 / 100,
+                      ),
+                      title: Text(
+                        'Checkout all products',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Samsung_SharpSans_Medium',
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                      trailing: Text(
+                        " ₦ " + newamount,
+                        style: TextStyle(
+                          fontFamily: 'Samsung_SharpSans_Medium',
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                          fontSize: 10,
+                        ),
                       ),
                     ),
                     color: CustColors.materialBlue,

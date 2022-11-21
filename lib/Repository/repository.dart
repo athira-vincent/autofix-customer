@@ -37,6 +37,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/ResetPasswordScr
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_api_provider.dart';
+import '../Models/new_checkout_model/new_checkout_model.dart';
 import '../Models/payment_success_model/payment_success_model.dart';
 import '../Models/wallet_check_balance_model.dart';
 import '../UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_api_provider.dart';
@@ -91,6 +92,8 @@ class Repository {
   final _vendornotificationprovider = MechanicApiProvider();
   final _apiTimeProvider = WorldTimeApiProvider();
   final _paymentsuccessprovider=CustomerApiProvider();
+
+  final _newcheckoutprovider=CustomerApiProvider();
 
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>
@@ -770,5 +773,6 @@ class Repository {
 
   Future<WalletCheckBalanceModel> fetchwalletcheckbalance(bookingid) =>
       _paymentsuccessprovider.fetchwalletcheckbalance(bookingid);
-
+  Future<NewCheckoutModel> newcheckoutapi(cartid, addressid) =>
+      _newcheckoutprovider.newcheckoutapi(cartid, addressid);
 }

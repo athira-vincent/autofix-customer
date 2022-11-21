@@ -3885,6 +3885,7 @@ class QueryProvider {
         firstName
         phoneNo
         address{
+        id
           fullName
           phoneNo
           pincode
@@ -4886,5 +4887,25 @@ class QueryProvider {
       enableDebug: true,
       isTokenThere: true,
     );
+  }
+
+
+  newcheckoutapi(String cartid, String addressid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String _query = """
+      mutation {
+  checkout(cartId: $cartid, customerAddressId: $addressid) {
+    mode
+    cost
+    duration
+    currency
+    pricingTier
+  }
+}
+     """;
+    log(_query);
+    return await GqlClient.I
+        .query01(_query, authToken, enableDebug: true, isTokenThere: true);
   }
 }
