@@ -53,6 +53,7 @@ import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'UI/SpareParts/MyCart/new_checkout_bloc/new_checkout_bloc.dart';
 import 'l10n/l10n.dart';
 
 String langCode;
@@ -196,6 +197,10 @@ class _MyAppState extends State<MyApp> {
               ),
               BlocProvider<CustomerWalletBloc>(
                 create: (context) => CustomerWalletBloc(),
+              ),
+
+              BlocProvider<NewCheckoutBloc>(
+                create: (context) => NewCheckoutBloc(),
               ),
             ],
             child:

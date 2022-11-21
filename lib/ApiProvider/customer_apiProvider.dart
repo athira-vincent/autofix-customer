@@ -30,6 +30,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/categor
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
 
+import '../Models/new_checkout_model/new_checkout_model.dart';
 import '../Models/payment_success_model/payment_success_model.dart';
 import '../Models/wallet_check_balance_model.dart';
 
@@ -815,6 +816,28 @@ class CustomerApiProvider {
       }
     } else {
       final errorMsg = WalletCheckBalanceModel(
+          status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+
+  /// checkout api
+  Future<NewCheckoutModel> newcheckoutapi( cartid, addressid
+      ) async {
+    Map<String, dynamic> _resp =
+    await _queryProvider.newcheckoutapi(cartid, addressid);
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = NewCheckoutModel(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return NewCheckoutModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = NewCheckoutModel(
           status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }

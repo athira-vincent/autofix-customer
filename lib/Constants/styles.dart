@@ -24,6 +24,12 @@ class Styles {
     color: CustColors.blackishgrey,
     fontSize: 11,
   );
+  static const orderstatusstyle = TextStyle(
+      fontSize: 10,
+      color:  Colors.black,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
 
   static const textLabelSubTitle01 = TextStyle(
     fontFamily: 'Samsung_SharpSans_Regular',

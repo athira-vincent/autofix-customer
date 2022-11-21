@@ -39,6 +39,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_api_provider.dart
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/CityList/city_list_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StatesList/states_list_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_api_provider.dart';
+import '../Models/new_checkout_model/new_checkout_model.dart';
 import '../Models/payment_success_model/payment_success_model.dart';
 import '../Models/wallet_check_balance_model.dart';
 import '../UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_api_provider.dart';
@@ -95,8 +96,10 @@ class Repository {
   final _vendornotificationprovider = MechanicApiProvider();
   final _apiTimeProvider = WorldTimeApiProvider();
   final _paymentsuccessprovider=CustomerApiProvider();
+  final _newcheckoutprovider=CustomerApiProvider();
+  
 
-  // City List
+// City List
   Future<dynamic> getCityList(String token, search) =>
       _cityListApiProvider.postCityListRequest(
           token, search);
@@ -784,5 +787,6 @@ class Repository {
 
   Future<WalletCheckBalanceModel> fetchwalletcheckbalance(bookingid) =>
       _paymentsuccessprovider.fetchwalletcheckbalance(bookingid);
-
+  Future<NewCheckoutModel> newcheckoutapi(cartid, addressid) =>
+      _newcheckoutprovider.newcheckoutapi(cartid, addressid);
 }

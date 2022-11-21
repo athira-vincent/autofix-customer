@@ -159,6 +159,7 @@ class Customer {
 
 class Address {
   Address({
+    required this.id,
     required this.fullName,
     required this.phoneNo,
     required this.pincode,
@@ -166,6 +167,7 @@ class Address {
     required this.state,
   });
 
+  String id;
   String fullName;
   String phoneNo;
   String pincode;
@@ -173,20 +175,22 @@ class Address {
   String state;
 
   factory Address.fromMap(Map<String, dynamic> json) => Address(
-        fullName: json["fullName"] ?? "",
-        phoneNo: json["phoneNo"] ?? "",
-        pincode: json["pincode"] ?? "",
-        city: json["city"] ?? "",
-        state: json["state"] ?? "",
-      );
+    id: json["id"],
+    fullName: json["fullName"] ?? "",
+    phoneNo: json["phoneNo"] ?? "",
+    pincode: json["pincode"] ?? "",
+    city: json["city"] ?? "",
+    state: json["state"] ?? "",
+  );
 
   Map<String, dynamic> toMap() => {
-        "fullName": fullName,
-        "phoneNo": phoneNo,
-        "pincode": pincode,
-        "city": city,
-        "state": state,
-      };
+    "id": id,
+    "fullName": fullName,
+    "phoneNo": phoneNo,
+    "pincode": pincode,
+    "city": city,
+    "state": state,
+  };
 }
 
 class Product {
