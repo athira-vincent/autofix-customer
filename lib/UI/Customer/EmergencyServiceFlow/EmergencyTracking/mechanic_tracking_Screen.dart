@@ -105,6 +105,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
   void listenToCloudFirestoreDB() {
     DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingIdEmergency}");
+
     reference.snapshots().listen((querySnapshot) {
       setState(() {
         customerId = querySnapshot.get('customerID');

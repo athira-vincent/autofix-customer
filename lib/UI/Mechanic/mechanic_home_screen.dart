@@ -6,6 +6,7 @@ import 'package:auto_fix/Constants/styles.dart';
 
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/Provider/locale_provider.dart';
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
@@ -19,6 +20,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,7 +46,9 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   double per = .10;
   double perfont = .10;
   String isOnline = "";
-  String authToken = "", userId = "", userName = "";
+  String authToken = "",
+      userId = "",
+      userName = "";
   late Map<String, dynamic> notificationPayloadMdl;
 
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
@@ -52,9 +56,9 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
   DateTime timeBackPressed = DateTime.now();
 
-  String location ='Null, Press Button';
-  String CurrentLatitude ="";
-  String CurrentLongitude ="";
+  String location = 'Null, Press Button';
+  String CurrentLatitude = "";
+  String CurrentLongitude = "";
 
   double _setValue(double value) {
     return value * per + value;
@@ -72,28 +76,32 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   }
 
   Future<void> getSharedPrefData() async {
-    String localProfileUrl = "", localProfileName = "";
+    String localProfileUrl = "",
+        localProfileName = "";
     print('getSharedPrefData -------> ');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       isOnline = shdPre.getString(SharedPrefKeys.mechanicIsOnline).toString();
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
-      localProfileName =  shdPre.getString(SharedPrefKeys.userName).toString();
-      localProfileUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
+      localProfileName = shdPre.getString(SharedPrefKeys.userName).toString();
+      localProfileUrl =
+          shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
     });
-    JWTTokenChecking.checking(shdPre.getString(SharedPrefKeys.token).toString(), context);
+    JWTTokenChecking.checking(
+        shdPre.getString(SharedPrefKeys.token).toString(), context);
     print('userFamilyId  MechanicHomeScreen ' + authToken.toString());
     print('userId  MechanicHomeScreen ' + userId.toString());
     print('userName  MechanicHomeScreen ' + userName.toString());
     print('isOnline  MechanicHomeScreen ' + isOnline.toString());
-    Provider.of<ProfileDataProvider>(context, listen: false).setProfile(userId, localProfileName, localProfileUrl);
+    Provider.of<ProfileDataProvider>(context, listen: false).setProfile(
+        userId, localProfileName, localProfileUrl);
   }
 
   Future<void> _getCurrentMechanicLocation() async {
     Position position = await _getGeoLocationPosition();
-    location ='Lat: ${position.latitude} , Long: ${position.longitude}';
- }
+    location = 'Lat: ${position.latitude} , Long: ${position.longitude}';
+  }
 
   Future<Position> _getGeoLocationPosition() async {
     bool serviceEnabled;
@@ -113,7 +121,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-
         return Future.error('Location permissions are denied');
       }
     }
@@ -126,31 +133,33 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
   }
 
   _listenApiResponse() {
     _mechanicHomeBloc.postMechanicOnlineOffline.listen((value) async {
-      if(value.status == "error"){
+      if (value.status == "error") {
         setState(() {
           //_isLoading = false;
-          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+          SnackBarWidget().setMaterialSnackBar(
+              value.message.toString(), _scaffoldKey);
         });
-      }else{
-          if(isOnline == "1"){
-            setState(() {
-              isOnline = "0";
-            });
-          }else{
-            setState(() {
-              isOnline = "1";
-            });
-          }
-         //isOnline = !isOnline;
-          SharedPreferences shdPre = await SharedPreferences.getInstance();
-          shdPre.setString(SharedPrefKeys.mechanicIsOnline,isOnline);
-          //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
-          /*_isLoading = false;
+      } else {
+        if (isOnline == "1") {
+          setState(() {
+            isOnline = "0";
+          });
+        } else {
+          setState(() {
+            isOnline = "1";
+          });
+        }
+        //isOnline = !isOnline;
+        SharedPreferences shdPre = await SharedPreferences.getInstance();
+        shdPre.setString(SharedPrefKeys.mechanicIsOnline, isOnline);
+        //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
+        /*_isLoading = false;
           socialLoginIsLoading = false;
           _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*/
       }
@@ -295,8 +304,12 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    userName = Provider.of<ProfileDataProvider>(context).getName;
-    Size size = MediaQuery.of(context).size;
+    userName = Provider
+        .of<ProfileDataProvider>(context)
+        .getName;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     var bottomNavigationBarItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
           backgroundColor: Colors.white,
@@ -340,7 +353,8 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                     width: _setValue(25),
                     height: _setValue(25),
                     child: _index == 1
-                        ? Image.asset('assets/image/ic_home_price_fault_active.png',
+                        ? Image.asset(
+                      'assets/image/ic_home_price_fault_active.png',
                       width: _setValue(26),
                       height: _setValue(26),
                     )
@@ -373,7 +387,8 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                     width: _setValue(25),
                     height: _setValue(25),
                     child: _index == 2
-                        ? SvgPicture.asset('assets/image/ic_home_service_active.svg',
+                        ? SvgPicture.asset(
+                      'assets/image/ic_home_service_active.svg',
                       width: _setValue(26),
                       height: _setValue(26),
                     )
@@ -431,16 +446,16 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       ),
     ];
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         final difference = DateTime.now().difference(timeBackPressed);
         final isExitWarning = difference >= Duration(seconds: 3);
         timeBackPressed = DateTime.now();
-        if(isExitWarning){
+        if (isExitWarning) {
           /* final message = 'Press back again to exit';
             Fluttertoast.showToast(msg: message,fontSize: 18);
             */
           return false;
-        }else{
+        } else {
           //Fluttertoast.cancel();
           ShowPopUpWidget().showPopUp(context);
           return false;
@@ -450,103 +465,149 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
         drawer: MechanicSideBarScreen(),
         key: scaffoldKey,
         appBar: _index == 0
-          ? PreferredSize(
-              preferredSize: Size.fromHeight(40.0 + MediaQuery.of(context).padding.top),
-              child: AppBar(
-                actions: [],
-                automaticallyImplyLeading: false,
-                flexibleSpace: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
+            ? PreferredSize(
+          preferredSize: Size.fromHeight(40.0 + MediaQuery
+              .of(context)
+              .padding
+              .top),
+          child: AppBar(
+            actions: [],
+            automaticallyImplyLeading: false,
+            flexibleSpace: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
 
-                      margin: EdgeInsets.only(
-                          left: 21, top: 20 + MediaQuery.of(context).padding.top),
+                  margin: EdgeInsets.only(
+                      left: 21, top: 20 + MediaQuery
+                      .of(context)
+                      .padding
+                      .top),
 
-                      child: GestureDetector(
-                          onTap: () {
-                            scaffoldKey.currentState?.openDrawer();
-                          },
-                          child: Image.asset(
-                            'assets/image/ic_drawer.png',
-                            width: 30,
-                            height: 30,
-                          )),
-                    ),
+                  child: GestureDetector(
+                      onTap: () {
+                        scaffoldKey.currentState?.openDrawer();
+                      },
+                      child: Image.asset(
+                        'assets/image/ic_drawer.png',
+                        width: 30,
+                        height: 30,
+                      )),
+                ),
 
-                    Container(
-                      margin: EdgeInsets.only(
-                          top: 25 + MediaQuery.of(context).padding.top, left: 20),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Welcome",
-                            style: Styles.homeWelcomeTextStyle,
-                          ),
-                          Text(
-                            " $userName",  //" Athira",
-                            style: Styles.homeNameTextStyle,
-                          ),
-                          Text(
-                            " !",
-                            style: Styles.homeWelcomeSymbolTextStyle,
-                          ),
-                        ],
+                Container(
+                  margin: EdgeInsets.only(
+                      top: 25 + MediaQuery
+                          .of(context)
+                          .padding
+                          .top, left: 20),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Welcome",
+                        style: Styles.homeWelcomeTextStyle,
                       ),
-                    ),
+                      Text(
+                        " $userName", //" Athira",
+                        style: Styles.homeNameTextStyle,
+                      ),
+                      Text(
+                        " !",
+                        style: Styles.homeWelcomeSymbolTextStyle,
+                      ),
+                    ],
+                  ),
+                ),
 
-                    Spacer(),
+                Spacer(),
 
-                    Container(
-                      color: Colors.white,
-                      child: InkWell(
-                        onTap: (){
-                          setState(() {
-                            if(isOnline == "1"){
-                              _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "0", userId, );
-                            }else{
-                              _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken","1", userId, );
-                            }
-                          });// !isOnline
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(
-                            top: 25 + MediaQuery.of(context).padding.top,
-                            right: 10 + MediaQuery.of(context).padding.right
+                Container(
+                  color: Colors.white,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        // Repository().postMechanicActiveServiceRequest(
+                        //     authToken, userId).then((value) =>
+                        // {
+                        //   if(value.data!.currentlyWorkingService!.isEmpty){
+                        //     if(isOnline == "1"){
+                        //       _mechanicHomeBloc
+                        //           .postMechanicOnlineOfflineRequest(
+                        //         "$authToken", "0", userId,)
+                        //     } else
+                        //       {
+                        //         _mechanicHomeBloc
+                        //             .postMechanicOnlineOfflineRequest(
+                        //           "$authToken", "1", userId,)
+                        //       }
+                        //   }else{
+                        //     Fluttertoast.showToast(
+                        //         msg: "You are in an active service"),
+                        //   }
+                        // });
+
+                        if(isOnline == "1"){
+                          _mechanicHomeBloc
+                              .postMechanicOnlineOfflineRequest(
+                            "$authToken", "0", userId,);
+                        } else
+                        {
+                          _mechanicHomeBloc
+                              .postMechanicOnlineOfflineRequest(
+                            "$authToken", "1", userId,);
+                        }
+                      });
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          top: 25 + MediaQuery
+                              .of(context)
+                              .padding
+                              .top,
+                          right: 10 + MediaQuery
+                              .of(context)
+                              .padding
+                              .right
+                      ),
+                      padding: EdgeInsets.only(
+                          left: 7, right: 7,
+                          top: 4, bottom: 4
+                      ),
+                      decoration: BoxDecoration(
+                          color: isOnline == "1"
+                              ? CustColors.light_navy
+                              : CustColors.cloudy_blue,
+                          borderRadius: BorderRadius.circular(4),
+                          boxShadow: [new BoxShadow(
+                            color: CustColors.roseText1,
+                            blurRadius: 10.0,
                           ),
-                          padding: EdgeInsets.only(
-                              left: 7, right: 7,
-                              top: 4, bottom: 4
-                          ),
-                          decoration: BoxDecoration(
-                              color: isOnline == "1" ? CustColors.light_navy : CustColors.cloudy_blue,
-                              borderRadius: BorderRadius.circular(4),
-                              boxShadow: [new BoxShadow(
-                                color: CustColors.roseText1,
-                                blurRadius: 10.0,
-                              ),]
-                          ),
-                          //color: isOnline ? CustColors.light_navy : CustColors.cloudy_blue,
-                          child: Text(
-                              isOnline == "1" ? "Online" : "Offline",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontFamily: "Samsung_SharpSans_Medium",
-                                fontWeight: FontWeight.w400
-                              ),
-                          ),
+                          ]
+                      ),
+                      //color: isOnline ? CustColors.light_navy : CustColors.cloudy_blue,
+                      child: Text(
+                        isOnline == "1" ? "Online" : "Offline",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontFamily: "Samsung_SharpSans_Medium",
+                            fontWeight: FontWeight.w400
                         ),
                       ),
                     ),
+                  ),
+                ),
 
-                    Container(
-                      margin: EdgeInsets.only(
-                           top: 25 + MediaQuery.of(context).padding.top,
-                           right: size.width * 4.2/100
-                      ),
-                      /*child: Stack(
+                Container(
+                  margin: EdgeInsets.only(
+                      top: 25 + MediaQuery
+                          .of(context)
+                          .padding
+                          .top,
+                      right: size.width * 4.2 / 100
+                  ),
+                  /*child: Stack(
                         children: [
                           SvgPicture.asset(
                                 'assets/image/notification_icon.svg',
@@ -578,28 +639,28 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                           ),
                         ],
                       ),*/
-                    ),
-                  ],
                 ),
-                backgroundColor: Colors.white,
-                shadowColor: Colors.white,
-              ),
-            )
-          :  PreferredSize(
-            preferredSize: Size.fromHeight(0.0),
-            child: AppBar(),
-          ),
-        body:  Center(
-              child:  IndexedStack(
-                    index: _index,
-                    children: <Widget> [
-                         MechanicHomeUIScreen(),
-                         Addpricefault(position: 1,),
-                         MechanicMyServicesScreen(),
-                         MechanicMyProfileScreen(isEnableEditing: false,),
-                    ],
-                  )
+              ],
             ),
+            backgroundColor: Colors.white,
+            shadowColor: Colors.white,
+          ),
+        )
+            : PreferredSize(
+          preferredSize: Size.fromHeight(0.0),
+          child: AppBar(),
+        ),
+        body: Center(
+            child: IndexedStack(
+              index: _index,
+              children: <Widget>[
+                MechanicHomeUIScreen(),
+                Addpricefault(position: 1,),
+                MechanicMyServicesScreen(),
+                MechanicMyProfileScreen(isEnableEditing: false,),
+              ],
+            )
+        ),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
             boxShadow: [
