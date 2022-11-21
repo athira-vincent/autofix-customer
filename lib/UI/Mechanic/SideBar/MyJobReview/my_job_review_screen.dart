@@ -27,6 +27,7 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isLoadingPage = true;
   List<MechanicReviewsDatum>? _mechanicReviewsData = [];
+  List<bool>? _reviewMessageLength;
 
   @override
   void initState() {
@@ -67,8 +68,10 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
         setState(() {
           _isLoadingPage = false;
           _mechanicReviewsData = value.data!.mechanicReviewList!.mechanicReviewsData;
+          _reviewMessageLength = List<bool>.filled(_mechanicReviewsData!.length, false);
           print(">>>>>>>>>> Review data" + _mechanicReviewsData.toString());
           print(">>>>>>>>>> Review data" + _mechanicReviewsData!.length.toString());
+          print(">>>>>>>>>> _reviewMessageLength" + _reviewMessageLength!.length.toString());
 
         });
       }
@@ -126,7 +129,7 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                                        width: 1,
                                      ),
                                    ),
-                                   height: 100,
+                                   height: _reviewMessageLength![index] == false ? 100 : 125,
                                    width: double.infinity,
                                    alignment: Alignment.center,
                                    child: Row(
@@ -183,7 +186,7 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                                                  //'Good service…and good..',
                                                  _mechanicReviewsData![index].feedback,
                                                  overflow: TextOverflow.ellipsis,
-                                                 maxLines: 1,
+                                                 maxLines: _reviewMessageLength![index] == false ? 1 : 5,
                                                  style: TextStyle(
                                                    fontFamily: 'Samsung_SharpSans_Medium',
                                                    fontSize: 10.0,
@@ -237,12 +240,20 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                                                    _mechanicReviewsData![index].feedback.length > 20
                                                        ? InkWell(
                                                           onTap: (){
-
+                                                            print("_reviewMessageLength![index] : " + _reviewMessageLength![index].toString());
+                                                            setState(() {
+                                                              if(_reviewMessageLength![index] == false){
+                                                                _reviewMessageLength![index] = true;
+                                                              }else{
+                                                                _reviewMessageLength![index] = false;
+                                                              }
+                                                            });
                                                           },
                                                          child: Padding(
                                                            padding: const EdgeInsets.only(top: 8.0),
                                                            child: RichText(
-                                                             text:TextSpan(text: 'Read More',
+                                                             text:TextSpan(
+                                                                 text: _reviewMessageLength![index] == false ? 'Read More' : 'Read Less',
                                                                  style:TextStyle(
                                                                    fontFamily: 'SamsungSharpSans-Regular',
                                                                    fontSize: 10,
