@@ -24,6 +24,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_api_pr
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault_api_provider.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_active_service_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_api_provider/mechanic_profile_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyJobReview/my_job_review_api_provider.dart';
@@ -493,7 +494,7 @@ class Repository {
           token, type, mechanicId, );
 
   // Fetch Mechanic Active Service Request
-  Future<dynamic> postMechanicActiveServiceRequest(token, mechanicId) =>
+  Future<MechanicActiveServiceUpdateMdl> postMechanicActiveServiceRequest(token, mechanicId) =>
       _mechanicApiProvider.postMechanicActiveServiceRequest(token, mechanicId);
 
   // Fetch Mechanic Online Offline Request
