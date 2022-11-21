@@ -7,6 +7,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicStartService/mechanic_start_service_screen.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
+import 'package:auto_fix/UI/chat/chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,8 +20,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../Constants/cust_colors.dart';
 import '../../../../../../Constants/styles.dart';
@@ -79,10 +82,13 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
   }
   static const LatLng _center = const LatLng(10.0159, 76.3419);
   List<LatLng> latlng = [];
-  String location ='';
-  String Address = '';
+  String location ='', Address = '';
+  String mechanicCurrentLat = "", mechanicCurrentLng = "";
   String authToken="", carName = "", customerAddress = "", plateNumber = "", vehicleColor = "";
+  String customerId = "", mechanicId = "", customerName = "", myProfileUrl = "", customerProfileUrl = "";
+  String callPhoneNumber = "", bookingId = "";
   bool isArrived = false;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -98,6 +104,11 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
       _getCurrentLocation();
     });
     getSharedPrefData();
+    Timer(const Duration(seconds: 2), () {
+      setState(() {
+        isLoading = false;
+      });
+    });
     _listenServiceListResponse();
   }
 
@@ -145,8 +156,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
   }
 
   _listenServiceListResponse() {
-
-    _mechanicOrderStatusUpdateBloc.MechanicOrderStatusUpdateResponse.listen((value) {
+    _serviceStatusUpdateBloc.postStatusUpdate.listen((value) {
       if (value.status == "error") {
         setState(() {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -159,10 +169,18 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
         });
       } else {
         setState(() {
-          Navigator.pushReplacement(
+          /*Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => MechanicStartServiceScreen()));
+                  builder: (context) => MechanicStartServiceScreen()));*/
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.data!.regularMechStatusUpdate!.msg!.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          ));
+          Navigator.pop(context);
         });
       }
     });
@@ -173,12 +191,19 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      bookingId = widget.bookedId;
       print('userFamilyId FindYourCustomerScreen '+authToken.toString());
       _firestore.collection("Regular-PickUp").doc('${widget.bookedId}').snapshots().listen((event) {
         carName = event.get('vehicleName');
         customerAddress = event.get('customerAddress');
         plateNumber =  event.get('vehiclePlateNumber');
         vehicleColor =  event.get('vehicleColor');
+        customerName = event.get('customerName');
+        callPhoneNumber = event.get('customerPhone');
+        myProfileUrl = event.get('mechanicProfileUrl');
+        customerProfileUrl = event.get('customerProfileUrl');
+        customerId = event.get('customerId');
+        mechanicId = event.get('mechanicId');
       });
     });
   }
@@ -227,7 +252,11 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
             'latitude': value1.latitude.toString(),
             'longitude': value1.longitude.toString()
         })
-            .then((value) => print("Location Added"))
+            .then((value) {
+          print("Location Added");
+          mechanicCurrentLat = value1.latitude.toString();
+          mechanicCurrentLng = value1.longitude.toString();
+        })
             .catchError((error) =>
             print("Failed to add Location: $error"));
       });
@@ -392,6 +421,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
         .collection("Regular-PickUp").doc('${widget.bookedId}')
         .update({
           'isArrived': "0",
+          'isArrivedTime': "${DateFormat("hh:mm a").format(DateTime.now())}",
         })
         .then((value) => print("Location Added"))
         .catchError((error) =>
@@ -401,10 +431,18 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Container(
+        body: isLoading == true
+            ?
+        Container(
+            width: size.width,
+            height: size.height,
+            child: Center(child: CircularProgressIndicator(color: CustColors.light_navy)))
+            :
+        Container(
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
@@ -556,9 +594,8 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
 
                                           child: MaterialButton(
                                             onPressed: () {
+                                              _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "3");
                                               updateToCloudFirestoreDB();
-                                              Navigator.of(context).pop();
-                                              _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "10");
                                             },
                                             child: Container(
                                               height: 30,
@@ -593,7 +630,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
                       Container(
                         height: 50,
                         decoration: BoxDecoration(
-                          color: CustColors.blue,
+                          color: CustColors.light_navy,
                           borderRadius: BorderRadius.only(
                               bottomRight:   Radius.circular(20),
                               bottomLeft:  Radius.circular(20)),
@@ -601,47 +638,85 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
                         child: Row(
                           children: [
                             Expanded(
-                              child: Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.phone, color: Colors.white),
-                                    Text(
-                                      "Call",
-                                      style: Styles.popUPTextStyle,
-                                    ),
-                                  ],
+                              child: InkWell(
+                                onTap: (){
+                                  _callPhoneNumber(callPhoneNumber);
+                                },
+                                child: Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                          height : 25,
+                                          width: 25,
+                                          child: Image.asset("assets/image/ic_call_blue_white.png")
+                                      ),
+                                      Text(
+                                        "Call",
+                                        style: Styles.popUPTextStyle,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                             Expanded(
-                              child:  Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.chat, color: Colors.white),
-                                    Text(
-                                      "Chat",
-                                      style: Styles.popUPTextStyle,
-                                    ),
-                                  ],
+                              child:  InkWell(
+                                onTap: (){
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ChatScreen(
+                                            peerId: customerId,
+                                            bookingId: '$bookingId',
+                                            collectionName: 'Regular-PickUp',
+                                            currentUserId: mechanicId,
+                                            peerName: customerName,
+                                            myImageUrl: myProfileUrl,
+                                            peerImageUrl: customerProfileUrl,
+                                          )));
+                                },
+                                child: Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                          height : 25,
+                                          width: 25,
+                                          child: Image.asset("assets/image/ic_chat_blue_white.png")
+                                      ),
+                                      Text(
+                                        "Chat",
+                                        style: Styles.popUPTextStyle,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                             Expanded(
-                              child:  Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.smartphone_sharp, color: Colors.white),
-                                    Text(
-                                      "Call via ResolMech",
-                                      style: Styles.popUPTextStyle,
-                                    ),
-                                  ],
+                              child:  InkWell(
+                                onTap: (){
+                                  launchMapsUrl(mechanicCurrentLat,mechanicCurrentLng,double.parse('${widget.latitude}'), double.parse('${widget.longitude}'));
+                                },
+                                child: Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                          height : 25,
+                                          width: 25,
+                                          child: Image.asset("assets/image/ic_navigate_blue_white.png")
+                                      ),
+                                      Text(
+                                        "Navigate",
+                                        style: Styles.popUPTextStyle,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -709,6 +784,33 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
       ),
     );
   }
+
+  void _callPhoneNumber(String phoneNumber) async {
+    var url = 'tel://$phoneNumber';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Error Occurred';
+    }
+  }
+
+  static void launchMapsUrl(
+      sourceLatitude,
+      sourceLongitude,
+      destinationLatitude,
+      destinationLongitude) async {
+    String mapOptions = [
+      'saddr=$sourceLatitude,$sourceLongitude',
+      'daddr=$destinationLatitude,$destinationLongitude',
+      'dir_action=navigate'
+    ].join('&');
+
+    final url = 'https://www.google.com/maps?$mapOptions';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }  }
 
   @override
   void dispose() {

@@ -439,6 +439,46 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
+  postCityListRequest(token, search) async {
+    String _query = """ 
+         {
+      citiesList(countryCode: "ng") {
+        cityName
+        suburbName
+        postcode
+      }
+    }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  postStatesListRequest(token, search) async {
+    String _query = """ 
+     {
+      statesList(countryCode: "ng") {
+        slug
+        pk
+        countryCode
+        name
+        code
+      }
+    }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
   postBrandDetailsRequest(token, search) async {
     String _query = """ 
        {
@@ -2799,11 +2839,59 @@ class QueryProvider {
     bookStatus,
   ) async {
     String _query = """
-     mutation {
-      mechanic_status_update(state: $bookStatus, bookId: $bookingId) {
+      mutation {
+    mechanic_status_update(state: $bookStatus, bookId: $bookingId) {
+      msg {
         message
       }
+      bookingData {
+        id
+        bookingCode
+        reqType
+        bookStatus
+        totalPrice
+        tax
+        commission
+        serviceCharge
+        totalTime
+        serviceTime
+        latitude
+        longitude
+        mechLatitude
+        mechLongitude
+        extend
+        totalExt
+        extendTime
+        bookedDate
+        bookedTime
+        isRated
+        status
+        customerId
+        mechanicId
+        vehicleId
+        regularType
+        mechanic{
+          id
+          firstName
+          phoneNo
+          emailId
+        }
+        customer{
+          id
+          firstName
+        }
+        vehicle{
+          id
+        }
+        bookService{
+          id
+          service{
+            icon
+          }
+        }
+      }
     }
+  }
     """;
     log(_query);
     return await GqlClient.I.query01(
@@ -4819,12 +4907,12 @@ class QueryProvider {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
     String userid = shdPre.getString(SharedPrefKeys.userID).toString();
-    String mutation_text = transtype == "1" ? "bookingId:$orderid" : "orderId:$orderid";
+    String mutation_text = transtype.toString() == "1" ? "bookingId: $orderid" : "orderCode: $orderid";
     String _query = """
  mutation {
   paymentCreate(
     transType:$transtype
-    amount:$amount
+    amount: ${double.parse(amount)} 
     paymentType:$paymenttype
     transId:"$transid"
     transData:"string"

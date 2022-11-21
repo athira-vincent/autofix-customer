@@ -26,8 +26,8 @@ class CustomerWalletScreen extends StatefulWidget {
 }
 
 class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
-  TextEditingController _phoneController = TextEditingController();
-  FocusNode _phoneFocusNode = FocusNode();
+  TextEditingController _amountController = TextEditingController();
+  FocusNode _amountFocusNode = FocusNode();
   String profileUrl = "";
   String name = "";
   String userid = "";
@@ -170,10 +170,10 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                                     height: 106.0,
                                     width: 106.0,
                                     child: ClipOval(
-                                      child: profileUrl != null
-                                          ? Image.network(profileUrl)
-                                          : SvgPicture.asset(
-                                              'assets/image/MechanicType/work_selection_avathar.svg'),
+                                      child: profileUrl == null || profileUrl == "" || profileUrl.isEmpty
+                                          ? SvgPicture.asset(
+                                          'assets/image/MechanicType/work_selection_avathar.svg')
+                                          : Image.network(profileUrl),
                                     ),
                                   ))),
                         ),
@@ -307,101 +307,103 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
   }
 
   Widget addMoneyWidget(Size size) {
-    return InkWell(
-      onTap: () {
-        initPlatformState();
-      },
-      child: Container(
-        margin: EdgeInsets.only(
-          //top: size.height * .2 / 100,
-          bottom: size.width * .2 / 100,
-        ),
-        child: Column(
-          children: [
-            FDottedLine(
-              color: CustColors.grey_04,
-              width: double.infinity,
-            ),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                  margin: EdgeInsets.only(
-                    top: size.height * 2 / 100,
-                    left: size.width * 9 / 100,
-                    right: size.width * 9 / 100,
-                  ),
-                  child: const Text(
-                    "Add money to wallet",
-                    style: Styles.myWalletTitleText05,
-                  )),
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                  margin: EdgeInsets.only(
-                    top: size.height * 2.5 / 100,
-                    left: size.width * 9 / 100,
-                    right: size.width * 9 / 100,
-                  ),
-                  child: const Text(
-                    "Enter amount ",
-                    style: Styles.myWalletListTileTitle01,
-                  )),
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
+    return Container(
+      margin: EdgeInsets.only(
+        //top: size.height * .2 / 100,
+        bottom: size.width * .2 / 100,
+      ),
+      child: Column(
+        children: [
+          FDottedLine(
+            color: CustColors.grey_04,
+            width: double.infinity,
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
                 margin: EdgeInsets.only(
                   top: size.height * 2 / 100,
                   left: size.width * 9 / 100,
                   right: size.width * 9 / 100,
                 ),
-                child: TextFormField(
-                  textAlignVertical: TextAlignVertical.center,
-                  maxLines: 1,
-                  style: Styles.textLabelSubTitle01,
-                  focusNode: _phoneFocusNode,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(15),
-                  ],
-                  validator: InputValidator(
-                    ch: 'Amount',
-                  ).phoneNumChecking,
-                  controller: _phoneController,
-                  cursorColor: CustColors.materialBlue,
-                  decoration: const InputDecoration(
-                    errorStyle: const TextStyle(color: Colors.red),
-                    isDense: true,
-                    hintText: 'Enter Amount',
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: CustColors.white_02,
-                        width: .5,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
+                child: const Text(
+                  "Add money to wallet",
+                  style: Styles.myWalletTitleText05,
+                )),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+                margin: EdgeInsets.only(
+                  top: size.height * 2.5 / 100,
+                  left: size.width * 9 / 100,
+                  right: size.width * 9 / 100,
+                ),
+                child: const Text(
+                  "Enter amount ",
+                  style: Styles.myWalletListTileTitle01,
+                )),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              margin: EdgeInsets.only(
+                top: size.height * 2 / 100,
+                left: size.width * 9 / 100,
+                right: size.width * 9 / 100,
+              ),
+              child: TextFormField(
+                textAlignVertical: TextAlignVertical.center,
+                maxLines: 1,
+                style: Styles.textLabelSubTitle01,
+                focusNode: _amountFocusNode,
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(15),
+                ],
+                validator: InputValidator(
+                  ch: 'Amount',
+                ).phoneNumChecking,
+                controller: _amountController,
+                cursorColor: CustColors.materialBlue,
+                decoration: const InputDecoration(
+                  errorStyle: const TextStyle(color: Colors.red),
+                  isDense: true,
+                  hintText: 'Enter Amount',
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
                       color: CustColors.white_02,
                       width: .5,
-                    )),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: CustColors.white_02,
-                      width: .5,
-                    )),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 12.8,
-                      horizontal: 8.0,
                     ),
-                    hintStyle: Styles.textLabelSubTitle,
                   ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                    color: CustColors.white_02,
+                    width: .5,
+                  )),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                    color: CustColors.white_02,
+                    width: .5,
+                  )),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 12.8,
+                    horizontal: 8.0,
+                  ),
+                  hintStyle: Styles.textLabelSubTitle,
                 ),
               ),
             ),
-            Align(
+          ),
+          _amountController.text.length > 0
+              ?
+          InkWell(
+            onTap: (){
+              initPlatformState();
+            },
+            child: Align(
               alignment: Alignment.centerLeft,
               child: Container(
                 width: double.infinity,
@@ -426,8 +428,35 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                 ),
               ),
             ),
-          ],
-        ),
+          )
+              :
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              width: double.infinity,
+              margin: EdgeInsets.only(
+                top: size.height * 2 / 100,
+                left: size.width * 9 / 100,
+                right: size.width * 9 / 100,
+              ),
+              padding: EdgeInsets.only(
+                top: size.height * 1.5 / 100,
+                bottom: size.height * 1.5 / 100,
+              ),
+              color: CustColors.cloudy_blue,
+              child: const Center(
+                child: Text(
+                  "Add Money",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontFamily: 'Samsung_SharpSans_Bold'),
+                ),
+              ),
+            ),
+          )
+          ,
+        ],
       ),
     );
   }
@@ -527,11 +556,11 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
 
     int amount;
     // initialize amount
-    if (_phoneController.text.isEmpty) {
+    if (_amountController.text.isEmpty) {
       //amount = 2500 * 100;
       amount = 0;
     } else {
-      amount = int.parse(_phoneController.text) * 100;
+      amount = int.parse(_amountController.text) * 100;
     }
 
     // create payment info
@@ -544,7 +573,7 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
     var message;
     if (result.hasValue) {
       Repository()
-          .fetchpaymentsucess(null, _phoneController.text, null,
+          .fetchpaymentsucess(null, _amountController.text, null,
               result.value.transactionReference, null)
           .then((value) => {
                 if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty)

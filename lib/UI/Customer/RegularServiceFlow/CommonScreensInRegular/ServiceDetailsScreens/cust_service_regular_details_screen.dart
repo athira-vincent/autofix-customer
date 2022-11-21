@@ -1,19 +1,15 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
-import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularRateMechanic/regular_rate_mechanic_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/cust_mobile_mech_service_track_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/cust_pick_up_track_service_screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/x_cust_pick_up_track_service_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_track_service_screen.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_bloc.dart';
-import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -85,7 +81,6 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
         });
       }else{
         setState(() {
-          isLoading = false;
           _BookingDetails = value.data!.bookingDetails;
           /*if(_BookingDetails!.regularType.toString() == "1"){
             firebaseCollection = TextStrings.firebase_pick_up;
@@ -106,6 +101,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
 
       setState(() {
         bookingDate = event.get("bookingDate");
+        isLoading = false;
       });
     });
   }
@@ -541,15 +537,10 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => CustTakeVehicleTrackScreen(
-                                        //reachTime: '${_BookingDetails!.bookedTime}',
-                                        bookedDate: bookingDate,
-                                        latitude: '${_BookingDetails!.latitude}',
-                                        longitude: '${_BookingDetails!.longitude}',
-                                        goTime: '${_BookingDetails!.bookedTime}',
-                                        bookedId: '${_BookingDetails!.id.toString()}',
-                                        //mechanicAddress: "${_BookingDetails!.mechanic!.firstName.toString()}",
-                                        //mechanicName: "${_BookingDetails!.mechanic!.firstName.toString()}",
-                                        //pickingDate: 'Mar 8,2022',
+                                        bookingId: _BookingDetails!.id.toString(),
+                                        bookingDate: bookingDate,
+                                        latitude: '${_BookingDetails!.mechLatitude}',
+                                        longitude: '${_BookingDetails!.mechLongitude}',
                                       ),
                                     ));
                               }

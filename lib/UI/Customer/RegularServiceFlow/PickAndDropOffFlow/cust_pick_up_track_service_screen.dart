@@ -38,16 +38,19 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String isBookedDate = "", scheduledDate = "",
-      scheduledTime = "", isDriveStarted = "",
+      scheduledTime = "",
       isArrived = "", isWorkStarted = "",
       isWorkFinished = "", isPayment = "";
   String isPickedUpVehicle = "-1";
   String isStartedFromLocation = "-1";
   String bookingDate = "", customerName = "", mechanicName = "";
   DateTime dateToday = DateTime.now();
-  String isDriveStartedTime = "", isArrivedTime = "", isWorkStartedTime = "", isWorkFinishedTime = "", isPaymentTime = "";
-  String customerAddress = "", mechanicAddress = "";
-  String isCompleted = "-1";String isStartedFromLocationForDropOff = "-1";
+  String isArrivedTime = "", isStartedFromLocationTime = "",
+      isPickedUpVehicleTime = "", isWorkStartedTime = "",isStartedFromLocationForDropOff = "",
+      isWorkFinishedTime = "", isPaymentTime = "", isReachedServiceCenterTime = "";
+  String customerAddress = "", mechanicAddress = "", isDropOffTime = "";
+  String isCompleted = "-1";String isStartedFromLocationForDropOffTime = "",
+      isReachedLocationForDropOff = "-1", isReachedLocationForDropOffTime = "";
   bool isLoading = true;
   String customerId = "", mechanicId = "", customerProfileUrl = "", mechanicProfileUrl = "";
   String callPhoneNumber = "";String isReachedServiceCenter = "-1";
@@ -71,37 +74,45 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
    await _firestore.collection("${TextStrings.firebase_pick_up}").doc('${widget.bookingId}').snapshots().listen((event) {
 
       setState(() {
-        bookingDate = event.get("bookingDate");
-        isStartedFromLocation = event.get("isStartedFromLocation");
-        isPickedUpVehicle = event.get("isPickedUpVehicle");
-        isReachedServiceCenter = event.get("isReachedServiceCenter");
-        isStartedFromLocationForDropOff = event.get("isStartedFromLocationForDropOff");
-        isDropOff = event.get("isDropOff");
+        //bookingDate = event.get("bookingDate");
         mechanicProfileUrl = event.get('mechanicProfileUrl');
         customerProfileUrl = event.get('customerProfileUrl');
         customerName = event.get("customerName");
         customerAddress = event.get("customerAddress");
-        scheduledTime = event.get("scheduledTime");
+        customerId = event.get('customerId');
+        mechanicId = event.get('mechanicId');
+        callPhoneNumber = event.get('mechanicPhone');
         mechanicName = event.get("mechanicName");
         mechanicAddress = event.get("mechanicAddress");
+
         isBookedDate = event.get("isBookedDate");
         scheduledDate = event.get("scheduledDate");
-        scheduledDate = event.get("scheduledDate");
-        isDriveStarted = event.get("isDriveStarted");
-        isDriveStartedTime = event.get("isDriveStartedTime");
+        scheduledTime = event.get("scheduledTime");
+        isStartedFromLocation = event.get("isStartedFromLocation");
+        isStartedFromLocationTime = event.get("isStartedFromLocationTime");
         isArrived = event.get("isArrived");
         isArrivedTime = event.get("isArrivedTime");
+        isPickedUpVehicle = event.get("isPickedUpVehicle");
+        isPickedUpVehicleTime = event.get("isPickedUpVehicleTime");
+        isReachedServiceCenter = event.get("isReachedServiceCenter");
+        isReachedServiceCenterTime = event.get("isReachedServiceCenterTime");
         isWorkStarted = event.get("isWorkStarted");
         isWorkStartedTime = event.get("isWorkStartedTime");
         isWorkFinished = event.get("isWorkFinished");
         isWorkFinishedTime = event.get("isWorkFinishedTime");
-        isPayment = event.get("isPayment");
-        isPaymentTime = event.get("isPaymentTime");
-        customerId = event.get('customerId');
-        mechanicId = event.get('mechanicId');
-        callPhoneNumber = event.get('mechanicPhone');
+        isStartedFromLocationForDropOff = event.get("isStartedFromLocationForDropOff");
+        isStartedFromLocationForDropOffTime = event.get("isStartedFromLocationForDropOffTime");
+        isReachedLocationForDropOff = event.get('isReachedLocationForDropOff');
+        isReachedLocationForDropOffTime = event.get("isReachedLocationForDropOffTime");
+        isDropOff = event.get("isDropOff");
+        isDropOffTime = event.get("isDropOffTime");
         isPaymentRequested = event.get("isPaymentRequested");
         isPaymentRequestedTime = event.get("isPaymentRequestedTime");
+        //scheduledDate = event.get("scheduledDate");
+        //isDriveStarted = event.get("isDriveStarted");     //***
+        //isDriveStartedTime = event.get("isDriveStartedTime");   //****
+        isPayment = event.get("isPayment");
+        isPaymentTime = event.get("isPaymentTime");
       });
 
       if(scheduledDate.isNotEmpty){
@@ -140,7 +151,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
 
   void updateToCloudFirestoreDB(String key, String value ) {
     _firestore
-        .collection("${TextStrings.firebase_mobile_mech}")
+        .collection("${TextStrings.firebase_pick_up}")
         .doc('${widget.bookingId}')
         .update({
       "$key" : "$value",
@@ -175,15 +186,16 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                   isStartedFromLocation == "-1" ? driveStartedInactiveUi(size) : driveStartedCompletedUi(size),
                   isArrived == "-1" ? mechanicArrivedInactiveUi(size) : mechanicArrivedCompletedUi(size),
                   isPickedUpVehicle == "-1" ? mechanicPickedUpInactiveUi(size) : mechanicPickedUpCompletedUi(size),
-                  isReachedServiceCenter == "-1" ? mechanicReachedWorkShopInactiveUi(size) :mechanicReachedWorkShopCompletedUi(size),
+                  isReachedServiceCenter == "-1" ? mechanicReachedWorkShopInactiveUi(size) : mechanicReachedWorkShopCompletedUi(size),
                   isWorkStarted == "-1" ? workStartedInactiveUi(size) : workStartedCompletedUi(size),
                   isWorkFinished == "-1" ? workFinishedInactiveUi(size) : workFinishedCompletedUi(size),
                   isStartedFromLocationForDropOff == "-1" ? startedForDropOffInactiveUi(size) : startedForDropOffCompletedUi(size),
+                  isReachedLocationForDropOff == "-1" ? reachedForDropOffInactiveUi(size) : reachedForDropOffCompletedUi(size),
                   isDropOff == "-1" ? mechanicDropOffInactiveUi(size) : mechanicDropOffCompletedUi(size),
 
-                  isWorkFinished == "-1" && isPaymentRequested == "-1" ?
+                  isDropOff == "-1" && isPaymentRequested == "-1" ?
                     paymentOptionInActiveUi(size)
-                      : isWorkFinished == "0" && isPaymentRequested == "-1" ?
+                      : isDropOff == "0" && isPaymentRequested == "-1" ?
                         paymentOptionWaitingUi(size)
                       : isPaymentRequested == "0" && isPayment == "5" ?
                         paymentOptionFinishedUi(size)
@@ -220,7 +232,6 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
         color: CustColors.light_navy,
       ),
         child: ListTile(
-
           leading: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -291,7 +302,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                           builder: (context) => ChatScreen(
                             peerId: mechanicId,
                             bookingId: '${widget.bookingId}',
-                            collectionName: 'Regular-MobileMech',
+                            collectionName: '${TextStrings.firebase_pick_up}',
                             currentUserId: customerId,
                             peerName: mechanicName,
                             peerImageUrl: mechanicProfileUrl,
@@ -410,7 +421,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                         Container(
                           height: 25,
                           width: 25,
-                          child: SvgPicture.asset('assets/image/ic_car1.svg',
+                          child: Image.asset('assets/image/ServiceTrackScreen/active_start_from_mech.png',
                             fit: BoxFit.contain,
                             //color: Colors.white,
                           ),
@@ -444,7 +455,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                         ),),
                       mechanicAddress.isEmpty ? Container(): SizedBox(height: 02),
                       Text('on ${_mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(scheduledDate))}'
-                          + '\nat ${isDriveStartedTime}',
+                          + '\nat ${isStartedFromLocationTime}',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -714,21 +725,13 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text( isDriveStarted == "-1" ? 'Drive not started' : "Expected to reach",
+                      Text( isStartedFromLocation == "-1" ? 'Drive not started' : "Expected to reach",
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      /*SizedBox(height: 02),
-                      isDriveStarted != "-1" ? Text('Expected to reach',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            color: const Color(0xff9b9b9b)
-                        ),) : Container(),*/
-                      isDriveStarted != "-1" ? SizedBox(height: 02) : Container(),
-                      isDriveStarted != "-1" ? Text('before $scheduledTime',
+                      isStartedFromLocation != "-1" ? SizedBox(height: 02) : Container(),
+                      isStartedFromLocation != "-1" ? Text('before $scheduledTime',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -797,7 +800,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('$mechanicName reached',
+                      Text('$mechanicName Picked Up Vehicle',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
@@ -811,7 +814,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                             color: const Color(0xff9b9b9b)
                         ),),*/
                       SizedBox(height: 02),
-                      Text('at ${isArrivedTime}',
+                      Text('at ${isPickedUpVehicleTime}',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -886,16 +889,8 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      /*SizedBox(height: 02),
-                      isDriveStarted != "-1" ? Text('Expected to reach',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            color: const Color(0xff9b9b9b)
-                        ),) : Container(),*/
-                      isDriveStarted != "-1" ? SizedBox(height: 02) : Container(),
-                      isDriveStarted != "-1" ? Text('before $scheduledTime',
+                      isStartedFromLocation != "-1" ? SizedBox(height: 02) : Container(),
+                      isStartedFromLocation != "-1" ? Text('before $scheduledTime',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -964,7 +959,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('$mechanicName reached',
+                      Text('$mechanicName reached service center',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
@@ -978,7 +973,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                             color: const Color(0xff9b9b9b)
                         ),),*/
                       SizedBox(height: 02),
-                      Text('at ${isArrivedTime}',
+                      Text('at ${isReachedServiceCenterTime}',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -1048,27 +1043,11 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text( "Picked Up Vehicle",
+                      Text( "Reached Service Center",
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      /*SizedBox(height: 02),
-                      isDriveStarted != "-1" ? Text('Expected to reach',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            color: const Color(0xff9b9b9b)
-                        ),) : Container(),*/
-                      isDriveStarted != "-1" ? SizedBox(height: 02) : Container(),
-                      isDriveStarted != "-1" ? Text('before $scheduledTime',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            color: const Color(0xff9b9b9b)
-                        ),) : Container()
                     ],
                   ),
                 ),
@@ -1129,49 +1108,10 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                         fontSize: 12,
                         fontFamily: 'SamsungSharpSans-Medium',
                       ),),
-                    /*SizedBox(height: 05),
-                    Text('Mar 5,2022',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                          color: const Color(0xff9b9b9b)
-                      ),)*/
                   ],
                 ),
               ),
             ),
-            /*Padding(
-              padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-              child: Container(
-                height: 23,
-                width: 55,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xffc9d6f2)
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 00.0),
-                  child: TextButton(
-                    onPressed: () {  },
-                    child: Text('TRACK',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: const Color(0xff919191),
-                        fontSize: 08,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color(0xffc9d6f2),
-                      shape:
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),*/
           ],
         ),
           Padding(
@@ -1311,7 +1251,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                 ),
               ),
             ],
-        ),
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(45,5,5,0),
             child: FDottedLine(
@@ -1319,7 +1259,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
               height: 50.0,
             ),
           ),
-    ],
+        ],
       ),
     );
   }
@@ -1438,21 +1378,13 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('$mechanicName reached',
+                      Text('$mechanicName started for drop off',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      /*SizedBox(height: 02),
-                      Text('Savannah estate, plot 176',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            color: const Color(0xff9b9b9b)
-                        ),),*/
                       SizedBox(height: 02),
-                      Text('at ${isArrivedTime}',
+                      Text('at ${isStartedFromLocationForDropOffTime}',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -1522,27 +1454,154 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text( "Picked Up Vehicle",
+                      Text( "Start for Drop Down",
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      /*SizedBox(height: 02),
-                      isDriveStarted != "-1" ? Text('Expected to reach',
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,0,5,5),
+            child: FDottedLine(
+              color: CustColors.light_navy05,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget reachedForDropOffCompletedUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 22.0,top: 00),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_arrived_w.svg',
+                            fit: BoxFit.contain,
+                            //color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                flex: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('$mechanicName reached for drop down',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 02),
+                      Text('at ${isReachedLocationForDropOffTime}',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),) : Container(),*/
-                      isDriveStarted != "-1" ? SizedBox(height: 02) : Container(),
-                      isDriveStarted != "-1" ? Text('before $scheduledTime',
-                        textAlign: TextAlign.start,
+                        ),)
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,0,5,5),
+            child: FDottedLine(
+              color: CustColors.light_navy,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget reachedForDropOffInactiveUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 22.0,top: 00),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy05,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_arrived_b.svg',
+                            fit: BoxFit.contain,
+                            //color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  //Expanded(child: child)
+                ],
+              ),
+              Expanded(
+                flex: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 01),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text( "Reached for Drop Down",
                         style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            color: const Color(0xff9b9b9b)
-                        ),) : Container()
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
                     ],
                   ),
                 ),
@@ -1605,21 +1664,13 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('$mechanicName reached',
+                      Text('$mechanicName Drop off',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      /*SizedBox(height: 02),
-                      Text('Savannah estate, plot 176',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            color: const Color(0xff9b9b9b)
-                        ),),*/
                       SizedBox(height: 02),
-                      Text('at ${isArrivedTime}',
+                      Text('at ${isDropOffTime}',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -1689,27 +1740,11 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text( "Picked Up Vehicle",
+                      Text( "Drop Down Vehicle",
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      /*SizedBox(height: 02),
-                      isDriveStarted != "-1" ? Text('Expected to reach',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            color: const Color(0xff9b9b9b)
-                        ),) : Container(),*/
-                      isDriveStarted != "-1" ? SizedBox(height: 02) : Container(),
-                      isDriveStarted != "-1" ? Text('before $scheduledTime',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            color: const Color(0xff9b9b9b)
-                        ),) : Container()
                     ],
                   ),
                 ),
@@ -1771,48 +1806,10 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
                       SizedBox(height: 05),
-                      /*Text('Mar 5,2022',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            color: const Color(0xff9b9b9b)
-                        ),)*/
                     ],
                   ),
                 ),
               ),
-              /*Padding(
-                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-                child: Container(
-                  height: 23,
-                  width: 55,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: const Color(0xffc9d6f2)
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 00.0),
-                    child: TextButton(
-                      onPressed: () {  },
-                      child: Text('TRACK',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: const Color(0xff919191),
-                          fontSize: 08,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: const Color(0xffc9d6f2),
-                        shape:
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),*/
               SizedBox(height: 20)
             ],
           ),
@@ -1900,9 +1897,8 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                             context,
                             MaterialPageRoute(
                                 builder: (context) => RegularPaymentScreen(
-                                  firebaseCollection: TextStrings.firebase_mobile_mech,
+                                  firebaseCollection: TextStrings.firebase_pick_up,
                                   bookingId: widget.bookingId,
-
                                 )));
                       },
                       child: Text('Pay Now',
@@ -2052,37 +2048,6 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                   ),
                 ),
               ),
-              /*Padding(
-                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-                child: Container(
-                  height: 23,
-                  width: 55,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: const Color(0xffc9d6f2)
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 00.0),
-                    child: TextButton(
-                      onPressed: () {  },
-                      child: Text('TRACK',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: const Color(0xff919191),
-                          fontSize: 08,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: const Color(0xffc9d6f2),
-                        shape:
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),*/
               SizedBox(height: 20)
             ],
           ),
