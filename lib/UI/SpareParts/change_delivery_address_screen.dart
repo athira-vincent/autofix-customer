@@ -96,21 +96,7 @@ class _ChangeDeliveryAddressScreenState
               listener: (context, state) {
                 if (state is PlaceOrderLoadedState) {
                   if (state.placeorderModel.data!.placeOrder.isNotEmpty) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Payment_Main_Screen(
-                                amount: widget.productprice,
-                                orderid: state
-                                    .placeorderModel.data!.placeOrder.first.id
-                                    .toString(),
-                                customerid:widget.customerid,
-                                customername:widget.customername,
-                                customeremail:widget.customeremail,
-                                customerphone:widget.customerphone
 
-
-                            )));
                   }
                 }
               },
@@ -119,18 +105,7 @@ class _ChangeDeliveryAddressScreenState
               listener: (context, state) {
                 if (state is PlaceOrderAllLoadedState) {
                   if (state.placeorderModel.data!.placeOrder.isNotEmpty) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Payment_Main_Screen(
-                                amount: null.toString(),
-                                orderid: state
-                                    .placeorderModel.data!.placeOrder.first.id
-                                    .toString(),
-                                customerid:widget.customerid,
-                                customername:widget.customername,
-                                customeremail:widget.customeremail,
-                                customerphone:widget.customerphone)));
+
                   }
                 }
               },
