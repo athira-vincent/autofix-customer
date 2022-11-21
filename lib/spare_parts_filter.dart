@@ -289,7 +289,7 @@ class _Search_Spare_Parts_FilterState extends State<Search_Spare_Parts_Filter> {
     return InkWell(
       onTap: () {
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const MyCartScreen()));
+            MaterialPageRoute(builder: (context) => MyCartScreen(isFromHome: false, addresstext: '', addressid: '',)));
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),

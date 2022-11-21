@@ -7,6 +7,7 @@ import 'package:auto_fix/UI/SpareParts/MyCart/address_bloc/address_state.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_address_bloc/delete_address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_address_bloc/delete_address_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_address_bloc/delete_address_state.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/my_cart_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_oder_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_oder_state.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_order_event.dart';
@@ -47,6 +48,8 @@ class _ChangeDeliveryAddressScreenState
   double per = .10;
 
   int isdefault = 0;
+
+  String addresstext="";
 
   double _setValue(double value) {
     return value * per + value;
@@ -208,6 +211,9 @@ class _ChangeDeliveryAddressScreenState
                                           isAddressSelected = true;
                                         }
                                       });
+
+                                      addresstext=state.addressModel.data!
+                                          .selectAddress[index].address;
                                     },
                                     child: Container(
                                       margin: EdgeInsets.only(
@@ -685,18 +691,26 @@ class _ChangeDeliveryAddressScreenState
       alignment: Alignment.topRight,
       child: InkWell(
         onTap: () {
-          if (widget.allitems == true) {
-            final placeorderallBloc =
-                BlocProvider.of<PlaceOrderAllBloc>(context);
-            placeorderallBloc.add(FetchPlaceOrderAllEvent(addressid));
-          } else {
-            final placeorderBloc = BlocProvider.of<PlaceOrderBloc>(context);
-            placeorderBloc.add(FetchPlaceOrderEvent(
-                widget.quantity.toString(),
-                widget.productprice.toString(),
-                widget.productid.toString(),
-                addressid));
-          }
+          // if (widget.allitems == true) {
+          //   final placeorderallBloc =
+          //       BlocProvider.of<PlaceOrderAllBloc>(context);
+          //   placeorderallBloc.add(FetchPlaceOrderAllEvent(addressid));
+          // } else {
+          //   final placeorderBloc = BlocProvider.of<PlaceOrderBloc>(context);
+          //   placeorderBloc.add(FetchPlaceOrderEvent(
+          //       widget.quantity.toString(),
+          //       widget.productprice.toString(),
+          //       widget.productid.toString(),
+          //       addressid));
+          // }
+
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      MyCartScreen(isFromHome: false,addressid:addressid,addresstext:addresstext
+                      )));
         },
         child: Container(
           margin: EdgeInsets.only(
