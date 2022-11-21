@@ -1281,12 +1281,13 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
 
   void changeScreen(String firebaseScreen){
     if(firebaseScreen == "C1"){
-      Navigator.pushReplacement(
+      /*Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) =>   MechanicTrackingScreen(latitude: "${firebaseCustomerLatitude}", longitude:  "${firebaseCustomerLongitude}",)
+              builder: (context) =>   MechanicTrackingScreen(latitude: "${firebaseCustomerLatitude}",
+                longitude:  "${firebaseCustomerLongitude}",bookingId: ,)
           )).then((value){
-      });
+      });*/
     }else if(firebaseScreen == "C2" || firebaseScreen == "C4" || firebaseScreen == "C5" ){     //firebaseScreen == "C3"
       Navigator.pushReplacement(
           context,
