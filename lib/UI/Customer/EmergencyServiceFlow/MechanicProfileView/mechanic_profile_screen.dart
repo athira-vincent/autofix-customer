@@ -277,6 +277,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "customerID" : "${detailsMdl!.data!.bookingDetails!.customerId}",
         "mechanicPhone" :"${detailsMdl.data!.bookingDetails!.mechanic!.phoneNo}",
         "customerPhone" : "${detailsMdl.data!.bookingDetails!.customer!.phoneNo}",
+        "mechanicProfileUrl" :"",  ///----detailsMdl.data!.bookingDetails!.mechanic.profileurl
+        "customerProfileUrl" : "",
         "mechanicAddress" : "",
         "mechanicLatitude" : widget.latitude,
         "mechanicLongitude" : widget.longitude,
@@ -418,7 +420,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>   MechanicTrackingScreen(latitude: widget.latitude, longitude:  widget.longitude,)
+                    builder: (context) =>   MechanicTrackingScreen(latitude: widget.latitude,
+                      longitude:  widget.longitude,bookingId: "${notificationPayloadMdl.bookingId}",)
                 )).then((value){
             });
           });

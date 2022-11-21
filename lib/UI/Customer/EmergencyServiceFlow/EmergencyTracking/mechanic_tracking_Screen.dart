@@ -27,11 +27,14 @@ class MechanicTrackingScreen extends StatefulWidget {
 
   final String latitude;
   final String longitude;
+  final String bookingId;
 
 
   MechanicTrackingScreen({
     required this.latitude,
-    required this.longitude,});
+    required this.longitude,
+    required this.bookingId
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -82,50 +85,59 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     customerMarker (LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())));
     getGoogleMapCameraPosition(LatLng(double.parse(widget.latitude.toString()),
         double.parse(widget.longitude.toString())));
+    listenToCloudFirestoreDB();
   }
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData MechanicTrackingScreen Customer App');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
-    setState(() {
-      authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      userName = shdPre.getString(SharedPrefKeys.userName).toString();
-      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
-      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
-      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      _firestoreData = _firestore.collection("ResolMech").doc('${bookingIdEmergency}').snapshots();
-      updateToCloudFirestoreMechanicCurrentScreenDB();
-      print('authToken>>>>>>>>>MechanicTrackingScreen Customer App ' + authToken.toString());
-      print('serviceIdEmergency>>>>>>>>MechanicTrackingScreen Customer App ' + serviceIdEmergency.toString());
-      print('mechanicIdEmergency>>>>>>>MechanicTrackingScreen Customer App ' + mechanicIdEmergency.toString());
-      print('bookingIdEmergency>>>>>>>>>MechanicTrackingScreen Customer App ' + bookingIdEmergency.toString());
-      listenToCloudFirestoreDB();
-    });
+    if(mounted){
+      setState(() {
+        authToken = shdPre.getString(SharedPrefKeys.token).toString();
+        userName = shdPre.getString(SharedPrefKeys.userName).toString();
+        serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
+        mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
+        bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+        _firestoreData = _firestore.collection("ResolMech").doc('${widget.bookingId}').snapshots();
+        updateToCloudFirestoreMechanicCurrentScreenDB();
+        print('authToken>>>>>>>>>MechanicTrackingScreen Customer App ' + authToken.toString());
+        print('serviceIdEmergency>>>>>>>>MechanicTrackingScreen Customer App ' + serviceIdEmergency.toString());
+        print('mechanicIdEmergency>>>>>>>MechanicTrackingScreen Customer App ' + mechanicIdEmergency.toString());
+        print('bookingIdEmergency>>>>>>>>>MechanicTrackingScreen Customer App ' + bookingIdEmergency.toString());
+
+      });
+    }
   }
 
   void listenToCloudFirestoreDB() {
-    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingIdEmergency}");
+    print("listenToCloudFirestoreDB >>>>");
 
-    reference.snapshots().listen((querySnapshot) {
-      setState(() {
-        customerId = querySnapshot.get('customerID');
-        mechanicId = querySnapshot.get('mechanicID');
-        mechanicName = querySnapshot.get('mechanicName');
-        mechanicArrivalState = querySnapshot.get("mechanicArrivalState");
-        mechanicProfileUrl = querySnapshot.get('mechanicProfileUrl');
-        customerProfileUrl = querySnapshot.get('customerProfileUrl');
-        print('mechanicArrivalState ++++ $mechanicArrivalState');
-        if(mechanicArrivalState =="1")
-          {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1")
-                )).then((value){
-            });
-          }
-      });
+     _firestore.collection("ResolMech").doc('${widget.bookingId}').snapshots().listen((querySnapshot) {
+       if(mounted){
+         setState(() {
+           customerId = querySnapshot.get('customerID');
+           mechanicId = querySnapshot.get('mechanicID');
+           mechanicName = querySnapshot.get('mechanicName');
+           mechanicArrivalState = querySnapshot.get("mechanicArrivalState");
+           mechanicProfileUrl = querySnapshot.get('mechanicProfileUrl');
+           customerProfileUrl = querySnapshot.get('customerProfileUrl');
+           print('mechanicArrivalState ++++ $mechanicArrivalState');
+           if(mechanicArrivalState =="1")
+           {
+             Navigator.pushReplacement(
+                 context,
+                 MaterialPageRoute(
+                     builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1")
+                 )).then((value){
+             });
+           }
+         });
+       }
     });
+    /*DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${widget.bookingId}");
+    reference.snapshots().listen((querySnapshot) {
+
+    });*/
   }
 
   void updateToCloudFirestoreMechanicCurrentScreenDB() {
@@ -178,10 +190,12 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         ),
         icon: mechanicIcon, //Icon for Marker
       ));
-      setState(() {
-        print("markers ${markers.length}");
-        setPolyline(LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())), latLng,);
-      });
+      if(mounted){
+        setState(() {
+          print("markers ${markers.length}");
+          setPolyline(LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())), latLng,);
+        });
+      }
     });
 
   }
@@ -239,7 +253,9 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
       width: 4,
     );
     polylines[id] = polyline;
-    setState(() {});
+    if(mounted){
+      setState(() {});
+    }
   }
 
   @override
@@ -265,10 +281,12 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                       print(">>> Firebase lat " + snapshot.data?.data()!['latitude']);
                       if(updatingLat != double.parse('${snapshot.data?.data()!['latitude']}'))
                       {
-                        setState(() {
-                          distanceInMeters = Geolocator.distanceBetween(double.parse('${widget.latitude}'), double.parse('${widget.longitude}'), double.parse('${snapshot.data?.data()!['latitude']}'), double.parse('${snapshot.data?.data()!['longitude']}'));
-                          print('DISTANCE distanceInMeters===== : ${distanceInMeters/1000} ');
-                        });
+                        if(mounted){
+                          setState(() {
+                            distanceInMeters = Geolocator.distanceBetween(double.parse('${widget.latitude}'), double.parse('${widget.longitude}'), double.parse('${snapshot.data?.data()!['latitude']}'), double.parse('${snapshot.data?.data()!['longitude']}'));
+                            print('DISTANCE distanceInMeters===== : ${distanceInMeters/1000} ');
+                          });
+                        }
                         updatingLat =  double.parse('${snapshot.data?.data()!['latitude']}');
                         mechanicMarker(LatLng(double.parse('${snapshot.data?.data()!['latitude']}'),double.parse('${snapshot.data?.data()!['longitude']}')));
                       }
@@ -284,10 +302,12 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                       polylines: Set<Polyline>.of(polylines.values), //polylines
                       mapType: MapType.normal, //map type
                       onMapCreated: (controller) { //method called when map is created
-                        setState(() {
-                          controller.setMapStyle(_mapStyle);
-                          mapController = controller;
-                        });
+                        if(mounted){
+                          setState(() {
+                            controller.setMapStyle(_mapStyle);
+                            mapController = controller;
+                          });
+                        }
                       },
                     );
                   }

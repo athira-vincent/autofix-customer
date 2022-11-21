@@ -111,26 +111,28 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     });
 
     await _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
-      setState(() {
-        extendedTime= event.get("extendedTime");
-        currentUpdatedTime = event.get("currentUpdatedTime");
-        isPaymentRequested = event.get("isPaymentRequested");
-        isWorkCompleted = event.get("isWorkCompleted");
-        mechanicDiagonsisState = event.get("mechanicDiagonsisState");
-        totalEstimatedTime = event.get('timerCounter');
-        mechanicName = event.get('mechanicName');
-        int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
-        levelClock = sec;
-        _controller = AnimationController(
-            vsync: this,
-            duration: Duration(
-                seconds:
-                levelClock)
-        );
-        _controller.forward();
-        _updateTimerListener();
+      if(mounted){
+        setState(() {
+          extendedTime= event.get("extendedTime");
+          currentUpdatedTime = event.get("currentUpdatedTime");
+          isPaymentRequested = event.get("isPaymentRequested");
+          isWorkCompleted = event.get("isWorkCompleted");
+          mechanicDiagonsisState = event.get("mechanicDiagonsisState");
+          totalEstimatedTime = event.get('timerCounter');
+          mechanicName = event.get('mechanicName');
+          int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
+          levelClock = sec;
+          _controller = AnimationController(
+              vsync: this,
+              duration: Duration(
+                  seconds:
+                  levelClock)
+          );
+          _controller.forward();
+          _updateTimerListener();
 
-      });
+        });
+      }
     });
   }
 
