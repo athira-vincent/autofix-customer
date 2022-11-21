@@ -18,7 +18,12 @@ import '../../../Models/customer_models/cart_list_model/cart_list_model.dart';
 import 'showcartpopbloc/show_cart_pop_event.dart';
 
 class MyCartScreen extends StatefulWidget {
-  const MyCartScreen({Key? key}) : super(key: key);
+  final bool isFromHome;
+  final String addressid,addresstext;
+  const MyCartScreen({
+    Key? key,
+    required this.isFromHome, required this.addressid, required this.addresstext,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {

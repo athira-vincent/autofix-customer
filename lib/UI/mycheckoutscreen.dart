@@ -10,6 +10,7 @@ import '../Constants/cust_colors.dart';
 import '../Constants/styles.dart';
 
 import '../Models/customer_models/cart_list_model/cart_list_model.dart';
+import 'Customer/payment_main_screen.dart';
 import 'SpareParts/MyCart/delete_cart_bloc/delete_cart_bloc.dart';
 import 'SpareParts/MyCart/delete_cart_bloc/delete_cart_event.dart';
 import 'SpareParts/MyCart/delete_cart_bloc/delete_cart_state.dart';
@@ -975,6 +976,19 @@ class _MyCheckoutScreenState extends State<MyCheckoutScreen> {
                       //     context,
                       //     MaterialPageRoute(
                       //         builder: (context) => const MyCheckoutScreen()));
+
+
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Payment_Main_Screen(
+                                  amount: itemtotal.toString(),
+                                  customerid: customerid,
+                                  customername: customername,
+                                  customeremail: "",
+                                  customerphone: cutomerphone,
+                                  allitems: true,
+                                  addressid: widget.newaddressid)));
                     },
                     child: ListTile(
                       leading: const Text(
