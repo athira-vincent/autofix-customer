@@ -2839,11 +2839,59 @@ class QueryProvider {
     bookStatus,
   ) async {
     String _query = """
-     mutation {
-      mechanic_status_update(state: $bookStatus, bookId: $bookingId) {
+      mutation {
+    mechanic_status_update(state: $bookStatus, bookId: $bookingId) {
+      msg {
         message
       }
+      bookingData {
+        id
+        bookingCode
+        reqType
+        bookStatus
+        totalPrice
+        tax
+        commission
+        serviceCharge
+        totalTime
+        serviceTime
+        latitude
+        longitude
+        mechLatitude
+        mechLongitude
+        extend
+        totalExt
+        extendTime
+        bookedDate
+        bookedTime
+        isRated
+        status
+        customerId
+        mechanicId
+        vehicleId
+        regularType
+        mechanic{
+          id
+          firstName
+          phoneNo
+          emailId
+        }
+        customer{
+          id
+          firstName
+        }
+        vehicle{
+          id
+        }
+        bookService{
+          id
+          service{
+            icon
+          }
+        }
+      }
     }
+  }
     """;
     log(_query);
     return await GqlClient.I.query01(

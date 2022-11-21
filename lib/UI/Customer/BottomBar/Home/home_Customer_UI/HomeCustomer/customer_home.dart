@@ -551,7 +551,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                             .icon
                                                             .toString() !=
                                                         "null"
-                                                ? SvgPicture.network(
+                                                ? Image.network(
                                                     snapshot
                                                         .data
                                                         ?.data
@@ -1328,7 +1328,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                   decoration: Styles.serviceIconBoxDecorationStyle,
                   child: service.icon.toString() != ""
                       || service.icon.toString() != "null"
-                      ? SvgPicture.network(
+                      ? Image.network(
                           service.icon,
                           width: 40,
                           height: 25,

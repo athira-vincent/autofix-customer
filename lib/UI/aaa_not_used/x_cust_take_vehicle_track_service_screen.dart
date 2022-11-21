@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
-import 'find_mechanic_by_customer_screen.dart';
+import '../Customer/RegularServiceFlow/TakeToMechanicFlow/find_mechanic_by_customer_screen.dart';
 
 class CustTakeVehicleTrackScreen01 extends StatefulWidget {
 
