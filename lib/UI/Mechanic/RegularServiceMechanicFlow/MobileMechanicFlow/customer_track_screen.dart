@@ -174,7 +174,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
               MaterialPageRoute(
                   builder: (context) => MechanicStartServiceScreen()));*/
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.data!.regularMechStatusUpdate!.msg.toString(),
+            content: Text(value.data!.regularMechStatusUpdate!.msg!.message.toString(),
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),

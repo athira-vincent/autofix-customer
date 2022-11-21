@@ -135,7 +135,7 @@ class HomeCustomerBloc {
   /// =============== Mechanics Regular Service Booking Id  ================== ///
 
 
-  final postMechanicsRegularBookingIDList = BehaviorSubject<MechanicBookingMdl>();
+  final postMechanicsRegularBookingIDList = PublishSubject<MechanicBookingMdl>();
   Stream<MechanicBookingMdl> get mechanicsRegularBookingIDResponse => postMechanicsRegularBookingIDList.stream;
 
   postMechanicsRegularServiceBookingIDRequest(

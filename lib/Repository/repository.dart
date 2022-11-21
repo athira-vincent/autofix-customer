@@ -36,6 +36,8 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/Servic
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/ResetPasswordScreen/create_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_api_provider.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/CityList/city_list_api_provider.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StatesList/states_list_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_api_provider.dart';
 import '../Models/new_checkout_model/new_checkout_model.dart';
 import '../Models/payment_success_model/payment_success_model.dart';
@@ -47,6 +49,8 @@ import '../UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecializati
 class Repository {
   final _customerApiProvider = CustomerApiProvider();
   final _mechanicApiProvider = MechanicApiProvider();
+  final _cityListApiProvider = CityListApiProvider();
+  final _statesListApiProvider = StatesListApiProvider();
 
   final _signupApiProvider = SignupApiProvider();
   final _customerFetchProfileApiProvider = CustomerProfileApiProvider();
@@ -92,8 +96,18 @@ class Repository {
   final _vendornotificationprovider = MechanicApiProvider();
   final _apiTimeProvider = WorldTimeApiProvider();
   final _paymentsuccessprovider=CustomerApiProvider();
-
   final _newcheckoutprovider=CustomerApiProvider();
+  
+
+// City List
+  Future<dynamic> getCityList(String token, search) =>
+      _cityListApiProvider.postCityListRequest(
+          token, search);
+
+  // States List
+  Future<dynamic> getStatesList(String token, search) =>
+      _statesListApiProvider.postStatesListRequest(
+          token, search);
 
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>

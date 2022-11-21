@@ -4,6 +4,8 @@ import 'package:auto_fix/Models/customer_models/type_address_model/type_address_
 import 'package:auto_fix/UI/SpareParts/MyCart/add_address_bloc/add_address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/add_address_bloc/add_address_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/add_address_bloc/add_address_state.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/CityList/city_list_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StatesList/states_list_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +39,10 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
   TextEditingController phonecontroller = TextEditingController();
   TextEditingController pincontroller = TextEditingController();
   TextEditingController localitycontroller = TextEditingController();
+  TextEditingController _stateController = TextEditingController();
+  TextEditingController _cityController = TextEditingController();
+
+  String selectedState = "", selectedCity = "" ;
 
   @override
   Widget build(BuildContext context) {
@@ -271,6 +277,122 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
             ),
           ),
         ),
+
+        Text(
+          "State",
+          style: hintTextStyle,
+        ),
+        InkWell(
+          onTap: (){
+            _awaitStateReturnValueFromSecondScreen(context);
+          },
+          child: Container(
+            margin: EdgeInsets.only(
+              top: size.height * 1.7 / 100,
+              bottom: size.height * 1.7 / 100,
+            ),
+            decoration: boxDecorationStyle,
+            child: TextFormField(
+              enabled: false,
+              controller: _stateController,
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              // focusNode: _nameFocusNode,
+              keyboardType: TextInputType.name,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp('[a-zA-Z ]')),
+              ],
+
+              validator: InputValidator(ch: "State").emptyChecking,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: const InputDecoration(
+                isDense: true,
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                hintStyle: Styles.textLabelSubTitle,
+              ),
+            ),
+          ),
+        ),
+        Text(
+          "City",
+          style: hintTextStyle,
+        ),
+        InkWell(
+          onTap: (){
+            _awaitCityReturnValueFromSecondScreen(context);
+          },
+          child: Container(
+            margin: EdgeInsets.only(
+              top: size.height * 1.7 / 100,
+              bottom: size.height * 1.7 / 100,
+            ),
+            decoration: boxDecorationStyle,
+            child: TextFormField(
+              enabled: false,
+              controller: _cityController,
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              // focusNode: _nameFocusNode,
+              keyboardType: TextInputType.name,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp('[a-zA-Z ]')),
+              ],
+
+              validator: InputValidator(ch: "State").emptyChecking,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: const InputDecoration(
+                isDense: true,
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                hintStyle: Styles.textLabelSubTitle,
+              ),
+            ),
+          ),
+        ),
+
         Text(
           "Phone number",
           style: hintTextStyle,
@@ -610,6 +732,34 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
     }
 
     return await Geolocator.getCurrentPosition();
+  }
+
+  void _awaitCityReturnValueFromSecondScreen(BuildContext context) async {
+    // start the SecondScreen and wait for it to finish with a result
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SelectCityScreen(),
+        ));
+    setState(() {
+      selectedCity = result;
+      _cityController.text = selectedCity;
+      print("Selected state @ sign up: " + selectedCity);
+    });
+  }
+
+  void _awaitStateReturnValueFromSecondScreen(BuildContext context) async {
+    // start the SecondScreen and wait for it to finish with a result
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SelectStatesScreen(),
+        ));
+    setState(() {
+      selectedState = result;
+      _stateController.text = selectedState;
+      print("Selected state @ sign up: " + selectedState);
+    });
   }
 
   Future<void> GetAddressFromLatLong(Position position) async {

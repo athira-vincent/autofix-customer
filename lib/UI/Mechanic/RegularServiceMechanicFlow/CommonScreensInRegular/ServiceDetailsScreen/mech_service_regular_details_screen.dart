@@ -1,5 +1,4 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/MobileMechanicFlow/mech_mobile_track_service_screen.dart';
@@ -8,7 +7,6 @@ import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFl
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -150,6 +148,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -478,15 +477,8 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                             context,
                             MaterialPageRoute(
                               builder: (context) => MechPickUpTrackScreen(
-                                bookedId: "${widget.bookingId}",
-                                //bookedDate: '${_BookingDetails!.bookedDate}',
-                                //bookedDate: _mechHomeBloc.dateMonthConverter(DateFormat().parse('${_BookingDetails!.bookedDate}')),
-                                bookedDate: bookingDate,
-                                latitude: '${_BookingDetails!.latitude}',
-                                longitude:'${_BookingDetails!.longitude}',
-                                mechanicAddress: '${_BookingDetails!.mechanic!.firstName}',
-                                mechanicName:  '${_BookingDetails!.mechanic!.firstName}',
-                                pickingDate: bookingDate,
+                                bookingId: "${widget.bookingId}",
+                                bookingDate: bookingDate,
                                 customerFcmToken: '${_BookingDetails!.customer!.fcmToken}',
                               ),
                             ));
@@ -507,10 +499,9 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                             context,
                             MaterialPageRoute(
                               builder: (context) => MechTakeVehicleTrackScreen(
-                                //reachTime: '',
-                                bookedDate: bookingDate,
-                                bookedId: '${_BookingDetails!.id.toString()}',
-                                customerFcmToken: '${_BookingDetails!.customer!.fcmToken}',
+                                bookingId: widget.bookingId,
+                                bookingDate: bookingDate,
+                                customerFcmToken: _BookingDetails!.customer!.fcmToken.toString(),
                               ),
                             ));
                       }

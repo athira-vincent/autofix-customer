@@ -5,12 +5,14 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
+import 'package:auto_fix/UI/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/mechanic_profile_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ChangePassword/change_password_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StatesList/states_list_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -122,6 +124,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       id = shdPre.getString(SharedPrefKeys.userID).toString();
       isOnline = shdPre.getString(SharedPrefKeys.mechanicIsOnline).toString();
+      JWTTokenChecking.checking(shdPre.getString(SharedPrefKeys.token).toString(), context);
       print('userFamilyId'+authToken.toString());
       _isLoadingPage=true;
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken,id);
@@ -1520,7 +1523,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SelectStateScreen(),
+          builder: (context) => SelectStatesScreen(),
         ));
     setState(() {
       selectedState = result;

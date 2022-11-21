@@ -1170,7 +1170,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                           height: 25,
                                                           width: 50,
                                                           alignment: Alignment.center,
-                                                          color: CustomerAllServicesList?.custCompletedOrders![index01].bookStatus == "8"
+                                                          color: CustomerAllServicesList?.custCompletedOrders![index01].bookStatus.toString() == "8"
                                                               ? CustColors.cloudy_blue : CustColors.light_navy,
                                                           child: Text('Emergency Service',
                                                             textAlign: TextAlign.center,
@@ -1182,7 +1182,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                           height: 25,
                                                           width: 50,
                                                           alignment: Alignment.center,
-                                                          color: CustomerAllServicesList?.custCompletedOrders![index01].bookStatus == "8"
+                                                          color: CustomerAllServicesList?.custCompletedOrders![index01].bookStatus.toString() == "8"
                                                               ? CustColors.cloudy_blue : CustColors.light_navy,
                                                           child: Text('Regular Service',
                                                             textAlign: TextAlign.center,
@@ -1197,7 +1197,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                             Container(
                                                               height: 50,
                                                               width: 50,
-                                                              color: CustomerAllServicesList?.custCompletedOrders![index01].bookStatus == "8"
+                                                              color: CustomerAllServicesList?.custCompletedOrders![index01].bookStatus.toString() == "8"
                                                                   ? CustColors.cloudy_blue : CustColors.light_navy,
                                                               child: CustomPaint(
                                                                 painter: CurvePainter(),

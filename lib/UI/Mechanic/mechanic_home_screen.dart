@@ -3,19 +3,15 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/Constants/text_strings.dart';
+
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/Provider/locale_provider.dart';
 import 'package:auto_fix/UI/Common/TokenChecking/JWTTokenChecking.dart';
-import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_screen_ui.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyServices/mechanic_my_services.dart';
-import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/IncomingJobRequestScreen/incoming_job_request_screen.dart';
-import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/mechanic_side_bar.dart';
 import 'package:auto_fix/Widgets/show_pop_up_widget.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
@@ -57,16 +53,13 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   DateTime timeBackPressed = DateTime.now();
 
   String location ='Null, Press Button';
-  String CurrentLatitude ="10.506402";
-  String CurrentLongitude ="76.244164";
+  String CurrentLatitude ="";
+  String CurrentLongitude ="";
 
   double _setValue(double value) {
     return value * per + value;
   }
 
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
 
   @override
   void initState() {

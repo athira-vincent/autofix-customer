@@ -8,6 +8,7 @@ import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StatesList/states_list_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
 import 'package:auto_fix/Utility/check_network.dart';
@@ -1833,7 +1834,7 @@ class _SignupScreenState extends State<SignupScreen> {
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SelectStateScreen(),
+          builder: (context) => SelectStatesScreen(),
         ));
     setState(() {
       selectedState = result;
