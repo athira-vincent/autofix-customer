@@ -4666,81 +4666,113 @@ class QueryProvider {
     String userID = shdPre.getString(SharedPrefKeys.userID).toString();
 
     String _query = """
-        {
+    {
     notificationList(id: $userID, platformId: 1) {
-      id
-      caption
-      message
-      read
-      trash
-      status
-      toId
-      bookingId
-      to {
+      newData {
         id
-        userCode
-        firstName
-        lastName
-        emailId
-        phoneNo
+        caption
+        message
+        read
+        trash
+        isViewed
         status
-        userTypeId
-        jwtToken
-        fcmToken
-        otpCode
-        isProfile
-        otpVerified
-        customer{
+        toId
+        bookingId
+        to{
           id
+          userCode
+          firstName
+          lastName
+          emailId
+          phoneNo
+          status
+          userTypeId
+          jwtToken
+          fcmToken
+          otpCode
+          isProfile
+          otpVerified
         }
-        mechanic{
+        from{
           id
+          firstName
         }
-        vendor{
+        booking{
           id
+          bookingCode
+          reqType
+          regularType
+          bookStatus
+        }
+        order{
+          id
+          deliverDate
+          totalPrice
         }
       }
-      booking {
+      previousData {
         id
-        bookingCode
-        reqType
-        bookStatus
-        totalPrice
-        tax
-        commission
-        serviceCharge
-        totalTime
-        serviceTime
-        latitude
-        longitude
-        mechLatitude
-        mechLongitude
-        extend
-        totalExt
-        extendTime
-        bookedDate
-        bookedTime
-        isRated
+        caption
+        message
+        read
+        trash
+        isViewed
         status
-        customerId
-        mechanicId
-        vehicleId
-        regularType
-        mechanic{
+        toId
+        bookingId
+        to{
           id
+          userCode
+          firstName
+          lastName
+          emailId
+          phoneNo
+          status
+          userTypeId
+          jwtToken
+          fcmToken
+          otpCode
+          isProfile
+          otpVerified
         }
-        customer{
-          id
+        from{
+          firstName
+          fcmToken
         }
-        vehicle{
+        booking{
           id
+          bookingCode
+          reqType
+          bookStatus
+          totalPrice
+          tax
+          commission
+          serviceCharge
+          totalTime
+          serviceTime
+          latitude
+          longitude
+          mechLatitude
+          mechLongitude
+          extend
+          totalExt
+          extendTime
+          bookedDate
+          bookedTime
+          isRated
+          status
+          customerId
+          mechanicId
+          vehicleId
+          regularType
         }
-        bookService{
+        order{
           id
+          oderCode
         }
       }
     }
-  }
+  }  
     """;
     print("cred");
     print(_query);

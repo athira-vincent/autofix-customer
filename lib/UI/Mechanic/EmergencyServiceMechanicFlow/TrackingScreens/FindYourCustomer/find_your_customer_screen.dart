@@ -421,7 +421,11 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         .update({
         'mechanicArrivalState': "1",
     })
-        .then((value) => print("Location Added"))
+        .then((value) => {
+          print("Location Added"),
+            _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+            authToken, bookingId, "3")
+        })
         .catchError((error) =>
         print("Failed to add Location: $error"));
   }
@@ -609,8 +613,6 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                                         child: MaterialButton(
                                           onPressed: () {
                                             updateToCloudFirestoreDB();
-                                            _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-                                                authToken, bookingId, "3");
                                           },
                                           child: Container(
                                             height: 30,

@@ -6,20 +6,20 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 
-import '../Constants/cust_colors.dart';
-import '../Constants/styles.dart';
+import '../../Constants/cust_colors.dart';
+import '../../Constants/styles.dart';
 
-import '../Models/customer_models/cart_list_model/cart_list_model.dart';
-import 'Customer/payment_main_screen.dart';
-import 'SpareParts/MyCart/delete_cart_bloc/delete_cart_bloc.dart';
-import 'SpareParts/MyCart/delete_cart_bloc/delete_cart_event.dart';
-import 'SpareParts/MyCart/delete_cart_bloc/delete_cart_state.dart';
-import 'SpareParts/MyCart/new_checkout_bloc/new_checkout_bloc.dart';
-import 'SpareParts/MyCart/new_checkout_bloc/new_checkout_event.dart';
-import 'SpareParts/MyCart/new_checkout_bloc/new_checkout_state.dart';
-import 'SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc.dart';
-import 'SpareParts/MyCart/showcartpopbloc/show_cart_pop_event.dart';
-import 'SpareParts/MyCart/showcartpopbloc/show_cart_pop_state.dart';
+import '../../Models/customer_models/cart_list_model/cart_list_model.dart';
+import '../Customer/payment_main_screen.dart';
+import 'MyCart/delete_cart_bloc/delete_cart_bloc.dart';
+import 'MyCart/delete_cart_bloc/delete_cart_event.dart';
+import 'MyCart/delete_cart_bloc/delete_cart_state.dart';
+import 'MyCart/new_checkout_bloc/new_checkout_bloc.dart';
+import 'MyCart/new_checkout_bloc/new_checkout_event.dart';
+import 'MyCart/new_checkout_bloc/new_checkout_state.dart';
+import 'MyCart/showcartpopbloc/show_cart_pop_bloc.dart';
+import 'MyCart/showcartpopbloc/show_cart_pop_event.dart';
+import 'MyCart/showcartpopbloc/show_cart_pop_state.dart';
 
 
 class MyCheckoutScreen extends StatefulWidget {

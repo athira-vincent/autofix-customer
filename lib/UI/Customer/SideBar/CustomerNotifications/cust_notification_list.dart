@@ -35,7 +35,7 @@ class _CustNotificationList extends State<CustNotificationList> {
                 Navigator.pop(context);
               },
                 child: Icon(Icons.arrow_back)),
-            backgroundColor: CustColors.materialBlue,
+            backgroundColor: CustColors.light_navy,
             toolbarHeight: 80,
             elevation: 0,
             title: const Text(
@@ -71,15 +71,14 @@ class _CustNotificationList extends State<CustNotificationList> {
                       if (state is CustomernotificationLoadingState) {
                         return progressBarDarkBlue();
                       } else if (state is CustomernotificationLoadedState) {
-                        return state.notificationModel.data?.notificationList.length != 0
+                        return state.notificationModel.data?.notificationList!.previousData!.length != 0
                           ? ListView.builder(
-                            itemCount: state.notificationModel.data?.notificationList.length ?? 0,
+                            itemCount: state.notificationModel.data?.notificationList!.previousData!.length ?? 0,
                             shrinkWrap: true,
                             itemBuilder: (BuildContext context, int index) {
                               return listItemEmergencyService(
                                   size,
-                                  state.notificationModel.data!
-                                      .notificationList[index]);
+                                  state.notificationModel.data!.notificationList!.previousData![index]);
                             })
                           : notificationListEmptyWidget(size);
                       } else if (state is CustomernotificationErrorState){
@@ -97,7 +96,7 @@ class _CustNotificationList extends State<CustNotificationList> {
   }
 
   Widget listItemEmergencyService(
-      Size size, NotificationList notificationList) {
+      Size size, PreviousDatum previousDatum, ) {
     return Padding(
       padding: const EdgeInsets.all(0.0),
       child: Container(
@@ -112,13 +111,14 @@ class _CustNotificationList extends State<CustNotificationList> {
         alignment: Alignment.center,
         child: Row(
           children: [
+            /// --------------------- profile image to be updated from api ---------------
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: CircleAvatar(
                 radius: 25,
                 child: ClipOval(
                   child: Image.network(
-                    '',
+                    'https://i.picsum.photos/id/799/200/200.jpg?hmac=zFQHfBiAYFHDNrr3oX_pQDYz-YWPWTDB3lIszvP8rRY',
                   ),
                 ),
               ),
@@ -133,7 +133,8 @@ class _CustNotificationList extends State<CustNotificationList> {
                     Row(
                       children: [
                         Text(
-                          notificationList.message,
+                          previousDatum.message,
+                          //notificationList.message,
                           style: const TextStyle(
                             fontFamily: 'Samsung_SharpSans_Medium',
                             fontSize: 10.0,
@@ -149,7 +150,7 @@ class _CustNotificationList extends State<CustNotificationList> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      notificationList.caption,
+                      previousDatum.caption,
                       style: TextStyle(
                         fontFamily: 'Samsung_SharpSans_Medium',
                         fontSize: 10.0,
