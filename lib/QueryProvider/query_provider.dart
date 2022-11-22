@@ -4940,7 +4940,9 @@ class QueryProvider {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
     String userid = shdPre.getString(SharedPrefKeys.userID).toString();
-    String mutation_text = transtype.toString() == "1" ? "bookingId: $orderid" : "orderCode: $orderid";
+    String mutation_text = transtype.toString() == "1" ? "bookingId: $orderid"
+                              : transtype.toString() == "2" ? "orderCode: $orderid"
+                              : "";
     String _query = """
  mutation {
   paymentCreate(

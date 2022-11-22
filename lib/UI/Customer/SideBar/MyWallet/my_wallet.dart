@@ -573,7 +573,7 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
     var message;
     if (result.hasValue) {
       Repository()
-          .fetchpaymentsucess(null, _amountController.text, null,
+          .fetchpaymentsucess(3, _amountController.text, 2,
               result.value.transactionReference, null)
           .then((value) => {
                 if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty)
