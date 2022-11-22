@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:auto_fix/Constants/GlobelTime/timeBloc.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
@@ -11,6 +13,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../Models/mechanic_models/mechanic_Services_List_Mdl/mechanicServicesListMdl.dart';
@@ -45,11 +48,23 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   int  selectedServiceTime = 0, timeInMinutes = 0;
   String startOrUpdateState = "0";
   String isWaiting = "-2";
+  final TimeBloc _timeCustomerBloc = TimeBloc();
+
+  String tdata="";
 
   @override
   void initState() {
     // TODO: implement initState
+
+    //_timeCustomerBloc.postTimeRequest("Nairobi");
+    // Repository().getCurrentWorldTime("delhi").then((value) => {
+    //   print("values"),
+    //   print(value.timezone),
+    // });
+
     super.initState();
+
+
     getSharedPrefData();
     _controller = AnimationController(
         vsync: this,
@@ -564,22 +579,35 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   Widget mechanicStartServiceButton(Size size){
     return InkWell(
       onTap: (){
-        updateToCloudFirestoreDB();
-        if (startOrUpdateState == "0")
-          {
-            setState(() {
-              isWaiting = "-2";
-            });
-          }
-        else
-          {
-            setState(() {
-              isWaiting = "0";
-            });
-          }
 
-        _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-            authToken, bookingId, "4");
+        /// add selected service time + current time
+        print("selectedservicetime");
+        print(selectedServiceTime);
+        print(tdata);
+
+        var today =  DateTime.now();
+        int converttime=int.parse(serviceTotalTimeForFirebase);
+        var addedtime = today.add( Duration(minutes: converttime));
+        print("newtime");
+        print(DateFormat("HH:mm:ss").format(addedtime));
+
+
+        // updateToCloudFirestoreDB();
+        // if (startOrUpdateState == "0")
+        //   {
+        //     setState(() {
+        //       isWaiting = "-2";
+        //     });
+        //   }
+        // else
+        //   {
+        //     setState(() {
+        //       isWaiting = "0";
+        //     });
+        //   }
+        //
+        // _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+        //     authToken, bookingId, "4");
       },
       child: Align(
         alignment: Alignment.centerRight,
@@ -604,7 +632,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             startOrUpdateState == "0"
             ? "Start services"
             : "Update Services",
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14.3,
               fontWeight: FontWeight.w600,
               fontFamily: "Samsung_SharpSans_Medium",

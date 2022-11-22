@@ -19,7 +19,7 @@ class CountdownMechanicTimer extends AnimatedWidget {
     // print('inSeconds.remainder ${clockTimer.inSeconds.remainder(60).toString()}');
 
     return Text(
-      "$timerText",
+      timerText,
       textAlign: TextAlign.center,
       softWrap: true,
       style: Styles.textCountdownMechanicTimer,
