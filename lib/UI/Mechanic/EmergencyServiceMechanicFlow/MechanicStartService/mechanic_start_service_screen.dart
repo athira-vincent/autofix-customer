@@ -592,22 +592,22 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         print(DateFormat("HH:mm:ss").format(addedtime));
 
 
-        // updateToCloudFirestoreDB();
-        // if (startOrUpdateState == "0")
-        //   {
-        //     setState(() {
-        //       isWaiting = "-2";
-        //     });
-        //   }
-        // else
-        //   {
-        //     setState(() {
-        //       isWaiting = "0";
-        //     });
-        //   }
-        //
-        // _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-        //     authToken, bookingId, "4");
+        updateToCloudFirestoreDB();
+        if (startOrUpdateState == "0")
+          {
+            setState(() {
+              isWaiting = "-2";
+            });
+          }
+        else
+          {
+            setState(() {
+              isWaiting = "0";
+            });
+          }
+
+        _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+            authToken, bookingId, "4");
       },
       child: Align(
         alignment: Alignment.centerRight,
