@@ -428,7 +428,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               top: size.height * 10 / 100
                           ),
                           child: InkWell(
-                            onTap: (){
+                            onTap: ()async{
                               showDialog(
                                   context: context,
                                   barrierDismissible: false,
@@ -436,6 +436,11 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                                     dialogContext = context;
                                     return deactivateDialog();
                                   });
+
+                              SharedPreferences sharedPreferences =
+                                  await SharedPreferences.getInstance();
+                              sharedPreferences.remove("starttime");
+                              sharedPreferences.remove("endtime");
                             },
                             child: Row(
                               children: [

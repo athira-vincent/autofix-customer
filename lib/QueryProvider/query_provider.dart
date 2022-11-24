@@ -5114,7 +5114,6 @@ class QueryProvider {
     );
   }
 
-
   newcheckoutapi(String cartid, String addressid) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
@@ -5126,6 +5125,21 @@ class QueryProvider {
     duration
     currency
     pricingTier
+  }
+}
+     """;
+    log(_query);
+    return await GqlClient.I
+        .query01(_query, authToken, enableDebug: true, isTokenThere: true);
+  }
+
+  timedifferenceapi( starttime,  endtime) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String _query = """
+      mutation {
+  timeDifference(startTime: "$starttime", endTime: "$endtime") {
+    remTime
   }
 }
      """;

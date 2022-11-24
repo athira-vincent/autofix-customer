@@ -1279,45 +1279,6 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
     );
   }
 
-  void changeScreen(String firebaseScreen){
-    if(firebaseScreen == "C1"){
-      /*Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>   MechanicTrackingScreen(latitude: "${firebaseCustomerLatitude}",
-                longitude:  "${firebaseCustomerLongitude}",bookingId: ,)
-          )).then((value){
-      });*/
-    }else if(firebaseScreen == "C2" || firebaseScreen == "C4" || firebaseScreen == "C5" ){     //firebaseScreen == "C3"
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1")
-          )).then((value){
-      });
-    }else if(firebaseScreen == "C3"){
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  CustomerApprovedScreen()
-          )).then((value){
-      });
-    }else if(firebaseScreen == "C4"){
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MechanicWorkCompletedScreen()));
-    }else if(firebaseScreen == "C5"){
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  DirectPaymentScreen(isMechanicApp: true, isPaymentFailed: true,)
-          )).then((value){
 
-      });
-    }else if(firebaseScreen == "C6"){
-      print("Service Completed");
-    }
-  }
 
 }

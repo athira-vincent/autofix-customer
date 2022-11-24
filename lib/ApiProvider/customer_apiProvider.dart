@@ -33,6 +33,7 @@ import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart'
 
 import '../Models/new_checkout_model/new_checkout_model.dart';
 import '../Models/payment_success_model/payment_success_model.dart';
+import '../Models/time_difference_model/time_difference_model.dart';
 import '../Models/wallet_check_balance_model.dart';
 
 class CustomerApiProvider {
@@ -822,12 +823,11 @@ class CustomerApiProvider {
     }
   }
 
-
   ///----- wallet balance response----------///
 
-  Future<WalletCheckBalanceModel> fetchwalletcheckbalance(
-      bookingid) async {
-    Map<String, dynamic> _resp = await _queryProvider.fetchwalletcheckbalance(bookingid);
+  Future<WalletCheckBalanceModel> fetchwalletcheckbalance(bookingid) async {
+    Map<String, dynamic> _resp =
+        await _queryProvider.fetchwalletcheckbalance(bookingid);
     if (_resp != null) {
       if (_resp['status'] == "error") {
         final errorMsg = WalletCheckBalanceModel(
@@ -844,12 +844,10 @@ class CustomerApiProvider {
     }
   }
 
-
   /// checkout api
-  Future<NewCheckoutModel> newcheckoutapi( cartid, addressid
-      ) async {
+  Future<NewCheckoutModel> newcheckoutapi(cartid, addressid) async {
     Map<String, dynamic> _resp =
-    await _queryProvider.newcheckoutapi(cartid, addressid);
+        await _queryProvider.newcheckoutapi(cartid, addressid);
     if (_resp != null) {
       if (_resp['status'] == "error") {
         final errorMsg = NewCheckoutModel(
@@ -861,6 +859,26 @@ class CustomerApiProvider {
       }
     } else {
       final errorMsg = NewCheckoutModel(
+          status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+  /// timedifference api
+  Future<TimeDifferenceModel> timedifferenceapi(starttime,endtime) async {
+    Map<String, dynamic> _resp =
+        await _queryProvider.timedifferenceapi(starttime,endtime);
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = TimeDifferenceModel(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return TimeDifferenceModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = TimeDifferenceModel(
           status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
