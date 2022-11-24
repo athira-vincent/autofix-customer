@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:auto_fix/Constants/GlobelTime/timeBloc.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
@@ -5,6 +8,7 @@ import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Models/customer_models/booking_details_model/bookingDetailsMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
+import 'package:auto_fix/Repository/repository.dart';
 
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
@@ -23,6 +27,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -69,6 +74,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
+  final TimeBloc _timeCustomerBloc = TimeBloc();
 
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -86,8 +92,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   String? FcmToken="";
   String authToken="";
   String userName="";
-
-
+  String currentDateTime = "";
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
   String bookingIdEmergency="";
@@ -178,7 +183,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           bookingIdEmergency = "${value.data?.emergencyBooking?.id}";
           _homeCustomerBloc.postBookingDetailsRequest(authToken, "${value.data?.emergencyBooking?.id}",);
           print("message mechanicsEmergencyBookingIDResponse >>>>>>>  ${value.message}");
-          print("success mechanicsEmergencyBookingIDResponse >>>>>>>  ${value.status}");
+          print("success mechanicsEmergencyBookingIDResponse >>>>>>>  ${value.data}");
 
         });
       }
@@ -218,11 +223,16 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           carPlateNumber = '${value.data?.bookingDetails?.vehicle?.plateNo}';
           carColor = '${value.data?.bookingDetails?.vehicle?.color}';
 
+          Repository().getCurrentWorldTime("Kolkata").then((value01) => {
 
-          callOnFcmApiSendPushNotifications(value);
-          _showMechanicAcceptanceDialog(context);
-          _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-              authToken, bookingIdEmergency, "1");
+            currentDateTime = value01.datetime!.millisecondsSinceEpoch.toString(),
+
+
+            print("dateConverter(timeNow!) >>> ${currentDateTime}"),
+            callOnFcmApiSendPushNotifications(value)
+
+          });
+
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
 
@@ -258,6 +268,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "id": "1",
         "status": "done",
         "screen": "IncomingJobOfferScreen",
+        "customerCurrentTime": currentDateTime,
+        "mechanicCurrentTime" : "",
         "bookingId" : bookingIdEmergency,
         "serviceName" : "${widget.mechanicListData?.mechanicService[0].service?.serviceName}",
         "serviceTime" : "${widget.mechanicListData?.mechanicService[0].time.split(':').first}",
@@ -277,7 +289,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "customerID" : "${detailsMdl!.data!.bookingDetails!.customerId}",
         "mechanicPhone" :"${detailsMdl.data!.bookingDetails!.mechanic!.phoneNo}",
         "customerPhone" : "${detailsMdl.data!.bookingDetails!.customer!.phoneNo}",
-        "mechanicProfileUrl" :"",  ///----detailsMdl.data!.bookingDetails!.mechanic.profileurl
+        "mechanicProfileUrl" :"",                                   ///----detailsMdl.data!.bookingDetails!.mechanic.profileurl
         "customerProfileUrl" : "",
         "mechanicAddress" : "",
         "mechanicLatitude" : widget.latitude,
@@ -338,6 +350,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
       if (response.statusCode == 200) {
         setState(() {
           print('notification sending success');
+          _showMechanicAcceptanceDialog(context);                                 /// -------------- show after postMechanicOrderStatusUpdateRequest response
+          _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(    /// -------------- Doubt --------------
+              authToken, bookingIdEmergency, "0");
 
         });
       } else {
@@ -435,7 +450,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-   // _listenNotification(context);
     //_notificationListener.listenNotification(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(

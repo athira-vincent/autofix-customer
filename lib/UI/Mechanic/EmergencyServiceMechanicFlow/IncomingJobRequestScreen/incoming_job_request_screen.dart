@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slider_button/slider_button.dart';
 
@@ -67,13 +69,17 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   int levelClock = 30;
   String authToken = "", userId = "";
   List yourItemList = [];
+  String worldTimeNotificationCreated = "", currentDateTime = "";
 
   @override
   void initState() {
     super.initState();
+    calculateTime();
     customerToken = widget.notificationPayloadMdl.customerFcmToken;
     bookingIdEmergency = widget.notificationPayloadMdl.bookingId;
+
     serviceName = widget.notificationPayloadMdl.serviceName;
+
     getSharedPrefData();
     _getApiResponse();
     _controller = AnimationController(
@@ -88,9 +94,50 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       if (status == AnimationStatus.completed) {
         print("levelClock >>>>>> " + levelClock.toString() );
         isAccepted = 0;
+        setClearSharedPrefData();
         Navigator.of(context, rootNavigator: true).pop(context);
       }
     });
+  }
+
+  void calculateTime(){
+    // worldTimeNotificationCreated = DateFormat('dd MMM yyyy, hh:mm:ss').format(
+    //   DateTime.fromMillisecondsSinceEpoch(
+    //     int.parse(widget.notificationPayloadMdl.customerCurrentTime),
+    //   ),
+    // );
+    // print(">>>> customerCurrentTime worldTimeNotificationCreated : ${widget.notificationPayloadMdl.customerCurrentTime}");
+    Duration time;
+    Repository().getCurrentWorldTime("Kolkata").then((value01) => {
+
+      currentDateTime = value01.datetime!.millisecondsSinceEpoch.toString(),
+      print(">>>> customerCurrentTime currentDateTime : $currentDateTime"),
+
+     time = DateTime.fromMillisecondsSinceEpoch( int.parse(widget.notificationPayloadMdl.customerCurrentTime)).
+      difference(DateTime.fromMillisecondsSinceEpoch(int.parse(currentDateTime))),
+      print( "time difference >>> ${time.inSeconds}"),
+      if(mounted){
+          if(time.inSeconds > -30){
+            setState(() {
+            levelClock = levelClock + time.inSeconds;
+            }),
+          }
+          else{
+            setState(() {
+              _controller.stop(canceled: true);
+              levelClock = 0;
+              Navigator.of(context, rootNavigator: true).pop(context);
+            }),
+          }
+      }
+    });
+  }
+
+  Future<void> setClearSharedPrefData() async {
+    print('setClearSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    shdPre.setBool(SharedPrefKeys.haveActiveServiceRequest, false);
+    shdPre.setString(SharedPrefKeys.activeServiceRequestData, "");
   }
 
   Future<void> getSharedPrefData() async {
@@ -130,6 +177,8 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         "id": "1",
         "status": "done",
         "screen": "MechanicTrackingScreen",
+        "customerCurrentTime": "",
+        "mechanicCurrentTime" : "",
         "bookingId" : "${widget.notificationPayloadMdl.bookingId}",
         "serviceName" : "${widget.notificationPayloadMdl.serviceName}",
         "serviceId" : "${widget.notificationPayloadMdl.serviceId}",
@@ -215,7 +264,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
           shdPre.setString(SharedPrefKeys.bookingIdEmergency, widget.notificationPayloadMdl.bookingId);
 
           updateToCloudFirestoreDB();
-
+          setClearSharedPrefData();
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(

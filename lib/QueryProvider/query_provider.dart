@@ -2814,6 +2814,109 @@ class QueryProvider {
     );
   }
 
+  postCustomerActiveServiceRequest(token, customerId) async {
+    String _query = """
+  mutation {
+    currentlyWorkingServiceCustomer(customerId: $customerId) {
+      id
+      bookingCode
+      reqType
+      bookStatus
+      totalPrice
+      tax
+      commission
+      serviceCharge
+      totalTime
+      serviceTime
+      latitude
+      longitude
+      extend
+      totalExt
+      extendTime
+      bookedDate
+      isRated
+      status
+      customerId
+      mechanicId
+      vehicleId
+      mechanic {
+        id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        status
+        userTypeId
+        jwtToken
+        fcmToken
+        otpCode
+        isProfile
+        otpVerified
+        mechanic{
+          id
+        }
+        customer{
+          id
+        }
+      }
+      customer {
+        id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        status
+        userTypeId
+        jwtToken
+        fcmToken
+        otpCode
+        isProfile
+        otpVerified
+        mechanic{
+          id
+        }
+        customer{
+          id
+        }
+      }
+      vehicle {
+        id
+        brand
+        model
+        engine
+        year
+        plateNo
+        lastMaintenance
+        milege
+        vehiclePic
+        color
+        latitude
+        longitude
+        defaultVehicle
+        status
+        userId
+      }
+      bookService {
+        id
+        status
+        service{
+          id
+        }
+      }
+    }
+  }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
   postMechanicIncomingJobUpdateRequest(token, bookingId, bookStatus) async {
     String _query = """
      mutation {
@@ -4940,9 +5043,9 @@ class QueryProvider {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
     String userid = shdPre.getString(SharedPrefKeys.userID).toString();
-    String mutation_text = transtype.toString() == "1"
-        ? "bookingId: $orderid"
-        : "orderCode: $orderid";
+    String mutation_text = transtype.toString() == "1" ? "bookingId: $orderid"
+                              : transtype.toString() == "2" ? "orderCode: $orderid"
+                              : "";
     String _query = """
  mutation {
   paymentCreate(

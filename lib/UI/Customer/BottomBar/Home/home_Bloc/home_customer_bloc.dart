@@ -10,6 +10,7 @@ import 'package:auto_fix/Models/customer_models/mechanic_start_service_model/cus
 import 'package:auto_fix/Models/customer_models/update_mechanic_booking_model/updateMechanicBookingMdl.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/customer_active_service_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/FetchProfile/customerDetailsMdl.dart';
@@ -63,6 +64,19 @@ class HomeCustomerBloc {
       _serviceDataList.forEach((element) {  postRegularServiceList.sink.add(element);});
 
     }
+  }
+
+  /// =============== Customer Active Service ================== ///
+
+  final postCustomerActiveService = PublishSubject<CustomerActiveServiceUpdateMdl>();
+  Stream<CustomerActiveServiceUpdateMdl> get postCustomerActiveServiceResponse => postCustomerActiveService.stream;
+
+  postCustomerActiveServiceRequest(
+      token, mechanicId) async {
+
+    CustomerActiveServiceUpdateMdl _customerActiveServiceMdl = await repository.postCustomerActiveServiceRequest(
+        token, mechanicId);
+    postCustomerActiveService.sink.add(_customerActiveServiceMdl);
   }
 
   /// =============== Emergency services list ================== ///

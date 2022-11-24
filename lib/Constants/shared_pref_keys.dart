@@ -41,6 +41,8 @@ class SharedPrefKeys {
   static const mechanicID = "mechanicID";
   static const mechanicIsOnline = "mechanicIsOnline";
   static const isWorkProfileCompleted = "isWorkProfileCompleted";
+  static const haveActiveServiceRequest = "haveActiveServiceRequest";
+  static const activeServiceRequestData = "activeServiceRequest";
 
   ///========= Customer Tracking Variables ==============///
 

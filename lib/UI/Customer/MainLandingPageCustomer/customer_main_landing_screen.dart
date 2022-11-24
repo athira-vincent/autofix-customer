@@ -54,10 +54,23 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
     super.initState();
     getSharedPrefData();
     _listenNotification(context);
+    _listenApiResponse();
   }
-
+  _listenApiResponse() {
+    _timeCustomerBloc.timeResponse.listen((value) {
+      if (value == "error") {
+        setState(() {
+          print("value.datetime >>> Error");
+        });
+      } else {
+        setState(() {
+          print("value.datetime >>> ${value.datetime}" );
+        });
+      }
+    });
+  }
   Future<void> getSharedPrefData() async {
-    _timeCustomerBloc.postTimeRequest("Nairobi");
+    _timeCustomerBloc.postTimeRequest("Kolkata");
     String localProfileUrl = "", localProfileName = "", localUserId = "";
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();

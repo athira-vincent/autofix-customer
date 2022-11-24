@@ -21,6 +21,7 @@ import 'package:auto_fix/Models/time_difference_model/time_difference_model.dart
 import 'package:auto_fix/Models/wallet_history_model/wallet_history_model.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/customer_active_service_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
@@ -497,6 +498,10 @@ class Repository {
   // Fetch Mechanic Active Service Request
   Future<MechanicActiveServiceUpdateMdl> postMechanicActiveServiceRequest(token, mechanicId) =>
       _mechanicApiProvider.postMechanicActiveServiceRequest(token, mechanicId);
+
+  // Fetch Customer Active Service Request
+  Future<CustomerActiveServiceUpdateMdl> postCustomerActiveServiceRequest(token, customerId) =>
+      _customerApiProvider.postCustomerActiveServiceRequest(token, customerId);
 
   // Fetch Mechanic Online Offline Request
   Future<dynamic> postMechanicIncomingRequestUpdate(

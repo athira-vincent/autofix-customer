@@ -46,6 +46,8 @@ class NotificationPayloadMdl {
     required this.customerFromPage,
     required this.mechanicFromPage,
     required this.message,
+    required this.customerCurrentTime,
+    required this.mechanicCurrentTime,
   });
 
   String clickAction;
@@ -83,6 +85,8 @@ class NotificationPayloadMdl {
   String customerFromPage;
   String mechanicFromPage;
   String message;
+  String customerCurrentTime;
+  String mechanicCurrentTime;
 
   factory NotificationPayloadMdl.fromJson(Map<String, dynamic> json) => NotificationPayloadMdl(
     clickAction: json["click_action"] == null ? null : json["click_action"],
@@ -120,6 +124,8 @@ class NotificationPayloadMdl {
     customerFromPage: json["customerFromPage"] == null ? null : json["customerFromPage"],
     mechanicFromPage: json["mechanicFromPage"] == null ? null : json["mechanicFromPage"],
     message: json["message"] == null ? null : json["message"],
+    customerCurrentTime: json["customerCurrentTime"] == null ? null : json["customerCurrentTime"],
+    mechanicCurrentTime: json["mechanicCurrentTime"] == null ? null : json["mechanicCurrentTime"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -158,5 +164,7 @@ class NotificationPayloadMdl {
     "customerFromPage": customerFromPage == null ? null : customerFromPage,
     "mechanicFromPage": mechanicFromPage == null ? null : mechanicFromPage,
     "message": message == null ? null : message,
+    "customerCurrentTime": customerCurrentTime == null ? null : customerCurrentTime,
+    "mechanicCurrentTime": mechanicCurrentTime == null ? null : mechanicCurrentTime,
   };
 }

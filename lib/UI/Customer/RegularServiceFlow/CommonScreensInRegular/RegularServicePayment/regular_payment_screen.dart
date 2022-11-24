@@ -298,17 +298,27 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     if( selectedOptionValue == 1) {
       setCashConfirmationBottomsheet(int.parse(totalServiceCost));
     } else if(_selectedOptionValue == 2){
-      await  Repository().fetchwalletcheckbalance(widget.bookingId).then((value) => {
+      await Repository().fetchwalletcheckbalance(widget.bookingId).then((value) => {
+        print("fetchwalletcheckbalance >>>> ${value.data}"),
 
-        if(value.data!.walletStatus.data.remain==0){
+        if(value.data!.walletStatus.status == true){
+          print("fetchwalletcheckbalance >>>> true"),
+          if(value.data!.walletStatus.data.remain==0){
 
-          setWalletSufficientConfirmationBottomsheet(int.parse(totalServiceCost))
-        }
-        else{
+            setWalletSufficientConfirmationBottomsheet(int.parse(totalServiceCost))
+          }
+          else{
+            Fluttertoast.showToast(msg: "Insufficient wallet balance"),
+            setWalletInsufficientBottomsheet(value.data!.walletStatus.data.wallet,
+                value.data!.walletStatus.data.remain,
+                value.data!.walletStatus.data.wallet + value.data!.walletStatus.data.remain)
+          }
+
+        }else{
           Fluttertoast.showToast(msg: "Insufficient wallet balance"),
-          setWalletInsufficientBottomsheet(value.data!.walletStatus.data.wallet,
-              value.data!.walletStatus.data.remain,
-              value.data!.walletStatus.data.wallet + value.data!.walletStatus.data.remain)
+          setWalletInsufficientBottomsheet(0,
+              int.parse(totalServiceCost),
+              int.parse(totalServiceCost))
         }
       });
     } else if(selectedOptionValue == 3){
@@ -645,7 +655,7 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
                         Fluttertoast.showToast(msg: "Recharge wallet");
                       }
                       else{
-                        Repository().fetchpaymentsucess("1", int.parse(totalServiceCost), "3",
+                        Repository().fetchpaymentsucess(1, int.parse(totalServiceCost), "3",
                             "", widget.bookingId)
                             .then((value) => {
 
@@ -950,15 +960,27 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     var message;
     if (result.hasValue) {
       Repository()
-          .fetchpaymentsucess(null, amountwallet, null,
+          .fetchpaymentsucess(3, amountwallet, 2,
           result.value.transactionReference, null)
           .then((value) => {
         if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty)
           {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => CustomerMainLandingScreen()))
-
+            /*Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => CustomerMainLandingScreen()))*/
             /// wallet deduction api integrate
+              Repository()
+              .fetchpaymentsucess(1, totalServiceCost, 3,
+              "Wallet Insufficient balance recharge payment", widget.bookingId)
+              .then((value) {
+
+                if(value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty){
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => CustomerMainLandingScreen()));
+                }else{
+                  print("Payment failed after wallet recharge");
+                }
+
+              }),
           }
         else
           {print("popcontext"), Navigator.pop(context)}
