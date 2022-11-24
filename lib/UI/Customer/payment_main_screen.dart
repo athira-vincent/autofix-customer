@@ -161,15 +161,16 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
                                 await Repository()
                                     .fetchwalletcheckbalance(orderid)
                                     .then((value) => {
-                                  if (value.data!.walletStatus.data
+                                  if (value.data!.walletStatus.data!
                                       .remain ==
                                       0)
                                     {
                                       Repository()
                                           .fetchpaymentsucess(
                                           "2",
-                                          value.data!.walletStatus
-                                              .data.amount,
+                                          /*value.data!.walletStatus
+                                              .data.amount,*/
+                                          0,
                                           "3",
                                           "",
                                           orderid)
@@ -201,14 +202,14 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
                                           msg:
                                           "Insufficient wallet balance"),
                                       setBottomsheet(
-                                          value.data!.walletStatus.data
+                                          value.data!.walletStatus.data!
                                               .wallet,
-                                          value.data!.walletStatus.data
+                                          value.data!.walletStatus.data!
                                               .remain,
-                                          value.data!.walletStatus.data
+                                          value.data!.walletStatus.data!
                                               .wallet +
                                               value.data!.walletStatus
-                                                  .data.remain)
+                                                  .data!.remain)
                                     }
                                 });
                               } else {

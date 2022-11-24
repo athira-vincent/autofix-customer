@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:convert';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
@@ -28,10 +29,17 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
+  SharedPreferences _shdPre = await SharedPreferences.getInstance();
   String screen = message.data['screen'];
   if(screen.toString() == "IncomingJobOfferScreen") {
     //_showTimeoutNotification(message);
     //goToNextScreen_OnAppWorking(message.data);
+    NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(message.data);
+    _shdPre.setBool(SharedPrefKeys.haveActiveServiceRequest, true);
+    _shdPre.setString(SharedPrefKeys.activeServiceRequestData, jsonEncode(notificationPayloadMdl));
+    print('===> ${_shdPre.getBool(SharedPrefKeys.haveActiveServiceRequest)} ============= 01');
+    print('===> ${_shdPre.getString(SharedPrefKeys.activeServiceRequestData)} ============= 01');
+
   }
   print('Handling a background message ${message.messageId}');
 }
@@ -84,8 +92,13 @@ Future<void> setupFcm() async {
     cancelOnError: false,
     onDone: () {},
   );
-
+  FirebaseMessaging.onBackgroundMessage((message) {
+    return firebaseMessagingBackgroundHandler(message) ;
+  }
+  );
   FirebaseMessaging.onMessage.listen((RemoteMessage remoteMessage) async {
+
+    print(">>>> message listn 06 ${remoteMessage.messageId}");
 
     String screen = remoteMessage.data['screen'];
     if(screen.toString() == "IncomingJobOfferScreen"){
@@ -101,12 +114,13 @@ Future<void> setupFcm() async {
       RemoteNotification? notification = remoteMessage.notification;
       AndroidNotification? android = remoteMessage.notification?.android;
       if (notification != null && android != null) {
+        print(">>>> message listn 03");
         if (remoteMessage.notification?.android!.imageUrl != null
             && remoteMessage.notification!.android!.imageUrl!.trim().isNotEmpty) {
           final String largeIcon = await _base64encodedImage(
             remoteMessage.notification!.android!.imageUrl!,
           );
-
+          print(">>>> message listn 02");
           final BigPictureStyleInformation bigPictureStyleInformation =
           BigPictureStyleInformation(
             ByteArrayAndroidBitmap.fromBase64String(largeIcon),
@@ -117,13 +131,15 @@ Future<void> setupFcm() async {
             htmlFormatSummaryText: true,
             hideExpandedLargeIcon: true,
           );
+
           flutterLocalNotificationsPlugin.show(
             remoteMessage.hashCode,
             remoteMessage.notification!.title,
             remoteMessage.notification!.body,
             NotificationDetails(
               android: AndroidNotificationDetails(
-                channel.id,
+                //channel.id,
+                "5",
                 channel.name,
                 channelDescription: channel.description,
                 icon: 'mipmap/ic_launcher',
@@ -137,13 +153,14 @@ Future<void> setupFcm() async {
           );
         }
         else {
+          print(">>>> message listn 04");
           flutterLocalNotificationsPlugin.show(
             remoteMessage.hashCode,
             remoteMessage.notification!.title,
             remoteMessage.notification!.body,
             NotificationDetails(
                 android: AndroidNotificationDetails(
-                  channel.id,
+                  "5",
                   channel.name,
                   channelDescription: channel.description,
                   importance: Importance.max,
@@ -153,14 +170,19 @@ Future<void> setupFcm() async {
             ),
             payload: json.encode(remoteMessage.data),
           );
+
         }
+
       }
+      print(">>>> message listn 05");
+      await flutterLocalNotificationsPlugin.cancel(5);
     }
   });
 }
 
 Future<void> deleteFcmToken() async {
   return await FirebaseMessaging.instance.deleteToken();
+  
 }
 
 Future<String> getFcmToken() async {
@@ -178,18 +200,30 @@ Future<void> goToNextScreen_OnClickNotification(Map<String, dynamic> data) async
   print(' $userType ============= 01');
 
   if (data['click_action'] != null) {
+    print(">>>> message listn 02");
 
     String screen = data['screen'];
     if(screen.toString() == "IncomingJobOfferScreen"){
-      NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(data);
+      Timer(const Duration(seconds: 4), () {
+        NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl
+            .fromJson(data);
 
-      String bookingId = data['bookingId'];
-      print("bookingId >>>>> " + bookingId );
-      notificationNavigatorKey.currentState!.pushNamed('/IncomingJobRequestScreen',arguments: notificationPayloadMdl);
+        String bookingId = data['bookingId'];
+        print("bookingId >>>>> " + bookingId);
+        notificationNavigatorKey.currentState!.pushNamed(
+            '/IncomingJobRequestScreen', arguments: notificationPayloadMdl);
+      });
     } else if(userType.toString() == TextStrings.user_customer){
-      notificationNavigatorKey.currentState!.pushNamed('/custNotificationList',);
+      Timer(const Duration(seconds: 4), () {
+        notificationNavigatorKey.currentState!.pushNamed(
+          '/custNotificationList',);
+      });
     }else if (userType.toString() == TextStrings.user_mechanic){
-      notificationNavigatorKey.currentState!.pushNamed('/mechNotificationList',);
+      Timer(const Duration(seconds: 4), ()
+      {
+        notificationNavigatorKey.currentState!.pushNamed(
+          '/mechNotificationList',);
+      });
     }else{
       Fluttertoast.showToast(
           msg: "Notification else part");
@@ -246,6 +280,7 @@ Future<void> goToNextScreen_OnAppWorking(Map<String, dynamic> data) async {
 
     String bookingId = data['bookingId'];
     print("bookingId >>>>> " + bookingId );
+    print("current Time >>>>>  ${notificationPayloadMdl.customerCurrentTime}");
     notificationNavigatorKey.currentState!.pushNamed('/IncomingJobRequestScreen',arguments: notificationPayloadMdl);
   } else{
     Fluttertoast.showToast(
@@ -261,7 +296,7 @@ Future<String> _base64encodedImage(String url) async {
   return base64Data;
 }
 
-Future<void> showNotificationWithChronometer(RemoteMessage remoteMessage) async {
+/*Future<void> showNotificationWithChronometer(RemoteMessage remoteMessage) async {
 
   print("showNotificationWithChronometer");
   Fluttertoast.showToast(
@@ -340,9 +375,9 @@ Future<void> showNotificationWithChronometer(RemoteMessage remoteMessage) async 
       payload: json.encode(remoteMessage.data),
     );
   }
-}
+}*/
 
-showSimpleNotification(RemoteMessage remoteMessage) async {
+/*showSimpleNotification(RemoteMessage remoteMessage) async {
 
   if (remoteMessage.notification?.android!.imageUrl != null
       && remoteMessage.notification!.android!.imageUrl!.trim().isNotEmpty) {
@@ -399,10 +434,10 @@ showSimpleNotification(RemoteMessage remoteMessage) async {
           payload: json.encode(remoteMessage.data),
         );
   }
-}
+}*/
 
 ///-------- method to show notification with time out ---------------
-Future<void> _showTimeoutNotification(RemoteMessage remoteMessage) async {
+/*Future<void> _showTimeoutNotification(RemoteMessage remoteMessage) async {
   //Map<String, dynamic> data = json.decode(remoteMessage.data[0]);
 
   print("_showTimeoutNotification data >>>> ${json.encode(remoteMessage.data)}");
@@ -426,5 +461,5 @@ Future<void> _showTimeoutNotification(RemoteMessage remoteMessage) async {
       notificationDetails,
     payload: json.encode(remoteMessage.data),
   );
-}
+}*/
 

@@ -1,5 +1,6 @@
 // @dart=2.9
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
@@ -8,12 +9,14 @@ import 'package:auto_fix/LocalNotifications.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/Provider/chat_provider.dart';
 import 'package:auto_fix/Provider/jobRequestNotifyProvider/job_request_notify_provider.dart';
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Common/LocalizationDelegates/ha_intl_ios.dart';
 import 'package:auto_fix/UI/Common/LocalizationDelegates/ha_intl_material.dart';
 import 'package:auto_fix/UI/Common/LocalizationDelegates/ig_intl_ios.dart';
 import 'package:auto_fix/UI/Common/LocalizationDelegates/ig_intl_material.dart';
 import 'package:auto_fix/UI/Common/LocalizationDelegates/yo_intl_ios.dart';
 import 'package:auto_fix/UI/Common/LocalizationDelegates/yo_intl_material.dart';
+import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/order_list_bloc/order_list_bloc.dart';
 import 'package:auto_fix/UI/Customer/SideBar/CustomerNotifications/cust_notification_list.dart';
@@ -107,7 +110,7 @@ class MyApp extends StatefulWidget {
       context.findAncestorStateOfType<_MyAppState>();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
 
   Locale _locale = Locale.fromSubtags(languageCode: langCode ?? 'en');
 
@@ -116,12 +119,73 @@ class _MyAppState extends State<MyApp> {
       _locale = value;
     });
   }
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    SharedPreferences _shdPre = await SharedPreferences.getInstance();
+    bool haveActiveServiceRequest = false;
+    print("fjfghfjfhjhkhklj 0001112222 ");
+    Duration time;
+    switch(state) {
+      case AppLifecycleState.resumed:
+        print("fjfghfjfhjhkhklj 000111 ");
 
+        haveActiveServiceRequest = _shdPre.getBool(SharedPrefKeys.haveActiveServiceRequest);
+
+        print("fjfghfjfhjhkhklj 000111 a $haveActiveServiceRequest");
+        if(haveActiveServiceRequest == true){
+          print("fjfghfjfhjhkhklj 000111 b");
+          String haveActiveServiceRequestData = _shdPre.getString(SharedPrefKeys.activeServiceRequestData);
+          Map<String,dynamic> userMap = jsonDecode(haveActiveServiceRequestData) as Map<String, dynamic>;
+          print("fjfghfjfhjhkhklj 000111 c ${userMap}");
+          NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(userMap);
+
+          Repository().getCurrentWorldTime("Kolkata").then((value01) => {
+
+            time = DateTime.fromMillisecondsSinceEpoch( int.parse(notificationPayloadMdl.customerCurrentTime)).
+            difference(DateTime.fromMillisecondsSinceEpoch(int.parse(value01.datetime.millisecondsSinceEpoch.toString()))),
+            print( "time difference >>> ${time.inSeconds}"),
+            print( "time difference >>> ${time.inSeconds}"),
+            if(time.inSeconds > -30){
+              print("fjfghfjfhjhkhklj 000111 d ${notificationPayloadMdl.id}"),
+              print("fjfghfjfhjhkhklj 000111 e ${notificationPayloadMdl.customerCurrentTime}"),
+
+              notificationNavigatorKey.currentState.pushNamed('/IncomingJobRequestScreen',arguments: notificationPayloadMdl)
+            }else{
+              Fluttertoast.showToast(msg: "Time Expired"),
+              print("Time Expired"),
+            }
+          });
+        }
+
+      // Handle this case
+        //work here
+        break;
+      case AppLifecycleState.inactive:
+      // Handle this case
+        print("fjfghfjfhjhkhklj 000222 ");
+        break;
+      case AppLifecycleState.paused:
+        print("fjfghfjfhjhkhklj 000333 ");
+      // Handle this case
+        break;
+
+      case AppLifecycleState.detached:
+        print("fjfghfjfhjhkhklj 000444 ");
+        break;
+    }
+  }
+
+@override
+  void dispose() {
+  WidgetsBinding.instance.removeObserver(this);
+  super.dispose();
+  }
   @override
   void initState() {
     super.initState();
     requestPermissions();
     setupFcm();
+    WidgetsBinding.instance.addObserver(this);
     //_locale = Provider.of<LocaleProvider>(context,).locale??L10n.all.elementAt(0);
   }
 
