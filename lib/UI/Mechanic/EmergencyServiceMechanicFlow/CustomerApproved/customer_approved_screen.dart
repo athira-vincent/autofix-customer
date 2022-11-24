@@ -105,7 +105,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen>
       print('CustomerApprovedScreen bookingId >>>> $bookingId');
       updateToCloudFirestoreMechanicCurrentScreenDB();
     });
-    await _firestore
+    _firestore
         .collection("ResolMech")
         .doc('$bookingId')
         .snapshots()

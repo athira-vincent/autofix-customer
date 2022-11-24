@@ -64,6 +64,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   bool apivalue = false;
 
   Timer? _timer;
+  var trywidgetaddedtime;
 
   @override
   void initState() {
@@ -643,6 +644,11 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         print("newtime");
         print(DateFormat("HH:mm:ss").format(addedtime));
 
+        setState(() {
+           trywidgetaddedtime=DateFormat("HH:mm:ss").format(addedtime);
+        });
+
+
         Repository()
             .timedifferenceapi(DateFormat("HH:mm:ss").format(DateTime.now()),
                 DateFormat("HH:mm:ss").format(addedtime))
@@ -1030,15 +1036,18 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         child: InkWell(
           onTap: () {
             //Navigator.of(context, rootNavigator: true).pop();
-            print("selectedservicetime");
+            print("continueselectedservicetime");
             print(selectedServiceTime);
             print(tdata);
             print(serviceTotalTimeForFirebase);
+
+
 
             var today = DateTime.now();
             int converttime = int.parse(serviceTotalTimeForFirebase);
             var addedtime = today.add(Duration(minutes: converttime));
             print("newtime");
+            print(addedtime);
             print(DateFormat("HH:mm:ss").format(addedtime));
 
             Repository()
@@ -1060,7 +1069,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                         remaintime: remaintime.toString().substring(3, 5),
                         starttime:
                             DateFormat("HH:mm:ss").format(DateTime.now()),
-                        endtime: DateFormat("HH:mm:ss").format(addedtime))));
+                        endtime: trywidgetaddedtime)));
           },
           child: const Text(
             "Continue",
