@@ -4940,7 +4940,9 @@ class QueryProvider {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
     String userid = shdPre.getString(SharedPrefKeys.userID).toString();
-    String mutation_text = transtype.toString() == "1" ? "bookingId: $orderid" : "orderCode: $orderid";
+    String mutation_text = transtype.toString() == "1"
+        ? "bookingId: $orderid"
+        : "orderCode: $orderid";
     String _query = """
  mutation {
   paymentCreate(
@@ -5009,7 +5011,6 @@ class QueryProvider {
     );
   }
 
-
   newcheckoutapi(String cartid, String addressid) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
@@ -5021,6 +5022,21 @@ class QueryProvider {
     duration
     currency
     pricingTier
+  }
+}
+     """;
+    log(_query);
+    return await GqlClient.I
+        .query01(_query, authToken, enableDebug: true, isTokenThere: true);
+  }
+
+  timedifferenceapi( starttime,  endtime) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String _query = """
+      mutation {
+  timeDifference(startTime: "$starttime", endTime: "$endtime") {
+    remTime
   }
 }
      """;
