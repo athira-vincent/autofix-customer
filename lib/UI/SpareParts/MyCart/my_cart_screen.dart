@@ -890,8 +890,8 @@ class _MyCartScreenState extends State<MyCartScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Image.asset(
-                'assets/images/home_customer/myCartLocation.png',
+              SvgPicture.asset(
+                'assets/image/home_customer/myCartLocation.svg',
                 height: 30,
                 width: 30,
               ),

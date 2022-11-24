@@ -13,6 +13,7 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_second_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicStartService/mechanic_start_service_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
@@ -990,14 +991,23 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                     }
                 });
 
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => CustomerApprovedScreen(
+            //           remaintime: remaintime.toString().substring(3, 5),
+            //               starttime: "",
+            //               endtime: "",
+            //             )));
+
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => CustomerApprovedScreen(
+                    builder: (context) => CustomerApprovedSecondScreen(
                       remaintime: remaintime.toString().substring(3, 5),
-                          starttime: "",
-                          endtime: "",
-                        ))).then((value) {});
+                      starttime: "",
+                      endtime: "",
+                    )));
           } else if (firebaseScreen == "M4") {
             Navigator.push(
                 context,
