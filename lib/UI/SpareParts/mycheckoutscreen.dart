@@ -10,7 +10,7 @@ import '../../Constants/cust_colors.dart';
 import '../../Constants/styles.dart';
 
 import '../../Models/customer_models/cart_list_model/cart_list_model.dart';
-import '../Customer/payment_main_screen.dart';
+import 'payment_main_screen.dart';
 import 'MyCart/delete_cart_bloc/delete_cart_bloc.dart';
 import 'MyCart/delete_cart_bloc/delete_cart_event.dart';
 import 'MyCart/delete_cart_bloc/delete_cart_state.dart';

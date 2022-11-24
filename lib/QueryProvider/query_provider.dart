@@ -4837,10 +4837,22 @@ class QueryProvider {
           otpCode
           isProfile
           otpVerified
+          customer{
+            profilePic
+          }
+          mechanic{
+            profilePic
+          }
         }
         from{
           firstName
           fcmToken
+          customer{
+            profilePic
+          }
+          mechanic{
+            profilePic
+          }
         }
         booking{
           id

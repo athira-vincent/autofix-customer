@@ -134,7 +134,7 @@ class _MechanicNotificationList extends State<MechanicNotificationList> {
                     Row(
                       children: [
                         Text(
-                          previousDatum.message,
+                          previousDatum.message!,
                           style: const TextStyle(
                             fontFamily: 'Samsung_SharpSans_Medium',
                             fontSize: 10.0,

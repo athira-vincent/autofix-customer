@@ -515,7 +515,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            widget.mechanicListData?.mechanic?[0].yearExp != null
+                            widget.mechanicListData?.mechanic[0].yearExp != null
                                 ? '${widget.mechanicListData?.mechanic[0].yearExp} Year'
                                 : '0 Year',
                             textAlign: TextAlign.center,
@@ -900,7 +900,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                               Spacer(),
                               Row(
                                 children: [
-                                  Text('${widget.mechanicListData?.mechanicService?[index].fee}',
+                                  Text('${widget.mechanicListData?.mechanicService[index].fee}',
                                     maxLines: 2,
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.visible,

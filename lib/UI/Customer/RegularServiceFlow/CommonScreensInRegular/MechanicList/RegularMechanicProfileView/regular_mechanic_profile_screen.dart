@@ -581,7 +581,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            widget.mechanicListData?.mechanic?[0].yearExp != null
+                            widget.mechanicListData?.mechanic[0].yearExp != null
                                 ? '${widget.mechanicListData?.mechanic[0].yearExp} Year'
                                 : '0 Year',
                             textAlign: TextAlign.center,
@@ -947,7 +947,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
             ),
             Container(
               child: ListView.builder(
-                itemCount:widget.mechanicListData?.mechanicService?.length,
+                itemCount:widget.mechanicListData?.mechanicService.length,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context,index,) {
@@ -975,7 +975,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                               Spacer(),
                               Row(
                                 children: [
-                                  Text('${widget.mechanicListData?.mechanicService?[index].fee}',
+                                  Text('${widget.mechanicListData?.mechanicService[index].fee}',
                                     maxLines: 2,
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.visible,

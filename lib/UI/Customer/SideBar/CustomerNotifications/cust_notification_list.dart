@@ -133,7 +133,7 @@ class _CustNotificationList extends State<CustNotificationList> {
                     Row(
                       children: [
                         Text(
-                          previousDatum.message,
+                          previousDatum.message!,
                           //notificationList.message,
                           style: const TextStyle(
                             fontFamily: 'Samsung_SharpSans_Medium',
