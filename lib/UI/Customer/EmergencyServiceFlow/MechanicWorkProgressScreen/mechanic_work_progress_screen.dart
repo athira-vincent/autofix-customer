@@ -601,6 +601,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                 Column(
                   children: [
                     CountdownMechanicTimer(
+
                       animation: StepTween(
                         begin: levelClock, // THIS IS A USER ENTERED NUMBER
                         end: 0,

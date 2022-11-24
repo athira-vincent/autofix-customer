@@ -17,6 +17,7 @@ import 'package:auto_fix/Models/customer_rating_model/customer_rating_model.dart
 import 'package:auto_fix/Models/customer_wallet_detail_model/customer_wallet_detail_model.dart';
 import 'package:auto_fix/Models/delete_cart_model/delete_cart_model.dart';
 import 'package:auto_fix/Models/notification_model/notification_model.dart';
+import 'package:auto_fix/Models/time_difference_model/time_difference_model.dart';
 import 'package:auto_fix/Models/wallet_history_model/wallet_history_model.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
@@ -98,7 +99,7 @@ class Repository {
   final _apiTimeProvider = WorldTimeApiProvider();
   final _paymentsuccessprovider=CustomerApiProvider();
   final _newcheckoutprovider=CustomerApiProvider();
-  
+  final _timedifferenceprovider=CustomerApiProvider();
 
 // City List
   Future<dynamic> getCityList(String token, search) =>
@@ -790,4 +791,8 @@ class Repository {
       _paymentsuccessprovider.fetchwalletcheckbalance(bookingid);
   Future<NewCheckoutModel> newcheckoutapi(cartid, addressid) =>
       _newcheckoutprovider.newcheckoutapi(cartid, addressid);
+
+
+  Future<TimeDifferenceModel> timedifferenceapi(starttime,endtime) =>
+      _timedifferenceprovider.timedifferenceapi(starttime,endtime);
 }
