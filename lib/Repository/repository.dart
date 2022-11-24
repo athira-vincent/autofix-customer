@@ -1,7 +1,9 @@
+import 'package:auto_fix/AA/GenerateAuthorization/generate_athorization_api_provider.dart';
 import 'package:auto_fix/ApiProvider/customer_apiProvider.dart';
 import 'package:auto_fix/ApiProvider/mechanic_api_provider.dart';
-import 'package:auto_fix/Constants/GlobelTime/timeApiProvider.dart';
-import 'package:auto_fix/Constants/GlobelTime/timeMdl.dart';
+import 'package:auto_fix/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
+import 'package:auto_fix/Common/GlobelTime/timeApiProvider.dart';
+import 'package:auto_fix/Common/GlobelTime/timeMdl.dart';
 import 'package:auto_fix/Models/cod_model/cod_model.dart';
 import 'package:auto_fix/Models/customer_models/add_address_model/add_address_model.dart';
 import 'package:auto_fix/Models/customer_models/add_cart_model/add_cart_model.dart';
@@ -12,15 +14,12 @@ import 'package:auto_fix/Models/customer_models/get_address_model/get_address_mo
 import 'package:auto_fix/Models/customer_models/order_list_model/order_list_model.dart';
 import 'package:auto_fix/Models/customer_models/place_order_model/place_order_model.dart';
 import 'package:auto_fix/Models/customer_models/spare_parts_list_model/spare_parts_list_model.dart';
-import 'package:auto_fix/Models/customer_models/spare_parts_model/spare_parts_model.dart';
 import 'package:auto_fix/Models/customer_rating_model/customer_rating_model.dart';
 import 'package:auto_fix/Models/customer_wallet_detail_model/customer_wallet_detail_model.dart';
 import 'package:auto_fix/Models/delete_cart_model/delete_cart_model.dart';
 import 'package:auto_fix/Models/notification_model/notification_model.dart';
 import 'package:auto_fix/Models/time_difference_model/time_difference_model.dart';
 import 'package:auto_fix/Models/wallet_history_model/wallet_history_model.dart';
-import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
-import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/customer_active_service_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_api_provider.dart';

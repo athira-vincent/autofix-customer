@@ -1,10 +1,5 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:math';
-
-import 'package:another_xlider/another_xlider.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Utility/check_network.dart';
 import 'package:flutter/material.dart';

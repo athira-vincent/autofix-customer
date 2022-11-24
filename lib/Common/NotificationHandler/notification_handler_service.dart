@@ -1,22 +1,18 @@
 
 import 'dart:async';
 import 'dart:convert';
-import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
-import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
-import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../main.dart';
+import '../../../main.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 

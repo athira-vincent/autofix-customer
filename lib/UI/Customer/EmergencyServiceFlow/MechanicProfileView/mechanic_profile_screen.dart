@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:auto_fix/Constants/GlobelTime/timeBloc.dart';
+import 'package:auto_fix/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
@@ -9,11 +9,8 @@ import 'package:auto_fix/Models/customer_models/booking_details_model/bookingDet
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
 import 'package:auto_fix/Repository/repository.dart';
-
-import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mechanic_tracking_Screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/BookingSuccessScreen/booking_success_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
@@ -26,11 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert' as json;
 
 
@@ -74,7 +67,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
-  final TimeBloc _timeCustomerBloc = TimeBloc();
 
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -223,7 +215,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           carPlateNumber = '${value.data?.bookingDetails?.vehicle?.plateNo}';
           carColor = '${value.data?.bookingDetails?.vehicle?.color}';
 
-          Repository().getCurrentWorldTime("Kolkata").then((value01) => {
+          Repository().getCurrentWorldTime("Nairobi").then((value01) => {
 
             currentDateTime = value01.datetime!.millisecondsSinceEpoch.toString(),
 

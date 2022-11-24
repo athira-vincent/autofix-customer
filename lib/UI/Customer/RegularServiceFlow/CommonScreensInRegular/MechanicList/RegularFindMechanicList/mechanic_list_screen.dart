@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 
+import 'package:auto_fix/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
-import 'package:auto_fix/UI/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/MechanicList/RegularMechanicProfileView/regular_mechanic_profile_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';

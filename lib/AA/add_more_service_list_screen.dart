@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-import '../../Widgets/screen_size.dart';
+import '../Widgets/screen_size.dart';
 
 class AddMoreServicesListScreen extends StatefulWidget {
 

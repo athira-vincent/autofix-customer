@@ -7,7 +7,7 @@ import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApprov
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/Widgets/mechanicWorkTimer.dart';
-import 'package:auto_fix/Widgets/mechanicWorkTimer02.dart';
+import 'package:auto_fix/AA/mechanicWorkTimer02.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

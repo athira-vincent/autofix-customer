@@ -1,5 +1,5 @@
+import 'package:auto_fix/AA/GenerateAuthorization/generate_authorization_mdl.dart';
 import 'package:auto_fix/QueryProvider/query_provider.dart';
-import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_authorization_mdl.dart';
 
 class GenerateAuthorizationApiProvider {
   final QueryProvider _queryProvider = QueryProvider();

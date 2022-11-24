@@ -1,18 +1,17 @@
 import 'dart:io';
 
+import 'package:auto_fix/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
-import 'package:auto_fix/UI/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_mdl.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ChangePassword/change_password_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StatesList/states_list_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
