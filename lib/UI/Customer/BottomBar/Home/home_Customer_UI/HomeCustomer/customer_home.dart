@@ -412,7 +412,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>  CustomerApprovedScreen(starttime:"",endtime: "",remaintime: "",)
+                    builder: (context) =>  CustomerApprovedScreen(starttime:"",endtime: "",remaintime: "", isFromHome: false,)
                 )).then((value){
             });
           }else if(firebaseScreen == "C4"){

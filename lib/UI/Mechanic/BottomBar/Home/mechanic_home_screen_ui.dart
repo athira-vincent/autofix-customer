@@ -11,6 +11,7 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/Home/brand_specialization_mdl.dar
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_second_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicStartService/mechanic_start_service_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicWorkComleted/mechanic_work_completed_screen.dart';
@@ -56,7 +57,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   String displayAddress = '';
   String firebaseCustomerLatitude = "",
       firebaseScreen = "",
-      firebaseCustomerLongitude = "";
+      firebaseCustomerLongitude = "", totalstarttimecurrenttimevalue = "";
 
   List<BrandDetail>? brandDetails;
   bool _isLoadingPage = false;
@@ -232,7 +233,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         vehicleName = event.get('carName');
         customerName = event.get('customerName');
         firebaseScreen = event.get('mechanicFromPage');
-
+        totalstarttimecurrenttimevalue = event.get("totalstarttimecurrenttimevalue");
         firebaseCustomerLatitude = event.get('customerLatitude');
         firebaseCustomerLongitude = event.get('customerLongitude');
       });
@@ -971,41 +972,67 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
             /// storing start time and end time in shared pref
             ///
             String remaintime = "";
-            SharedPreferences preferences =
-                await SharedPreferences.getInstance();
-            String starttime = preferences.getString("starttime").toString();
-            String endtime = preferences.getString("endtime").toString();
+            // SharedPreferences preferences =
+            //     await SharedPreferences.getInstance();
+            // String starttime = preferences.getString("starttime").toString();
+            // String endtime = preferences.getString("endtime").toString();
 
             print("preftimes");
-            print(starttime);
-            print(endtime);
 
-        await    Repository().timedifferenceapi(starttime, endtime).then((value) => {
-                  if (value.data!.timeDifference.remTime.isNotEmpty)
-                    {
-                      setState(() {
-                        remaintime = value.data!.timeDifference.remTime;
-                      })
-                    }
-                });
+            if(DateFormat("HH:mm:ss").format(DateTime.now())==totalstarttimecurrenttimevalue){
+              print("work finished");
+
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CustomerApprovedScreen(
+                        isFromHome: true,
+                        remaintime: "0",
+                        starttime: "",
+                        endtime: "",
+                      )));
+            }
+            else{
+              await    Repository().timedifferenceapi(DateFormat("HH:mm:ss").format(DateTime.now()), totalstarttimecurrenttimevalue).then((value) => {
+                if (value.data!.timeDifference.remTime.isNotEmpty)
+                  {
+                    setState(() {
+                      String string = value.data!.timeDifference.remTime;
+                      int hour = int.parse(string.split(":")[0]);
+                      int minute = int.parse(string.split(":")[1]);
+                      int second = int.parse(string.split(":")[2]);
+                      Duration duration = Duration(hours: hour, minutes: minute, seconds: second);
+                      print("Minutes is: ${duration.inMinutes}");
+                      print("inSeconds is: ${duration.inSeconds}");
+                      remaintime = duration.inSeconds.toString();
+
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CustomerApprovedScreen(
+                                isFromHome: true,
+                                remaintime: remaintime,
+                                starttime: "",
+                                endtime: "",
+                              )));
+                    })
+                  }
+              });
+            }
+
+
+
+
+
 
             // Navigator.push(
             //     context,
             //     MaterialPageRoute(
-            //         builder: (context) => CustomerApprovedScreen(
-            //           remaintime: remaintime.toString().substring(3, 5),
-            //               starttime: "",
-            //               endtime: "",
-            //             )));
-
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => CustomerApprovedSecondScreen(
-                      remaintime: remaintime.toString().substring(3, 5),
-                      starttime: "",
-                      endtime: "",
-                    )));
+            //         builder: (context) => CustomerApprovedSecondScreen(
+            //           remaintime: remaintime,
+            //           starttime: "",
+            //           endtime: "",
+            //         )));
           } else if (firebaseScreen == "M4") {
             Navigator.push(
                 context,

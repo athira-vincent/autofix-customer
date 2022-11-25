@@ -87,7 +87,7 @@ class _MechanicDiagnoseTestScreenState extends State<MechanicDiagnoseTestScreen>
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CustomerApprovedScreen(remaintime: "",starttime: "",endtime: "",)));
+                              builder: (context) => CustomerApprovedScreen(isFromHome: false,remaintime: "",starttime: "",endtime: "",)));
                     },
                     child: mechanicStartServiceButton(size)),
               ],

@@ -103,7 +103,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
   String carNameModel="";
 
   String carPlateNumber="";
-  int totalAmount = 0;
+  int totalAmount = 0; String serviceFeeList = "";
 
   late StateSetter mechanicAcceptance;
 
@@ -120,7 +120,14 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         "serviceCost" : '${widget.mechanicListData!.mechanicService[i].fee}'
       });
       totalAmount = totalAmount + int.parse(widget.mechanicListData!.mechanicService[i].fee);
+      if(i == widget.selectedService.length-1){
+        serviceFeeList = serviceFeeList + '${widget.mechanicListData!.mechanicService[i].fee}';
+      }
+      else{
+        serviceFeeList = serviceFeeList + '${widget.mechanicListData!.mechanicService[i].fee},';
     }
+    }
+    print(">>>>>>serviceFeeList : $serviceFeeList");
     /*yourItemList.add({
         "serviceCategoryId": '${widget.selectedService[i].categoryId}',
         "serviceId" : '${widget.selectedService[i].id}',
@@ -1036,6 +1043,10 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         print(">>>>>>>>>> ServiceId  ${widget.serviceIds}");
 
           print('serviceIdEmergency>>>>>>>>11111 ' + serviceIdEmergency.toString());
+        print('>>>>>>>>serviceIds ' + '['+'${widget.serviceIds}'+']');
+        print('>>>>>>>>mechanicListData ' '${widget.mechanicListData?.id}',);
+        print('>>>>>>>>serviceFeeList ' '['+'${serviceFeeList}'+']',);
+
 
           _homeCustomerBloc.postMechanicsRegularServiceBookingIDRequest(
             authToken,
@@ -1045,6 +1056,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
             '${widget.latitude}',
             '${widget.longitude}',
             '['+'${widget.serviceIds}'+']',
+            '['+'${serviceFeeList}'+']',
             '${widget.mechanicListData?.id}',
             "2",
             widget.regularServiceType == TextStrings.txt_pick_up
