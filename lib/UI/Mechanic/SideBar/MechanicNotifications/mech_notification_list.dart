@@ -6,6 +6,7 @@ import 'package:auto_fix/UI/Mechanic/SideBar/MechanicNotifications/mech_notifica
 import 'package:auto_fix/UI/Mechanic/SideBar/MechanicNotifications/mech_notification_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 
 class MechanicNotificationList extends StatefulWidget {
@@ -113,13 +114,28 @@ class _MechanicNotificationList extends State<MechanicNotificationList> {
         child: Row(
           children: [
             /// ---------------------- profile image to be updated from api
+            /*previousDatum.from!.customer![0].profilePic != null &&
+                previousDatum.from!.customer![0].profilePic != ""
+              ?
             Padding(
               padding: const EdgeInsets.only(left: 4),
               child: CircleAvatar(
                 radius: 25,
                 child: ClipOval(
                   child: Image.network(
-                    'https://i.picsum.photos/id/799/200/200.jpg?hmac=zFQHfBiAYFHDNrr3oX_pQDYz-YWPWTDB3lIszvP8rRY',
+                    previousDatum.from!.customer![0].profilePic,
+                  ),
+                ),
+              ),
+            )
+            :*/
+            Padding(
+              padding: const EdgeInsets.only(left: 4),
+              child: CircleAvatar(
+                radius: 25,
+                child: ClipOval(
+                  child: SvgPicture.asset(
+                      'assets/image/MechanicType/work_selection_avathar.svg'
                   ),
                 ),
               ),
@@ -134,7 +150,8 @@ class _MechanicNotificationList extends State<MechanicNotificationList> {
                     Row(
                       children: [
                         Text(
-                          previousDatum.message,
+                          previousDatum.message!,
+                          maxLines: 4,
                           style: const TextStyle(
                             fontFamily: 'Samsung_SharpSans_Medium',
                             fontSize: 10.0,
@@ -151,6 +168,7 @@ class _MechanicNotificationList extends State<MechanicNotificationList> {
                     const SizedBox(height: 10),
                     Text(
                       previousDatum.caption,
+                      maxLines: 4,
                       style: TextStyle(
                         fontFamily: 'Samsung_SharpSans_Medium',
                         fontSize: 10.0,

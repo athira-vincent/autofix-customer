@@ -1,9 +1,7 @@
-import 'package:auto_fix/Constants/GlobelTime/timeBloc.dart';
+import 'package:auto_fix/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
-import 'package:auto_fix/Provider/locale_provider.dart';
-import 'package:auto_fix/UI/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_UI/HomeCustomer/customer_home.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.dart';
@@ -29,7 +27,6 @@ class CustomerMainLandingScreen extends StatefulWidget {
 
 class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
 
-  final TimeBloc _timeCustomerBloc = TimeBloc();
   int _index = 0;
   int _counter = 0;
   var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -53,24 +50,11 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
-    _listenNotification(context);
-    _listenApiResponse();
+
   }
-  _listenApiResponse() {
-    _timeCustomerBloc.timeResponse.listen((value) {
-      if (value == "error") {
-        setState(() {
-          print("value.datetime >>> Error");
-        });
-      } else {
-        setState(() {
-          print("value.datetime >>> ${value.datetime}" );
-        });
-      }
-    });
-  }
+
   Future<void> getSharedPrefData() async {
-    _timeCustomerBloc.postTimeRequest("Kolkata");
+
     String localProfileUrl = "", localProfileName = "", localUserId = "";
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
@@ -86,143 +70,6 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
       print('authToken>>>>>>>>> ' + authToken.toString());
       //print('profileImageUrl>>>>>>>>> CustomerMainLandingScreen' + profileImageUrl.toString());
     });
-  }
-
-  _listenNotification(BuildContext context) {
-    _timeCustomerBloc.postTime.listen((value) {
-      print(">>>>>>> Time block listen >>> ${value}");
-    });
-
-    /*FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-
-      print("message received onMessage");
-
-      //Future<void>.delayed(const Duration(seconds: 2));//faking task delay
-
-      setState(() {
-        _counter += 1;
-        //_notificationPayloadMdl = event.data;
-      });
-      print("event.notification!.data " + event.data.toString());
-
-      String screen = event.data['screen'];
-      if(screen.toString() == "IncomingJobOfferScreen"){
-        NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
-
-        //var data = message['data'] ?? message;
-        String bookingId = event.data['bookingId'];
-        print("bookingId >>>>> " + bookingId );
-
-        final provider = Provider.of<LocaleProvider>(context,listen: false);
-        provider.setPayload(notificationPayloadMdl);
-
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>  IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)
-            )).then((value){
-        });
-      }
-    });*/
-
-    /*FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message received onMessage");
-
-      *//*setState(() {
-        _counter += 1;
-        //_notificationPayloadMdl = event.data;
-      });*//*
-      print("event.notification!.data " + event.data.toString());
-
-      String screen = event.data['screen'];
-      *//*if(screen.toString() == "MechanicWaitingPaymentScreen"){
-
-        String bookingId = event.data['bookingId'];
-        print("bookingId >>>>> " + bookingId );
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MechanicWaitingPaymentScreen()));
-      }*//*
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
-      print("message received onMessageOpenedApp");
-
-      setState(() {
-        _counter += 1;
-      });
-
-      print("event.notification!.data " + event.data.toString());
-      String screen = event.data['screen'];
-      if (screen.toString() == "MechanicWaitingPaymentScreen") {
-        String bookingId = event.data['bookingId'];
-        print("bookingId >>>>> " + bookingId);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MechanicWaitingPaymentScreen()));
-      } else if (screen.toString() == "customerServiceDetails") {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => CustServiceRegularDetailsScreen(
-                      bookingId: event.data['bookingId'],
-                      firebaseCollection:
-                          event.data['regularType'].toString() == "1"
-                              ? TextStrings.firebase_pick_up
-                              : event.data['regularType'].toString() == "2"
-                                  ? TextStrings.firebase_mobile_mech
-                                  : TextStrings.firebase_take_vehicle,
-                    ))).then((value) {});
-      }
-    });
-
-    FirebaseMessaging.onBackgroundMessage((message) async {
-      print("onBackgroundMessage " + message.data.toString());
-
-      setState(() {
-        _counter += 1;
-        //_notificationPayloadMdl = event.data;
-      });
-      print("message.notification!.data " + message.data.toString());
-      print("event.notification!.data " + message.data.toString());
-      String screen = message.data['screen'];
-      if (screen.toString() == "MechanicWaitingPaymentScreen") {
-        String bookingId = message.data['bookingId'];
-        print("bookingId >>>>> " + bookingId);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MechanicWaitingPaymentScreen()));
-      } else if (screen.toString() == "mechanicServiceDetails") {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MechServiceRegularDetailsScreen(
-                      bookingId: message.data['bookingId'],
-                      firebaseCollection:
-                          message.data['regularType'].toString() == "1"
-                              ? TextStrings.firebase_pick_up
-                              : message.data['regularType'].toString() == "2"
-                                  ? TextStrings.firebase_mobile_mech
-                                  : TextStrings.firebase_take_vehicle,
-                    ))).then((value) {});
-      } else if (screen.toString() == "customerServiceDetails") {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => CustServiceRegularDetailsScreen(
-                      bookingId: message.data['bookingId'],
-                      firebaseCollection:
-                          message.data['regularType'].toString() == "1"
-                              ? TextStrings.firebase_pick_up
-                              : message.data['regularType'].toString() == "2"
-                                  ? TextStrings.firebase_mobile_mech
-                                  : TextStrings.firebase_take_vehicle,
-                    ))).then((value) {});
-      }
-    });*/
   }
 
   @override

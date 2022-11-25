@@ -1,6 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/Customer/payment_main_screen.dart';
+import 'package:auto_fix/UI/SpareParts/payment_main_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/address_bloc/address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/address_bloc/address_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/address_bloc/address_state.dart';

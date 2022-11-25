@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:auto_fix/Constants/GlobelTime/Api.dart';
-import 'package:auto_fix/Constants/GlobelTime/timeMdl.dart';
+import 'package:auto_fix/Common/GlobelTime/Api.dart';
+import 'package:auto_fix/Common/GlobelTime/timeMdl.dart';
 import 'package:http/http.dart' as http;
 
 

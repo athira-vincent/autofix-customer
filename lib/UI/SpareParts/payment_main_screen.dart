@@ -1,6 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Paymentsuccessscreen.dart';
-import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
+import 'package:auto_fix/AA/direct_payment_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/cod_bloc/cod_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/cod_bloc/cod_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/cod_bloc/cod_state.dart';
@@ -13,10 +13,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:isw_mobile_sdk/isw_mobile_sdk.dart';
 
 import '../../Repository/repository.dart';
-import '../SpareParts/MyCart/placeallorderbloc/place_oder_all_state.dart';
-import '../SpareParts/MyCart/placeallorderbloc/place_order_all_event.dart';
-import '../SpareParts/purchase_response_screen.dart';
-import 'MainLandingPageCustomer/customer_main_landing_screen.dart';
+import 'MyCart/placeallorderbloc/place_oder_all_state.dart';
+import 'MyCart/placeallorderbloc/place_order_all_event.dart';
+import 'purchase_response_screen.dart';
+import '../Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 
 class Payment_Main_Screen extends StatefulWidget {
   final String amount,
@@ -79,10 +79,10 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
           BlocListener<PlaceOrderAllBloc, PlaceOrderAllState>(
             listener: (context, state) {
               if (state is PlaceOrderAllLoadedState) {
-                if (state.placeorderModel.data!.placeOrder!.isNotEmpty) {
+                if (state.placeorderModel.data!.placeOrder.isNotEmpty) {
                   setState(() {
                     orderid = state
-                        .placeorderModel.data!.placeOrder!.first.id
+                        .placeorderModel.data!.placeOrder.first.id
                         .toString();
                   });
 
@@ -202,14 +202,14 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
                                           msg:
                                           "Insufficient wallet balance"),
                                       setBottomsheet(
-                                          value.data!.walletStatus.data!
+                                          value.data!.walletStatus.data
                                               .wallet,
-                                          value.data!.walletStatus.data!
+                                          value.data!.walletStatus.data
                                               .remain,
-                                          value.data!.walletStatus.data!
+                                          value.data!.walletStatus.data
                                               .wallet +
                                               value.data!.walletStatus
-                                                  .data!.remain)
+                                                  .data.remain)
                                     }
                                 });
                               } else {

@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:auto_fix/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Repository/repository.dart';
-import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
@@ -12,10 +12,10 @@ import 'package:auto_fix/Widgets/Countdown.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slider_button/slider_button.dart';
@@ -56,9 +56,6 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
     return value * per + value;
   }
 
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
   bool language_en_ar=true;
 
   bool SliderVal = false;
@@ -101,14 +98,8 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   }
 
   void calculateTime(){
-    // worldTimeNotificationCreated = DateFormat('dd MMM yyyy, hh:mm:ss').format(
-    //   DateTime.fromMillisecondsSinceEpoch(
-    //     int.parse(widget.notificationPayloadMdl.customerCurrentTime),
-    //   ),
-    // );
-    // print(">>>> customerCurrentTime worldTimeNotificationCreated : ${widget.notificationPayloadMdl.customerCurrentTime}");
     Duration time;
-    Repository().getCurrentWorldTime("Kolkata").then((value01) => {
+    Repository().getCurrentWorldTime("Nairobi").then((value01) => {
 
       currentDateTime = value01.datetime!.millisecondsSinceEpoch.toString(),
       print(">>>> customerCurrentTime currentDateTime : $currentDateTime"),
@@ -126,6 +117,8 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
             setState(() {
               _controller.stop(canceled: true);
               levelClock = 0;
+              SliderVal = true;
+              Fluttertoast.showToast(msg: "Time Expired");
               Navigator.of(context, rootNavigator: true).pop(context);
             }),
           }
@@ -363,31 +356,6 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         print("Failed to add row: $error"));
 
   }
-
-  /*void changeScreen(){
-    if (widget.serviceModel == "0"){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
-    }else if (widget.serviceModel == "1"){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
-     // PickUpCustomerLocationScreen
-    }else if (widget.serviceModel == "2"){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
-    }else if (widget.serviceModel == "3"){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
-    }
-  }*/
 
   @override
   void dispose() {

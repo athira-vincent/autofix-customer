@@ -8,7 +8,6 @@ import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landi
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularServicePayment/regular_payment_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/TakeToMechanicFlow/find_mechanic_by_customer_screen.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
-import 'package:auto_fix/UI/chat/chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';

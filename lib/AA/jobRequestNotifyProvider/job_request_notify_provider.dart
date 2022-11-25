@@ -1,4 +1,5 @@
-import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
+
+import 'package:auto_fix/Common/NotificationPayload/notification_mdl.dart';
 import 'package:flutter/material.dart';
 
 class JobRequestNotifyProvider extends ChangeNotifier {

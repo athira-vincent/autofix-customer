@@ -1,22 +1,19 @@
 
 import 'dart:async';
 import 'dart:convert';
-import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
-import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
-import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../main.dart';
+import '../../../main.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -198,21 +195,38 @@ Future<void> goToNextScreen_OnClickNotification(Map<String, dynamic> data) async
   SharedPreferences _shdPre = await SharedPreferences.getInstance();
   String? userType = _shdPre.getString(SharedPrefKeys.userType);
   print(' $userType ============= 01');
+  Duration time;
 
   if (data['click_action'] != null) {
     print(">>>> message listn 02");
 
     String screen = data['screen'];
     if(screen.toString() == "IncomingJobOfferScreen"){
-      Timer(const Duration(seconds: 4), () {
-        NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl
-            .fromJson(data);
 
-        String bookingId = data['bookingId'];
-        print("bookingId >>>>> " + bookingId);
-        notificationNavigatorKey.currentState!.pushNamed(
+      NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(data);
+
+      Repository().getCurrentWorldTime("Nairobi").then((value01) => {
+
+        time = DateTime.fromMillisecondsSinceEpoch( int.parse(notificationPayloadMdl.customerCurrentTime)).
+        difference(DateTime.fromMillisecondsSinceEpoch(int.parse(value01.datetime!.millisecondsSinceEpoch.toString()))),
+
+        if(time.inSeconds > -30){
+
+          Timer(const Duration(seconds: 4), () {
+            String bookingId = data['bookingId'];
+            print("bookingId >>>>> " + bookingId);
+            notificationNavigatorKey.currentState!.pushNamed(
             '/IncomingJobRequestScreen', arguments: notificationPayloadMdl);
+          })
+
+        }else{
+          Fluttertoast.showToast(msg: "Time Expired"),
+          print("Time Expired"),
+          _shdPre.setBool(SharedPrefKeys.haveActiveServiceRequest, false),
+          _shdPre.setString(SharedPrefKeys.activeServiceRequestData, "")
+        }
       });
+
     } else if(userType.toString() == TextStrings.user_customer){
       Timer(const Duration(seconds: 4), () {
         notificationNavigatorKey.currentState!.pushNamed(
@@ -228,16 +242,6 @@ Future<void> goToNextScreen_OnClickNotification(Map<String, dynamic> data) async
       Fluttertoast.showToast(
           msg: "Notification else part");
     }
-    /*switch (data['click_action']) {
-      case "first_screen":
-        navigatorKey.currentState.pushNamed(FirstScreen.routeName,);
-        break;
-      case "second_screen":
-        navigatorKey.currentState.pushNamed(SecondScreen.routeName,);
-        break;
-      case "sample_screen":
-        navigatorKey.currentState.pushNamed(SampleScreen.routeName,);
-    }*/
     return;
   }
   //If the payload is empty or no click_action key found then go to Notification Screen if your app has one.
@@ -249,9 +253,6 @@ Future<void> goToNextScreen_OnAppBackground(Map<String, dynamic> data) async {
       msg: "goToNextScreen_OnAppBackground",
       timeInSecForIosWeb: 15
   );
-  SharedPreferences _shdPre = await SharedPreferences.getInstance();
-  String? userType = _shdPre.getString(SharedPrefKeys.userType);
-  print(' $userType ============= 02');
 
     String screen = data['screen'];
     if(screen.toString() == "IncomingJobOfferScreen"){
@@ -270,9 +271,6 @@ Future<void> goToNextScreen_OnAppWorking(Map<String, dynamic> data) async {
       msg: "goToNextScreen_OnAppWorking",
       timeInSecForIosWeb: 15
   );
-  SharedPreferences _shdPre = await SharedPreferences.getInstance();
-  String? userType = _shdPre.getString(SharedPrefKeys.userType);
-  print(' $userType ============= 03');
 
   String screen = data['screen'];
   if(screen.toString() == "IncomingJobOfferScreen"){

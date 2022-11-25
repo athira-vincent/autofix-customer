@@ -4,6 +4,7 @@ import 'package:auto_fix/Models/notification_model/notification_model.dart';
 import 'package:auto_fix/UI/Customer/SideBar/CustomerNotifications/cust_notification_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'cust_notification_bloc.dart';
 import 'cust_notification_event.dart';
 
@@ -112,13 +113,28 @@ class _CustNotificationList extends State<CustNotificationList> {
         child: Row(
           children: [
             /// --------------------- profile image to be updated from api ---------------
+            /*previousDatum.from!.mechanic![0].profilePic != null &&
+                previousDatum.from!.mechanic![0].profilePic != ""
+                ?
             Padding(
-              padding: const EdgeInsets.only(left: 10),
+              padding: const EdgeInsets.only(left: 4),
               child: CircleAvatar(
                 radius: 25,
                 child: ClipOval(
                   child: Image.network(
-                    'https://i.picsum.photos/id/799/200/200.jpg?hmac=zFQHfBiAYFHDNrr3oX_pQDYz-YWPWTDB3lIszvP8rRY',
+                    previousDatum.from!.mechanic![0].profilePic,
+                  ),
+                ),
+              ),
+            )
+                :*/
+            Padding(
+              padding: const EdgeInsets.only(left: 4),
+              child: CircleAvatar(
+                radius: 25,
+                child: ClipOval(
+                  child: SvgPicture.asset(
+                      'assets/image/MechanicType/work_selection_avathar.svg'
                   ),
                 ),
               ),
@@ -133,8 +149,9 @@ class _CustNotificationList extends State<CustNotificationList> {
                     Row(
                       children: [
                         Text(
-                          previousDatum.message,
+                          previousDatum.message!,
                           //notificationList.message,
+                          maxLines: 4,
                           style: const TextStyle(
                             fontFamily: 'Samsung_SharpSans_Medium',
                             fontSize: 10.0,

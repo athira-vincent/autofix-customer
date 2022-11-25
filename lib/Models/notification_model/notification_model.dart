@@ -55,16 +55,16 @@ class NotificationList {
     required this.previousData,
   });
 
-  List<dynamic>? newData;
+  dynamic newData;
   List<PreviousDatum>? previousData;
 
   factory NotificationList.fromMap(Map<String, dynamic> json) => NotificationList(
-    newData: json["newData"] == null ? null : List<dynamic>.from(json["newData"].map((x) => x)),
+    newData: json["newData"],
     previousData: json["previousData"] == null ? null : List<PreviousDatum>.from(json["previousData"].map((x) => PreviousDatum.fromMap(x))),
   );
 
   Map<String, dynamic> toMap() => {
-    "newData": newData == null ? null : List<dynamic>.from(newData!.map((x) => x)),
+    "newData": newData,
     "previousData": previousData == null ? null : List<dynamic>.from(previousData!.map((x) => x.toMap())),
   };
 }
@@ -88,7 +88,7 @@ class PreviousDatum {
 
   String id;
   String caption;
-  String message;
+  String? message;
   int read;
   int trash;
   int isViewed;
@@ -96,7 +96,7 @@ class PreviousDatum {
   int toId;
   int bookingId;
   To? to;
-  dynamic from;
+  From? from;
   Booking? booking;
   dynamic order;
 
@@ -111,7 +111,7 @@ class PreviousDatum {
     toId: json["toId"] == null ? null : json["toId"],
     bookingId: json["bookingId"] == null ? null : json["bookingId"],
     to: json["to"] == null ? null : To.fromMap(json["to"]),
-    from: json["from"],
+    from: json["from"] == null ? null : From.fromMap(json["from"]),
     booking: json["booking"] == null ? null : Booking.fromMap(json["booking"]),
     order: json["order"],
   );
@@ -127,7 +127,7 @@ class PreviousDatum {
     "toId": toId == null ? null : toId,
     "bookingId": bookingId == null ? null : bookingId,
     "to": to == null ? null : to!.toMap(),
-    "from": from,
+    "from": from == null ? null : from!.toMap(),
     "booking": booking == null ? null : booking!.toMap(),
     "order": order,
   };
@@ -171,7 +171,7 @@ class Booking {
   double commission;
   double serviceCharge;
   dynamic totalTime;
-  String serviceTime;
+  dynamic serviceTime;
   double latitude;
   double longitude;
   double mechLatitude;
@@ -245,6 +245,52 @@ class Booking {
   };
 }
 
+
+class From {
+  From({
+    required this.firstName,
+    required this.fcmToken,
+    required this.customer,
+    required this.mechanic,
+  });
+
+  String firstName;
+  String fcmToken;
+  List<Customer>? customer;
+  List<dynamic>? mechanic;
+
+  factory From.fromMap(Map<String, dynamic> json) => From(
+    firstName: json["firstName"] == null ? null : json["firstName"],
+    fcmToken: json["fcmToken"] == null ? null : json["fcmToken"],
+    customer: json["customer"] == null ? null : List<Customer>.from(json["customer"].map((x) => Customer.fromMap(x))),
+    mechanic: json["mechanic"] == null ? null : List<dynamic>.from(json["mechanic"].map((x) => x)),
+  );
+
+  Map<String, dynamic> toMap() => {
+    "firstName": firstName == null ? null : firstName,
+    "fcmToken": fcmToken == null ? null : fcmToken,
+    "customer": customer == null ? null : List<dynamic>.from(customer!.map((x) => x.toMap())),
+    "mechanic": mechanic == null ? null : List<dynamic>.from(mechanic!.map((x) => x)),
+  };
+}
+
+class Customer {
+  Customer({
+    required this.profilePic,
+  });
+
+  String profilePic;
+
+  factory Customer.fromMap(Map<String, dynamic> json) => Customer(
+    profilePic: json["profilePic"] == null ? null : json["profilePic"],
+  );
+
+  Map<String, dynamic> toMap() => {
+    "profilePic": profilePic == null ? null : profilePic,
+  };
+}
+
+
 class To {
   To({
     required this.id,
@@ -260,6 +306,8 @@ class To {
     required this.otpCode,
     required this.isProfile,
     required this.otpVerified,
+    required this.customer,
+    required this.mechanic,
   });
 
   int id;
@@ -272,9 +320,11 @@ class To {
   int userTypeId;
   String jwtToken;
   String fcmToken;
-  String otpCode;
+  dynamic otpCode;
   int isProfile;
   int otpVerified;
+  List<dynamic>? customer;
+  List<Customer>? mechanic;
 
   factory To.fromMap(Map<String, dynamic> json) => To(
     id: json["id"] == null ? null : json["id"],
@@ -287,9 +337,11 @@ class To {
     userTypeId: json["userTypeId"] == null ? null : json["userTypeId"],
     jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
     fcmToken: json["fcmToken"] == null ? null : json["fcmToken"],
-    otpCode: json["otpCode"] == null ? null : json["otpCode"],
+    otpCode: json["otpCode"],
     isProfile: json["isProfile"] == null ? null : json["isProfile"],
     otpVerified: json["otpVerified"] == null ? null : json["otpVerified"],
+    customer: json["customer"] == null ? null : List<dynamic>.from(json["customer"].map((x) => x)),
+    mechanic: json["mechanic"] == null ? null : List<Customer>.from(json["mechanic"].map((x) => Customer.fromMap(x))),
   );
 
   Map<String, dynamic> toMap() => {
@@ -303,8 +355,10 @@ class To {
     "userTypeId": userTypeId == null ? null : userTypeId,
     "jwtToken": jwtToken == null ? null : jwtToken,
     "fcmToken": fcmToken == null ? null : fcmToken,
-    "otpCode": otpCode == null ? null : otpCode,
+    "otpCode": otpCode,
     "isProfile": isProfile == null ? null : isProfile,
     "otpVerified": otpVerified == null ? null : otpVerified,
+    "customer": customer == null ? null : List<dynamic>.from(customer!.map((x) => x)),
+    "mechanic": mechanic == null ? null : List<dynamic>.from(mechanic!.map((x) => x.toMap())),
   };
 }
