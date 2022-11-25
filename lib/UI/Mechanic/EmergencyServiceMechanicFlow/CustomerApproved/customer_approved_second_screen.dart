@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/additional_time_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/Widgets/mechanicWorkTimer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -89,6 +90,7 @@ class _CustomerApprovedSecondScreenState extends State<CustomerApprovedSecondScr
     //storetime(widget.starttime, widget.endtime);
     _controller = AnimationController(
         vsync: this, duration: Duration(seconds: levelClock));
+    _controller.forward();
 
   }
 
@@ -354,34 +356,86 @@ class _CustomerApprovedSecondScreenState extends State<CustomerApprovedSecondScr
   Widget mechanicAddMoreTimeButton(Size size) {
     return Align(
       alignment: Alignment.centerLeft,
-      child: Container(
-        margin: EdgeInsets.only(
-            left: size.width * 6.2 / 100, top: size.height * 3.7 / 100),
-        decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(6),
+      child: InkWell(
+        onTap: () async {
+          SharedPreferences sharedPreferences =
+              await SharedPreferences.getInstance();
+          sharedPreferences.remove("starttime");
+          sharedPreferences.remove("endtime");
+          setState(() {
+            print("updateToCloudFirestoreDB extendedTime $extendedTime");
+            print("timerCountr11111111111 ${timeCounter}");
+
+            updateToCloudFirestoreDB("1", "1", extendedTime, "0");
+            _mechanicOrderStatusUpdateBloc
+                .postMechanicOrderStatusUpdateRequest(
+                authToken, bookingId, "6");
+
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MechanicWorkCompletedScreen()));
+          });
+        },
+        child: Container(
+          margin: EdgeInsets.only(
+              left: size.width * 6.2 / 100, top: size.height * 3.7 / 100),
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(6),
+              ),
+              color: CustColors.light_navy),
+          padding: EdgeInsets.only(
+            left: size.width * 5.8 / 100,
+            right: size.width * 5.8 / 100,
+            top: size.height * 1 / 100,
+            bottom: size.height * 1 / 100,
+          ),
+          child: const Text(
+            "Work Finished",
+            style: TextStyle(
+              fontSize: 14.3,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Samsung_SharpSans_Medium",
+              color: Colors.white,
             ),
-            color: CustColors.light_navy),
-        padding: EdgeInsets.only(
-          left: size.width * 5.8 / 100,
-          right: size.width * 5.8 / 100,
-          top: size.height * 1 / 100,
-          bottom: size.height * 1 / 100,
-        ),
-        child: const Text(
-          "Work Finished",
-          style: TextStyle(
-            fontSize: 14.3,
-            fontWeight: FontWeight.w600,
-            fontFamily: "Samsung_SharpSans_Medium",
-            color: Colors.white,
           ),
         ),
       ),
     );
   }
 
-
+  void updateToCloudFirestoreDB(String isWorkStarted, String isWorkCompleted,
+      String time, String currentUpdatedTime) {
+    print("updateToCloudFirestoreDB totalTimeTaken clock2222222222 >>>> " +
+        totalTimeTaken.toString());
+    if (currentUpdatedTime == "0") {
+      _firestore
+          .collection("ResolMech")
+          .doc('${bookingId}')
+          .update({
+        'isWorkStarted': "$isWorkStarted",
+        'isWorkCompleted': "$isWorkCompleted",
+        "extendedTime": "$time",
+        "totalTimeTakenByMechanic": "${totalTimeTaken.toString()}",
+      })
+          .then((value) => print("Location Added"))
+          .catchError((error) => print("Failed to add Location: $error"));
+    } else {
+      _firestore
+          .collection("ResolMech")
+          .doc('${bookingId}')
+          .update({
+        'isWorkStarted': "$isWorkStarted",
+        'isWorkCompleted': "$isWorkCompleted",
+        "extendedTime": "$time",
+        "timerCounter": "$currentUpdatedTime",
+        "totalTimeTakenByMechanic": "${totalTimeTaken.toString()}",
+      })
+          .then((value) => print("Location Added"))
+          .catchError((error) => print("Failed to add Location: $error"));
+    }
+  }
 
 
 

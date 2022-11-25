@@ -142,6 +142,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             querySnapshot.get("totalstarttimecurrenttimevalue");
 
         currenttime = querySnapshot.get("appreturntime");
+        remaintime = querySnapshot.get("remaintime");
 
         print('customerDiagonsisApproval ++++ $customerDiagonsisApproval');
         print('oldSelectedServiceId ++++ $oldSelectedServiceId');
@@ -160,13 +161,14 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
             print("currentremaintime");
             print(remaintime);
-            print(remaintime.toString().substring(3, 5));
+
 
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => CustomerApprovedScreen(
-                        remaintime: remaintime.toString().substring(3, 5),
+                      isFromHome: false,
+                        remaintime: remaintime,
                         starttime:
                             DateFormat("HH:mm:ss").format(DateTime.now()),
                         endtime: DateFormat("HH:mm:ss").format(addedtime))));
@@ -628,7 +630,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
   Widget mechanicStartServiceButton(Size size) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
         /// add selected service time + current time
         print("selectedservicetime");
         print(selectedServiceTime);
@@ -643,18 +645,27 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         print(DateFormat("HH:mm:ss").format(addedtime));
 
         setState(() {
+
            trywidgetaddedtime=DateFormat("HH:mm:ss").format(addedtime);
         });
 
 
-        Repository()
+       await Repository()
             .timedifferenceapi(DateFormat("HH:mm:ss").format(DateTime.now()),
                 DateFormat("HH:mm:ss").format(addedtime))
             .then((value) => {
                   if (value.data!.timeDifference.remTime.isNotEmpty)
                     {
                       setState(() {
-                        remaintime = value.data!.timeDifference.remTime;
+                        print("testing >>> $remaintime");
+                        String string = value.data!.timeDifference.remTime;
+                        int hour = int.parse(string.split(":")[0]);
+                        int minute = int.parse(string.split(":")[1]);
+                        int second = int.parse(string.split(":")[2]);
+                        Duration duration = Duration(hours: hour, minutes: minute, seconds: second);
+                        print("Minutes is: ${duration.inMinutes}");
+                        print("inSeconds is: ${duration.inSeconds}");
+                        remaintime = duration.inSeconds.toString();
                       })
                     }
                 });
@@ -670,7 +681,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             .update({
               'totalstarttimecurrenttimevalue':
                   DateFormat("HH:mm:ss").format(addedtime),
-              "appreturntime": DateFormat("HH:mm:ss").format(DateTime.now())
+              "appreturntime": DateFormat("HH:mm:ss").format(DateTime.now()),
+          "remaintime":remaintime
             })
             .then((value) => print("updatedServiceList ended Added"))
             .catchError(
@@ -1056,7 +1068,14 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                       if (value.data!.timeDifference.remTime.isNotEmpty)
                         {
                           setState(() {
-                            remaintime = value.data!.timeDifference.remTime;
+                            String string = value.data!.timeDifference.remTime;
+                            int hour = int.parse(string.split(":")[0]);
+                            int minute = int.parse(string.split(":")[1]);
+                            int second = int.parse(string.split(":")[2]);
+                            Duration duration = Duration(hours: hour, minutes: minute, seconds: second);
+                            print("Minutes is: ${duration.inMinutes}");
+                            print("inSeconds is: ${duration.inSeconds}");
+                            remaintime = duration.inSeconds.toString();
                           })
                         }
                     });
@@ -1064,7 +1083,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                 context,
                 MaterialPageRoute(
                     builder: (context) => CustomerApprovedScreen(
-                        remaintime: remaintime.toString().substring(3, 5),
+                      isFromHome: false,
+                        remaintime: remaintime,
                         starttime:
                             DateFormat("HH:mm:ss").format(DateTime.now()),
                         endtime: trywidgetaddedtime)));

@@ -15,11 +15,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomerApprovedScreen extends StatefulWidget {
   final String remaintime, starttime, endtime;
+  final bool isFromHome;
 
   CustomerApprovedScreen({
     required this.remaintime,
     required this.starttime,
     required this.endtime,
+    required this.isFromHome
   });
 
   @override
@@ -84,14 +86,24 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen>
     print(widget.starttime);
     print(widget.endtime);
 
+
     int remtime = int.parse(widget.remaintime);
 
-    levelClock = remtime;
+
+    setState(() {
+      levelClock = remtime;
+    });
+
     print("levelclock");
     print(levelClock);
+
     //storetime(widget.starttime, widget.endtime);
     _controller = AnimationController(
         vsync: this, duration: Duration(seconds: levelClock));
+    if(widget.isFromHome==true){
+      _controller.forward();
+
+    }
     getSharedPrefData();
   }
 
@@ -134,6 +146,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen>
             _totalTimeCounter();
             _updateTimerListener(int.parse(updatedServiceTime));
             isStartedWork = true;
+            //storetime(widget.starttime, widget.endtime);
             _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
                 authToken, bookingId, "5");
           }
@@ -449,7 +462,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen>
             isStartedWork = true;
             _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
                 authToken, bookingId, "5");
-            storetime(widget.starttime, widget.endtime);
+           // storetime(widget.starttime, widget.endtime);
 
           } else {
             SharedPreferences sharedPreferences =

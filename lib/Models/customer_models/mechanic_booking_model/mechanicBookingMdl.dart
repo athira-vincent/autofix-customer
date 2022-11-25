@@ -86,10 +86,10 @@ class MechanicBooking {
   String bookingCode;
   int reqType;
   int bookStatus;
-  var totalPrice;
-  var tax;
-  var commission;
-  var serviceCharge;
+  int totalPrice;
+  double tax;
+  double commission;
+  double serviceCharge;
   dynamic totalTime;
   String serviceTime;
   double latitude;
@@ -105,11 +105,11 @@ class MechanicBooking {
   int status;
   int customerId;
   int mechanicId;
-  int vehicleId;
+  dynamic vehicleId;
   int regularType;
-  MechanicBookingCustomer? mechanic;
-  MechanicBookingCustomer? customer;
-  Vehicle? vehicle;
+  Customer? mechanic;
+  Customer? customer;
+  dynamic vehicle;
   dynamic bookService;
 
   factory MechanicBooking.fromJson(Map<String, dynamic> json) => MechanicBooking(
@@ -118,9 +118,9 @@ class MechanicBooking {
     reqType: json["reqType"] == null ? null : json["reqType"],
     bookStatus: json["bookStatus"] == null ? null : json["bookStatus"],
     totalPrice: json["totalPrice"] == null ? null : json["totalPrice"],
-    tax: json["tax"] == null ? null : json["tax"],
-    commission: json["commission"] == null ? null : json["commission"],
-    serviceCharge: json["serviceCharge"] == null ? null : json["serviceCharge"],
+    tax: json["tax"] == null ? null : json["tax"].toDouble(),
+    commission: json["commission"] == null ? null : json["commission"].toDouble(),
+    serviceCharge: json["serviceCharge"] == null ? null : json["serviceCharge"].toDouble(),
     totalTime: json["totalTime"],
     serviceTime: json["serviceTime"] == null ? null : json["serviceTime"],
     latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
@@ -136,11 +136,11 @@ class MechanicBooking {
     status: json["status"] == null ? null : json["status"],
     customerId: json["customerId"] == null ? null : json["customerId"],
     mechanicId: json["mechanicId"] == null ? null : json["mechanicId"],
-    vehicleId: json["vehicleId"] == null ? null : json["vehicleId"],
+    vehicleId: json["vehicleId"],
     regularType: json["regularType"] == null ? null : json["regularType"],
-    mechanic: json["mechanic"] == null ? null : MechanicBookingCustomer.fromJson(json["mechanic"]),
-    customer: json["customer"] == null ? null : MechanicBookingCustomer.fromJson(json["customer"]),
-    vehicle: json["vehicle"] == null ? null : Vehicle.fromJson(json["vehicle"]),
+    mechanic: json["mechanic"] == null ? null : Customer.fromJson(json["mechanic"]),
+    customer: json["customer"] == null ? null : Customer.fromJson(json["customer"]),
+    vehicle: json["vehicle"],
     bookService: json["bookService"],
   );
 
@@ -168,17 +168,17 @@ class MechanicBooking {
     "status": status == null ? null : status,
     "customerId": customerId == null ? null : customerId,
     "mechanicId": mechanicId == null ? null : mechanicId,
-    "vehicleId": vehicleId == null ? null : vehicleId,
+    "vehicleId": vehicleId,
     "regularType": regularType == null ? null : regularType,
     "mechanic": mechanic == null ? null : mechanic!.toJson(),
     "customer": customer == null ? null : customer!.toJson(),
-    "vehicle": vehicle == null ? null : vehicle!.toJson(),
+    "vehicle": vehicle,
     "bookService": bookService,
   };
 }
 
-class MechanicBookingCustomer {
-  MechanicBookingCustomer({
+class Customer {
+  Customer({
     required this.id,
     required this.userCode,
     required this.firstName,
@@ -207,14 +207,14 @@ class MechanicBookingCustomer {
   int userTypeId;
   String jwtToken;
   String fcmToken;
-  String otpCode;
+  dynamic otpCode;
   int isProfile;
   int otpVerified;
-  List<CustomerElement>? customer;
-  List<CustomerElement>? mechanic;
+  List<dynamic>? customer;
+  List<Mechanic>? mechanic;
   dynamic vendor;
 
-  factory MechanicBookingCustomer.fromJson(Map<String, dynamic> json) => MechanicBookingCustomer(
+  factory Customer.fromJson(Map<String, dynamic> json) => Customer(
     id: json["id"] == null ? null : json["id"],
     userCode: json["userCode"] == null ? null : json["userCode"],
     firstName: json["firstName"] == null ? null : json["firstName"],
@@ -225,11 +225,11 @@ class MechanicBookingCustomer {
     userTypeId: json["userTypeId"] == null ? null : json["userTypeId"],
     jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
     fcmToken: json["fcmToken"] == null ? null : json["fcmToken"],
-    otpCode: json["otpCode"] == null ? null : json["otpCode"],
+    otpCode: json["otpCode"],
     isProfile: json["isProfile"] == null ? null : json["isProfile"],
     otpVerified: json["otpVerified"] == null ? null : json["otpVerified"],
-    customer: json["customer"] == null ? null : List<CustomerElement>.from(json["customer"].map((x) => CustomerElement.fromJson(x))),
-    mechanic: json["mechanic"] == null ? null : List<CustomerElement>.from(json["mechanic"].map((x) => CustomerElement.fromJson(x))),
+    customer: json["customer"] == null ? null : List<dynamic>.from(json["customer"].map((x) => x)),
+    mechanic: json["mechanic"] == null ? null : List<Mechanic>.from(json["mechanic"].map((x) => Mechanic.fromJson(x))),
     vendor: json["vendor"],
   );
 
@@ -244,17 +244,17 @@ class MechanicBookingCustomer {
     "userTypeId": userTypeId == null ? null : userTypeId,
     "jwtToken": jwtToken == null ? null : jwtToken,
     "fcmToken": fcmToken == null ? null : fcmToken,
-    "otpCode": otpCode == null ? null : otpCode,
+    "otpCode": otpCode,
     "isProfile": isProfile == null ? null : isProfile,
     "otpVerified": otpVerified == null ? null : otpVerified,
-    "customer": customer == null ? null : List<dynamic>.from(customer!.map((x) => x.toJson())),
+    "customer": customer == null ? null : List<dynamic>.from(customer!.map((x) => x)),
     "mechanic": mechanic == null ? null : List<dynamic>.from(mechanic!.map((x) => x.toJson())),
     "vendor": vendor,
   };
 }
 
-class CustomerElement {
-  CustomerElement({
+class Mechanic {
+  Mechanic({
     required this.id,
     required this.profilePic,
   });
@@ -262,7 +262,7 @@ class CustomerElement {
   String id;
   String profilePic;
 
-  factory CustomerElement.fromJson(Map<String, dynamic> json) => CustomerElement(
+  factory Mechanic.fromJson(Map<String, dynamic> json) => Mechanic(
     id: json["id"] == null ? null : json["id"],
     profilePic: json["profilePic"] == null ? null : json["profilePic"],
   );
@@ -270,77 +270,5 @@ class CustomerElement {
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
     "profilePic": profilePic == null ? null : profilePic,
-  };
-}
-
-class Vehicle {
-  Vehicle({
-    required this.id,
-    required this.brand,
-    required this.model,
-    required this.engine,
-    required this.year,
-    required this.plateNo,
-    required this.lastMaintenance,
-    required this.milege,
-    required this.vehiclePic,
-    required this.color,
-    required this.latitude,
-    required this.longitude,
-    required this.defaultVehicle,
-    required this.status,
-    required this.userId,
-  });
-
-  String id;
-  String brand;
-  String model;
-  String engine;
-  String year;
-  String plateNo;
-  String lastMaintenance;
-  String milege;
-  String vehiclePic;
-  dynamic color;
-  double latitude;
-  double longitude;
-  int defaultVehicle;
-  int status;
-  int userId;
-
-  factory Vehicle.fromJson(Map<String, dynamic> json) => Vehicle(
-    id: json["id"] == null ? null : json["id"],
-    brand: json["brand"] == null ? null : json["brand"],
-    model: json["model"] == null ? null : json["model"],
-    engine: json["engine"] == null ? null : json["engine"],
-    year: json["year"] == null ? null : json["year"],
-    plateNo: json["plateNo"] == null ? null : json["plateNo"],
-    lastMaintenance: json["lastMaintenance"] == null ? null : json["lastMaintenance"],
-    milege: json["milege"] == null ? null : json["milege"],
-    vehiclePic: json["vehiclePic"] == null ? null : json["vehiclePic"],
-    color: json["color"] == null ? null : json["color"],
-    latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
-    longitude: json["longitude"] == null ? null : json["longitude"].toDouble(),
-    defaultVehicle: json["defaultVehicle"] == null ? null : json["defaultVehicle"],
-    status: json["status"] == null ? null : json["status"],
-    userId: json["userId"] == null ? null : json["userId"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "brand": brand == null ? null : brand,
-    "model": model == null ? null : model,
-    "engine": engine == null ? null : engine,
-    "year": year == null ? null : year,
-    "plateNo": plateNo == null ? null : plateNo,
-    "lastMaintenance": lastMaintenance == null ? null : lastMaintenance,
-    "milege": milege == null ? null : milege,
-    "vehiclePic": vehiclePic == null ? null : vehiclePic,
-    "color": color,
-    "latitude": latitude == null ? null : latitude,
-    "longitude": longitude == null ? null : longitude,
-    "defaultVehicle": defaultVehicle == null ? null : defaultVehicle,
-    "status": status == null ? null : status,
-    "userId": userId == null ? null : userId,
   };
 }

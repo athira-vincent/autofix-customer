@@ -1096,7 +1096,7 @@ class QueryProvider {
       time,
       latitude,
       longitude,
-      serviceId,
+      serviceId,serviceCost,
       mechanicId,
       reqType,
       regularServiceType,
@@ -1111,7 +1111,8 @@ class QueryProvider {
             latitude: ${double.parse(latitude.toString())}
             longitude: ${double.parse(longitude.toString())}
             serviceId: $serviceId
-            mechanicId: ${int.parse(mechanicId.toString())}
+            serviceCost: $serviceCost
+            mechanicId: $mechanicId
             reqType: ${int.parse(reqType.toString())}
             regularType: ${int.parse(regularServiceType.toString())}
             paymentType: 1
