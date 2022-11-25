@@ -598,15 +598,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                             fontSize: 12),
                                       ),
                                       Text(
-                                        " [ " +
-                                            snapshot
-                                                .data!
-                                                .data!
-                                                .upcomingCompletedServices![i]
-                                                .vehicle!
-                                                .brand
-                                                .toString() +
-                                            " ] ",
+                                        " [ " + (snapshot.data?.data?.upcomingCompletedServices?[i].vehicle?.brand.toString()??"")+" ] ",
                                         //" [ HONDA CITY ]",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w400,

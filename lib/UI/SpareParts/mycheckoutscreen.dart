@@ -373,7 +373,7 @@ class _MyCheckoutScreenState extends State<MyCheckoutScreen> {
                                                   child: Visibility(
                                                     visible: true,
                                                     child: SvgPicture.asset(
-                                                      'assets/images/home_customer/deleteMyCart.svg',
+                                                      'assets/image/home_customer/deleteMyCart.svg',
                                                       height: 18,
                                                       width: 18,
                                                     ),
@@ -710,8 +710,8 @@ class _MyCheckoutScreenState extends State<MyCheckoutScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Image.asset(
-                'assets/images/home_customer/myCartLocation.png',
+              SvgPicture.asset(
+                'assets/image/home_customer/myCartLocation.svg',
                 height: 30,
                 width: 30,
               ),

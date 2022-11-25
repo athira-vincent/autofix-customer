@@ -19,10 +19,13 @@ import 'showcartpopbloc/show_cart_pop_event.dart';
 
 class MyCartScreen extends StatefulWidget {
   final bool isFromHome;
-  final String addressid,addresstext;
+  final String addressid, addresstext;
+
   const MyCartScreen({
     Key? key,
-    required this.isFromHome, required this.addressid, required this.addresstext,
+    required this.isFromHome,
+    required this.addressid,
+    required this.addresstext,
   }) : super(key: key);
 
   @override
@@ -685,51 +688,51 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                         .product
                                                         .price;
 
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => ChangeDeliveryAddressScreen(
-                                                            quantity: state
-                                                                .cartlistmodel
-                                                                .data!
-                                                                .cartList
-                                                                .data[index]
-                                                                .quantity
-                                                                .toString(),
-                                                            productprice: totalprice
-                                                                .toString(),
-                                                            productid: state
-                                                                .cartlistmodel
-                                                                .data!
-                                                                .cartList
-                                                                .data[index]
-                                                                .product
-                                                                .id
-                                                                .toString(),
-                                                            allitems: false,
-                                                            customerid: state
-                                                                .cartlistmodel
-                                                                .data!
-                                                                .cartList
-                                                                .data[index]
-                                                                .customer
-                                                                .id
-                                                                .toString(),
-                                                            customername: state
-                                                                .cartlistmodel
-                                                                .data!
-                                                                .cartList
-                                                                .data[index]
-                                                                .customer
-                                                                .firstName,
-                                                            customeremail: state
-                                                                .cartlistmodel
-                                                                .data!
-                                                                .cartList
-                                                                .data[index]
-                                                                .customer
-                                                                .emailId,
-                                                            customerphone: state.cartlistmodel.data!.cartList.data[index].customer.phoneNo)));
+                                                // Navigator.push(
+                                                //     context,
+                                                //     MaterialPageRoute(
+                                                //         builder: (context) => ChangeDeliveryAddressScreen(
+                                                //             quantity: state
+                                                //                 .cartlistmodel
+                                                //                 .data!
+                                                //                 .cartList
+                                                //                 .data[index]
+                                                //                 .quantity
+                                                //                 .toString(),
+                                                //             productprice: totalprice
+                                                //                 .toString(),
+                                                //             productid: state
+                                                //                 .cartlistmodel
+                                                //                 .data!
+                                                //                 .cartList
+                                                //                 .data[index]
+                                                //                 .product
+                                                //                 .id
+                                                //                 .toString(),
+                                                //             allitems: false,
+                                                //             customerid: state
+                                                //                 .cartlistmodel
+                                                //                 .data!
+                                                //                 .cartList
+                                                //                 .data[index]
+                                                //                 .customer
+                                                //                 .id
+                                                //                 .toString(),
+                                                //             customername: state
+                                                //                 .cartlistmodel
+                                                //                 .data!
+                                                //                 .cartList
+                                                //                 .data[index]
+                                                //                 .customer
+                                                //                 .firstName,
+                                                //             customeremail: state
+                                                //                 .cartlistmodel
+                                                //                 .data!
+                                                //                 .cartList
+                                                //                 .data[index]
+                                                //                 .customer
+                                                //                 .emailId,
+                                                //             customerphone: state.cartlistmodel.data!.cartList.data[index].customer.phoneNo)));
                                               },
                                               child: Container(
                                                 height: MediaQuery.of(context)
@@ -904,15 +907,17 @@ class _MyCartScreenState extends State<MyCartScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                        child: Text(
-                          "Delivering to : " " " +
-                              states +
-                              " , " +
-                              city +
-                              " ," +
-                              pincode,
-                          style: Styles.sparePartNameTextBlack17,
-                        ),
+                        child: widget.isFromHome == false
+                            ? Text(widget.addresstext)
+                            : Text(
+                                "Delivering to : " " " +
+                                    states +
+                                    " , " +
+                                    city +
+                                    " ," +
+                                    pincode,
+                                style: Styles.sparePartNameTextBlack17,
+                              ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -930,6 +935,18 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                 //               customerphone: '',
                                 //               customername: '',
                                 //             )));
+
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChangeDeliveryAddressScreen(
+                                              allitems: false,
+                                              customerid: '',
+                                              customeremail: '',
+                                              customerphone: '',
+                                              customername: '',
+                                            )));
                               },
                               child: Text(
                                 "Change address",

@@ -158,60 +158,61 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
                                 codBloc
                                     .add(FetchCodEvent(widget.amount, orderid));
                               } else if (_selectedOptionValue == 2) {
-                                await Repository()
-                                    .fetchwalletcheckbalance(orderid)
-                                    .then((value) => {
-                                  if (value.data!.walletStatus.data!
-                                      .remain ==
-                                      0)
-                                    {
-                                      Repository()
-                                          .fetchpaymentsucess(
-                                          "2",
-                                          /*value.data!.walletStatus
-                                              .data.amount,*/
-                                          0,
-                                          "3",
-                                          "",
-                                          orderid)
-                                          .then((value) => {
-                                        if (value
-                                            .data!
-                                            .paymentCreate
-                                            .paymentData!
-                                            .id
-                                            .toString()
-                                            .isNotEmpty)
-                                          {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder:
-                                                        (context) =>
-                                                        CustomerMainLandingScreen()))
-                                          }
-                                        else
-                                          {
-                                            print("popcontext"),
-                                            Navigator.pop(context)
-                                          }
-                                      })
-                                    }
-                                  else
-                                    {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                          "Insufficient wallet balance"),
-                                      setBottomsheet(
-                                          value.data!.walletStatus.data
-                                              .wallet,
-                                          value.data!.walletStatus.data
-                                              .remain,
-                                          value.data!.walletStatus.data
-                                              .wallet +
-                                              value.data!.walletStatus
-                                                  .data.remain)
-                                    }
-                                });
+                                initPlatformState();
+                                // await Repository()
+                                //     .fetchwalletcheckbalance(orderid)
+                                //     .then((value) => {
+                                //   if (value.data!.walletStatus.data!
+                                //       .remain ==
+                                //       0)
+                                //     {
+                                //       Repository()
+                                //           .fetchpaymentsucess(
+                                //           "2",
+                                //           /*value.data!.walletStatus
+                                //               .data.amount,*/
+                                //           0,
+                                //           "3",
+                                //           "",
+                                //           orderid)
+                                //           .then((value) => {
+                                //         if (value
+                                //             .data!
+                                //             .paymentCreate
+                                //             .paymentData!
+                                //             .id
+                                //             .toString()
+                                //             .isNotEmpty)
+                                //           {
+                                //             Navigator.of(context).push(
+                                //                 MaterialPageRoute(
+                                //                     builder:
+                                //                         (context) =>
+                                //                         CustomerMainLandingScreen()))
+                                //           }
+                                //         else
+                                //           {
+                                //             print("popcontext"),
+                                //             Navigator.pop(context)
+                                //           }
+                                //       })
+                                //     }
+                                //   else
+                                //     {
+                                //       Fluttertoast.showToast(
+                                //           msg:
+                                //           "Insufficient wallet balance"),
+                                //       setBottomsheet(
+                                //           value.data!.walletStatus.data
+                                //               .wallet,
+                                //           value.data!.walletStatus.data
+                                //               .remain,
+                                //           value.data!.walletStatus.data
+                                //               .wallet +
+                                //               value.data!.walletStatus
+                                //                   .data.remain)
+                                //     }
+                                // });
                               } else {
                                 initPlatformState();
                               }
@@ -396,18 +397,18 @@ class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
             .millisecond
             .toString();
 
-    int amount;
+    double amount;
     // initialize amount
     if (widget.amount.isEmpty) {
       //amount = 2500 * 100;
-      amount = 0;
+      amount = 0.0;
     } else {
-      amount = int.parse(widget.amount) * 100;
+      amount = double.parse(widget.amount) * 100.0;
     }
 
     // create payment info
     IswPaymentInfo iswPaymentInfo = IswPaymentInfo(customerId, customerName,
-        customerEmail, customerMobile, reference, amount);
+        customerEmail, customerMobile, reference, amount.toInt());
 
 
     // trigger payment

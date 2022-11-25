@@ -24,15 +24,13 @@ import 'MyCart/placeallorderbloc/place_oder_all_state.dart';
 import 'MyCart/placeallorderbloc/place_order_all_event.dart';
 
 class ChangeDeliveryAddressScreen extends StatefulWidget {
-  final String quantity, productprice, productid,customerid,customername,customeremail,customerphone;
+  final String customerid,customername,customeremail,customerphone;
   final bool allitems;
 
   ChangeDeliveryAddressScreen(
       {Key? key,
-      required this.quantity,
-      required this.productprice,
-      required this.productid,
-      required this.allitems, required this.customerid, required this.customername, required this.customeremail, required this.customerphone})
+
+        required this.allitems, required this.customerid, required this.customername, required this.customeremail, required this.customerphone})
       : super(key: key);
 
   @override
@@ -174,6 +172,18 @@ class _ChangeDeliveryAddressScreenState
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                     onTap: () {
+                                      addresstext=state.addressModel.data!
+                                          .selectAddress[index].address +" "+" "+state.addressModel.data!.selectAddress[index].addressLine2+state
+                                          .addressModel
+                                          .data!
+                                          .selectAddress[index]
+                                          .state +
+                                          " " +
+                                          state.addressModel.data!
+                                              .selectAddress[index].city +
+                                          " "+state.addressModel.data!
+                                          .selectAddress[index].pincode;
+
                                       addressid = state.addressModel.data!
                                           .selectAddress[index].id;
                                       setState(() {

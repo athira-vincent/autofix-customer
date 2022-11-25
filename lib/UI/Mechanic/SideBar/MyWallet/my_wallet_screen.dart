@@ -113,21 +113,15 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                   SubTitleTextRound(
                                       size,
                                       "Total job done",
-                                      _MyWallet!.jobCount > 0
-                                          ? _MyWallet!.jobCount.toString()
-                                          : "0"),
+                                      _MyWallet?.jobCount.toString()??"0"),
                                   SubTitleTextRound(
                                       size,
                                       "All payments",
-                                      _MyWallet!.totalPayment! > 0
-                                          ? _MyWallet!.totalPayment.toString()
-                                          : "0"),
+                                      _MyWallet?.totalPayment??"0"),
                                   SubTitleTextRound(
                                       size,
                                       "Monthly collection",
-                                      _MyWallet!.monthlySum > 0
-                                          ? _MyWallet!.monthlySum.toString()
-                                          : "0"),
+                                      _MyWallet?.monthlySum??"0"),
                                 ],
                               ),
                             ),
@@ -162,7 +156,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                         right: size.width * 10.5 / 100,
                                       ),
                                       child: Text(
-                                        _MyWallet!.totalPayment.toString(),
+                                        _MyWallet?.totalPayment?.toString()??"0",
                                         //"- ₦ 15000",
                                         style: Styles.myWalletTitleText04,
                                       )),
@@ -173,7 +167,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                           _BookingDatum!.length != 0
                               ? ListView.builder(
                                   shrinkWrap: true,
-                                  itemCount: _BookingDatum!.length,
+                                  itemCount: _BookingDatum?.length??0,
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return Container(
@@ -400,9 +394,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                 style: Styles.myWalletCardText01,
                               ),
                               Text(
-                                _MyWallet!.totalPayment > 0
-                                    ? '${_MyWallet!.totalPayment}'
-                                    : "0",
+                                _MyWallet?.totalPayment??'',
                                 style: Styles.myWalletCardText01,
                               )
                             ]),
