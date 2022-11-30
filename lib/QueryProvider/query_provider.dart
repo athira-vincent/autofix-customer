@@ -1400,6 +1400,7 @@ class QueryProvider {
         id
         status
         serviceId
+        serviceCost
         bookMechanicId
       service{
         id
@@ -1730,76 +1731,112 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  postMechanicMyWalletRequest(String token, mechanicId) async {
-    String _query = """
+  postMechanicMyWalletRequest(String token, mechanicId, type,String customeDate) async {
+    String _query = "";
+
+    if(customeDate.isEmpty){
+      _query = """
       mutation {
-   myWallet(
-    dayStart: "2022-07-07"
-    dayEnd: "2022-07-07"
-    monthStart: "2022-07-01"
-    monthEnd: "2022-07-31"
-    mechanicId: $mechanicId
-  ) {
-    jobCount
-    monthlySum
-    totalPayment
-    bookingData {
-      id
-      bookingCode
-      reqType
-      bookStatus
-      totalPrice
-      tax
-      commission
-      serviceCharge
-      totalTime
-      serviceTime
-      latitude
-      longitude
-      extend
-      totalExt
-      extendTime
-      bookedDate
-      bookedTime
-      isRated
-      status
-      regularType
-      mechLatitude
-      mechLongitude
-      demoMechanicId
-      customerId
-      vehicleId
-      serviceId
-      mechanic{
+    myWallet(type: $type) {
+      balance
+      totalAmount
+      todaysPayments {
         id
+        bookingCode
+        reqType
+        bookStatus
+        totalPrice
+        tax
+        commission
+        serviceCharge
+        totalTime
+        serviceTime
+        latitude
+        longitude
+        extend
+        totalExt
+        extendTime
+        bookedDate
+        bookedTime
+        isRated
+        status
+        regularType
+        mechLatitude
+        mechLongitude
+        demoMechanicId
+        customerId
+        vehicleId
+        serviceId
         mechanic{
-          profilePic
+          id
+          firstName
+          mechanic{
+            profilePic
+          }
         }
-      }
-      customer{
-        id
-        firstName
         customer{
-          profilePic
+          id 
+          firstName
+          customer{
+            profilePic
+          }
         }
       }
-    }
-    payArr {
-      id
-      transType
-      amount
-      paymentType
-      transId
-      status
-      createdAt
-      updatedAt
-      bookingId
-      orderId
     }
   }
-}
-
-     """;
+      """;
+    }else{
+      _query = """
+        mutation {
+    myWallet(customDate: "$customeDate") {
+      balance
+      totalAmount
+      todaysPayments {
+        id
+        bookingCode
+        reqType
+        bookStatus
+        totalPrice
+        tax
+        commission
+        serviceCharge
+        totalTime
+        serviceTime
+        latitude
+        longitude
+        extend
+        totalExt
+        extendTime
+        bookedDate
+        bookedTime
+        isRated
+        status
+        regularType
+        mechLatitude
+        mechLongitude
+        demoMechanicId
+        customerId
+        vehicleId
+        serviceId
+        mechanic{
+          id
+          firstName
+          mechanic{
+            profilePic
+          }
+        }
+        customer{
+          id 
+          firstName
+          customer{
+            profilePic
+          }
+        }
+      }
+    }
+  }
+      """;
+    }
     log(_query);
     print("Token >>>>>>> $token");
     return await GqlClient.I.query01(
@@ -3607,6 +3644,7 @@ class QueryProvider {
           id
           status
           serviceId
+          serviceCost
           bookMechanicId
         service{
           id
@@ -5101,11 +5139,12 @@ class QueryProvider {
     String mutation_text = transtype.toString() == "1" ? "bookingId: $orderid"
                               : transtype.toString() == "2" ? "orderCode: $orderid"
                               : "";
+    //${double.parse(amount)}
     String _query = """
  mutation {
   paymentCreate(
     transType:$transtype
-    amount: ${double.parse(amount)} 
+    amount: $amount
     paymentType:$paymenttype
     transId:"$transid"
     transData:"string"
@@ -5134,6 +5173,7 @@ class QueryProvider {
 
     """;
     log(_query);
+    print(">>>>>amount : $amount .... double.parse(amount) >>>>> ");
     return await GqlClient.I.query01(
       _query,
       authToken,

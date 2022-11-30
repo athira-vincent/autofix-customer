@@ -181,9 +181,9 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                           child: ListView.builder(
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: _BookingDetails!.mechanicService!.length,
+                              itemCount: _BookingDetails!.bookService!.length,
                               itemBuilder: (BuildContext context, int index){
-                                return listViewItems(_BookingDetails!.mechanicService![index]);
+                                return listViewItems(_BookingDetails!.bookService![index]);
                               }),
                         ),
                         Container(
@@ -576,7 +576,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
   }
 
 
-  Widget listViewItems(MechanicService mechanicService){
+  Widget listViewItems(BookService mechanicService){
     return Column(
       children: [
         Padding(
@@ -645,7 +645,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                           Padding(
                             padding: const EdgeInsets.only(left: 05.0),
                             child: Text(
-                              mechanicService.fee.toString(),   //bookService.service!.minPrice.toString(),  // '30',
+                              mechanicService.serviceCost.toString(),   //bookService.service!.minPrice.toString(),  // '30',
                               style: TextStyle(
                                   fontSize: 10,
                                   color: Colors.white

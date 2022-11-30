@@ -105,11 +105,11 @@ class MechanicBooking {
   int status;
   int customerId;
   int mechanicId;
-  dynamic vehicleId;
+  int vehicleId;
   int regularType;
-  Customer? mechanic;
-  Customer? customer;
-  dynamic vehicle;
+  MechanicBookingCustomer? mechanic;
+  MechanicBookingCustomer? customer;
+  Vehicle? vehicle;
   dynamic bookService;
 
   factory MechanicBooking.fromJson(Map<String, dynamic> json) => MechanicBooking(
@@ -136,11 +136,11 @@ class MechanicBooking {
     status: json["status"] == null ? null : json["status"],
     customerId: json["customerId"] == null ? null : json["customerId"],
     mechanicId: json["mechanicId"] == null ? null : json["mechanicId"],
-    vehicleId: json["vehicleId"],
+    vehicleId: json["vehicleId"] == null ? null : json["vehicleId"],
     regularType: json["regularType"] == null ? null : json["regularType"],
-    mechanic: json["mechanic"] == null ? null : Customer.fromJson(json["mechanic"]),
-    customer: json["customer"] == null ? null : Customer.fromJson(json["customer"]),
-    vehicle: json["vehicle"],
+    mechanic: json["mechanic"] == null ? null : MechanicBookingCustomer.fromJson(json["mechanic"]),
+    customer: json["customer"] == null ? null : MechanicBookingCustomer.fromJson(json["customer"]),
+    vehicle: json["vehicle"] == null ? null : Vehicle.fromJson(json["vehicle"]),
     bookService: json["bookService"],
   );
 
@@ -168,17 +168,17 @@ class MechanicBooking {
     "status": status == null ? null : status,
     "customerId": customerId == null ? null : customerId,
     "mechanicId": mechanicId == null ? null : mechanicId,
-    "vehicleId": vehicleId,
+    "vehicleId": vehicleId == null ? null : vehicleId,
     "regularType": regularType == null ? null : regularType,
     "mechanic": mechanic == null ? null : mechanic!.toJson(),
     "customer": customer == null ? null : customer!.toJson(),
-    "vehicle": vehicle,
+    "vehicle": vehicle == null ? null : vehicle!.toJson(),
     "bookService": bookService,
   };
 }
 
-class Customer {
-  Customer({
+class MechanicBookingCustomer {
+  MechanicBookingCustomer({
     required this.id,
     required this.userCode,
     required this.firstName,
@@ -207,14 +207,14 @@ class Customer {
   int userTypeId;
   String jwtToken;
   String fcmToken;
-  dynamic otpCode;
+  String otpCode;
   int isProfile;
   int otpVerified;
-  List<dynamic>? customer;
-  List<Mechanic>? mechanic;
+  List<CustomerElement>? customer;
+  List<CustomerElement>? mechanic;
   dynamic vendor;
 
-  factory Customer.fromJson(Map<String, dynamic> json) => Customer(
+  factory MechanicBookingCustomer.fromJson(Map<String, dynamic> json) => MechanicBookingCustomer(
     id: json["id"] == null ? null : json["id"],
     userCode: json["userCode"] == null ? null : json["userCode"],
     firstName: json["firstName"] == null ? null : json["firstName"],
@@ -225,11 +225,11 @@ class Customer {
     userTypeId: json["userTypeId"] == null ? null : json["userTypeId"],
     jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
     fcmToken: json["fcmToken"] == null ? null : json["fcmToken"],
-    otpCode: json["otpCode"],
+    otpCode: json["otpCode"] == null ? null : json["otpCode"],
     isProfile: json["isProfile"] == null ? null : json["isProfile"],
     otpVerified: json["otpVerified"] == null ? null : json["otpVerified"],
-    customer: json["customer"] == null ? null : List<dynamic>.from(json["customer"].map((x) => x)),
-    mechanic: json["mechanic"] == null ? null : List<Mechanic>.from(json["mechanic"].map((x) => Mechanic.fromJson(x))),
+    customer: json["customer"] == null ? null : List<CustomerElement>.from(json["customer"].map((x) => CustomerElement.fromJson(x))),
+    mechanic: json["mechanic"] == null ? null : List<CustomerElement>.from(json["mechanic"].map((x) => CustomerElement.fromJson(x))),
     vendor: json["vendor"],
   );
 
@@ -244,17 +244,17 @@ class Customer {
     "userTypeId": userTypeId == null ? null : userTypeId,
     "jwtToken": jwtToken == null ? null : jwtToken,
     "fcmToken": fcmToken == null ? null : fcmToken,
-    "otpCode": otpCode,
+    "otpCode": otpCode == null ? null : otpCode,
     "isProfile": isProfile == null ? null : isProfile,
     "otpVerified": otpVerified == null ? null : otpVerified,
-    "customer": customer == null ? null : List<dynamic>.from(customer!.map((x) => x)),
+    "customer": customer == null ? null : List<dynamic>.from(customer!.map((x) => x.toJson())),
     "mechanic": mechanic == null ? null : List<dynamic>.from(mechanic!.map((x) => x.toJson())),
     "vendor": vendor,
   };
 }
 
-class Mechanic {
-  Mechanic({
+class CustomerElement {
+  CustomerElement({
     required this.id,
     required this.profilePic,
   });
@@ -262,7 +262,7 @@ class Mechanic {
   String id;
   String profilePic;
 
-  factory Mechanic.fromJson(Map<String, dynamic> json) => Mechanic(
+  factory CustomerElement.fromJson(Map<String, dynamic> json) => CustomerElement(
     id: json["id"] == null ? null : json["id"],
     profilePic: json["profilePic"] == null ? null : json["profilePic"],
   );
@@ -270,5 +270,77 @@ class Mechanic {
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
     "profilePic": profilePic == null ? null : profilePic,
+  };
+}
+
+class Vehicle {
+  Vehicle({
+    required this.id,
+    required this.brand,
+    required this.model,
+    required this.engine,
+    required this.year,
+    required this.plateNo,
+    required this.lastMaintenance,
+    required this.milege,
+    required this.vehiclePic,
+    required this.color,
+    required this.latitude,
+    required this.longitude,
+    required this.defaultVehicle,
+    required this.status,
+    required this.userId,
+  });
+
+  String id;
+  String brand;
+  String model;
+  String engine;
+  String year;
+  String plateNo;
+  String lastMaintenance;
+  String milege;
+  String vehiclePic;
+  String color;
+  double latitude;
+  double longitude;
+  int defaultVehicle;
+  int status;
+  int userId;
+
+  factory Vehicle.fromJson(Map<String, dynamic> json) => Vehicle(
+    id: json["id"] == null ? null : json["id"],
+    brand: json["brand"] == null ? null : json["brand"],
+    model: json["model"] == null ? null : json["model"],
+    engine: json["engine"] == null ? null : json["engine"],
+    year: json["year"] == null ? null : json["year"],
+    plateNo: json["plateNo"] == null ? null : json["plateNo"],
+    lastMaintenance: json["lastMaintenance"] == null ? null : json["lastMaintenance"],
+    milege: json["milege"] == null ? null : json["milege"],
+    vehiclePic: json["vehiclePic"] == null ? null : json["vehiclePic"],
+    color: json["color"] == null ? null : json["color"],
+    latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
+    longitude: json["longitude"] == null ? null : json["longitude"].toDouble(),
+    defaultVehicle: json["defaultVehicle"] == null ? null : json["defaultVehicle"],
+    status: json["status"] == null ? null : json["status"],
+    userId: json["userId"] == null ? null : json["userId"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id == null ? null : id,
+    "brand": brand == null ? null : brand,
+    "model": model == null ? null : model,
+    "engine": engine == null ? null : engine,
+    "year": year == null ? null : year,
+    "plateNo": plateNo == null ? null : plateNo,
+    "lastMaintenance": lastMaintenance == null ? null : lastMaintenance,
+    "milege": milege == null ? null : milege,
+    "vehiclePic": vehiclePic == null ? null : vehiclePic,
+    "color": color == null ? null : color,
+    "latitude": latitude == null ? null : latitude,
+    "longitude": longitude == null ? null : longitude,
+    "defaultVehicle": defaultVehicle == null ? null : defaultVehicle,
+    "status": status == null ? null : status,
+    "userId": userId == null ? null : userId,
   };
 }

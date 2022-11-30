@@ -1,8 +1,8 @@
+import 'package:auto_fix/AA/StateList/states_mdl.dart';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Models/resend_otp_model/resend_otp_model.dart';
 import 'package:auto_fix/Repository/repository.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/signUp_Mdl.dart';
 
 import 'package:rxdart/rxdart.dart';

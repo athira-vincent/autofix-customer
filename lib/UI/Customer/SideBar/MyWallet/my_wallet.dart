@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/error_strings.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Models/customer_wallet_detail_model/customer_wallet_detail_model.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:isw_mobile_sdk/isw_mobile_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,6 +33,7 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
   String profileUrl = "";
   String name = "";
   String userid = "";
+  bool buttonEnable = false;
 
   @override
   void initState() {
@@ -275,7 +278,7 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                                         null
                                 ? "0"
                                 : walletistoryModel
-                                    .data!.walletDetails.walletData!.balance
+                                    .data!.walletDetails.walletData!.amount
                                     .toString()),
                         SubTitleTextRound(
                             size,
@@ -289,7 +292,7 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                                         null
                                 ? "0"
                                 : walletistoryModel
-                                    .data!.walletDetails.walletData!.amount
+                                    .data!.walletDetails.walletData!.balance
                                     .toString()),
                       ],
                     ),
@@ -394,10 +397,21 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                   ),
                   hintStyle: Styles.textLabelSubTitle,
                 ),
+                onChanged: (text){
+                  if(text.length > 0){
+                    setState(() {
+                      buttonEnable = true;
+                    });
+                  }else{
+                    setState(() {
+                      buttonEnable = false;
+                    });
+                  }
+                },
               ),
             ),
           ),
-          _amountController.text.length > 0
+          buttonEnable == true
               ?
           InkWell(
             onTap: (){
@@ -430,27 +444,32 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
             ),
           )
               :
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              width: double.infinity,
-              margin: EdgeInsets.only(
-                top: size.height * 2 / 100,
-                left: size.width * 9 / 100,
-                right: size.width * 9 / 100,
-              ),
-              padding: EdgeInsets.only(
-                top: size.height * 1.5 / 100,
-                bottom: size.height * 1.5 / 100,
-              ),
-              color: CustColors.cloudy_blue,
-              child: const Center(
-                child: Text(
-                  "Add Money",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontFamily: 'Samsung_SharpSans_Bold'),
+          InkWell(
+            onTap: (){
+              Fluttertoast.showToast(msg: "Enter Amount");
+            },
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.only(
+                  top: size.height * 2 / 100,
+                  left: size.width * 9 / 100,
+                  right: size.width * 9 / 100,
+                ),
+                padding: EdgeInsets.only(
+                  top: size.height * 1.5 / 100,
+                  bottom: size.height * 1.5 / 100,
+                ),
+                color: CustColors.cloudy_blue,
+                child: const Center(
+                  child: Text(
+                    "Add Money",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontFamily: 'Samsung_SharpSans_Bold'),
+                  ),
                 ),
               ),
             ),
@@ -573,19 +592,24 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
     var message;
     if (result.hasValue) {
       Repository()
-          .fetchpaymentsucess(3, _amountController.text, 2,
+          .fetchpaymentsucess(3, int.parse(_amountController.text), 2,
               result.value.transactionReference, null)
           .then((value) => {
-                if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty)
+                if (value.data!.paymentCreate.msg!.message == ErrorStrings.error_214)
                   {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => CustomerMainLandingScreen()))
+                    // Navigator.of(context).push(MaterialPageRoute(
+                    //     builder: (context) => CustomerMainLandingScreen()))
+                    Fluttertoast.showToast(msg: "Amount added to wallet")
                   }
                 else
-                  {print("popcontext"), Navigator.pop(context)}
+                  {print("popcontext"),
+                    Navigator.pop(context),
+                    Fluttertoast.showToast(msg: "Failed to add Money to wallet")
+                  }
               });
     } else {
       message = "You cancelled the transaction pls try again";
+      Fluttertoast.showToast(msg: "You cancelled the transaction. Try again");
     }
 
     message = "You completed txn using: " +
@@ -604,9 +628,9 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
     print(result.value.responseCode);
     print(result.value.responseDescription);
     print(result.value.transactionReference);
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      duration: const Duration(seconds: 3),
-    ));
+    // Scaffold.of(context).showSnackBar(SnackBar(
+    //   content: Text(message),
+    //   duration: const Duration(seconds: 3),
+    // ));
   }
 }

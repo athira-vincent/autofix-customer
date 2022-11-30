@@ -56,16 +56,16 @@ class PaymentCreate {
   });
 
   PaymentData? paymentData;
-  dynamic msg;
+  Msg? msg;
 
   factory PaymentCreate.fromMap(Map<String, dynamic> json) => PaymentCreate(
     paymentData: json["paymentData"] == null ? null : PaymentData.fromMap(json["paymentData"]),
-    msg: json["msg"],
+    msg: json["msg"] == null ? null : Msg.fromJson(json["msg"]),
   );
 
   Map<String, dynamic> toMap() => {
     "paymentData": paymentData == null ? null : paymentData!.toMap(),
-    "msg": msg,
+    "msg": msg == null ? null : msg!.toJson(),
   };
 }
 
@@ -116,3 +116,20 @@ class PaymentData {
 
   };
 }
+
+class Msg {
+  Msg({
+    required this.message,
+  });
+
+  String message;
+
+  factory Msg.fromJson(Map<String, dynamic> json) => Msg(
+    message: json["message"] == null ? null : json["message"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "message": message == null ? null : message,
+  };
+}
+

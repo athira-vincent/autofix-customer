@@ -90,31 +90,30 @@ class BookingDetails {
   int reqType;
   int bookStatus;
   String totalPrice;
-  dynamic tax;
-  var commission;
-  dynamic serviceCharge;
-  String totalTime;
-  dynamic serviceTime;
+  double tax;
+  int commission;
+  double serviceCharge;
+  dynamic totalTime;
+  String serviceTime;
   double latitude;
   double longitude;
   dynamic extend;
   dynamic totalExt;
   dynamic extendTime;
   DateTime? bookedDate;
-  dynamic bookedTime;
+  String bookedTime;
   int isRated;
   int status;
-  dynamic regularType;
-  dynamic mechLatitude;
-  dynamic mechLongitude;
-  dynamic demoMechanicId;
+  int regularType;
+  double mechLatitude;
+  double mechLongitude;
   int customerId;
   int vehicleId;
   dynamic serviceId;
   List<BookService>? bookService;
   Vehicle? vehicle;
-  Customer? mechanic;
-  Customer? customer;
+  BookingDetailsCustomer? mechanic;
+  BookingDetailsCustomer? customer;
   List<dynamic>? review;
   bool isRate;
   List<MechanicService>? mechanicService;
@@ -126,7 +125,7 @@ class BookingDetails {
     bookStatus: json["bookStatus"] == null ? null : json["bookStatus"],
     totalPrice: json["totalPrice"] == null ? null : json["totalPrice"],
     tax: json["tax"] == null ? null : json["tax"].toDouble(),
-    commission: json["commission"] == null ? null : json["commission"].toDouble(),
+    commission: json["commission"] == null ? null : json["commission"],
     serviceCharge: json["serviceCharge"] == null ? null : json["serviceCharge"].toDouble(),
     totalTime: json["totalTime"],
     serviceTime: json["serviceTime"] == null ? null : json["serviceTime"],
@@ -147,8 +146,8 @@ class BookingDetails {
     serviceId: json["serviceId"],
     bookService: json["bookService"] == null ? null : List<BookService>.from(json["bookService"].map((x) => BookService.fromJson(x))),
     vehicle: json["vehicle"] == null ? null : Vehicle.fromJson(json["vehicle"]),
-    mechanic: json["mechanic"] == null ? null : Customer.fromJson(json["mechanic"]),
-    customer: json["customer"] == null ? null : Customer.fromJson(json["customer"]),
+    mechanic: json["mechanic"] == null ? null : BookingDetailsCustomer.fromJson(json["mechanic"]),
+    customer: json["customer"] == null ? null : BookingDetailsCustomer.fromJson(json["customer"]),
     review: json["review"] == null ? null : List<dynamic>.from(json["review"].map((x) => x)),
     isRate: json["isRate"] == null ? null : json["isRate"],
     mechanicService: json["mechanicService"] == null ? null : List<MechanicService>.from(json["mechanicService"].map((x) => MechanicService.fromJson(x))),
@@ -195,6 +194,7 @@ class BookService {
     required this.id,
     required this.status,
     required this.serviceId,
+    required this.serviceCost,
     required this.bookMechanicId,
     required this.service,
   });
@@ -202,6 +202,7 @@ class BookService {
   String id;
   int status;
   int serviceId;
+  int serviceCost;
   dynamic bookMechanicId;
   BookServiceService? service;
 
@@ -209,6 +210,7 @@ class BookService {
     id: json["id"] == null ? null : json["id"],
     status: json["status"] == null ? null : json["status"],
     serviceId: json["serviceId"] == null ? null : json["serviceId"],
+    serviceCost: json["serviceCost"] == null ? null : json["serviceCost"],
     bookMechanicId: json["bookMechanicId"],
     service: json["service"] == null ? null : BookServiceService.fromJson(json["service"]),
   );
@@ -217,6 +219,7 @@ class BookService {
     "id": id == null ? null : id,
     "status": status == null ? null : status,
     "serviceId": serviceId == null ? null : serviceId,
+    "serviceCost": serviceCost == null ? null : serviceCost,
     "bookMechanicId": bookMechanicId,
     "service": service == null ? null : service!.toJson(),
   };
@@ -246,8 +249,8 @@ class BookServiceService {
   };
 }
 
-class Customer {
-  Customer({
+class BookingDetailsCustomer {
+  BookingDetailsCustomer({
     required this.id,
     required this.userCode,
     required this.firstName,
@@ -276,12 +279,12 @@ class Customer {
   String jwtToken;
   String fcmToken;
   String otpCode;
-  dynamic customer;
+  List<CustomerElement>? customer;
   int userTypeId;
-  dynamic mechanic;
+  List<CustomerElement>? mechanic;
   dynamic mechanicService;
 
-  factory Customer.fromJson(Map<String, dynamic> json) => Customer(
+  factory BookingDetailsCustomer.fromJson(Map<String, dynamic> json) => BookingDetailsCustomer(
     id: json["id"] == null ? null : json["id"],
     userCode: json["userCode"] == null ? null : json["userCode"],
     firstName: json["firstName"] == null ? null : json["firstName"],
@@ -293,9 +296,9 @@ class Customer {
     jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
     fcmToken: json["fcmToken"] == null ? null : json["fcmToken"],
     otpCode: json["otpCode"] == null ? null : json["otpCode"],
-    customer: json["customer"],
+    customer: json["customer"] == null ? null : List<CustomerElement>.from(json["customer"].map((x) => CustomerElement.fromJson(x))),
     userTypeId: json["userTypeId"] == null ? null : json["userTypeId"],
-    mechanic: json["mechanic"],
+    mechanic: json["mechanic"] == null ? null : List<CustomerElement>.from(json["mechanic"].map((x) => CustomerElement.fromJson(x))),
     mechanicService: json["mechanicService"],
   );
 
@@ -311,10 +314,26 @@ class Customer {
     "jwtToken": jwtToken == null ? null : jwtToken,
     "fcmToken": fcmToken == null ? null : fcmToken,
     "otpCode": otpCode == null ? null : otpCode,
-    "customer": customer,
+    "customer": customer == null ? null : List<dynamic>.from(customer!.map((x) => x.toJson())),
     "userTypeId": userTypeId == null ? null : userTypeId,
-    "mechanic": mechanic,
+    "mechanic": mechanic == null ? null : List<dynamic>.from(mechanic!.map((x) => x.toJson())),
     "mechanicService": mechanicService,
+  };
+}
+
+class CustomerElement {
+  CustomerElement({
+    required this.id,
+  });
+
+  String id;
+
+  factory CustomerElement.fromJson(Map<String, dynamic> json) => CustomerElement(
+    id: json["id"] == null ? null : json["id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id == null ? null : id,
   };
 }
 

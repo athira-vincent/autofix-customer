@@ -10,9 +10,9 @@ class MechanicMyWalletApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
 
   Future<MechanicMyWalletMdl> postMechanicMyWalletRequest(
-      token, mechanicId)async {
+      String token, mechanicId, type,String customeDate)async {
     Map<String, dynamic> _resp = await _queryProvider.postMechanicMyWalletRequest(
-      token, mechanicId);
+      token, mechanicId, type, customeDate);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

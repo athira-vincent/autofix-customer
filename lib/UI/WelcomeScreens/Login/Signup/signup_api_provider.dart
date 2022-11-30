@@ -2,9 +2,9 @@
 
 import 'dart:convert';
 
+import 'package:auto_fix/AA/StateList/states_mdl.dart';
 import 'package:auto_fix/Models/resend_otp_model/resend_otp_model.dart';
 import 'package:auto_fix/QueryProvider/query_provider.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/signUp_Mdl.dart';
 
 import 'package:flutter/services.dart';

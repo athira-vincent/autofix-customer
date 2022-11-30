@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/error_strings.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
-import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/UI/Common/payment_failed_screen.dart';
+import 'package:auto_fix/UI/Common/payment_success_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularServicePayment/regular_direct_payment_screen.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,12 +13,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:isw_mobile_sdk/isw_mobile_sdk.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../Repository/repository.dart';
-import '../../../MainLandingPageCustomer/customer_main_landing_screen.dart';
 
 class RegularPaymentScreen extends StatefulWidget {
 
@@ -73,13 +74,15 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     });
   }
 
-  void updateToCloudFirestoreDB(String paymentOption) {
+  void updateToCloudFirestoreDB(String key, String value) {
 
     _firestore
         .collection("${widget.firebaseCollection}")
         .doc('${widget.bookingId}')
         .update({
-          'isPayment': "$paymentOption",
+          "$key" : "$value",
+          "${key}Time" : "${DateFormat("hh:mm a").format(DateTime.now())}",
+          //'isPayment': "$paymentOption",
         })
         .then((value) => print("Location Added"))
         .catchError((error) =>
@@ -373,21 +376,41 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
 
     var message;
     if (result.hasValue) {
-      Repository()
-          .fetchpaymentsucess(
+      Repository().fetchpaymentsucess(
           1, result.value.amount, paymentType, result.value.transactionReference, '${widget.bookingId}')
           .then((value) => {
         if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty)
           {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => CustomerMainLandingScreen()))
-
+          updateToCloudFirestoreDB("isPayment","5"),
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Payment Success",
+              style: const TextStyle(
+                  fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          )),
+        Navigator.push(context,
+            MaterialPageRoute(
+                builder: (context) => PaymentSuccessScreen(
+                  bookingId: widget.bookingId,
+                  firebaseCollection: widget.firebaseCollection,
+                ))),
           }
         else
-          {print("popcontext"), Navigator.pop(context)}
+          {
+            print("popcontext"),
+            Navigator.pop(context),
+            Navigator.push(context,MaterialPageRoute(builder: (context) => PaymentFailedScreen(
+              firebaseCollection: widget.firebaseCollection,
+              bookingId: widget.bookingId,
+            )))
+          }
       });
     } else {
       message = "You cancelled the transaction pls try again";
+      Navigator.push(context,MaterialPageRoute(builder: (context) => PaymentFailedScreen(
+        firebaseCollection: widget.firebaseCollection,
+        bookingId: widget.bookingId,
+      )));
     }
 
     message = "You completed txn using: " +
@@ -511,14 +534,16 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
                     ),
                   ),
                 ),
+                value == true
+                    ?
                 InkWell(
                   onTap: (){
-                    if(value==false){
+                    /*if(value==false){
                       Fluttertoast.showToast(msg: "Recharge wallet");
                     }
-                    else{
+                    else{*/
                       walletrecharge(remain);
-                    }
+                    //}
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -530,6 +555,39 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
                             Radius.circular(6),
                           ),
                           color: CustColors.light_navy
+                      ),
+
+                      child: Center(
+                        child: Text(
+                          "Pay",
+                          style: TextStyle(
+                            fontSize: 14.3,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Samsung_SharpSans_Medium",
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+                    :
+                InkWell(
+                  onTap: (){
+                    if(value==false){
+                      Fluttertoast.showToast(msg: "Insufficient Balance");
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(6),
+                          ),
+                          color: CustColors.cloudy_blue
                       ),
 
                       child: Center(
@@ -660,18 +718,27 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
                             .then((value) => {
 
                           if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty) {
+                            updateToCloudFirestoreDB("isPayment","5"),
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                   content: Text("Payment Success",
                                       style: const TextStyle(
                                           fontFamily: 'Roboto_Regular', fontSize: 14)),
                                   duration: const Duration(seconds: 2),
                                   backgroundColor: CustColors.light_navy,
-                                ))
-                            /*Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => CustomerMainLandingScreen()))*/
+                                )),
+                            Navigator.push(context,
+                                MaterialPageRoute(
+                                    builder: (context) => PaymentSuccessScreen(
+                                      firebaseCollection: widget.firebaseCollection,
+                                      bookingId: widget.bookingId,
+                                    ))),
                           } else {
                             print("popcontext"),
-                            Navigator.pop(context)
+                            Navigator.pop(context),
+                            Navigator.push(context,MaterialPageRoute(builder: (context) => PaymentFailedScreen(
+                              firebaseCollection: widget.firebaseCollection,
+                              bookingId: widget.bookingId,
+                            )))
                           }
                         });
                       }
@@ -774,7 +841,7 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
                         Fluttertoast.showToast(msg: "Recharge wallet");
                       }
                       else{*/
-                        updateToCloudFirestoreDB("1");
+                        updateToCloudFirestoreDB("isPayment","1");
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -958,35 +1025,57 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     var result = await IswMobileSdk.pay(iswPaymentInfo);
 
     var message;
-    if (result.hasValue) {
-      Repository()
-          .fetchpaymentsucess(3, amountwallet, 2,
+    if (result.value.isSuccessful) {
+      Repository().fetchpaymentsucess(3, amountwallet, 2,
           result.value.transactionReference, null)
           .then((value) => {
-        if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty)
+            print("value.data.paymentCreate.msg >>> ${value.data!.paymentCreate.msg!.message}"),
+        if (value.data!.paymentCreate.msg!.message.toString() == ErrorStrings.error_214)      //214 - Wallet recharged successfully
           {
-            /*Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => CustomerMainLandingScreen()))*/
             /// wallet deduction api integrate
-              Repository()
-              .fetchpaymentsucess(1, totalServiceCost, 3,
+              Repository().fetchpaymentsucess(1, int.parse(totalServiceCost), 3,
               "Wallet Insufficient balance recharge payment", widget.bookingId)
-              .then((value) {
+              .then((value01) {
 
-                if(value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty){
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => CustomerMainLandingScreen()));
+                if(value01.data!.paymentCreate.paymentData!.id.toString().isNotEmpty){
+
+                updateToCloudFirestoreDB("isPayment","5");
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Payment Success",
+                  style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+                    duration: const Duration(seconds: 2),
+                    backgroundColor: CustColors.light_navy,
+                  ));
+                  Navigator.push(context,
+                      MaterialPageRoute(
+                          builder: (context) => PaymentSuccessScreen(
+                            bookingId: widget.bookingId,
+                            firebaseCollection: widget.firebaseCollection,
+                          )));
                 }else{
+                  Navigator.push(context,
+                      MaterialPageRoute(
+                          builder: (context) => PaymentFailedScreen(
+                            firebaseCollection: widget.firebaseCollection,
+                            bookingId: widget.bookingId,
+                          )));
                   print("Payment failed after wallet recharge");
                 }
-
               }),
           }
         else
-          {print("popcontext"), Navigator.pop(context)}
+          {
+            print("popcontext"),
+            Navigator.pop(context),
+            Navigator.push(context,MaterialPageRoute(builder: (context) => PaymentFailedScreen(
+                firebaseCollection: widget.firebaseCollection,
+                bookingId: widget.bookingId,
+            )))
+          }
       });
     } else {
       message = "You cancelled the transaction pls try again";
+      print("result.value.isSuccessful - else");
     }
 
     message = "You completed txn using: " +
@@ -1005,10 +1094,10 @@ class _RegularPaymentScreenState extends State<RegularPaymentScreen> {
     print(result.value.responseCode);
     print(result.value.responseDescription);
     print(result.value.transactionReference);
-    Scaffold.of(context).showSnackBar(SnackBar(
+    /*Scaffold.of(context).showSnackBar(SnackBar(
       content: Text(message),
       duration: const Duration(seconds: 3),
-    ));
+    ));*/
   }
 
 }
