@@ -189,8 +189,10 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         "customerID" : "${widget.notificationPayloadMdl.customerID}",
         "mechanicPhone" : "${widget.notificationPayloadMdl.mechanicPhone}",
         "customerPhone" : "${widget.notificationPayloadMdl.customerPhone}",
-        "mechanicProfileUrl" :"",                    ///----detailsMdl.data!.bookingDetails!.mechanic.profileurl
-        "customerProfileUrl" : "",
+        "mechanicProfileUrl" :"${widget.notificationPayloadMdl.mechanicProfileUrl}",                    ///----detailsMdl.data!.bookingDetails!.mechanic.profileurl
+        "customerProfileUrl" : "${widget.notificationPayloadMdl.customerProfileUrl}",
+        "mechanicEmail" : "${widget.notificationPayloadMdl.mechanicEmail}",
+        "customerEmail" : "${widget.notificationPayloadMdl.customerEmail}",
         "mechanicAddress" : "${widget.notificationPayloadMdl.mechanicAddress}",
         "mechanicLatitude" : "${widget.notificationPayloadMdl.mechanicLatitude}",
         "mechanicLongitude" : "${widget.notificationPayloadMdl.mechanicLongitude}",
@@ -300,7 +302,12 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "carPlateNumber" : "${widget.notificationPayloadMdl.carPlateNumber}",
       "carColor" : "${widget.notificationPayloadMdl.carColor}",
       "customerID" : "${widget.notificationPayloadMdl.customerID}",
+      "mechanicPhone" : "${widget.notificationPayloadMdl.mechanicPhone}",
       "customerPhone" : "${widget.notificationPayloadMdl.customerPhone}",
+      "mechanicProfileUrl" :"${widget.notificationPayloadMdl.mechanicProfileUrl}",                    ///----detailsMdl.data!.bookingDetails!.mechanic.profileurl
+      "customerProfileUrl" : "${widget.notificationPayloadMdl.customerProfileUrl}",
+      "mechanicEmail" : "${widget.notificationPayloadMdl.mechanicEmail}",
+      "customerEmail" : "${widget.notificationPayloadMdl.customerEmail}",
       "customerName" : "${widget.notificationPayloadMdl.customerName}",
       "customerAddress" : "${widget.notificationPayloadMdl.customerAddress}",
       "customerLatitude" : "${widget.notificationPayloadMdl.customerLatitude}",
@@ -308,9 +315,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "customerFcmToken" : "${widget.notificationPayloadMdl.customerFcmToken}",
       "mechanicName" : "${widget.notificationPayloadMdl.mechanicName}",
       "mechanicID" : "${widget.notificationPayloadMdl.mechanicID}",
-      "mechanicPhone" : "${widget.notificationPayloadMdl.mechanicPhone}",
-      "mechanicProfileUrl" :"",  ///----detailsMdl.data!.bookingDetails!.mechanic.profileurl
-      "customerProfileUrl" : "",
+
       "mechanicAddress" :"${widget.notificationPayloadMdl.mechanicAddress}",
       "mechanicLatitude" : "${widget.notificationPayloadMdl.mechanicLatitude}",
       "mechanicLongitude" : "${widget.notificationPayloadMdl.mechanicLongitude}",

@@ -90,9 +90,9 @@ class BookingDetails {
   int reqType;
   int bookStatus;
   String totalPrice;
-  double tax;
-  int commission;
-  double serviceCharge;
+  dynamic tax;
+  dynamic commission;
+  dynamic serviceCharge;
   dynamic totalTime;
   String serviceTime;
   double latitude;
@@ -104,7 +104,7 @@ class BookingDetails {
   String bookedTime;
   int isRated;
   int status;
-  int regularType;
+  dynamic regularType;
   double mechLatitude;
   double mechLongitude;
   int customerId;
@@ -124,9 +124,9 @@ class BookingDetails {
     reqType: json["reqType"] == null ? null : json["reqType"],
     bookStatus: json["bookStatus"] == null ? null : json["bookStatus"],
     totalPrice: json["totalPrice"] == null ? null : json["totalPrice"],
-    tax: json["tax"] == null ? null : json["tax"].toDouble(),
+    tax: json["tax"] == null ? null : json["tax"],
     commission: json["commission"] == null ? null : json["commission"],
-    serviceCharge: json["serviceCharge"] == null ? null : json["serviceCharge"].toDouble(),
+    serviceCharge: json["serviceCharge"] == null ? null : json["serviceCharge"],
     totalTime: json["totalTime"],
     serviceTime: json["serviceTime"] == null ? null : json["serviceTime"],
     latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
@@ -138,7 +138,7 @@ class BookingDetails {
     bookedTime: json["bookedTime"] == null ? null : json["bookedTime"],
     isRated: json["isRated"] == null ? null : json["isRated"],
     status: json["status"] == null ? null : json["status"],
-    regularType: json["regularType"] == null ? null : json["regularType"],
+    regularType: json["regularType"],
     mechLatitude: json["mechLatitude"] == null ? null : json["mechLatitude"].toDouble(),
     mechLongitude: json["mechLongitude"] == null ? null : json["mechLongitude"].toDouble(),
     customerId: json["customerId"] == null ? null : json["customerId"],
@@ -173,7 +173,7 @@ class BookingDetails {
     "bookedTime": bookedTime == null ? null : bookedTime,
     "isRated": isRated == null ? null : isRated,
     "status": status == null ? null : status,
-    "regularType": regularType == null ? null : regularType,
+    "regularType": regularType,
     "mechLatitude": mechLatitude == null ? null : mechLatitude,
     "mechLongitude": mechLongitude == null ? null : mechLongitude,
     "customerId": customerId == null ? null : customerId,
@@ -324,16 +324,20 @@ class BookingDetailsCustomer {
 class CustomerElement {
   CustomerElement({
     required this.id,
+    required this.profilePic,
   });
 
   String id;
+  String profilePic;
 
   factory CustomerElement.fromJson(Map<String, dynamic> json) => CustomerElement(
     id: json["id"] == null ? null : json["id"],
+    profilePic: json["profilePic"] == null ? null : json["profilePic"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
+    "profilePic": profilePic == null ? null : profilePic,
   };
 }
 

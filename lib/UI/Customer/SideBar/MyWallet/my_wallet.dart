@@ -18,7 +18,6 @@ import 'package:isw_mobile_sdk/isw_mobile_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../Repository/repository.dart';
-import '../../MainLandingPageCustomer/customer_main_landing_screen.dart';
 
 class CustomerWalletScreen extends StatefulWidget {
   const CustomerWalletScreen({Key? key}) : super(key: key);
@@ -595,14 +594,20 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
           .fetchpaymentsucess(3, int.parse(_amountController.text), 2,
               result.value.transactionReference, null)
           .then((value) => {
-                if (value.data!.paymentCreate.msg!.message == ErrorStrings.error_214)
+                if (value.data!.paymentCreate.msg!.message.toString() == ErrorStrings.error_214)
                   {
                     // Navigator.of(context).push(MaterialPageRoute(
                     //     builder: (context) => CustomerMainLandingScreen()))
-                    Fluttertoast.showToast(msg: "Amount added to wallet")
+                    Fluttertoast.showToast(msg: "Amount added to wallet"),
+                    print("Amount added to wallet >>> repeat Wallet details"),
+                    Navigator.pushReplacement(context,
+                    MaterialPageRoute(
+                    builder: (BuildContext context) => super.widget))
+                    //BlocProvider.of<CustomerWalletBloc>(context)..add(FetchCustomerWalletEvent()),
                   }
                 else
-                  {print("popcontext"),
+                  {
+                    print("popcontext"),
                     Navigator.pop(context),
                     Fluttertoast.showToast(msg: "Failed to add Money to wallet")
                   }

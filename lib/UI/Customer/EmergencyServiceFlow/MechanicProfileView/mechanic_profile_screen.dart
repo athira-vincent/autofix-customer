@@ -103,7 +103,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     yourItemList.add({
       "serviceName" : "${widget.mechanicListData?.mechanicService[0].service?.serviceName}",
       "serviceTime" : "${widget.mechanicListData?.mechanicService[0].time.split(':').first}",
-      "serviceCost" :"${widget.mechanicListData?.mechanicService[0].service?.minPrice}",
+      "serviceCost" :"${widget.mechanicListData?.mechanicService[0].fee}",
       "serviceId" : "${widget.mechanicListData?.mechanicService[0].service?.id}",
       "isDefault":  '1',
     });
@@ -188,8 +188,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         });
       } else {
 
-        SharedPreferences shdPre = await SharedPreferences.getInstance();
-
         setState(() {
           _homeCustomerBloc.postBookingDetailsRequest(authToken, bookingIdEmergency,);
           print("message mechanicsUpdateBookingIDResponse >>>>>>>  ${value.message}");
@@ -206,8 +204,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         });
       } else {
 
-        SharedPreferences shdPre = await SharedPreferences.getInstance();
-
         setState(() {
 
           carNameBrand = '${value.data?.bookingDetails?.vehicle?.brand}';
@@ -218,7 +214,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           Repository().getCurrentWorldTime("Nairobi").then((value01) => {
 
             currentDateTime = value01.datetime!.millisecondsSinceEpoch.toString(),
-
 
             print("dateConverter(timeNow!) >>> ${currentDateTime}"),
             callOnFcmApiSendPushNotifications(value)
@@ -265,7 +260,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "bookingId" : bookingIdEmergency,
         "serviceName" : "${widget.mechanicListData?.mechanicService[0].service?.serviceName}",
         "serviceTime" : "${widget.mechanicListData?.mechanicService[0].time.split(':').first}",
-        "serviceCost" :"${widget.mechanicListData?.mechanicService[0].service?.minPrice}",
+        "serviceCost" :"${widget.mechanicListData?.mechanicService[0].fee}",
         "serviceId" : "${widget.mechanicListData?.mechanicService[0].service?.id}",
         "serviceList" : yourItemList.toString(),
         "carName" : "$carNameBrand [$carNameModel]",
@@ -281,8 +276,10 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "customerID" : "${detailsMdl!.data!.bookingDetails!.customerId}",
         "mechanicPhone" :"${detailsMdl.data!.bookingDetails!.mechanic!.phoneNo}",
         "customerPhone" : "${detailsMdl.data!.bookingDetails!.customer!.phoneNo}",
-        "mechanicProfileUrl" :"",                                   ///----detailsMdl.data!.bookingDetails!.mechanic.profileurl
-        "customerProfileUrl" : "",
+        "mechanicProfileUrl" : "${detailsMdl.data!.bookingDetails!.mechanic!.mechanic![0].profilePic}",                  ///----detailsMdl.data!.bookingDetails!.mechanic.profileurl
+        "customerProfileUrl" : "${detailsMdl.data!.bookingDetails!.customer!.customer![0].profilePic}",
+        "mechanicEmail" : "${detailsMdl.data!.bookingDetails!.mechanic!.emailId}",
+        "customerEmail" : "${detailsMdl.data!.bookingDetails!.customer!.emailId}",
         "mechanicAddress" : "",
         "mechanicLatitude" : widget.latitude,
         "mechanicLongitude" : widget.longitude,
@@ -300,7 +297,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "extendedTime" : "0",
         "customerFromPage" : "0",
         "mechanicFromPage" : "0",
-        "updatedServiceCost" : "${widget.mechanicListData?.mechanicService[0].service?.minPrice}",
+        "updatedServiceCost" : "${widget.mechanicListData?.mechanicService[0].fee}",
         "updatedServiceList" : "",
         "updatedServiceTime" : "${widget.mechanicListData?.mechanicService[0].time.split(':').first}",
         "isWorkStarted" : "0",
@@ -364,7 +361,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
      yourItemList.add({
       "serviceName" : "${widget.mechanicListData?.mechanicService[0].service?.serviceName}",
       "serviceTime" : "${widget.mechanicListData?.mechanicService[0].time.split(':').first}",
-      "serviceCost" :"${widget.mechanicListData?.mechanicService[0].service?.minPrice}",
+      "serviceCost" :"${widget.mechanicListData?.mechanicService[0].fee}",
       "serviceId" : "${widget.mechanicListData?.mechanicService[0].service?.id}",
       "isDefault":  '1',
     });
@@ -376,7 +373,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             "serviceModel" : FieldValue.arrayUnion([{
             "serviceName" : "${widget.mechanicListData?.mechanicService[0].service?.serviceName}",
             "serviceTime" : "${widget.mechanicListData?.mechanicService[0].time.split(':').first}",
-            "serviceCost" :"${widget.mechanicListData?.mechanicService[0].service?.minPrice}",
+            "serviceCost" :"${widget.mechanicListData?.mechanicService[0].fee}",
             "serviceId" : "${widget.mechanicListData?.mechanicService[0].service?.id}",
             "isDefault":  '1',
           }]),
@@ -979,6 +976,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             widget.latitude,
             widget.longitude,
             widget.serviceIds,
+            widget.mechanicListData!.mechanicService[0].fee,
             '${widget.mechanicListData?.id}',
             '1',
             '${widget.mechanicListData?.totalAmount}',

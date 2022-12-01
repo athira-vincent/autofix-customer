@@ -56,8 +56,8 @@ class MyWallet {
     required this.todaysPayments,
   });
 
-  int balance;
-  int totalAmount;
+  dynamic balance;
+  dynamic totalAmount;
   List<TodaysPayment>? todaysPayments;
 
   factory MyWallet.fromJson(Map<String, dynamic> json) => MyWallet(

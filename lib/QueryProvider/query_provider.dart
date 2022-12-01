@@ -1234,7 +1234,7 @@ class QueryProvider {
       time,
       latitude,
       longitude,
-      serviceId,
+      serviceId, serviceCost,
       mechanicId,
       reqType,
       totalPrice,
@@ -1248,6 +1248,7 @@ class QueryProvider {
               latitude: ${double.parse(latitude.toString())}
               longitude: ${double.parse(longitude.toString())}
               serviceId: ${int.parse(serviceId.toString())}
+              serviceCost: ${int.parse(serviceCost.toString())}
               mechanicId:${int.parse(mechanicId.toString())}
               reqType: ${int.parse(reqType.toString())}
               paymentType: ${int.parse(paymentType.toString())}
@@ -1371,7 +1372,7 @@ class QueryProvider {
     String _query = """
 {
   bookingDetails(bookingId: $bookingId) {
-    id
+      id
       bookingCode
       reqType
       bookStatus
@@ -1438,9 +1439,11 @@ class QueryProvider {
       status
       mechanic{
         id
+        profilePic
       }
       mechanicService{
         id
+        fee
       }
     }
     customer {
@@ -1457,6 +1460,7 @@ class QueryProvider {
       otpCode
       customer{
         id
+        profilePic
       }
     }
     review {
