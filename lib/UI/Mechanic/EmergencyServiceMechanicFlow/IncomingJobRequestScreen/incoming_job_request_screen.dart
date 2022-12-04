@@ -328,8 +328,8 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "totalTimeTakenByMechanic": "0",
       "timerCounter": "${widget.notificationPayloadMdl.serviceTime}",
       "currentUpdatedTime": "${widget.notificationPayloadMdl.serviceTime}",
-      "customerFromPage" : "MechanicTrackingScreen",
-      "mechanicFromPage" : "FindYourCustomerScreen",
+      "customerFromPage" : "C1",
+      "mechanicFromPage" : "M1",
       "isWorkStarted" : "0",
       "isWorkCompleted" : "0",
       "latitude": "${widget.notificationPayloadMdl.mechanicLatitude}",
@@ -355,6 +355,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "mechanicArrivalState": "0",
       "mechanicDiagonsisState": "0",
       "customerDiagonsisApproval": "0",
+      "totalstarttimecurrenttimevalue" : "",
     })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>

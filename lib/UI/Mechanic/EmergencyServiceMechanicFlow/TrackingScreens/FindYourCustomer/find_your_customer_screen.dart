@@ -5,6 +5,8 @@ import 'dart:typed_data';
 
 import 'package:auto_fix/Common/chat/chat.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_screen_ui.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicStartService/mechanic_start_service_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,6 +15,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -25,8 +28,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../../../Constants/cust_colors.dart';
 import '../../../../../../Constants/styles.dart';
 import 'dart:ui' as ui;
-
-
 
 class FindYourCustomerScreen extends StatefulWidget {
 
@@ -51,7 +52,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   double height = 0;
   String selectedState = "";
   double distanceInMeters = 0.0;
-  String googleAPiKey = "AIzaSyA1s82Y0AiWYbzXwfppyvKLNzFL-u7mArg";
+  String googleAPiKey = TextStrings.googleAPiKey;
   String? _mapStyle;
   Set<Marker> markers = Set(); //markers for google map
   BitmapDescriptor? customerIcon;
@@ -81,6 +82,9 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   String authToken="", bookingId = "", carName = "", customerAddress = "", plateNumber = "", carColor = "";
   String customerId = "", mechanicId = "", customerName = "", customerProfileUrl = "", mechanicProfileUrl = "";
   bool isArrived = false;
+  String callPhoneNumber = "";
+  String mechanicCurrentLat = "", mechanicCurrentLng = "";
+  Timer? timer;
 
   @override
   void initState() {
@@ -99,7 +103,6 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
   mapStyling() {
     print('latlong from another screen ${widget.latitude} ${widget.longitude}');
-
     rootBundle.loadString('assets/map_style/map_style.json').then((string) {
       _mapStyle = string;
     });
@@ -187,6 +190,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         customerId = event.get('customerID');
         mechanicId = event.get('mechanicID');
         customerName = event.get('customerName');
+        callPhoneNumber = event.get('customerPhone');
       });
     });
     /*Fluttertoast.showToast(
@@ -210,6 +214,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
       // accessing the position and request users of the
       // App to enable the location services.
       await Geolocator.openLocationSettings();
+      Fluttertoast.showToast(msg: "Location services is disabled.");
       return Future.error('Location services are disabled.');
     }
 
@@ -244,7 +249,12 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
             'latitude': value1.latitude.toString(),
             'longitude': value1.longitude.toString()
         })
-            .then((value) => print("Location Added"))
+            .then((value){
+              print("Location Added");
+              print("athira latitude: ${value1.latitude.toString()} longitude: ${value1.longitude.toString()}");
+              mechanicCurrentLat = value1.latitude.toString();
+              mechanicCurrentLng = value1.longitude.toString();
+          })
             .catchError((error) =>
             print("Failed to add Location: $error"));
       });
@@ -259,9 +269,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
           {
             isArrived = true;
           }
-
     });
-    //return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
   }
 
   mechanicMarker(LatLng latLng) {
@@ -442,295 +450,41 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   }
 
 
-
-
   @override
   Widget build(BuildContext context) {
-    Timer.periodic(Duration(seconds: 20), (Timer t) {
+    timer = Timer.periodic(Duration(seconds: 10), (timer) {
       _getCurrentLocation();
     });
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
+      child: WillPopScope(
+        onWillPop: ()async{
+          Navigator.pushNamed(context, '/mechanicHomeScreen').then((_) => setState(() {}));
+          return true;
+        },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
 
-            //_googleMap != null ? _googleMap! : CircularProgressIndicator(),
+              //_googleMap != null ? _googleMap! : CircularProgressIndicator(),
 
-            GoogleMap( //Map widget from google_maps_flutter package
-              zoomGesturesEnabled: true, //enable Zoom in, out on map
-              initialCameraPosition: _kGooglePlex!,
-              markers: markers, //markers to show on map
-              polylines: Set<Polyline>.of(polylines.values), //polylines
-              mapType: MapType.normal, //map type
-              onMapCreated: (controller) { //method called when map is created
-                setState(() {
-                  controller.setMapStyle(_mapStyle);
-                  mapController = controller;
-                });
-              },
-            ),
-
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20,10,20,30),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20,10,20,10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                height: 20,
-                                width: 20,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(5,5,5,10),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      carName,
-                                      //"Toyota Corolla Silver",
-                                      style: Styles.appBarTextBlack17,
-                                    ),
-                                    Text(
-                                      //"Service Id :Vien232",
-                                      "Plate No : " + plateNumber,
-                                      style: Styles.SelectLanguageWalkThroughStyle,
-                                    ),
-                                    Text(
-                                      //"Service Id :Vien232",
-                                      "Vehicle Color : " + carColor,
-                                      style: Styles.SelectLanguageWalkThroughStyle,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          Row(
-                            children: [
-
-                              Column(
-                                children: [
-                                  Container(
-                                    height: 20,
-                                    width: 20,
-                                    child: SvgPicture.asset(
-                                      'assets/image/mechanicProfileView/directionMechnanicTracking.svg',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: FDottedLine(
-                                      color: CustColors.blue,
-                                      height: 60.0,
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 20,
-                                    width: 20,
-                                    child: SvgPicture.asset(
-                                      'assets/image/mechanicProfileView/clockMechnanicTracking.svg',
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Container(
-                                      height: 60,
-                                      width: 200,
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Address",
-                                            style: Styles.waitingTextBlack17,
-                                          ),
-                                          Text(
-                                            customerAddress,
-                                            //"Elenjikkal house,Residency Empyreal Garden Anchery P.o Thrissur-680006",
-                                            style: Styles.awayTextBlack,
-                                            textAlign: TextAlign.start,
-                                            maxLines: 3,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(5),
-                                        child: Container(
-                                          height: 40,
-                                          width: 150,
-                                          child:  Column(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                int.parse('${(distanceInMeters).toString().split('.').first}') <= 500
-                                                    ? "${(distanceInMeters).toStringAsFixed(2)} m"
-                                                    : "${(distanceInMeters/1000).toStringAsFixed(2)} km",
-                                                style: Styles.waitingTextBlack17,
-                                                maxLines: 1,
-                                              ),
-                                              Text(
-                                                "Away",
-                                                style: Styles.awayTextBlack,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        alignment: Alignment.bottomLeft,
-
-                                        child: MaterialButton(
-                                          onPressed: () {
-                                            updateToCloudFirestoreDB();
-                                          },
-                                          child: Container(
-                                            height: 30,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  'Arrived',
-                                                  textAlign: TextAlign.center,
-                                                  style: Styles.textButtonLabelSubTitle,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          color: isArrived ? CustColors.light_navy :  CustColors.greyText,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(
-                                                  _setValue(10))),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: CustColors.blue,
-                        borderRadius: BorderRadius.only(
-                            bottomRight:   Radius.circular(20),
-                            bottomLeft:  Radius.circular(20)),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: (){
-                                String callPhoneNumber = "90488878777";
-                                _callPhoneNumber(callPhoneNumber);
-                              },
-                              child: Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.phone, color: Colors.white),
-                                    Text(
-                                      "Call",
-                                      style: Styles.popUPTextStyle,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child:  InkWell(
-                              onTap: (){
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ChatScreen(
-                                          peerId: customerId,
-                                          bookingId: '$bookingId',
-                                          collectionName: 'ResolMech',
-                                          currentUserId: mechanicId,
-                                          peerName: customerName,
-                                          peerImageUrl: customerProfileUrl,
-                                          myImageUrl: mechanicProfileUrl,
-                                        )));
-                              },
-                              child: Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.chat, color: Colors.white),
-                                    Text(
-                                      "Chat",
-                                      style: Styles.popUPTextStyle,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child:  Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.smartphone_sharp, color: Colors.white),
-                                  Text(
-                                    "Call via ResolMech",
-                                    style: Styles.popUPTextStyle,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              GoogleMap( //Map widget from google_maps_flutter package
+                zoomGesturesEnabled: true, //enable Zoom in, out on map
+                initialCameraPosition: _kGooglePlex!,
+                markers: markers, //markers to show on map
+                polylines: Set<Polyline>.of(polylines.values), //polylines
+                mapType: MapType.normal, //map type
+                onMapCreated: (controller) { //method called when map is created
+                  setState(() {
+                    controller.setMapStyle(_mapStyle);
+                    mapController = controller;
+                  });
+                },
               ),
-            ),
 
-            Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20,20,20,50),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20,10,20,30),
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -743,31 +497,255 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                     children: <Widget>[
 
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                        padding: const EdgeInsets.fromLTRB(20,10,20,10),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
-                                /*Container(
-                                    child: Icon(Icons.arrow_back, color: Colors.black),
-                                  ),*/
+                                Container(
+                                  height: 20,
+                                  width: 20,
+                                ),
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(15,0,15,0),
+                                  padding: const EdgeInsets.fromLTRB(5,5,5,10),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Find your customer",
-                                        textAlign: TextAlign.start,
-                                        style: Styles.waitingTextBlack17,
+                                        carName,
+                                        //"Toyota Corolla Silver",
+                                        style: Styles.appBarTextBlack17,
+                                      ),
+                                      Text(
+                                        //"Service Id :Vien232",
+                                        "Plate No : " + plateNumber,
+                                        style: Styles.SelectLanguageWalkThroughStyle,
+                                      ),
+                                      Text(
+                                        //"Service Id :Vien232",
+                                        "Vehicle Color : " + carColor,
+                                        style: Styles.SelectLanguageWalkThroughStyle,
                                       ),
                                     ],
                                   ),
                                 ),
                               ],
+                            ),
+
+                            Row(
+                              children: [
+
+                                Column(
+                                  children: [
+                                    Container(
+                                      height: 20,
+                                      width: 20,
+                                      child: SvgPicture.asset(
+                                        'assets/image/mechanicProfileView/directionMechnanicTracking.svg',
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(5),
+                                      child: FDottedLine(
+                                        color: CustColors.blue,
+                                        height: 60.0,
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 20,
+                                      width: 20,
+                                      child: SvgPicture.asset(
+                                        'assets/image/mechanicProfileView/clockMechnanicTracking.svg',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(5),
+                                      child: Container(
+                                        height: 60,
+                                        width: 200,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Address",
+                                              style: Styles.waitingTextBlack17,
+                                            ),
+                                            Text(
+                                              customerAddress,
+                                              //"Elenjikkal house,Residency Empyreal Garden Anchery P.o Thrissur-680006",
+                                              style: Styles.awayTextBlack,
+                                              textAlign: TextAlign.start,
+                                              maxLines: 3,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(5),
+                                          child: Container(
+                                            height: 40,
+                                            width: 150,
+                                            child:  Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  int.parse('${(distanceInMeters).toString().split('.').first}') <= 500
+                                                      ? "${(distanceInMeters).toStringAsFixed(2)} m"
+                                                      : "${(distanceInMeters/1000).toStringAsFixed(2)} km",
+                                                  style: Styles.waitingTextBlack17,
+                                                  maxLines: 1,
+                                                ),
+                                                Text(
+                                                  "Away",
+                                                  style: Styles.awayTextBlack,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          alignment: Alignment.bottomLeft,
+
+                                          child: MaterialButton(
+                                            onPressed: () {
+                                              updateToCloudFirestoreDB();
+                                            },
+                                            child: Container(
+                                              height: 30,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    'Arrived',
+                                                    textAlign: TextAlign.center,
+                                                    style: Styles.textButtonLabelSubTitle,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            color: isArrived ? CustColors.light_navy :  CustColors.greyText,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                    _setValue(10))),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: CustColors.light_navy,
+                          borderRadius: BorderRadius.only(
+                              bottomRight:   Radius.circular(20),
+                              bottomLeft:  Radius.circular(20)),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: InkWell(
+                                onTap: (){
+                                  //String callPhoneNumber = "90488878777";
+                                  _callPhoneNumber(callPhoneNumber);
+                                },
+                                child: Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                          height : 25,
+                                          width: 25,
+                                          child: Image.asset("assets/image/ic_call_blue_white.png")
+                                      ),
+                                      Text(
+                                        "Call",
+                                        style: Styles.popUPTextStyle,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child:  InkWell(
+                                onTap: (){
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ChatScreen(
+                                            peerId: customerId,
+                                            bookingId: '$bookingId',
+                                            collectionName: 'ResolMech',
+                                            currentUserId: mechanicId,
+                                            peerName: customerName,
+                                            peerImageUrl: customerProfileUrl,
+                                            myImageUrl: mechanicProfileUrl,
+                                          )));
+                                },
+                                child: Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                          height : 25,
+                                          width: 25,
+                                          child: Image.asset("assets/image/ic_chat_blue_white.png")
+                                      ),
+                                      Text(
+                                        "Chat",
+                                        style: Styles.popUPTextStyle,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child:  Container(
+                                child: InkWell(
+                                  onTap: (){
+                                    launchMapsUrl(mechanicCurrentLat,mechanicCurrentLng,double.parse('${widget.latitude}'), double.parse('${widget.longitude}'));
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                          height : 25,
+                                          width: 25,
+                                          child: Image.asset("assets/image/ic_navigate_blue_white.png")
+                                      ),
+                                      Text(
+                                        "Navigate",
+                                        style: Styles.popUPTextStyle,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -776,8 +754,59 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                   ),
                 ),
               ),
-            ),
-          ],
+
+              Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20,20,20,50),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  /*Container(
+                                      child: Icon(Icons.arrow_back, color: Colors.black),
+                                    ),*/
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(15,0,15,0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Find your customer",
+                                          textAlign: TextAlign.start,
+                                          style: Styles.waitingTextBlack17,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -792,9 +821,28 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
     }
   }
 
+  static void launchMapsUrl(
+      sourceLatitude,
+      sourceLongitude,
+      destinationLatitude,
+      destinationLongitude) async {
+    String mapOptions = [
+      'saddr=$sourceLatitude,$sourceLongitude',
+      'daddr=$destinationLatitude,$destinationLongitude',
+      'dir_action=navigate'
+    ].join('&');
+
+    final url = 'https://www.google.com/maps?$mapOptions';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }  }
+
   @override
   void dispose() {
     super.dispose();
+    timer?.cancel();
     _mechanicOrderStatusUpdateBloc.dispose();
   }
 

@@ -1659,9 +1659,9 @@ class QueryProvider {
     String _query = """
                 {
                  mechanicServicesList(
-                   mechanicId: ${int.parse(mechanicId.toString())}, 
-                   page: ${int.parse(page.toString())}, 
-                   size: ${int.parse(size.toString())}, 
+                   mechanicId: ${int.parse(mechanicId.toString())} 
+                   page: ${int.parse(page.toString())} 
+                   size: ${int.parse(size.toString())} 
                    search: "$search") 
                   {
                     totalItems

@@ -14,6 +14,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_part_bloc/home_sp
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_screen.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/mechanic_waiting_payment.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/AddRegularMoreServices/add_more_regular_service_list_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
@@ -46,7 +47,7 @@ class HomeCustomerUIScreen extends StatefulWidget {
   }
 }
 
-class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
+class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> with WidgetsBindingObserver{
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
   TextEditingController searchController = new TextEditingController();
@@ -65,13 +66,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   String mechanicIdEmergency = "";
   String bookingIdEmergency = "";
   String addressLocationText = "";
-
-  final List<String> imageList = [
-    "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
-    'https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage2.png?alt=media&token=419e2555-5c26-4295-8201-6c78f1ed563e',
-    "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
-    'https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage2.png?alt=media&token=419e2555-5c26-4295-8201-6c78f1ed563e',
-  ];
 
   bool isEmergencyService = false;
   bool isRegularService = true;
@@ -103,6 +97,19 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   String mechanicId = "", bookingId = "", vehicleName = "", customerName = "";
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _hasActiveService = false;
+    // Timer.periodic(const Duration(seconds: 90), (Timer t) {
+    //   _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
+    // });
+    getSharedPrefData();
+    _getCurrentCustomerLocation(false);
+    _listenServiceListResponse();
+  }
+
+  @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     getSharedPrefData();
@@ -115,18 +122,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     super.didUpdateWidget(oldWidget);
     _getCurrentCustomerLocation(false);
     getSharedPrefData();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _hasActiveService = false;
-    Timer.periodic(const Duration(seconds: 90), (Timer t) {
-      _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
-    });
-    getSharedPrefData();
-    _getCurrentCustomerLocation(false);
-    _listenServiceListResponse();
   }
 
   Future<void> setFcmToken(String Authtoken) async {
@@ -148,10 +143,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           shdPre.getString(SharedPrefKeys.preferredLongitude).toString();
       preferredAddress =
           shdPre.getString(SharedPrefKeys.preferredAddress).toString();
-
-
-
-
 
       if ((preferredLatitude.toString() != "" &&
               preferredLatitude.toString() != "null") &&
@@ -181,6 +172,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         print(
             'serviceIdEmergency>>>>>>>>000000' + serviceIdEmergency.toString());
       }
+      _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
 
       _homeCustomerBloc.postEmergencyServiceListRequest(
           "$authToken", "1", null, null);
@@ -224,13 +216,15 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
     _homeCustomerBloc.postCustomerActiveServiceResponse.listen((value) {
       if(value.status == "error"){
-        setState(() {
-          //_isLoading = false;
-          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+        SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+        if(mounted){
+          setState(() {
+            //_isLoading = false;
             _hasActiveService = false;
+            print("snackbareerror");
+          });
+        }
 
-          print("snackbareerror");
-        });
       }else{
         print("hasActiveService>>>> ${value.data?.currentlyWorkingServiceCustomer.toString()}");
         print(value.data?.currentlyWorkingServiceCustomer.toString());
@@ -239,34 +233,38 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
             && value.data?.currentlyWorkingServiceCustomer.toString() != null
             && value.data?.currentlyWorkingServiceCustomer.toString() != 'null')
         {
-          setState(() {
-            _hasActiveService = true;
-            setReminderData(value.data?.currentlyWorkingServiceCustomer![0].id.toString());
-            print("hasActiveService>>>> true");
-          });
+          if(mounted){
+            setState(() {
+              _hasActiveService = true;
+              setReminderData(value.data?.currentlyWorkingServiceCustomer![0].id.toString());
+              print("hasActiveService>>>> true");
+            });
+          }
         }
         else {
-          setState(()  {
-            _hasActiveService = false;
-            print("hasActiveService>>>> false");
-          });
+          if(mounted){
+            setState(()  {
+              _hasActiveService = false;
+              print("hasActiveService>>>> false");
+            });
+          }
         }
       }
     });
   }
 
-  Future<void> setReminderData(String? bookedId) async {
+  Future<void> setReminderData(String? bookedId01) async {
     /*SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
     });*/
-     _firestore.collection("ResolMech").doc('$bookedId').snapshots().listen((event) {
-      print('_firestore >>> $bookedId' );
+     _firestore.collection("ResolMech").doc('$bookedId01').snapshots().listen((event) {
+      print('_firestore >>> $bookedId01' );
       setState(() {
         vehicleName = event.get('carName');
-        customerName = event.get('customerName');
+        customerName = event.get('mechanicName');
         firebaseScreen = event.get('customerFromPage');
-        bookingIdEmergency = bookingId;
+        bookingIdEmergency = bookedId01!;
         firebaseCustomerLatitude = event.get('customerLatitude');
         firebaseCustomerLongitude = event.get('customerLongitude');
 
@@ -397,9 +395,12 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
             Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) =>  MechanicTrackingScreen(latitude: "${firebaseCustomerLatitude}",
-                longitude:  "${firebaseCustomerLongitude}",bookingId: bookingIdEmergency,)
+              builder: (context) =>  MechanicTrackingScreen(
+                latitude: "${firebaseCustomerLatitude}",
+                longitude:  "${firebaseCustomerLongitude}",
+                bookingId: bookingIdEmergency,)
           )).then((value){
+              _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
       });
           }else if(firebaseScreen == "C2" || firebaseScreen == "C4" || firebaseScreen == "C5" ){     //firebaseScreen == "C3"
             Navigator.pushReplacement(
@@ -407,6 +408,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 MaterialPageRoute(
                     builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1")
                 )).then((value){
+              _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
             });
           }else if(firebaseScreen == "C3"){
             Navigator.push(
@@ -414,21 +416,32 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 MaterialPageRoute(
                     builder: (context) =>  CustomerApprovedScreen(starttime:"",endtime: "",remaintime: "", isFromHome: false,)
                 )).then((value){
+              _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
             });
           }else if(firebaseScreen == "C4"){
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MechanicWorkCompletedScreen()));
+                    builder: (context) => MechanicWorkCompletedScreen())).then((value){
+              _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
+            });
           }else if(firebaseScreen == "C5"){
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) =>  DirectPaymentScreen(isMechanicApp: true, isPaymentFailed: true,)
                 )).then((value){
-
+              _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
             });
           }else if(firebaseScreen == "C6"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  MechanicWaitingPaymentScreen()
+                )).then((value){
+              _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
+            });
+
             print("Service Completed");
           }
         },
@@ -1644,6 +1657,12 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       color: Colors.black,
       letterSpacing: .7,
       wordSpacing: .7);
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 }
 
 class MyBehavior extends ScrollBehavior {

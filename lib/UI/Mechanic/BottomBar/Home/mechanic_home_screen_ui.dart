@@ -39,7 +39,7 @@ class MechanicHomeUIScreen extends StatefulWidget {
   }
 }
 
-class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
+class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> with WidgetsBindingObserver{
   late final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   FcmTokenUpdateBloc _fcmTokenUpdateBloc = FcmTokenUpdateBloc();
 
@@ -64,12 +64,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
   bool _hasActiveService = false;
 
-  final List<String> imageList = [
-    "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
-    'https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage2.png?alt=media&token=419e2555-5c26-4295-8201-6c78f1ed563e',
-    "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
-    'https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage2.png?alt=media&token=419e2555-5c26-4295-8201-6c78f1ed563e',
-  ];
 
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -78,12 +72,13 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _hasActiveService = false;
     getSharedPrefData();
 
-    _hasActiveService = false;
     Timer.periodic(const Duration(seconds: 90), (Timer t) {
-      _mechanicHomeBloc.postMechanicActiveServiceRequest(
-          "$authToken", mechanicId);
+      // _mechanicHomeBloc.postMechanicActiveServiceRequest(
+      //     "$authToken", mechanicId);
       _getCurrentMechanicLocation();
     });
 
@@ -98,6 +93,13 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     print("xkkhhnbb 001");
     setFcmToken(authToken);
     getSharedPrefData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    getSharedPrefData();
+    super.didChangeDependencies();
   }
 
   void registerNotification() async {
@@ -127,6 +129,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       print('userId  MechanicHomeUIScreen ' + mechanicId.toString());
       setFcmToken(authToken);
       _getCurrentMechanicLocation();
+      _mechanicHomeBloc.postMechanicActiveServiceRequest("$authToken", mechanicId);
       _mechanicProfileBloc.postMechanicFetchProfileRequest(
           authToken, mechanicId);
       _mechanicHomeBloc.postMechanicUpComingServiceRequest(
@@ -189,9 +192,11 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           //_isLoading = false;
           SnackBarWidget()
               .setMaterialSnackBar(value.message.toString(), _scaffoldKey);
-          setState(() {
-            _hasActiveService = false;
-          });
+          if(mounted){
+            setState(() {
+              _hasActiveService = false;
+            });
+          }
           print("snackbareerror");
         });
       } else {
@@ -202,17 +207,22 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
             value.data?.currentlyWorkingService.toString() != '[]' &&
             value.data?.currentlyWorkingService.toString() != null &&
             value.data?.currentlyWorkingService.toString() != 'null') {
-          setState(() {
-            _hasActiveService = true;
-            setReminderData(
-                value.data?.currentlyWorkingService![0].id.toString());
-            print("hasActiveService>>>> true");
-          });
+          if(mounted){
+            setState(() {
+              _hasActiveService = true;
+              setReminderData(
+                  value.data?.currentlyWorkingService![0].id.toString());
+              print("hasActiveService>>>> true");
+            });
+          }
+
         } else {
-          setState(() {
-            _hasActiveService = false;
-            print("hasActiveService>>>> false");
-          });
+          if(mounted){
+            setState(() {
+              _hasActiveService = false;
+              print("hasActiveService>>>> false");
+            });
+          }
         }
       }
     });
@@ -233,9 +243,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         vehicleName = event.get('carName');
         customerName = event.get('customerName');
         firebaseScreen = event.get('mechanicFromPage');
-        totalstarttimecurrenttimevalue = event.get("totalstarttimecurrenttimevalue");
         firebaseCustomerLatitude = event.get('customerLatitude');
         firebaseCustomerLongitude = event.get('customerLongitude');
+        totalstarttimecurrenttimevalue = event.get("totalstarttimecurrenttimevalue");
       });
     });
   }
@@ -947,6 +957,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       child: InkWell(
         onTap: () async {
           if (firebaseScreen == "M1") {
+            print("firebaseCustomerLatitude : $firebaseCustomerLatitude firebaseCustomerLongitude : $firebaseCustomerLongitude");
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -954,12 +965,18 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                           latitude: firebaseCustomerLatitude /*"10.0159"*/,
                           longitude: firebaseCustomerLongitude /*"76.3419"*/,
                           //notificationPayloadMdl: widget.notificationPayloadMdl,
-                        )));
+                        ))).then((value){
+              _mechanicHomeBloc.postMechanicActiveServiceRequest(
+                  "$authToken", mechanicId);
+            });
           } else if (firebaseScreen == "M2") {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MechanicStartServiceScreen()));
+                    builder: (context) => MechanicStartServiceScreen())).then((value){
+              _mechanicHomeBloc.postMechanicActiveServiceRequest(
+                  "$authToken", mechanicId);
+            });
           } else if (firebaseScreen == "M3") {
             /// storing start time and end time in shared pref
             ///
@@ -982,7 +999,10 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                         remaintime: "0",
                         starttime: "",
                         endtime: "",
-                      )));
+                      ))).then((value){
+                _mechanicHomeBloc.postMechanicActiveServiceRequest(
+                    "$authToken", mechanicId);
+              });
             }
             else{
               await    Repository().timedifferenceapi(DateFormat("HH:mm:ss").format(DateTime.now()), totalstarttimecurrenttimevalue).then((value) => {
@@ -1012,11 +1032,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
               });
             }
 
-
-
-
-
-
             // Navigator.push(
             //     context,
             //     MaterialPageRoute(
@@ -1029,7 +1044,10 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MechanicWorkCompletedScreen()));
+                    builder: (context) => MechanicWorkCompletedScreen())).then((value){
+              _mechanicHomeBloc.postMechanicActiveServiceRequest(
+                  "$authToken", mechanicId);
+            });
           } else if (firebaseScreen == "M5") {
             Navigator.push(
                 context,
@@ -1037,7 +1055,10 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                     builder: (context) => DirectPaymentScreen(
                           isMechanicApp: true,
                           isPaymentFailed: true,
-                        ))).then((value) {});
+                        ))).then((value) {
+              _mechanicHomeBloc.postMechanicActiveServiceRequest(
+                  "$authToken", mechanicId);
+            });
           } else if (firebaseScreen == "M6") {
             print("Service Completed");
           }
@@ -1081,5 +1102,11 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 }

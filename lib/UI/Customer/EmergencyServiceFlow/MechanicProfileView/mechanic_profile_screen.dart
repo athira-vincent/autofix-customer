@@ -95,6 +95,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   String carPlateNumber="", carColor = "";
 
   late StateSetter mechanicAcceptance;
+  bool _isLoading = false;
+  bool isExpanded = false;
 
   @override
   void initState() {
@@ -109,11 +111,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     });
     getSharedPrefData();
     _listen();
-
+    _isLoading = true;
     _listenNotification(context);
   }
-
-
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
@@ -146,11 +146,13 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     _homeCustomerBloc.MechanicProfileDetailsResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
+          _isLoading = false;
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
         });
       } else {
         setState(() {
+          _isLoading = false;
           _mechanicDetailsMdl = value;
           reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}') >= 2 ? 2 : _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length;
 
@@ -445,13 +447,29 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
+          child: _isLoading
+              ? Visibility(
+            visible: true,
+            child: Container(
+              height: size.height,
+              child: Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      CustColors.light_navy),
+                ),
+              ),
+            ),
+          )
+              : Column(
             children: [
               appBarCustomUi(size),
               profileImageAndKmAndReviewCount(size),
               timeAndLocationUi(size),
 
-              _mechanicDetailsMdl == null
+              /*_mechanicDetailsMdl == null
+                  ? Container()
+                  : reviewsUi(size),*/
+              _mechanicDetailsMdl!.data!.mechanicDetails!.mechanicReviewsData.toString() == '[]'
                   ? Container()
                   : reviewsUi(size),
               selectedServiceDetailsUi(size),
@@ -591,7 +609,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                           :
                                       SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
                                   )))
-
                       ),
                     ),
                   ),
@@ -635,7 +652,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                       )
                     ],
                   ),
-
                 ],
               ),
             ),
@@ -742,13 +758,13 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(10,10,10,10),
                                   child: Container(
-                                    width: 80.0,
-                                    height: 80.0,
+                                    width: 70.0,
+                                    height: 70.0,
                                     child: ClipRRect(
                                         borderRadius: BorderRadius.circular(20.0),
                                         child:Container(
                                             child:CircleAvatar(
-                                                radius: 50,
+                                                radius: 40,
                                                 backgroundColor: Colors.white,
                                                 child: ClipOval(
                                                   child:
@@ -776,7 +792,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.all(2),
+                                          padding: const EdgeInsets.all(3),
                                           child: Text('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings?.customer?.firstName} ${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings?.customer?.lastName}',
                                             style: Styles.textLabelTitle12,
                                             maxLines: 1,
@@ -809,7 +825,13 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             InkWell(
               onTap: (){
                 setState(() {
-                  reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}');
+                  if(!isExpanded){
+                    reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}');
+                    isExpanded = true;
+                  }else{
+                    reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}') >= 2 ? 2 : _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length;
+                    isExpanded = false;
+                  }
                   print('reviewLength $reviewLength');
                   print('reviewLength ${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}');
                 });
@@ -824,9 +846,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                     width: 110,
                     color: CustColors.greyText,
                   ),
-                  const Padding(
+                   Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Text('Load more',
+                    child: Text( isExpanded ? 'Show less' : 'Load more',
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.visible,
@@ -919,7 +941,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
               child: Row(
                 children: [
                   Row(
-                    children: const [
+                    children: [
                       Text('Total Amount',
                         maxLines: 2,
                         textAlign: TextAlign.start,
@@ -928,7 +950,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                       ),
                     ],
                   ),
-                  const Spacer(),
+                  Spacer(),
                   Row(
                     children: [
                       Text('${widget.mechanicListData?.totalAmount}',

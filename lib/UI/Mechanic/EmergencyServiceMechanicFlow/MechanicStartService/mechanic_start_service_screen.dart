@@ -5,8 +5,10 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/AA/add_more_service_list_screen.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_screen_ui.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:auto_fix/Widgets/mechanicWorkTimer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,6 +30,7 @@ class MechanicStartServiceScreen extends StatefulWidget {
 
 class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     with TickerProviderStateMixin {
+
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc =
       MechanicOrderStatusUpdateBloc();
@@ -252,131 +255,138 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                width: size.width,
-                height: size.height,
-                color: Colors.white,
-                child: Container(
-                  child: isWaiting == "0"
-                      ? waitCustomerResponseWidget(size)
-                      : isWaiting == "1"
-                          ? customerResponseAcceptRejectWidget(size)
-                          : isWaiting == "-1"
-                              ? customerResponseAcceptRejectWidget(size)
-                              : Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      mechanicStartServiceTitle(size),
-                                      mechanicStartServiceImage(size),
-                                      mechanicEditSelectedService(
-                                          size, "$selectedServiceName"),
-                                      mechanicAdditionalFaultService(size, ""),
-                                      InkWell(
-                                        onTap: () {
-                                          print(
-                                              " on Tap - Add More _awaitReturnValueFromSecondScreenOnAdd");
-                                          setState(() {
-                                            _awaitReturnValueFromSecondScreenOnAdd(
-                                                context);
-                                          });
-                                        },
-                                        child: Align(
-                                            alignment: Alignment.centerRight,
-                                            child: Container(
-                                                margin: EdgeInsets.only(
-                                                    right: size.width * 8 / 100,
-                                                    top: size.height *
-                                                        1.2 /
-                                                        100),
-                                                child: Text(
-                                                  "Add more",
-                                                  style: TextStyle(
-                                                    fontSize: 20,
-                                                    fontFamily:
-                                                        "SharpSans_Bold",
-                                                    fontWeight: FontWeight.w700,
-                                                    color:
-                                                        CustColors.light_navy,
-                                                  ),
-                                                ))),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(
-                                            top: size.height * 6 / 100),
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              alignment: Alignment.center,
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  SvgPicture.asset(
-                                                    'assets/image/ic_alarm.svg',
-                                                    width: size.width * 4 / 100,
-                                                    height:
-                                                        size.height * 4 / 100,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  /* Expanded(
-                                                child: Text("$serviceTotalTimeForFirebase:00",
-                                                  style: TextStyle(
-                                                      fontSize: 36,
-                                                      fontFamily: "SharpSans_Bold",
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.black,
-                                                      letterSpacing: .7
-                                                  ),
-                                                ),
-                                              ),*/
-
-                                                  CountdownMechanicTimer(
-                                                    animation: StepTween(
-                                                      begin: levelClock,
-                                                      // THIS IS A USER ENTERED NUMBER
-                                                      end: 0,
-                                                    ).animate(_controller),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                    Radius.circular(13),
-                                                  ),
-                                                  border: Border.all(
-                                                      color: CustColors
-                                                          .light_navy02,
-                                                      width: 0.3)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                    "Total estimated time "),
-                                              ),
-                                            )
-                                          ],
+      child: WillPopScope(
+        onWillPop: () async{
+          Navigator.pushNamed(context, '/mechanicHomeScreen').then((_) => setState(() {}));
+          return true;
+        },
+        child: Scaffold(
+          //restorationId: ,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  width: size.width,
+                  height: size.height,
+                  color: Colors.white,
+                  child: Container(
+                    child: isWaiting == "0"
+                        ? waitCustomerResponseWidget(size)
+                        : isWaiting == "1"
+                            ? customerResponseAcceptRejectWidget(size)
+                            : isWaiting == "-1"
+                                ? customerResponseAcceptRejectWidget(size)
+                                : Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        mechanicStartServiceTitle(size),
+                                        mechanicStartServiceImage(size),
+                                        mechanicEditSelectedService(
+                                            size, "$selectedServiceName"),
+                                        mechanicAdditionalFaultService(size, ""),
+                                        InkWell(
+                                          onTap: () {
+                                            print(
+                                                " on Tap - Add More _awaitReturnValueFromSecondScreenOnAdd");
+                                            setState(() {
+                                              _awaitReturnValueFromSecondScreenOnAdd(
+                                                  context);
+                                            });
+                                          },
+                                          child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: size.width * 8 / 100,
+                                                      top: size.height *
+                                                          1.2 /
+                                                          100),
+                                                  child: Text(
+                                                    "Add more",
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontFamily:
+                                                          "SharpSans_Bold",
+                                                      fontWeight: FontWeight.w700,
+                                                      color:
+                                                          CustColors.light_navy,
+                                                    ),
+                                                  ))),
                                         ),
-                                      ),
-                                      mechanicStartServiceButton(size),
-                                    ],
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              top: size.height * 6 / 100),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                alignment: Alignment.center,
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      'assets/image/ic_alarm.svg',
+                                                      width: size.width * 4 / 100,
+                                                      height:
+                                                          size.height * 4 / 100,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    /* Expanded(
+                                                  child: Text("$serviceTotalTimeForFirebase:00",
+                                                    style: TextStyle(
+                                                        fontSize: 36,
+                                                        fontFamily: "SharpSans_Bold",
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.black,
+                                                        letterSpacing: .7
+                                                    ),
+                                                  ),
+                                                ),*/
+
+                                                    CountdownMechanicTimer(
+                                                      animation: StepTween(
+                                                        begin: levelClock,
+                                                        // THIS IS A USER ENTERED NUMBER
+                                                        end: 0,
+                                                      ).animate(_controller),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                      Radius.circular(13),
+                                                    ),
+                                                    border: Border.all(
+                                                        color: CustColors
+                                                            .light_navy02,
+                                                        width: 0.3)),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                      "Total estimated time "),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        mechanicStartServiceButton(size),
+                                      ],
+                                    ),
                                   ),
-                                ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
