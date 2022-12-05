@@ -133,8 +133,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                  context,
                  MaterialPageRoute(
                      builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1")
-                 )).then((value){
-             });
+                 ));
            }
          });
        }
@@ -265,10 +264,10 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return  SafeArea(
+    return SafeArea(
       child: WillPopScope(
         onWillPop: () async{
-          HomeCustomerUIScreen().createState();
+          Navigator.pushNamed(context, '/customerMainLandingScreen').then((_) => setState(() {}));
           return true;
         },
         child: Scaffold(
@@ -592,6 +591,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
       ),
     );
   }
+
   void _callPhoneNumber(String phoneNumber) async {
     var url = 'tel://$phoneNumber';
     if (await canLaunch(url)) {

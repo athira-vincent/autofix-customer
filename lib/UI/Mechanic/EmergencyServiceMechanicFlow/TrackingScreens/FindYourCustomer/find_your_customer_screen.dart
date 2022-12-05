@@ -84,7 +84,8 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   bool isArrived = false;
   String callPhoneNumber = "";
   String mechanicCurrentLat = "", mechanicCurrentLng = "";
-  Timer? timer;
+  Timer? timerObjVar;
+  Timer? timerObj;
 
   @override
   void initState() {
@@ -449,10 +450,9 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         print("Failed to add Location: $error"));
   }
 
-
   @override
   Widget build(BuildContext context) {
-    timer = Timer.periodic(Duration(seconds: 10), (timer) {
+    Timer.periodic(Duration(seconds: 10), (timer) {
       _getCurrentLocation();
     });
     return SafeArea(
@@ -842,8 +842,20 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   @override
   void dispose() {
     super.dispose();
-    timer?.cancel();
+    cancelTimer();
     _mechanicOrderStatusUpdateBloc.dispose();
+  }
+  cancelTimer() {
+
+    if (timerObjVar != null) {
+      timerObjVar?.cancel();
+      timerObjVar = null;
+    }
+
+    if (timerObj != null) {
+      timerObj?.cancel();
+      timerObj = null;
+    }
   }
 
 }
