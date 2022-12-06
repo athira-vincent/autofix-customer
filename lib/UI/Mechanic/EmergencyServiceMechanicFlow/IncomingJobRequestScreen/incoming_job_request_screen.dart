@@ -46,7 +46,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  bool _isLoading = false;
+  //bool _isLoading = false;
   //late bool _isJobOfferAccepted;
 
   late int isAccepted;
@@ -61,7 +61,6 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   bool SliderVal = false;
   String? FcmToken ="";
 
-  int _counter = 0;
   late AnimationController _controller;
   int levelClock = 30;
   String authToken = "", userId = "";
@@ -376,7 +375,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
     _mechanicOrderStatusUpdateBloc.MechanicOrderStatusUpdateResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
-          _isLoading = false;
+          //_isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.message.toString(),
                 style: const TextStyle(
@@ -388,7 +387,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         });
       } else {
         setState(() {
-          _isLoading = false;
+          //_isLoading = false;
           print('getSharedPrefData');
           callOnFcmApiSendPushNotifications(1);
           /*Navigator.pushReplacement(context,
@@ -654,8 +653,6 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       ],
     );
   }
-
-
 
 }
 

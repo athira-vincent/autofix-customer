@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-import '../Widgets/screen_size.dart';
+import '../../../Widgets/screen_size.dart';
 
 class AddMoreServicesListScreen extends StatefulWidget {
 
@@ -62,11 +62,12 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
           "");
 
     });
-    await _firestore.collection("ResolMech").doc('${bookingId}').snapshots().listen((event) {
+    /*await _firestore.collection("ResolMech").doc('${bookingId}').snapshots().listen((event) {
+
       setState(() {
 
       });
-    });
+    });*/
   }
 
   _listenServiceListResponse() {

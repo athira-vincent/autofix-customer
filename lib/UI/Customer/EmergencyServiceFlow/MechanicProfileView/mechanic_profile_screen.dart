@@ -68,7 +68,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
 
-
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   List yourItemList = [];
@@ -426,7 +425,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>   MechanicTrackingScreen(latitude: widget.latitude,
+                    builder: (context) => MechanicTrackingScreen(latitude: widget.latitude,
                       longitude:  widget.longitude,bookingId: "${notificationPayloadMdl.bookingId}",)
                 )).then((value){
             });

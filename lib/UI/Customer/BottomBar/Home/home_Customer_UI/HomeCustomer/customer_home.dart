@@ -12,6 +12,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_part_bloc/home_sp
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_part_bloc/home_spare_part_event.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_part_bloc/home_spare_part_state.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mechanic_tracking_Screen.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/ExtraDiagnosisScreen/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/mechanic_waiting_payment.dart';
@@ -414,7 +415,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> with Widget
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>  CustomerApprovedScreen(starttime:"",endtime: "",remaintime: "", isFromHome: false,)
+                    builder: (context) =>  ExtraServiceDiagonsisScreen(isEmergency: true,)
                 )).then((value){
               _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
             });
