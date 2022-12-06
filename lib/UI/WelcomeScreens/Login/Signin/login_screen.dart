@@ -127,31 +127,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                   /* InkWell(
-                                      onTap: (){
-                                        if(language_en_ar==true)
-                                        {
-                                          MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
-                                          setState(() {
-                                            language_en_ar=false;
-                                          });
-                                        }
-                                        else
-                                        {
-                                          MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
-                                          setState(() {
-                                            language_en_ar=true;
-                                          });
-                                        }
-                                      },
-                                      child:*/ Container(
+                                   Container(
                                         child: Text(
                                           AppLocalizations.of(context)!.login ,
                                           //'Login',
                                           style: Styles.textHeadLogin,
                                         ),
                                       ),
-                                   // ),
                                     Padding(
                                       padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
                                       child: Column(
@@ -458,7 +440,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       print('result facebook');
                                                       _loginWithFB();
 
-
                                                     },
                                                   ),
                                                 ),
@@ -559,7 +540,7 @@ class _LoginScreenState extends State<LoginScreen> {
                context,
                MaterialPageRoute(
                    builder: (context) => CustomerMainLandingScreen()));
-           SnackBarWidget().setSnackBar("Customer Login Successful",context);
+           SnackBarWidget().setSnackBar(AppLocalizations.of(context)!.text_login_success_cust,context);
 
          }else {     //if(value.data!.signIn!.user!.userTypeId == "2"
            _shdPre.setInt(SharedPrefKeys.isProfileCompleted, 3);
@@ -583,14 +564,7 @@ class _LoginScreenState extends State<LoginScreen> {
                      return MechanicHomeScreen();}
                ));
 
-           SnackBarWidget().setSnackBar("Mechanic Login Successful",context);
-           /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("Mechanic Login Successful",
-                  style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
-              duration: Duration(seconds: 3),
-              backgroundColor: CustColors.light_navy,
-            ));*/
-           //SnackBarWidget().setSnackBar("Mechanic Login Successful",context);
+           SnackBarWidget().setSnackBar(AppLocalizations.of(context)!.text_login_success_mech,context);
          }
        }else if(value.data!.signIn!.message == ErrorStrings.error_205){
          if(value.data!.signIn!.user!.userTypeId.toString() == "1"){
@@ -696,7 +670,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     builder: (context) => CustomerMainLandingScreen()));
           }
           else if(value.data!.socialLogin!.user!.userTypeId.toString() == "2"){
-            SnackBarWidget().setSnackBar("Mechanic Login Successful",context);
+            SnackBarWidget().setSnackBar(AppLocalizations.of(context)!.text_login_success_mech,context);
             _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 3);
             _signinBloc.userDefault(
                 value.data!.socialLogin!.token.toString(),
@@ -717,7 +691,7 @@ class _LoginScreenState extends State<LoginScreen> {
           }
           else if(value.data!.socialLogin!.user!.userTypeId.toString() == "3"){
             print('Please login through Relex App >>>>>>>>>>>>>>>>+++');
-            SnackBarWidget().setMaterialSnackBar('Please login through Relex App',_scaffoldKey);
+            SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.text_login_using_relex,_scaffoldKey);                // Please login through Relex App'
           }
         });
       }

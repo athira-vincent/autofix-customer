@@ -1572,7 +1572,6 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   }
 
   void showOrganisationTypeSelector() {
-    _signupBloc.searchStates("");
     showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -1667,7 +1666,6 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   }
 
   void showMinistryGovtSelector() {
-    _signupBloc.searchStates("");
     showModalBottomSheet(
         context: context,
         builder: (context) {

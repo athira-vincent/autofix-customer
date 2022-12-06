@@ -1,11 +1,19 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularRateMechanic/regular_rate_mechanic_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class PaymentSuccessScreen extends StatefulWidget {
 
-  PaymentSuccessScreen();
+  String firebaseCollection;
+  String bookingId;
+
+  PaymentSuccessScreen({
+    required this.firebaseCollection,
+    required this.bookingId
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -114,8 +122,21 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
+            onTap: (){
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                  CustomerMainLandingScreen()), (Route<dynamic> route) => false);
+            },
               child: reviewLaterButton(size)),
           InkWell(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => RegularRateMechanicScreen(
+                        bookingId: widget.bookingId,
+                        firebaseCollection: widget.firebaseCollection,
+                      )));
+            },
               child: reviewNowButton(size)),
         ],
       ),

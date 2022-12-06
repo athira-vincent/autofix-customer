@@ -83,9 +83,9 @@ class CurrentlyWorkingServiceCustomer {
   int reqType;
   int bookStatus;
   int totalPrice;
-  int tax;
-  int commission;
-  int serviceCharge;
+  dynamic tax;
+  dynamic commission;
+  dynamic serviceCharge;
   dynamic totalTime;
   String serviceTime;
   double latitude;

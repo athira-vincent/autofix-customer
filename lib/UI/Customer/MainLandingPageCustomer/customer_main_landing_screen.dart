@@ -27,6 +27,8 @@ class CustomerMainLandingScreen extends StatefulWidget {
 
 class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
 
+  static const routeName = '/customerMainLandingScreen';
+
   int _index = 0;
   int _counter = 0;
   var scaffoldKey = GlobalKey<ScaffoldState>();

@@ -15,11 +15,13 @@ import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/order_list_bloc/order_list_bloc.dart';
+import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:auto_fix/UI/Customer/SideBar/CustomerNotifications/cust_notification_list.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyOrders/cacncel_order_bloc/cacncel_order_bloc.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyWallet/customer_wallet_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/IncomingJobRequestScreen/incoming_job_request_screen.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MechanicNotifications/mech_notification_list.dart';
+import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/add_address_bloc/add_address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/address_bloc/address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/bloc/add_cart_bloc.dart';
@@ -256,7 +258,9 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
                   navigatorKey: notificationNavigatorKey,
                   routes: {
                     '/custNotificationList': (_) => CustNotificationList(),
-                    '/mechNotificationList': (_) => MechanicNotificationList()
+                    '/mechNotificationList': (_) => MechanicNotificationList(),
+                    '/mechanicHomeScreen' : (_) => MechanicHomeScreen(),
+                    '/customerMainLandingScreen' : (_) => CustomerMainLandingScreen()
                   },
                   onGenerateRoute: (settings){
                     if (settings.name == '/IncomingJobRequestScreen') {

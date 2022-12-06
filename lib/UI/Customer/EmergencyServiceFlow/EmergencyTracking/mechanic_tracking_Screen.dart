@@ -5,6 +5,8 @@ import 'package:auto_fix/Common/chat/chat.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_UI/HomeCustomer/customer_home.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
@@ -12,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -45,7 +48,7 @@ class MechanicTrackingScreen extends StatefulWidget {
 
 class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
-  String googleAPiKey = "AIzaSyA1s82Y0AiWYbzXwfppyvKLNzFL-u7mArg";
+  String googleAPiKey = TextStrings.googleAPiKey;
   String? _mapStyle;
   Set<Marker> markers = Set(); //markers for google map
   BitmapDescriptor? customerIcon;
@@ -74,6 +77,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
   String bookingIdEmergency="";
+  String callPhoneNumber = "";
   String customerId = "", mechanicId = "", mechanicName = "", mechanicProfileUrl = "", customerProfileUrl = "";
 
   @override
@@ -121,6 +125,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
            mechanicArrivalState = querySnapshot.get("mechanicArrivalState");
            mechanicProfileUrl = querySnapshot.get('mechanicProfileUrl');
            customerProfileUrl = querySnapshot.get('customerProfileUrl');
+           callPhoneNumber = querySnapshot.get('mechanicPhone');
            print('mechanicArrivalState ++++ $mechanicArrivalState');
            if(mechanicArrivalState =="1")
            {
@@ -128,8 +133,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                  context,
                  MaterialPageRoute(
                      builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1")
-                 )).then((value){
-             });
+                 ));
            }
          });
        }
@@ -260,265 +264,78 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return  SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Container(
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
+    return SafeArea(
+      child: WillPopScope(
+        onWillPop: () async{
+          Navigator.pushNamed(context, '/customerMainLandingScreen').then((_) => setState(() {}));
+          return true;
+        },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Container(
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
 
-              StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                stream: _firestoreData,
-                builder: (_, snapshot) {
+                StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                  stream: _firestoreData,
+                  builder: (_, snapshot) {
 
 
-                  if (snapshot.hasError) return Text('Error = ${snapshot.error}');
+                    if (snapshot.hasError) return Text('Error = ${snapshot.error}');
 
-                  if (snapshot.hasData) {
+                    if (snapshot.hasData) {
 
-                    Timer(const Duration(seconds: 15), () {
-                      print(">>> Firebase lat " + snapshot.data?.data()!['latitude']);
-                      if(updatingLat != double.parse('${snapshot.data?.data()!['latitude']}'))
-                      {
-                        if(mounted){
-                          setState(() {
-                            distanceInMeters = Geolocator.distanceBetween(double.parse('${widget.latitude}'), double.parse('${widget.longitude}'), double.parse('${snapshot.data?.data()!['latitude']}'), double.parse('${snapshot.data?.data()!['longitude']}'));
-                            print('DISTANCE distanceInMeters===== : ${distanceInMeters/1000} ');
-                          });
+                      Timer(const Duration(seconds: 10), () {
+                        print(">>> Firebase lat " + snapshot.data?.data()!['latitude']);
+                        if(updatingLat != double.parse('${snapshot.data?.data()!['latitude']}'))
+                        {
+                          if(mounted){
+                            setState(() {
+                              distanceInMeters = Geolocator.distanceBetween(double.parse('${widget.latitude}'), double.parse('${widget.longitude}'), double.parse('${snapshot.data?.data()!['latitude']}'), double.parse('${snapshot.data?.data()!['longitude']}'));
+                              print('DISTANCE distanceInMeters===== : ${distanceInMeters/1000} ');
+                            });
+                          }
+                          updatingLat =  double.parse('${snapshot.data?.data()!['latitude']}');
+                          mechanicMarker(LatLng(double.parse('${snapshot.data?.data()!['latitude']}'),double.parse('${snapshot.data?.data()!['longitude']}')));
                         }
-                        updatingLat =  double.parse('${snapshot.data?.data()!['latitude']}');
-                        mechanicMarker(LatLng(double.parse('${snapshot.data?.data()!['latitude']}'),double.parse('${snapshot.data?.data()!['longitude']}')));
-                      }
-                    });
+                      });
 
-                    return GoogleMap(
+                      return GoogleMap(
 
-                      //Map widget from google_maps_flutter package
+                        //Map widget from google_maps_flutter package
 
-                      zoomGesturesEnabled: true, //enable Zoom in, out on map
-                      initialCameraPosition: _kGooglePlex!,
-                      markers: markers, //markers to show on map
-                      polylines: Set<Polyline>.of(polylines.values), //polylines
-                      mapType: MapType.normal, //map type
-                      onMapCreated: (controller) { //method called when map is created
-                        if(mounted){
-                          setState(() {
-                            controller.setMapStyle(_mapStyle);
-                            mapController = controller;
-                          });
-                        }
-                      },
-                    );
-                  }
+                        zoomGesturesEnabled: true, //enable Zoom in, out on map
+                        initialCameraPosition: _kGooglePlex!,
+                        markers: markers, //markers to show on map
+                        polylines: Set<Polyline>.of(polylines.values), //polylines
+                        mapType: MapType.normal, //map type
+                        onMapCreated: (controller) { //method called when map is created
+                          if(mounted){
+                            setState(() {
+                              controller.setMapStyle(_mapStyle);
+                              mapController = controller;
+                            });
+                          }
+                        },
+                      );
+                    }
 
-                  return Center(child: CircularProgressIndicator());
-                },
-              ),
-
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20,20,20,50),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [new BoxShadow(
-                        color: CustColors.roseText1,
-                        blurRadius: 10.0,
-                      ),]
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20,20,20,20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  height: 20,
-                                  width: 20,
-                                  child: SvgPicture.asset(
-                                    'assets/image/mechanicProfileView/directionMechnanicTracking.svg',
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Departed",
-                                        style: Styles.waitingTextBlack17,
-                                      ),
-                                      Text(
-                                        "Mechanic Departed from his location.",
-                                        style: Styles.awayTextBlack,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: FDottedLine(
-                                color: CustColors.blue,
-                                height: 40.0,
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  height: 20,
-                                  width: 20,
-                                  child: SvgPicture.asset(
-                                    'assets/image/mechanicProfileView/clockMechnanicTracking.svg',
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: InkWell(
-                                    onTap: (){
-                                      //  updateToCloudFirestoreDB();
-                                    },
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          int.parse('${(distanceInMeters).toString().split('.').first}') <= 500
-                                              ? "${(distanceInMeters).toStringAsFixed(2)} m"
-                                              : "${(distanceInMeters/1000).toStringAsFixed(2)} km",
-                                          // "${distanceInMeters/1000} km",
-                                          style: Styles.waitingTextBlack17,
-                                        ),
-                                        Text(
-                                          "Away",
-                                          style: Styles.awayTextBlack,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: CustColors.blue,
-                          borderRadius: BorderRadius.only(
-                              bottomRight:   Radius.circular(20),
-                              bottomLeft:  Radius.circular(20)),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                child: InkWell(
-                                  onTap: (){
-                                    String callPhoneNumber = "90488878777";
-                                    _callPhoneNumber(callPhoneNumber);
-                                  },
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.phone, color: Colors.white),
-                                      Text(
-                                        "Call",
-                                        style: Styles.popUPTextStyle,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child:  Container(
-                                child: InkWell(
-                                  onTap: (){
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => ChatScreen(
-                                              peerId: mechanicId,
-                                              bookingId: '${bookingIdEmergency}',
-                                              collectionName: 'ResolMech',
-                                              currentUserId: customerId,
-                                              peerName: mechanicName,
-                                              myImageUrl: customerProfileUrl,
-                                              peerImageUrl: mechanicProfileUrl,
-                                            )));
-                                  },
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.chat, color: Colors.white),
-                                      Text(
-                                        "Chat",
-                                        style: Styles.popUPTextStyle,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child:  Container(
-                                child: InkWell(
-                                  onTap: (){
-
-                                  },
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.smartphone_sharp, color: Colors.white),
-                                      Text(
-                                        "Call via ResolMech",
-                                        style: Styles.popUPTextStyle,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                    return Center(child: CircularProgressIndicator());
+                  },
                 ),
-              ),
 
-              Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
+                Padding(
                   padding: const EdgeInsets.fromLTRB(20,20,20,50),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [new BoxShadow(
-                        color: CustColors.roseText1,
-                        blurRadius: 10.0,
-                      ),],
-                      borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [new BoxShadow(
+                          color: CustColors.roseText1,
+                          blurRadius: 10.0,
+                        ),]
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -527,28 +344,79 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                       children: <Widget>[
 
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                          padding: const EdgeInsets.fromLTRB(20,20,20,20),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
-                                  /*Container(
-                                      child: Icon(Icons.arrow_back, color: Colors.black),
-                                    ),*/
+                                  Container(
+                                    height: 20,
+                                    width: 20,
+                                    child: SvgPicture.asset(
+                                      'assets/image/mechanicProfileView/directionMechnanicTracking.svg',
+                                    ),
+                                  ),
                                   Padding(
-                                    padding: const EdgeInsets.fromLTRB(15,0,15,0),
+                                    padding: const EdgeInsets.all(5),
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Mechanic is on his way",
-                                          textAlign: TextAlign.start,
+                                          "Departed",
                                           style: Styles.waitingTextBlack17,
                                         ),
+                                        Text(
+                                          "Mechanic Departed from his location.",
+                                          style: Styles.awayTextBlack,
+                                        ),
                                       ],
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: FDottedLine(
+                                  color: CustColors.blue,
+                                  height: 40.0,
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    height: 20,
+                                    width: 20,
+                                    child: SvgPicture.asset(
+                                      'assets/image/mechanicProfileView/clockMechnanicTracking.svg',
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: InkWell(
+                                      onTap: (){
+                                        //  updateToCloudFirestoreDB();
+                                      },
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            int.parse('${(distanceInMeters).toString().split('.').first}') <= 500
+                                                ? "${(distanceInMeters).toStringAsFixed(2)} m"
+                                                : "${(distanceInMeters/1000).toStringAsFixed(2)} km",
+                                            // "${distanceInMeters/1000} km",
+                                            style: Styles.waitingTextBlack17,
+                                          ),
+                                          Text(
+                                            "Away",
+                                            style: Styles.awayTextBlack,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
 
@@ -557,18 +425,173 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                             ],
                           ),
                         ),
+
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: CustColors.light_navy,
+                            borderRadius: BorderRadius.only(
+                                bottomRight:   Radius.circular(20),
+                                bottomLeft:  Radius.circular(20)),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  child: InkWell(
+                                    onTap: (){
+                                      //String callPhoneNumber = "90488878777";
+                                      _callPhoneNumber(callPhoneNumber);
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                            height : 25,
+                                            width: 25,
+                                            child: Image.asset("assets/image/ic_call_blue_white.png")
+                                        ),
+                                        Text(
+                                          "Call",
+                                          style: Styles.popUPTextStyle,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child:  Container(
+                                  child: InkWell(
+                                    onTap: (){
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => ChatScreen(
+                                                peerId: mechanicId,
+                                                bookingId: '${bookingIdEmergency}',
+                                                collectionName: 'ResolMech',
+                                                currentUserId: customerId,
+                                                peerName: mechanicName,
+                                                myImageUrl: customerProfileUrl,
+                                                peerImageUrl: mechanicProfileUrl,
+                                              )));
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                            height : 25,
+                                            width: 25,
+                                            child: Image.asset("assets/image/ic_chat_blue_white.png")
+                                        ),
+                                        Text(
+                                          "Chat",
+                                          style: Styles.popUPTextStyle,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child:  Container(
+                                  child: InkWell(
+                                    onTap: (){
+                                      Fluttertoast.showToast(msg: "mechanic is coming to your location");
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                            height : 25,
+                                            width: 25,
+                                            child: Image.asset("assets/image/ic_navigate_blue_white.png")
+                                        ),
+                                        Text(
+                                          "Navigate",
+                                          style: Styles.popUPTextStyle,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 ),
-              ),
 
-            ],
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20,20,20,50),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [new BoxShadow(
+                          color: CustColors.roseText1,
+                          blurRadius: 10.0,
+                        ),],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    /*Container(
+                                        child: Icon(Icons.arrow_back, color: Colors.black),
+                                      ),*/
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(15,0,15,0),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Mechanic is on his way",
+                                            textAlign: TextAlign.start,
+                                            style: Styles.waitingTextBlack17,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
   void _callPhoneNumber(String phoneNumber) async {
     var url = 'tel://$phoneNumber';
     if (await canLaunch(url)) {

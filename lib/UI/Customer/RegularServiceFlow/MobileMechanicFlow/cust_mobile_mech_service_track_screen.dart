@@ -1221,7 +1221,6 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                                 builder: (context) => RegularPaymentScreen(
                                   firebaseCollection: TextStrings.firebase_mobile_mech,
                                   bookingId: widget.bookingId,
-
                                 )));
                       },
                       child: Text('Pay Now',

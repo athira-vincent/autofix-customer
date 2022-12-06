@@ -70,4 +70,6 @@ class TextStrings {
   static const  appLifeCycle_background = "background";
 
   static const  appLifeCycle_destroyed = "destroyed";
+
+  static const  googleAPiKey = "AIzaSyA1s82Y0AiWYbzXwfppyvKLNzFL-u7mArg";
 }

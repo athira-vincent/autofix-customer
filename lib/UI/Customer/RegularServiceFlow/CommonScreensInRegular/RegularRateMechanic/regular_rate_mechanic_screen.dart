@@ -38,11 +38,9 @@ class _RegularRateMechanicScreenState extends State<RegularRateMechanicScreen> {
   String authToken="";
   String userName="";
   String mechanicName="";
-  //String totalEstimatedTime = "0";
   String totalEstimatedCost = "0";
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  var _firestoreData ;
 
   TextEditingController _feedBackController = TextEditingController();
 
