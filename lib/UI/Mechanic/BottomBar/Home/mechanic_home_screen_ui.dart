@@ -64,6 +64,8 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> with Widget
   MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
   bool _hasActiveService = false;
 
+  String emergencybookinid="";
+
 
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -233,6 +235,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> with Widget
     setState(() {
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
     });*/
+    emergencybookinid=bookedId.toString();
     await _firestore
         .collection("ResolMech")
         .doc('$bookedId')
@@ -965,6 +968,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> with Widget
                           latitude: firebaseCustomerLatitude /*"10.0159"*/,
                           longitude: firebaseCustomerLongitude /*"76.3419"*/,
                           //notificationPayloadMdl: widget.notificationPayloadMdl,
+                      bookingid: emergencybookinid,
                         ))).then((value){
               _mechanicHomeBloc.postMechanicActiveServiceRequest(
                   "$authToken", mechanicId);
@@ -973,7 +977,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> with Widget
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MechanicStartServiceScreen())).then((value){
+                    builder: (context) => MechanicStartServiceScreen(bookingId: emergencybookinid))).then((value){
               _mechanicHomeBloc.postMechanicActiveServiceRequest(
                   "$authToken", mechanicId);
             });
@@ -981,12 +985,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> with Widget
             /// storing start time and end time in shared pref
             ///
             String remaintime = "";
-            // SharedPreferences preferences =
-            //     await SharedPreferences.getInstance();
-            // String starttime = preferences.getString("starttime").toString();
-            // String endtime = preferences.getString("endtime").toString();
 
-            print("preftimes");
+
+
 
             if(DateFormat("HH:mm:ss").format(DateTime.now())==totalstarttimecurrenttimevalue){
               print("work finished");
@@ -1017,6 +1018,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> with Widget
                       print("Minutes is: ${duration.inMinutes}");
                       print("inSeconds is: ${duration.inSeconds}");
                       remaintime = duration.inSeconds.toString();
+
+                      print("remaintime");
+                      print(remaintime);
 
                       Navigator.push(
                           context,

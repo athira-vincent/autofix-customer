@@ -76,6 +76,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen>
   String currenttime = "";
 
   bool apivalue = false;
+  int remtime=0;
 
   @override
   void initState() {
@@ -87,7 +88,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen>
     print(widget.endtime);
 
 
-    int remtime = int.parse(widget.remaintime);
+     remtime = int.parse(widget.remaintime);
 
 
     setState(() {
@@ -129,12 +130,21 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen>
         customerDiagonsisApproval = event.get('customerDiagonsisApproval');
         mechanicDiagonsisState = event.get('mechanicDiagonsisState');
         if (listenToFirestoreTime == "0") {
-          levelClock = int.parse('${updatedServiceTime.split(":").first}');
-          int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;
-          levelClock = sec;
-          _controller = AnimationController(
-              vsync: this, duration: Duration(seconds: levelClock));
-          listenToFirestoreTime = "1";
+          if(widget.isFromHome==true){
+            levelClock=remtime;
+
+          }
+          else{
+            levelClock = int.parse('${updatedServiceTime.split(":").first}');
+            int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;
+            levelClock = sec;
+            print("levelClocksec");
+            print(levelClock);
+            _controller = AnimationController(
+                vsync: this, duration: Duration(seconds: levelClock));
+            listenToFirestoreTime = "1";
+          }
+
           if (mechanicDiagonsisState == "2") {
             setState(() {
               print("updateToCloudFirestoreDB isStartedWork $isStartedWork");
