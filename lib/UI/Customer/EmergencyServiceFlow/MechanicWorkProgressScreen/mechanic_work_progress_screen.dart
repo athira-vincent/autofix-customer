@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/ExtraDiagnosisScreen/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/mechanic_waiting_payment.dart';
 import 'package:auto_fix/Widgets/Countdown.dart';
@@ -13,6 +14,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicWorkProgressScreen extends StatefulWidget {
@@ -62,6 +64,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   String mechanicIdEmergency="";
   String extendedTime="0";
   String currentUpdatedTime="0";
+  String totalstarttimecurrenttimevalue = "";
 
 
   String extendedTimeFirstTymCall="0";
@@ -71,6 +74,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   bool isLoading = true;
   Timer? timerForCouterTime;
   Timer? timerCouterTime;
+  int remaintime = 0;
 
 
   @override
@@ -85,7 +89,41 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
         duration: Duration(
             seconds:
             levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
-       );
+    );
+    if(workStatus == "2"){
+      setTimer();
+    }
+  }
+
+  Future<void> setTimer() async {
+
+    if(DateFormat("HH:mm:ss").format(DateTime.now())==totalstarttimecurrenttimevalue){
+      print("work finished");
+
+    }
+    else{
+      await Repository().timedifferenceapi(DateFormat("HH:mm:ss").format(DateTime.now()), totalstarttimecurrenttimevalue).then((value) => {
+        if (value.data!.timeDifference.remTime.isNotEmpty)
+          {
+            setState(() {
+              String string = value.data!.timeDifference.remTime;
+              int hour = int.parse(string.split(":")[0]);
+              int minute = int.parse(string.split(":")[1]);
+              int second = int.parse(string.split(":")[2]);
+              Duration duration = Duration(hours: hour, minutes: minute, seconds: second);
+              print("Minutes is: ${duration.inMinutes}");
+              print("inSeconds is: ${duration.inSeconds}");
+              remaintime = int.parse(duration.inSeconds.toString());
+              _controller.stop();
+              levelClock = remaintime;
+              _controller.forward();
+              print("remaintime");
+              print(remaintime);
+
+            })
+          }
+      });
+    }
   }
 
   @override
@@ -130,6 +168,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           );
           _controller.forward();
           _updateTimerListener();
+          totalstarttimecurrenttimevalue = event.get("totalstarttimecurrenttimevalue");
 
         });
       }

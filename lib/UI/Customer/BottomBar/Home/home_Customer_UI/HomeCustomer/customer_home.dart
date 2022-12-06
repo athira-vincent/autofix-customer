@@ -405,6 +405,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> with Widget
               _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
       });
           }else if(firebaseScreen == "C2" || firebaseScreen == "C4" || firebaseScreen == "C5" ){     //firebaseScreen == "C3"
+
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
