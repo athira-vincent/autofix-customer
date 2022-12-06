@@ -109,8 +109,33 @@
   "error_211" : "OTP Not Verified! Try Again!",
   "error_213" : "User Not Registered",
   "error_301" : "Profile Not Completed! Try Login with username Password",
-  "error_not_found" : "No Results found."
-
-
+  "error_not_found" : "No Results found.",
+  "text_brand" : "Brand",
+  "text_brand_name":"Brand name",
+  "text_select_brand": "Select your vehicle brand",
+  "text_select_brand":"Please select brand first",
+  "text_select_car_variant":"Select your car variant",
+  "text_engine_type": "Engine Type",
+  "text_select_model": "Select your engine model",
+  "text_year": "Year",
+  "text_selct_manf_date": "Select your vehicle manufacture date",
+  "text_color": "Color",
+  "text_vehicle_color": "Vehicle color",
+  "text_enter_veh_color": "Enter your Vehicle color",
+  "text_plate_number": "Plate number",
+  "text_enter_plate_number": "Enter your Plate number",
+  "text_last_maintenance": "Last maintenance",
+  "text_last_maintenance_date": "Last maintenance date",
+  "text_select_service_date": "Select your last service date",
+  "text_approximate_mileage": "Approximate mileage",
+  "text_select_total_kilometres": "Select your vehicle total kilometres",
+  "text_add_more_vehicles": "Add more vehicles",
+  "text_finish": "Finish",
+  "text_select_date": "Select Date",
+  "text_month": "Month",
+  "text_successfully_created": "Successfully Created",
+  "text_upload_vehicle_photo": "Upload your vehicle photo",
+  "text_model": "Model",
+  "text_model_name": "Model name"
 
 }
