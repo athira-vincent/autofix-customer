@@ -1,3 +1,4 @@
+/*
 import 'dart:async';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
@@ -79,11 +80,13 @@ class _MobileMechTrackingScreenState extends State<MobileMechTrackingScreen> {
     rootBundle.loadString('assets/map_style/map_style.json').then((string) {
       _mapStyle = string;
     });
-    /*DefaultAssetBundle.of(context).loadString('assets/map_style/map_style.json').then((string) {
+    */
+/*DefaultAssetBundle.of(context).loadString('assets/map_style/map_style.json').then((string) {
       this._mapStyle = string;
     }).catchError((error) {
       log(error.toString());
-    });*/
+    });*//*
+
 
     Timer(const Duration(seconds: 5), () {
       changeScreen();
@@ -467,4 +470,4 @@ class _MobileMechTrackingScreenState extends State<MobileMechTrackingScreen> {
 
 
 
-}
+}*/

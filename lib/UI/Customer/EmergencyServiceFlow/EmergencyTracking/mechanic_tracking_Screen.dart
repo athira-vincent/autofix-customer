@@ -70,8 +70,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   double distanceInMeters = 0.0;
   var updatingLat = 0.0;
   String mechanicArrivalState = "0";
-  Timer? timerObjVar;
-  Timer? timerObj;
   String authToken="";
   String userName="";
   String serviceIdEmergency="";
@@ -79,6 +77,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   String bookingIdEmergency="";
   String callPhoneNumber = "";
   String customerId = "", mechanicId = "", mechanicName = "", mechanicProfileUrl = "", customerProfileUrl = "";
+  Timer? locationTimer;
 
   @override
   void initState() {
@@ -129,10 +128,11 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
            print('mechanicArrivalState ++++ $mechanicArrivalState');
            if(mechanicArrivalState =="1")
            {
+             locationTimer!.cancel();
              Navigator.pushReplacement(
                  context,
                  MaterialPageRoute(
-                     builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1")
+                     builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1",bookingId: widget.bookingId,)
                  ));
            }
          });
@@ -281,12 +281,11 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                   stream: _firestoreData,
                   builder: (_, snapshot) {
 
-
                     if (snapshot.hasError) return Text('Error = ${snapshot.error}');
 
                     if (snapshot.hasData) {
 
-                      Timer(const Duration(seconds: 10), () {
+                      locationTimer = Timer(const Duration(seconds: 10), () {
                         print(">>> Firebase lat " + snapshot.data?.data()!['latitude']);
                         if(updatingLat != double.parse('${snapshot.data?.data()!['latitude']}'))
                         {
@@ -304,8 +303,9 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                       return GoogleMap(
 
                         //Map widget from google_maps_flutter package
-
                         zoomGesturesEnabled: true, //enable Zoom in, out on map
+                        zoomControlsEnabled: false,
+                        mapToolbarEnabled: false,
                         initialCameraPosition: _kGooglePlex!,
                         markers: markers, //markers to show on map
                         polylines: Set<Polyline>.of(polylines.values), //polylines
@@ -605,21 +605,8 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    cancelTimer();
     print("dispose");
   }
 
-  cancelTimer() {
-
-    if (timerObjVar != null) {
-      timerObjVar?.cancel();
-      timerObjVar = null;
-    }
-
-    if (timerObj != null) {
-      timerObj?.cancel();
-      timerObj = null;
-    }
-  }
 
 }
