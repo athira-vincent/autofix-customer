@@ -175,13 +175,13 @@ class HomeCustomerBloc {
   postMechanicsEmergencyServiceBookingIDRequest(
       token, date, time,
       latitude, longitude,
-      serviceId, mechanicId, reqType,
+      serviceId, serviceCost, mechanicId, reqType,
       totalPrice, paymentType, travelTime) async {
 
     EmergencyBookingMdl _mechanicsBookingMdl = await repository.postMechanicsEmergencyServiceBookingIDRequest(
         token, date, time,
         latitude, longitude,
-        serviceId, mechanicId, reqType,
+        serviceId, serviceCost, mechanicId, reqType,
         totalPrice, paymentType, travelTime);
     postMechanicsEmergencyBookingIDList.sink.add(_mechanicsBookingMdl);
   }

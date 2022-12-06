@@ -34,6 +34,8 @@ class ErrorStrings {
   static const error_211 = "211";             /// ----------- OTP Not Verified! Try Again!
   static const error_213 = "213";             /// ----------- User Not Registered! Create Account!
   static const error_212 = "212";             /// ----------- socialLogin_not_Applicable_login_manually
+  static const error_214 = "214";             /// ----------- 214 Wallet recharged successfully
+
 
 
 }

@@ -34,7 +34,7 @@ class MechanicHomeScreen extends StatefulWidget {
 }
 
 class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
-
+  static const routeName = '/mechanicHomeScreen';
   late final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   int _index = 0;

@@ -1,5 +1,6 @@
+/*
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/AA/add_more_service_list_screen.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/add_more_service_list_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +88,7 @@ class _MechanicDiagnoseTestScreenState extends State<MechanicDiagnoseTestScreen>
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CustomerApprovedScreen(isFromHome: false,remaintime: "",starttime: "",endtime: "",)));
+                              builder: (context) => CustomerApprovedScreen(isFromHome: true,)));
                     },
                     child: mechanicStartServiceButton(size)),
               ],
@@ -455,19 +456,22 @@ class _MechanicDiagnoseTestScreenState extends State<MechanicDiagnoseTestScreen>
       //selectedState = result;
       if(serviceList!='[]')
       {
-        /*_chooseVechicleSpecializedController.text = selectedVehicles;
+        */
+/*_chooseVechicleSpecializedController.text = selectedVehicles;
         print ("Selected state @ sign up: " + selectedState );
         print ("Selected selectedVehicleId @ sign up: " + selectedVehicleId );
         print ("Selected selectedVehicles @ sign up: " + selectedVehicles );
         if (_formKey.currentState!.validate()) {
         } else {
-        }*/
+        }*//*
+
       }
 
     });
   }
 
-  /*void _awaitReturnValueFromSecondScreenOnEdit(BuildContext context) async {
+  */
+/*void _awaitReturnValueFromSecondScreenOnEdit(BuildContext context) async {
 
     // start the SecondScreen and wait for it to finish with a result
     //List<String> serviceList = [];
@@ -487,6 +491,7 @@ class _MechanicDiagnoseTestScreenState extends State<MechanicDiagnoseTestScreen>
         });
       }
 
-  }*/
+  }*//*
 
-}
+
+}*/

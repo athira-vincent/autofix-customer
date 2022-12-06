@@ -27,8 +27,8 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
   MechanicMyWalletBloc _mechanicWalletBloc = MechanicMyWalletBloc();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late MechanicMyWalletMdl mechanicMyWalletMdl;
-  List<BookingDatum>? _BookingDatum = [];
-  MyWallet? _MyWallet;
+  List<TodaysPayment>? _BookingDatum = [];
+  MyWallet? _myWalletDaily, _myWalletWeekly, _myWalletMonthly;
   bool _isLoadingPage = true;
 
   @override
@@ -48,27 +48,53 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
       profileUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
       print('userFamilyId ' + authToken.toString());
       print('userId ' + mechanicId.toString());
-      _mechanicWalletBloc.postMechanicFetchMyWalletRequest(
-          authToken, mechanicId /*"8"*/);
+      _mechanicWalletBloc.postMechanicFetchMyWalletDailyRequest(
+          authToken, mechanicId, "1", "");
+      _mechanicWalletBloc.postMechanicFetchMyWalletWeeklyRequest(
+          authToken, mechanicId, "2", "");
+      _mechanicWalletBloc.postMechanicFetchMyWalletMonthlyRequest(
+          authToken, mechanicId, "3", "");
+
     });
   }
 
   _listenApiResponse() {
-    _mechanicWalletBloc.postMechanicMyWallet.listen((value) {
+    _mechanicWalletBloc.MechanicMyWalletDailyResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           _isLoadingPage = false;
-          // SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
       } else {
         setState(() {
           _isLoadingPage = false;
-          _BookingDatum = value.data!.myWallet!.bookingData;
-          _MyWallet = value.data!.myWallet;
-          //mechanicMyWalletMdl = value;
-          //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
-          /*_isLoading = false;
-          _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*/
+          _BookingDatum = value.data!.myWallet!.todaysPayments;
+          _myWalletDaily = value.data!.myWallet;
+        });
+      }
+    });
+    _mechanicWalletBloc.MechanicMyWalletWeeklyResponse.listen((value) {
+      if (value.status == "error") {
+        /*setState(() {
+          _isLoadingPage = false;
+        });*/
+      } else {
+        setState(() {
+          //_isLoadingPage = false;
+          //_BookingDatum = value.data!.myWallet!.todaysPayments;
+          _myWalletWeekly = value.data!.myWallet;
+        });
+      }
+    });
+    _mechanicWalletBloc.MechanicMyWalletMonthlyResponse.listen((value) {
+      if (value.status == "error") {
+        /*setState(() {
+          _isLoadingPage = false;
+        });*/
+      } else {
+        setState(() {
+          //_isLoadingPage = false;
+          //_BookingDatum = value.data!.myWallet!.todaysPayments;
+          _myWalletMonthly = value.data!.myWallet;
         });
       }
     });
@@ -112,16 +138,16 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                 children: [
                                   SubTitleTextRound(
                                       size,
-                                      "Total job done",
-                                      _MyWallet?.jobCount.toString()??"0"),
+                                      "Daily Collection",
+                                      _myWalletDaily?.totalAmount.toString()??"0"),
                                   SubTitleTextRound(
                                       size,
-                                      "All payments",
-                                      _MyWallet?.totalPayment??"0"),
+                                      "Weekly Collection",
+                                      _myWalletWeekly?.totalAmount.toString()??"0"),
                                   SubTitleTextRound(
                                       size,
                                       "Monthly collection",
-                                      _MyWallet?.monthlySum??"0"),
+                                      _myWalletMonthly?.totalAmount.toString()??"0"),
                                 ],
                               ),
                             ),
@@ -142,30 +168,31 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                         right: size.width * 9 / 100,
                                       ),
                                       child: const Text(
-                                        "Todays payments",
+                                        "Today's payments",
                                         style: Styles.myWalletTitleText03,
                                       )),
                                 ),
                                 const Spacer(),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Container(
-                                      margin: EdgeInsets.only(
-                                        top: size.height * 1.5 / 100,
-                                        //left: size.width * 9 / 100,
-                                        right: size.width * 10.5 / 100,
-                                      ),
-                                      child: Text(
-                                        _MyWallet?.totalPayment?.toString()??"0",
-                                        //"- ₦ 15000",
-                                        style: Styles.myWalletTitleText04,
-                                      )),
-                                ),
+                                // Align(
+                                //   alignment: Alignment.centerRight,
+                                //   child: Container(
+                                //       margin: EdgeInsets.only(
+                                //         top: size.height * 1.5 / 100,
+                                //         //left: size.width * 9 / 100,
+                                //         right: size.width * 10.5 / 100,
+                                //       ),
+                                //       child: Text(
+                                //         _myWalletDaily?.balance.toString()??"0",
+                                //         //"- ₦ 15000",
+                                //         style: Styles.myWalletTitleText04,
+                                //       )),
+                                // ),
                               ],
                             ),
                           ),
                           _BookingDatum!.length != 0
                               ? ListView.builder(
+                                  scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
                                   itemCount: _BookingDatum?.length??0,
                                   itemBuilder:
@@ -268,11 +295,13 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                 var formate1 =
                     "${dateTime.year}-${dateTime.month}-${dateTime.day}";
 
-                Navigator.push(
+                /*Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            Wallet_History(wallatdate: formate1)));
+                            Wallet_History(wallatdate: formate1)));*/
+                _mechanicWalletBloc.postMechanicFetchMyWalletDailyRequest(
+                    authToken, mechanicId, "", formate1);
               }
             });
           },
@@ -394,7 +423,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                 style: Styles.myWalletCardText01,
                               ),
                               Text(
-                                _MyWallet?.totalPayment??'',
+                                _myWalletDaily?.balance.toString()??'',
                                 style: Styles.myWalletCardText01,
                               )
                             ]),

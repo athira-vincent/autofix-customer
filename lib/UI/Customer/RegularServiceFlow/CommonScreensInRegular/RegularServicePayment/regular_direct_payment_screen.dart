@@ -4,7 +4,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/direct_payment_success_screen.dart';
-import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/payment_failed_screen.dart';
+import 'package:auto_fix/UI/Common/payment_failed_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularServicePayment/regular_direct_payment_success_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';

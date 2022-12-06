@@ -254,8 +254,8 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         "customerFcmToken" : "${token}",
         "mechanicPhone" : "${mechanicBooking!.mechanic!.phoneNo}",
         "customerPhone" : "${mechanicBooking.customer!.phoneNo}",
-        "mechanicProfileUrl" : "${mechanicBooking.mechanic!.mechanic![0].profilePic}",
-        "customerProfileUrl" : "${mechanicBooking.customer!.customer![0].profilePic}",
+        "mechanicProfileUrl" : "${mechanicBooking.mechanic!.mechanic![0].profilePic ?? ''}",
+        "customerProfileUrl" : "${mechanicBooking.customer!.customer![0].profilePic ?? ''}",
         "mechanicId": "${widget.mechanicId}",
         "mechanicName": "${widget.mechanicListData!.firstName}",
         "mechanicLatitude": "${widget.mechanicListData!.mechanicStatus[0].latitude}",
@@ -320,8 +320,8 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "customerFcmToken" : "${token}",
       "mechanicPhone" : "${mechanicBooking!.mechanic!.phoneNo}",
       "customerPhone" : "${mechanicBooking.customer!.phoneNo}",
-      "mechanicProfileUrl" : "${mechanicBooking.mechanic!.mechanic![0].profilePic}",
-      "customerProfileUrl" : "${mechanicBooking.customer!.customer![0].profilePic}",
+      "mechanicProfileUrl" : "${mechanicBooking.mechanic!.mechanic![0].profilePic ?? ''}",
+      "customerProfileUrl" : "${mechanicBooking.customer!.customer![0].profilePic ?? ''}",
       "mechanicId": "${widget.mechanicId}",
       "mechanicName": "${widget.mechanicListData!.firstName}",
       "mechanicLatitude": "${widget.mechanicListData!.mechanicStatus[0].latitude}",
@@ -384,8 +384,8 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "customerFcmToken" : "${token}",
       "mechanicPhone" : "${mechanicBooking!.mechanic!.phoneNo}",
       "customerPhone" : "${mechanicBooking.customer!.phoneNo}",
-      "mechanicProfileUrl" : "${mechanicBooking.mechanic!.mechanic![0].profilePic}",
-      "customerProfileUrl" : "${mechanicBooking.customer!.customer![0].profilePic}",
+      "mechanicProfileUrl" : "${mechanicBooking.mechanic!.mechanic![0].profilePic ?? ''}",
+      "customerProfileUrl" : "${mechanicBooking.customer!.customer![0].profilePic ?? ''}",
       "mechanicId": "${widget.mechanicId}",
       "mechanicName": "${widget.mechanicListData!.firstName}",
       "mechanicLatitude": "${widget.mechanicListData!.mechanicStatus[0].latitude}",
@@ -1102,69 +1102,6 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         ),
       ),
     );
-  }
-
-  _showMechanicAcceptanceDialog(BuildContext context) async {
-    Future.delayed(const Duration(seconds: 35), () {
-
-
-      setState(() {
-        print('_showMechanicAcceptanceDialog');
-
-        Navigator.of(context, rootNavigator: true).pop();
-        Navigator.of(context).pop();
-
-      });
-
-    });
-    await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return StatefulBuilder(builder: (BuildContext context, StateSetter mechanicAcceptance1) {
-            mechanicAcceptance = mechanicAcceptance1;
-            return AlertDialog(
-                backgroundColor: Colors.white,
-                insetPadding: EdgeInsets.only(left: 20, right: 20),
-
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius. circular(10))),
-                contentPadding: const EdgeInsets.all(20),
-                content: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            "Wait few minutes !",
-                            style: Styles.waitingTextBlack17,
-                          ),
-                          Text(
-                            "Wait for the response from ${widget.mechanicListData?.firstName}!",
-                            style: Styles.awayTextBlack,
-                          ),
-                          Container(
-                            height: 150,
-                              child: SvgPicture.asset(
-                                  'assets/image/mechanicProfileView/waitForMechanic.svg',
-                                height: 200,
-                                fit: BoxFit.cover,
-                              )
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ));
-          });
-        });
-
-
   }
 
 }

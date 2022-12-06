@@ -32,6 +32,10 @@ class NotificationPayloadMdl {
     required this.customerID,
     required this.mechanicPhone,
     required this.customerPhone,
+    required this.mechanicProfileUrl,
+    required this.customerProfileUrl,
+    required this.mechanicEmail,
+    required this.customerEmail,
     required this.mechanicAddress,
     required this.mechanicLatitude,
     required this.mechanicLongitude,
@@ -73,6 +77,10 @@ class NotificationPayloadMdl {
   String customerID;
   String mechanicPhone;
   String customerPhone;
+  String mechanicProfileUrl;
+  String customerProfileUrl;
+  String mechanicEmail;
+  String customerEmail;
   String mechanicAddress;
   String mechanicLatitude;
   String mechanicLongitude;
@@ -110,6 +118,10 @@ class NotificationPayloadMdl {
     customerID: json["customerID"] == null ? null : json["customerID"],
     mechanicPhone: json["mechanicPhone"] == null ? null : json["mechanicPhone"],
     customerPhone: json["customerPhone"] == null ? null : json["customerPhone"],
+    mechanicProfileUrl: json["mechanicProfileUrl"] == null ? null : json["mechanicProfileUrl"],
+    customerProfileUrl: json["customerProfileUrl"] == null ? null : json["customerProfileUrl"],
+    mechanicEmail: json["mechanicEmail"] == null ? null : json["mechanicEmail"],
+    customerEmail: json["customerEmail"] == null ? null : json["customerEmail"],
     mechanicAddress: json["mechanicAddress"] == null ? null : json["mechanicAddress"],
     mechanicLatitude: json["mechanicLatitude"] == null ? null : json["mechanicLatitude"],
     mechanicLongitude: json["mechanicLongitude"] == null ? null : json["mechanicLongitude"],
@@ -150,6 +162,10 @@ class NotificationPayloadMdl {
     "customerID": customerID == null ? null : customerID,
     "mechanicPhone": mechanicPhone == null ? null : mechanicPhone,
     "customerPhone": customerPhone == null ? null : customerPhone,
+    "mechanicProfileUrl": mechanicProfileUrl == null ? null : mechanicProfileUrl,
+    "customerProfileUrl": customerProfileUrl == null ? null : customerProfileUrl,
+    "mechanicEmail": mechanicEmail == null ? null : mechanicEmail,
+    "customerEmail": customerEmail == null ? null : customerEmail,
     "serviceTime": serviceTime == null ? null : serviceTime,
     "serviceCost": serviceCost == null ? null : serviceCost,
     "mechanicAddress": mechanicAddress == null ? null : mechanicAddress,

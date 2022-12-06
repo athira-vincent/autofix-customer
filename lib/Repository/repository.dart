@@ -277,7 +277,7 @@ class Repository {
           time,
           latitude,
           longitude,
-          serviceId,
+          serviceId, serviceCost,
           mechanicId,
           reqType,
           totalPrice,
@@ -289,7 +289,7 @@ class Repository {
           time,
           latitude,
           longitude,
-          serviceId,
+          serviceId, serviceCost,
           mechanicId,
           reqType,
           totalPrice,
@@ -367,8 +367,8 @@ class Repository {
       _addCarApiProvider.postVechicleUpdateRequest(token, id, status);
 
   // Mechanic My Wallet
-  Future<dynamic> postMechanicFetchMyWalletRequest(token, type) =>
-      _addMechanicMyWalletApiProvider.postMechanicMyWalletRequest(token, type);
+  Future<dynamic> postMechanicFetchMyWalletRequest(String token, mechanicId, type,String customeDate) =>
+      _addMechanicMyWalletApiProvider.postMechanicMyWalletRequest(token, mechanicId, type, customeDate);
 
   // Mechanic My Job Review
   Future<dynamic> postMechanicFetchMyJobReviewRequest(token, type) =>

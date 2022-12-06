@@ -1,16 +1,35 @@
 {
-  "helloWorld": "¡Hola Mundo!",
   "login": "Wo ile",
   "forgot_password": "Forgot password!!",
   "text_forgot_password": "Gbagbe ọrọ aṣina bi?",
   "welcome_to": "WELCOME TO",
   "next": "Itele",
+  "text_login_success_cust" : "Customer Login Successful_yo",
+  "text_login_success_mech" : "Mechanic Login Successful_yo",
+  "text_login_using_relex" : "Please login through Relex App_yo",
+  "text_went_wrong_try" : "Something went wrong. Try Again_yo",
 
   "text_customer": "Onibara",
   "text_mechanic": "Mekaniki",
   "text_individual": "Olukuluku",
   "text_corporate": "Ajọpọ",
   "text_govt_bodies": "Awọn ara ijọba",
+
+  "text_error_name_empty": "Name cannot Empty",
+    "text_error_phone_empty": "Phone Number cannot Empty",
+    "text_error_email_empty": "Email cannot Empty",
+    "text_error_state_empty": "Select State",
+    "text_error_password_empty": "Fill Password",
+    "text_error_cpassword_empty": "Enter Confirm Password",
+    "text_error_password_different": "Passwords are different!",
+    "text_error_experience_empty": "Enter Year of Experience",
+    "text_error_org_name_empty": "Organisation Name cannot Empty",
+    "text_error_org_type_empty": "Organisation Type cannot Empty",
+    "text_error_contact_person_empty": "Contact Person cannot Empty",
+    "text_error_enter_email_empty": "Enter Email Id",
+    "text_error_ministry_empty": "Select Ministry",
+    "text_camera": "Camera",
+    "text_gallery": "Gallery",
 
   "itsmemaria": "It's Me M¡Hola Mundo!maria!",
   "text_select_language": "YAN EDE",
@@ -88,7 +107,8 @@
       "error_210" : "Account Exist.Please Login!",
       "error_211" : "OTP Not Verified! Try Again!",
       "error_213" : "User Not Registered",
-      "error_301" : "Profile Not Completed! Try Login with username Password"
+      "error_301" : "Profile Not Completed! Try Login with username Password",
+      "error_not_found" : "No Results found._yo"
 
 
 

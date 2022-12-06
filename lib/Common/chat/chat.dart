@@ -230,7 +230,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Image.network(
-                          widget.myImageUrl == ""
+                          widget.myImageUrl == "" || widget.myImageUrl == null
                               ?
                           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHYAAAB2CAMAAAAqeZcjAAAAMFBMVEXk5ueutLeqsLPo6era3d6xt7q4vcDq7O27wMLW2dvJzc/e4eLFycu1ur3T1tjN0dNC/DypAAACiUlEQVRoge2ZDXKsIBCEgQFFUbn/bQOb7Ctrn8qM6dmkUvQFvpo/YBpjurq6urq6urq6uv6eiMiklAyN9D6mmZYh2KoQszdvIZNfrHP2KedCTupg8sOO+UW2i27EZJZX5ic4bIpcSuGQWsGLGpemM2jlrkrcS2qVCpd8g2qDCrdFtXbAc6kJLfWd0Vw6npxXbgJjE4da0oylUmRRrcMeG80ufgo6vdxgS7gTEJu4VGsjLlzK3BwX4ZqZBj7VbTCs4VOtxV1FXoKF9bKotNaCqOVglFBhPcWf2odQkyvDwlpZMj9I7A9FK8PCaivrZI/CzqK5hR3K248cF5J7D3rzBT4V+HqU9BTyedFaQ3YKOKogy9AXumCEoA90bi+D11xuuPBthEdF717t7bYKv+FyVj6n4BTR2qSq2DXUGF78Us3hunlUodZnxnl9XdYzxE7vBLd6TfuvWo5H2IWU3U6a1hev09mob7EaGnfOrivpze8xlKt3nrZ5iTEueTJv88+Jxp20q1qBhfIIdA0lzzXT6xDn7M2oFjON5Odo//POa4WdG2aNdNOYcjwi7tnr7KEZp5Rfp+aEHOYEIhNNJbVt5nOihg0AJtpW0SpS/yvm705yPZNk0M+Qv3WEUDo+gTkRT/e5LOv6DBzvBXzx6cME5xv3/ijbpY8DFsd79ZDgc630RrzTwEdgGRfCfHAlHQ2jFi7/kSXwDHBcSDftFFhboNCFYojz9df8LpWLtaVAC/vFbZaX94UoVTPNIsONrdYKKvTn2Wqs+TrBtsLFD89Tl9VtGwW3dXVmiL63RLrauoXfWyLF86fGqNTHD11Eq3BC/dNFcRWpF39wySkqn0dLijqndnV1df06fQBDZxuwbCYKtwAAAABJRU5ErkJggg=="
                               :
@@ -301,7 +301,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Image.network(
-                          widget.peerImageUrl == ""
+                          widget.peerImageUrl == "" || widget.peerImageUrl == null
                               ?
                           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHYAAAB2CAMAAAAqeZcjAAAAMFBMVEXk5ueutLeqsLPo6era3d6xt7q4vcDq7O27wMLW2dvJzc/e4eLFycu1ur3T1tjN0dNC/DypAAACiUlEQVRoge2ZDXKsIBCEgQFFUbn/bQOb7Ctrn8qM6dmkUvQFvpo/YBpjurq6urq6urq6uv6eiMiklAyN9D6mmZYh2KoQszdvIZNfrHP2KedCTupg8sOO+UW2i27EZJZX5ic4bIpcSuGQWsGLGpemM2jlrkrcS2qVCpd8g2qDCrdFtXbAc6kJLfWd0Vw6npxXbgJjE4da0oylUmRRrcMeG80ufgo6vdxgS7gTEJu4VGsjLlzK3BwX4ZqZBj7VbTCs4VOtxV1FXoKF9bKotNaCqOVglFBhPcWf2odQkyvDwlpZMj9I7A9FK8PCaivrZI/CzqK5hR3K248cF5J7D3rzBT4V+HqU9BTyedFaQ3YKOKogy9AXumCEoA90bi+D11xuuPBthEdF717t7bYKv+FyVj6n4BTR2qSq2DXUGF78Us3hunlUodZnxnl9XdYzxE7vBLd6TfuvWo5H2IWU3U6a1hev09mob7EaGnfOrivpze8xlKt3nrZ5iTEueTJv88+Jxp20q1qBhfIIdA0lzzXT6xDn7M2oFjON5Odo//POa4WdG2aNdNOYcjwi7tnr7KEZp5Rfp+aEHOYEIhNNJbVt5nOihg0AJtpW0SpS/yvm705yPZNk0M+Qv3WEUDo+gTkRT/e5LOv6DBzvBXzx6cME5xv3/ijbpY8DFsd79ZDgc630RrzTwEdgGRfCfHAlHQ2jFi7/kSXwDHBcSDftFFhboNCFYojz9df8LpWLtaVAC/vFbZaX94UoVTPNIsONrdYKKvTn2Wqs+TrBtsLFD89Tl9VtGwW3dXVmiL63RLrauoXfWyLF86fGqNTHD11Eq3BC/dNFcRWpF39wySkqn0dLijqndnV1df06fQBDZxuwbCYKtwAAAABJRU5ErkJggg=="
                               :
