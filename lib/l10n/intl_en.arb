@@ -136,6 +136,9 @@
   "text_successfully_created": "Successfully Created",
   "text_upload_vehicle_photo": "Upload your vehicle photo",
   "text_model": "Model",
-  "text_model_name": "Model name"
+  "text_model_name": "Model name",
+  "text_select_your_services_on_both_categories": "Select your services on both categories",
+  "text_regular": "Regular",
+  "text_emergency": "Emergency"
 
 }

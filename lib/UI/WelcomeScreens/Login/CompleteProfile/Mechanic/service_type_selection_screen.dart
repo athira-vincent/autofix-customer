@@ -37,7 +37,7 @@ class _ServiceTypeSelectionScreenState extends State<ServiceTypeSelectionScreen>
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
                     alignment: Alignment.centerLeft,
-                    child: Text("Select your services on both categories",
+                    child: Text(AppLocalizations.of(context)!.text_select_your_services_on_both_categories,
                       style: Styles.serviceSelectionTitle01Style,)),
               ),
               Expanded(
@@ -65,7 +65,7 @@ class _ServiceTypeSelectionScreenState extends State<ServiceTypeSelectionScreen>
                           },
                           child: ServiceTypeSelectionWidget(
                             imagePath: 'assets/image/img_service_regular.png',
-                            titleText: Text("Regular",
+                            titleText: Text(AppLocalizations.of(context)!.text_regular,
                                 style: Styles.titleTextStyle),
                             //titleText: ,
                           ),
@@ -84,7 +84,7 @@ class _ServiceTypeSelectionScreenState extends State<ServiceTypeSelectionScreen>
                           },
                           child: ServiceTypeSelectionWidget(
                             imagePath: 'assets/image/img_service_emergency.png',
-                            titleText: Text("Emergency ",
+                            titleText: Text(AppLocalizations.of(context)!.text_emergency,
                                 style: Styles.titleTextStyle),
                           ),
                         ),
