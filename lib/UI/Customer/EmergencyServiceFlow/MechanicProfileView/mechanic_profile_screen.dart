@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:auto_fix/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
@@ -5,12 +8,9 @@ import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Models/customer_models/booking_details_model/bookingDetailsMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
-
-import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mechanic_tracking_Screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/BookingSuccessScreen/booking_success_screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/MobileMechTracking/mobile_mechanic_tracking_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
@@ -23,10 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert' as json;
 
 
@@ -71,7 +68,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
 
-
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   List yourItemList = [];
@@ -87,8 +83,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   String? FcmToken="";
   String authToken="";
   String userName="";
-
-
+  String currentDateTime = "";
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
   String bookingIdEmergency="";
@@ -99,6 +94,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   String carPlateNumber="", carColor = "";
 
   late StateSetter mechanicAcceptance;
+  bool _isLoading = false;
+  bool isExpanded = false;
 
   @override
   void initState() {
@@ -107,17 +104,15 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     yourItemList.add({
       "serviceName" : "${widget.mechanicListData?.mechanicService[0].service?.serviceName}",
       "serviceTime" : "${widget.mechanicListData?.mechanicService[0].time.split(':').first}",
-      "serviceCost" :"${widget.mechanicListData?.mechanicService[0].service?.minPrice}",
+      "serviceCost" :"${widget.mechanicListData?.mechanicService[0].fee}",
       "serviceId" : "${widget.mechanicListData?.mechanicService[0].service?.id}",
       "isDefault":  '1',
     });
     getSharedPrefData();
     _listen();
-
+    _isLoading = true;
     _listenNotification(context);
   }
-
-
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
@@ -150,11 +145,13 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     _homeCustomerBloc.MechanicProfileDetailsResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
+          _isLoading = false;
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
         });
       } else {
         setState(() {
+          _isLoading = false;
           _mechanicDetailsMdl = value;
           reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}') >= 2 ? 2 : _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length;
 
@@ -179,7 +176,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           bookingIdEmergency = "${value.data?.emergencyBooking?.id}";
           _homeCustomerBloc.postBookingDetailsRequest(authToken, "${value.data?.emergencyBooking?.id}",);
           print("message mechanicsEmergencyBookingIDResponse >>>>>>>  ${value.message}");
-          print("success mechanicsEmergencyBookingIDResponse >>>>>>>  ${value.status}");
+          print("success mechanicsEmergencyBookingIDResponse >>>>>>>  ${value.data}");
 
         });
       }
@@ -191,8 +188,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           print("errrrorr mechanicsUpdateBookingIDResponse >>>>>>>  ${value.status}");
         });
       } else {
-
-        SharedPreferences shdPre = await SharedPreferences.getInstance();
 
         setState(() {
           _homeCustomerBloc.postBookingDetailsRequest(authToken, bookingIdEmergency,);
@@ -210,8 +205,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         });
       } else {
 
-        SharedPreferences shdPre = await SharedPreferences.getInstance();
-
         setState(() {
 
           carNameBrand = '${value.data?.bookingDetails?.vehicle?.brand}';
@@ -219,11 +212,15 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           carPlateNumber = '${value.data?.bookingDetails?.vehicle?.plateNo}';
           carColor = '${value.data?.bookingDetails?.vehicle?.color}';
 
+          Repository().getCurrentWorldTime("Nairobi").then((value01) => {
 
-          callOnFcmApiSendPushNotifications(value);
-          _showMechanicAcceptanceDialog(context);
-          _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-              authToken, bookingIdEmergency, "1");
+            currentDateTime = value01.datetime!.millisecondsSinceEpoch.toString(),
+
+            print("dateConverter(timeNow!) >>> ${currentDateTime}"),
+            callOnFcmApiSendPushNotifications(value)
+
+          });
+
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
 
@@ -259,10 +256,12 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "id": "1",
         "status": "done",
         "screen": "IncomingJobOfferScreen",
+        "customerCurrentTime": currentDateTime,
+        "mechanicCurrentTime" : "",
         "bookingId" : bookingIdEmergency,
         "serviceName" : "${widget.mechanicListData?.mechanicService[0].service?.serviceName}",
         "serviceTime" : "${widget.mechanicListData?.mechanicService[0].time.split(':').first}",
-        "serviceCost" :"${widget.mechanicListData?.mechanicService[0].service?.minPrice}",
+        "serviceCost" :"${widget.mechanicListData?.mechanicService[0].fee}",
         "serviceId" : "${widget.mechanicListData?.mechanicService[0].service?.id}",
         "serviceList" : yourItemList.toString(),
         "carName" : "$carNameBrand [$carNameModel]",
@@ -278,6 +277,10 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "customerID" : "${detailsMdl!.data!.bookingDetails!.customerId}",
         "mechanicPhone" :"${detailsMdl.data!.bookingDetails!.mechanic!.phoneNo}",
         "customerPhone" : "${detailsMdl.data!.bookingDetails!.customer!.phoneNo}",
+        "mechanicProfileUrl" : "${detailsMdl.data!.bookingDetails!.mechanic!.mechanic![0].profilePic}",                  ///----detailsMdl.data!.bookingDetails!.mechanic.profileurl
+        "customerProfileUrl" : "${detailsMdl.data!.bookingDetails!.customer!.customer![0].profilePic}",
+        "mechanicEmail" : "${detailsMdl.data!.bookingDetails!.mechanic!.emailId}",
+        "customerEmail" : "${detailsMdl.data!.bookingDetails!.customer!.emailId}",
         "mechanicAddress" : "",
         "mechanicLatitude" : widget.latitude,
         "mechanicLongitude" : widget.longitude,
@@ -295,7 +298,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "extendedTime" : "0",
         "customerFromPage" : "0",
         "mechanicFromPage" : "0",
-        "updatedServiceCost" : "${widget.mechanicListData?.mechanicService[0].service?.minPrice}",
+        "updatedServiceCost" : "${widget.mechanicListData?.mechanicService[0].fee}",
         "updatedServiceList" : "",
         "updatedServiceTime" : "${widget.mechanicListData?.mechanicService[0].time.split(':').first}",
         "isWorkStarted" : "0",
@@ -337,6 +340,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
       if (response.statusCode == 200) {
         setState(() {
           print('notification sending success');
+          _showMechanicAcceptanceDialog(context);                                 /// -------------- show after postMechanicOrderStatusUpdateRequest response
+          _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(    /// -------------- Doubt --------------
+              authToken, bookingIdEmergency, "0");
 
         });
       } else {
@@ -356,7 +362,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
      yourItemList.add({
       "serviceName" : "${widget.mechanicListData?.mechanicService[0].service?.serviceName}",
       "serviceTime" : "${widget.mechanicListData?.mechanicService[0].time.split(':').first}",
-      "serviceCost" :"${widget.mechanicListData?.mechanicService[0].service?.minPrice}",
+      "serviceCost" :"${widget.mechanicListData?.mechanicService[0].fee}",
       "serviceId" : "${widget.mechanicListData?.mechanicService[0].service?.id}",
       "isDefault":  '1',
     });
@@ -368,7 +374,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             "serviceModel" : FieldValue.arrayUnion([{
             "serviceName" : "${widget.mechanicListData?.mechanicService[0].service?.serviceName}",
             "serviceTime" : "${widget.mechanicListData?.mechanicService[0].time.split(':').first}",
-            "serviceCost" :"${widget.mechanicListData?.mechanicService[0].service?.minPrice}",
+            "serviceCost" :"${widget.mechanicListData?.mechanicService[0].fee}",
             "serviceId" : "${widget.mechanicListData?.mechanicService[0].service?.id}",
             "isDefault":  '1',
           }]),
@@ -419,7 +425,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>   MechanicTrackingScreen(latitude: widget.latitude, longitude:  widget.longitude,)
+                    builder: (context) => MechanicTrackingScreen(latitude: widget.latitude,
+                      longitude:  widget.longitude,bookingId: "${notificationPayloadMdl.bookingId}",)
                 )).then((value){
             });
           });
@@ -433,28 +440,41 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-   // _listenNotification(context);
     //_notificationListener.listenNotification(context);
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                appBarCustomUi(size),
-                profileImageAndKmAndReviewCount(size),
-                timeAndLocationUi(size),
-
-                _mechanicDetailsMdl == null
-                    ? Container()
-                    : reviewsUi(size),
-                selectedServiceDetailsUi(size),
-                widget.isEmergency ? acceptAndSendRequestButton( size,context) : acceptAndContinueButton(size, context),
-              ],
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: _isLoading
+              ? Visibility(
+            visible: true,
+            child: Container(
+              height: size.height,
+              child: Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      CustColors.light_navy),
+                ),
+              ),
             ),
+          )
+              : Column(
+            children: [
+              appBarCustomUi(size),
+              profileImageAndKmAndReviewCount(size),
+              timeAndLocationUi(size),
+
+              /*_mechanicDetailsMdl == null
+                  ? Container()
+                  : reviewsUi(size),*/
+              _mechanicDetailsMdl!.data!.mechanicDetails!.mechanicReviewsData.toString() == '[]'
+                  ? Container()
+                  : reviewsUi(size),
+              selectedServiceDetailsUi(size),
+              acceptAndSendRequestButton( size,context) ,
+              // Accept $ Send Request - Emergency service
+            ],
           ),
         ),
       ),
@@ -492,6 +512,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                     textAlign: TextAlign.center,
                     style: Styles.experienceTextBlack,
                   ),
+                  SizedBox(height: 3,),
                   Padding(
                     padding: const EdgeInsets.all(4),
                     child: Stack(
@@ -500,7 +521,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                         Container(
                           height: 60,
                           width: 60,
-                          color: Colors.white,
+                          color: CustColors.metallic_blue,
                           child: CustomPaint(
                             painter: CurvePainter(),
                           ),
@@ -508,7 +529,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            widget.mechanicListData?.mechanic?[0].yearExp != null
+                            widget.mechanicListData?.mechanic[0].yearExp != null
                                 ? '${widget.mechanicListData?.mechanic[0].yearExp} Year'
                                 : '0 Year',
                             textAlign: TextAlign.center,
@@ -587,7 +608,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                           :
                                       SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
                                   )))
-
                       ),
                     ),
                   ),
@@ -631,7 +651,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                       )
                     ],
                   ),
-
                 ],
               ),
             ),
@@ -738,13 +757,13 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(10,10,10,10),
                                   child: Container(
-                                    width: 80.0,
-                                    height: 80.0,
+                                    width: 70.0,
+                                    height: 70.0,
                                     child: ClipRRect(
                                         borderRadius: BorderRadius.circular(20.0),
                                         child:Container(
                                             child:CircleAvatar(
-                                                radius: 50,
+                                                radius: 40,
                                                 backgroundColor: Colors.white,
                                                 child: ClipOval(
                                                   child:
@@ -772,7 +791,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.all(2),
+                                          padding: const EdgeInsets.all(3),
                                           child: Text('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings?.customer?.firstName} ${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings?.customer?.lastName}',
                                             style: Styles.textLabelTitle12,
                                             maxLines: 1,
@@ -805,7 +824,13 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             InkWell(
               onTap: (){
                 setState(() {
-                  reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}');
+                  if(!isExpanded){
+                    reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}');
+                    isExpanded = true;
+                  }else{
+                    reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}') >= 2 ? 2 : _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length;
+                    isExpanded = false;
+                  }
                   print('reviewLength $reviewLength');
                   print('reviewLength ${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}');
                 });
@@ -820,9 +845,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                     width: 110,
                     color: CustColors.greyText,
                   ),
-                  const Padding(
+                   Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Text('Load more',
+                    child: Text( isExpanded ? 'Show less' : 'Load more',
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.visible,
@@ -893,7 +918,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                               Spacer(),
                               Row(
                                 children: [
-                                  Text('${widget.mechanicListData?.mechanicService?[index].fee}',
+                                  Text('${widget.mechanicListData?.mechanicService[index].fee}',
                                     maxLines: 2,
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.visible,
@@ -915,7 +940,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
               child: Row(
                 children: [
                   Row(
-                    children: const [
+                    children: [
                       Text('Total Amount',
                         maxLines: 2,
                         textAlign: TextAlign.start,
@@ -924,7 +949,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                       ),
                     ],
                   ),
-                  const Spacer(),
+                  Spacer(),
                   Row(
                     children: [
                       Text('${widget.mechanicListData?.totalAmount}',
@@ -972,6 +997,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             widget.latitude,
             widget.longitude,
             widget.serviceIds,
+            widget.mechanicListData!.mechanicService[0].fee,
             '${widget.mechanicListData?.id}',
             '1',
             '${widget.mechanicListData?.totalAmount}',
@@ -1015,69 +1041,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     );
   }
 
-  Widget acceptAndContinueButton(Size size, BuildContext context) {
-    return InkWell(
-      onTap: (){
-        print("on press acceptAndContinueButton");
-        if(widget.serviceModel == "Pick up & Drop off"){
-
-        }
-        if(widget.serviceModel == "Mobile Mechanic"){
-          _showMechanicAcceptanceDialog(context);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MobileMechTrackingScreen()));
-        }
-        if(widget.serviceModel == "Take Vehicle to Mechanic"){
-          _showMechanicAcceptanceDialog(context);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BookingSuccessScreen(
-                    bookingDate: "Mar 5, 2022",
-                  )));
-        }
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
-        child: Row(
-          children: [
-            Spacer(),
-            Container(
-              height: 45,
-              width:200,
-              alignment: Alignment.center,
-              margin: const EdgeInsets.only(top: 8, bottom: 6,left: 20,right: 20),
-              //padding: EdgeInsets.only(left: 20, right: 20),
-              decoration: BoxDecoration(
-                color: CustColors.light_navy,
-                border: Border.all(
-                  color: CustColors.blue,
-                  style: BorderStyle.solid,
-                  width: 0.70,
-                ),
-                borderRadius: BorderRadius.circular(7),
-              ),
-              child:  Text(
-                "Accept & continue",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Corbel_Bold',
-                    fontSize:
-                    ScreenSize().setValueFont(14.5),
-                    fontWeight: FontWeight.w800),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   _showMechanicAcceptanceDialog(BuildContext context) async {
-    Future.delayed(const Duration(seconds: 35), () {
-
+    Future.delayed(const Duration(seconds: 40), () {
 
       setState(() {
         print('_showMechanicAcceptanceDialog');

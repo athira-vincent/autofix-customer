@@ -14,10 +14,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class My_Orders_Display extends StatefulWidget {
   final OrderList modeldetails;
-  final String deliverydate;
+
+  final String deliverydate, productpic;
 
   const My_Orders_Display(
-      {Key? key, required this.modeldetails, required this.deliverydate})
+      {Key? key, required this.modeldetails, required this.deliverydate,
+        required this.productpic})
       : super(key: key);
 
   @override
@@ -27,6 +29,22 @@ class My_Orders_Display extends StatefulWidget {
 class _My_Orders_DisplayState extends State<My_Orders_Display> {
   double _rating = 1.0;
   double _initialRating = 1.0;
+  late List<String> image;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    if(widget.modeldetails.product.productImage.toString() != "null"){
+      image = widget.modeldetails.product.productImage
+          .replaceAll("[", "")
+          .replaceAll("]", "")
+          .split(",");
+      print("imagesss >>>");
+      print(image[0]);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,8 +111,10 @@ class _My_Orders_DisplayState extends State<My_Orders_Display> {
                     decoration: BoxDecoration(
                         color: CustColors.whiteBlueish,
                         borderRadius: BorderRadius.circular(11.0)),
-                    child: Image.network(
-                        'https://cdn.zeplin.io/620a1cdc253c8ca7ef9e1792/assets/0DEE6D3F-2121-4194-86D6-903C453BFC87.png'),
+                    child: image==null
+                        ? Image.network(
+                        'https://cdn.zeplin.io/620a1cdc253c8ca7ef9e1792/assets/0DEE6D3F-2121-4194-86D6-903C453BFC87.png')
+                        : Image.network(image[0].toString()),
                   ),
                 ),
                 const SizedBox(

@@ -5,19 +5,44 @@ import 'package:rxdart/rxdart.dart';
 class MechanicMyWalletBloc {
   final Repository repository = Repository();
 
-  final postMechanicMyWallet = PublishSubject<MechanicMyWalletMdl>();
-  Stream<MechanicMyWalletMdl> get MechanicMyWalletResponse => postMechanicMyWallet.stream;
+  /// =============== Mechanic Wallet Type 1 - Daily ================== ///
 
-  postMechanicFetchMyWalletRequest(
-      String token, type
+  final postMechanicMyWalletDaily = PublishSubject<MechanicMyWalletMdl>();
+  Stream<MechanicMyWalletMdl> get MechanicMyWalletDailyResponse => postMechanicMyWalletDaily.stream;
+
+  postMechanicFetchMyWalletDailyRequest(
+      String token, mechanicId, type,String customeDate
       ) async {
-    MechanicMyWalletMdl _mechanicMyWalletMdl = await repository.postMechanicFetchMyWalletRequest(token, type);
-    postMechanicMyWallet.sink.add(_mechanicMyWalletMdl);
+    MechanicMyWalletMdl _mechanicMyWalletMdl = await repository.postMechanicFetchMyWalletRequest(token, mechanicId,type,customeDate);
+    postMechanicMyWalletDaily.sink.add(_mechanicMyWalletMdl);
   }
 
+  /// =============== Mechanic Wallet Type 2 - Weekly ================== ///
+  final postMechanicMyWalletWeekly = PublishSubject<MechanicMyWalletMdl>();
+  Stream<MechanicMyWalletMdl> get MechanicMyWalletWeeklyResponse => postMechanicMyWalletWeekly.stream;
+
+  postMechanicFetchMyWalletWeeklyRequest(
+      String token, mechanicId, type, String customeDate
+      ) async {
+    MechanicMyWalletMdl _mechanicMyWalletMdl = await repository.postMechanicFetchMyWalletRequest(token, mechanicId, type, customeDate);
+    postMechanicMyWalletWeekly.sink.add(_mechanicMyWalletMdl);
+  }
+
+  /// =============== Mechanic Wallet Type 3 - Monthly ================== ///
+  final postMechanicMyWalletMonthly = PublishSubject<MechanicMyWalletMdl>();
+  Stream<MechanicMyWalletMdl> get MechanicMyWalletMonthlyResponse => postMechanicMyWalletMonthly.stream;
+
+  postMechanicFetchMyWalletMonthlyRequest(
+      String token, mechanicId, type, String customeDate
+      ) async {
+    MechanicMyWalletMdl _mechanicMyWalletMdl = await repository.postMechanicFetchMyWalletRequest(token, mechanicId, type, customeDate);
+    postMechanicMyWalletMonthly.sink.add(_mechanicMyWalletMdl);
+  }
 
   dispose() {
-    postMechanicMyWallet.close();
+    postMechanicMyWalletDaily.close();
+    postMechanicMyWalletWeekly.close();
+    postMechanicMyWalletMonthly.close();
   }
 
 

@@ -74,9 +74,9 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
       mechanicId = shdPre.getString(SharedPrefKeys.userID).toString();
 
       print('userFamilyId'+authToken.toString());
-      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "2", mechanicId);
-      _mechanicHomeBloc.postMechanicCompletedServiceRequest("$authToken", "0", mechanicId);
-      _mechanicHomeBloc.postMechanicAllServiceRequest("$authToken", "undefined", mechanicId);
+      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "2", mechanicId, 0, 200);
+      _mechanicHomeBloc.postMechanicCompletedServiceRequest("$authToken", "0", mechanicId, 0, 200);
+      _mechanicHomeBloc.postMechanicAllServiceRequest("$authToken", "undefined", mechanicId, 0, 200);
     });
   }
 
@@ -528,7 +528,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                     height: 25,
                                                     width: 50,
                                                     alignment: Alignment.center,
-                                                    color: CustColors.blue,
+                                                    color: CustColors.light_navy,
                                                     child: Text('Emergency Service',
                                                       textAlign: TextAlign.center,
                                                       style: Styles.badgeTextStyle2,
@@ -539,13 +539,13 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                     height: 25,
                                                     width: 50,
                                                     alignment: Alignment.center,
-                                                    color: CustColors.blue,
+                                                    color: CustColors.light_navy,
                                                     child: Text('Regular Service',
                                                       textAlign: TextAlign.center,
                                                       style: Styles.badgeTextStyle2,
                                                     ),
                                                   ),
-                                                  SizedBox(height: 5,),
+                                                  SizedBox(height: 3,),
                                                   Stack(
                                                     alignment: Alignment.topCenter,
                                                     children: [
@@ -553,7 +553,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                       Container(
                                                         height: 50,
                                                         width: 50,
-                                                        color: Colors.white,
+                                                        color: CustColors.light_navy,
                                                         child: CustomPaint(
                                                           painter: CurvePainter(),
                                                         ),
@@ -804,7 +804,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                         height: 25,
                                                         width: 50,
                                                         alignment: Alignment.center,
-                                                        color: CustColors.blue,
+                                                        color: CustColors.cloudy_blue,
                                                         child: Text('Emergency Service',
                                                           textAlign: TextAlign.center,
                                                           style: Styles.badgeTextStyle2,
@@ -815,13 +815,13 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                         height: 25,
                                                         width: 50,
                                                         alignment: Alignment.center,
-                                                        color: CustColors.blue,
+                                                        color: CustColors.cloudy_blue,
                                                         child: Text('Regular Service',
                                                           textAlign: TextAlign.center,
                                                           style: Styles.badgeTextStyle2,
                                                         ),
                                                       ),
-                                                      SizedBox(height: 5,),
+                                                      SizedBox(height: 3,),
                                                       Stack(
                                                         alignment: Alignment.topCenter,
                                                         children: [
@@ -829,7 +829,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                           Container(
                                                             height: 50,
                                                             width: 50,
-                                                            color: Colors.white,
+                                                            color: CustColors.cloudy_blue,
                                                             child: CustomPaint(
                                                               painter: CurvePainter(),
                                                             ),
@@ -1078,7 +1078,8 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                           height: 25,
                                                           width: 50,
                                                           alignment: Alignment.center,
-                                                          color: CustColors.blue,
+                                                          color: CustomerAllServicesList?.upcomingCompletedServices![index].bookStatus.toString() == "8"
+                                                              ? CustColors.cloudy_blue : CustColors.light_navy,
                                                           child: Text('Emergency Service',
                                                             textAlign: TextAlign.center,
                                                             style: Styles.badgeTextStyle2,
@@ -1089,13 +1090,14 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                           height: 25,
                                                           width: 50,
                                                           alignment: Alignment.center,
-                                                          color: CustColors.blue,
+                                                          color: CustomerAllServicesList?.upcomingCompletedServices![index].bookStatus.toString() == "8"
+                                                              ? CustColors.cloudy_blue : CustColors.light_navy,
                                                           child: Text('Regular Service',
                                                             textAlign: TextAlign.center,
                                                             style: Styles.badgeTextStyle2,
                                                           ),
                                                         ),
-                                                        SizedBox(height: 5,),
+                                                        SizedBox(height: 3,),
                                                         Stack(
                                                           alignment: Alignment.topCenter,
                                                           children: [
@@ -1103,7 +1105,8 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                             Container(
                                                               height: 50,
                                                               width: 50,
-                                                              color: Colors.white,
+                                                              color: CustomerAllServicesList?.upcomingCompletedServices![index].bookStatus.toString() == "8"
+                                                                  ? CustColors.cloudy_blue : CustColors.light_navy,
                                                               child: CustomPaint(
                                                                 painter: CurvePainter(),
                                                               ),

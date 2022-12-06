@@ -63,5 +63,13 @@ class TextStrings {
 
   static const  firebase_serverToken = "AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL";
 
+  static const  appLifeCycle_init = "initialized";
 
+  static const  appLifeCycle_working = "working";
+
+  static const  appLifeCycle_background = "background";
+
+  static const  appLifeCycle_destroyed = "destroyed";
+
+  static const  googleAPiKey = "AIzaSyA1s82Y0AiWYbzXwfppyvKLNzFL-u7mArg";
 }

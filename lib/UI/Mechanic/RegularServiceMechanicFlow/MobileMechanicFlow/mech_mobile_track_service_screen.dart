@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/MobileMechanicFlow/customer_track_screen.dart';
@@ -16,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MechMobileTrackScreen extends StatefulWidget{
   final String bookingId;
@@ -40,28 +42,29 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
   final ServiceStatusUpdateBloc _serviceStatusUpdateBloc = ServiceStatusUpdateBloc();
   String bookingDate = "", scheduledDate = "", scheduledTime = "";
-  String isBookedDate = "-1",  isDriveStarted = "", isArrived = "-1", isWorkStarted = "", isWorkFinished = "", isPayment = "";
+  String isBookedDate = "-1",  isDriveStarted = "", isArrived = "-1", isWorkStarted = "", isWorkFinished = "",isPaymentRequested = "-1", isPayment = "";
   String customerName = "",customerAddress = "", mechanicName = "", mechanicAddress = "", customerLatitude = "", customerLongitude = "";
-  String isDriveStartedTime = "", isArrivedTime = "", isWorkStartedTime = "", isWorkFinishedTime = "", isPaymentTime = "";
+  String isDriveStartedTime = "", isArrivedTime = "", isWorkStartedTime = "", isWorkFinishedTime = "", isPaymentTime = "", isPaymentRequestedTime = "";
   DateTime dateToday = DateTime.now() ;
   String isCompleted = "-1";
   String? FcmToken="";
   String authToken="";
   String userName="", userId = "", vehicleName = "";
-  bool isLoading = true;
+  bool isLoading = true;String serviceCost = "";
+  BuildContext? dialogContext;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getSharedPrefData();
+    listenToCloudFirestoreDB();
+    bookingDate = widget.bookingDate;
     Timer(const Duration(seconds: 3), () {
       setState(() {
         isLoading = false;
       });
     });
-    getSharedPrefData();
-    listenToCloudFirestoreDB();
-    bookingDate = widget.bookingDate;
   }
 
   Future<void> getSharedPrefData() async {
@@ -77,7 +80,6 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
   void listenToCloudFirestoreDB() {
     //_firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
     _firestore.collection("Regular-MobileMech").doc('${widget.bookingId}').snapshots().listen((event) {
-
       setState(() {
         bookingDate = event.get("bookingDate");
         customerName = event.get("customerName");
@@ -98,6 +100,9 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
         isWorkStartedTime = event.get("isWorkStartedTime");
         isWorkFinished = event.get("isWorkFinished");
         isWorkFinishedTime = event.get("isWorkFinishedTime");
+        isPaymentRequested = event.get("isPaymentRequested");
+        isPaymentRequestedTime = event.get("isPaymentRequestedTime");
+        serviceCost = event.get("serviceTotalAmount");
         isPayment = event.get("isPayment");
         isPaymentTime = event.get("isPaymentTime");
       });
@@ -118,7 +123,6 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
       if(isPayment == "5"){
         setState(() {
           isCompleted = "0";
-          _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "8");
         });
       }
 
@@ -225,108 +229,187 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
             width: size.width,
             height: size.height,
             child: Center(child: CircularProgressIndicator(color: CustColors.light_navy)))
-        :
-        Container(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                appBarCustomerUi(size),
-                trackServiceBoxUi(size),
-                serviceBookedUi(size),
-                isBookedDate == "-1" && isDriveStarted == "-1"?
+          :
+        Column(
+          children: [
+            appBarCustomerUi(size),
+            Container(
+              height: size.height - 120,
+              child: ListView(
+                children: [
+                  serviceBookedUi(size),
+                  isBookedDate == "-1" && isDriveStarted == "-1"?
                   goToCustomerInactiveUi(size)
-                    : isBookedDate == "0" && isDriveStarted == "-1"?
-                        goToCustomerActiveWaitingUi(size)                       // show ready for service button
-                       // : isBookedDate == "0" && isDriveStarted == "0" ?
-                        //  goToCustomerActiveTrackUi(size)                     // show map button
-                          : goToCustomerFinishedUi(size),                       // show the details like start time and location
-                isDriveStarted == "-1" && isArrived == "-1" ?
+                      : isBookedDate == "0" && isDriveStarted == "-1"?
+                  goToCustomerActiveWaitingUi(size)                       // show ready for service button
+                  // : isBookedDate == "0" && isDriveStarted == "0" ?
+                  //  goToCustomerActiveTrackUi(size)                     // show map button
+                      : goToCustomerFinishedUi(size),                       // show the details like start time and location
+                  isDriveStarted == "-1" && isArrived == "-1" ?
                   mechanicIsArrivedInActiveUi(size)
-                  :  isDriveStarted == "0" && isArrived == "-1" ?
-                      mechanicIsArrivedActiveUi(size)
+                      :  isDriveStarted == "0" && isArrived == "-1" ?
+                  mechanicIsArrivedActiveUi(size)
                       : mechanicIsArrivedFinishedUi(size),
-                isArrived == "-1" && isWorkStarted == "-1"  ?
+                  isArrived == "-1" && isWorkStarted == "-1"  ?
                   startWorkInActiveUi(size)
-                    : isArrived == "0" && isWorkStarted == "-1" ?
-                      startWorkActiveUi(size)
-                    : startWorkFinishedUi(size),
+                      : isArrived == "0" && isWorkStarted == "-1" ?
+                  startWorkActiveUi(size)
+                      : startWorkFinishedUi(size),
 
-                isWorkStarted == "-1" && isWorkFinished == "-1" ?
-                    finishedWorkInActiveUi(size)
-                    : isWorkStarted == "0" && isWorkFinished == "-1" ?
-                      finishedWorkActiveUi(size)
-                    : finishedWorkFinishedUi(size),
+                  isWorkStarted == "-1" && isWorkFinished == "-1" ?
+                  finishedWorkInActiveUi(size)
+                      : isWorkStarted == "0" && isWorkFinished == "-1" ?
+                  finishedWorkActiveUi(size)
+                      : finishedWorkFinishedUi(size),
 
-                isWorkFinished == "-1" && isPayment == "-1" ?
-                    paymentOptionInActiveUi(size)
-                    : (isWorkFinished == "0" && isPayment == "-1") || (isWorkFinished == "0" && isPayment == "0") ?
-                      paymentOptionWaitingActiveUi(size)
-                    : isWorkFinished == "0" && isPayment == "1" ?
-                      paymentOptionActiveUi(size)
-                    : paymentOptionFinishedUi(size),
-                completedUi(size),
-                textButtonUi(size),
-              ],
-            ),
-          ),
+                  isWorkFinished == "-1" && isPaymentRequested == "-1" ?
+                  requestPaymentInActiveUi(size)
+                      : isWorkFinished == "0" && isPaymentRequested == "-1" ?
+                  requestPaymentActiveUi(size)
+                      : requestPaymentFinishedUi(size),
+
+                  isPaymentRequested == "-1" && isPayment == "-1" ?
+                  paymentOptionInActiveUi(size)
+                      : isPaymentRequested == "0" && isPayment == "-1" ?
+                  paymentOptionWaitingActiveUi(size)
+                      : isPaymentRequested == "0" && isPayment == "1" ?
+                  paymentOptionActiveUi(size)
+                      : paymentOptionFinishedUi(size),
+
+                  /*isWorkFinished == "-1" && isPaymentRequested == "-1" ?
+                  requestPaymentInActiveUi(size)
+                      : isWorkFinished == "0" && isPaymentRequested == "-1" ?
+                  requestPaymentActiveUi(size)
+                      : isWorkFinished == "0" && isPayment == "0" ?*/
+                  /*paymentOptionWaitingActiveUi(size)
+                      : isWorkFinished == "0" && isPayment == "1" ?
+                  paymentOptionActiveUi(size)
+                      : paymentOptionFinishedUi(size),*/
+
+                  /*isWorkFinished == "-1" && isPayment == "-1" ?
+                  paymentOptionInActiveUi(size)
+                      : (isWorkFinished == "0" && isPayment == "-1") || (isWorkFinished == "0" && isPayment == "0") ?
+                  paymentOptionWaitingActiveUi(size)
+                      : isWorkFinished == "0" && isPayment == "1" ?
+                  paymentOptionActiveUi(size)
+                      : paymentOptionFinishedUi(size),*/
+                  completedUi(size),
+                  textButtonUi(size),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );
   }
 
   Widget appBarCustomerUi(Size size){
-    return Container(
-      margin: EdgeInsets.only(
-         // left: size.width * 10 / 100,
-          //top: size.height * 3.3 / 100
-      ),
-      child: Stack(
-        children: [
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.arrow_back, color: const Color(0xff707070)),
-                onPressed: () { Navigator.pop(context); },
-              )
-            ],
-          )
-        ],
-      ),
+    return Row(
+      children: [
+        trackServiceBoxUi(size),
+      ],
     );
   }
 
   Widget trackServiceBoxUi(Size size){
-    return Padding(
-      padding: const EdgeInsets.only(left: 22.0,right: 22.0),
-      child: Container(
-        height: 83,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: CustColors.light_navy,
+    return Container(
+      height: 80,
+      width: size.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(0),
+        color: CustColors.light_navy,
+      ),
+      child: ListTile(
+
+        leading: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              margin: EdgeInsets.only(
+                // left: size.width * 10 / 100,
+                  top: size.height * 2.5 / 100
+              ),
+              child: Stack(
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.arrow_back, color: const Color(0xffffffff)),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Container(
+                margin: EdgeInsets.only(
+                  // left: size.width * 10 / 100,
+                    top: size.height * 2.5 / 100
+                ),
+                height: 45,
+                width: 45,
+                child: Image.asset('assets/image/ic_clock.png')),
+          ],
         ),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: Container(
-                    height: 50,
-                    width:50,
-                    child: Image.asset('assets/image/ic_clock.png')),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: Text('TRACK SERVICE',
-                style: TextStyle(
-                  fontFamily: 'SamsungSharpSans-Medium',
-                  fontSize: 16,
-                  //height: 30
-                  color: Colors.white,
-                ),),
-              ),
-            ],
+        title: Container(
+          margin: EdgeInsets.only(
+            // left: size.width * 10 / 100,
+              top: size.height * 2.5 / 100
           ),
+          child: Text('TRACK SERVICE',
+            style: TextStyle(
+              fontFamily: 'SamsungSharpSans-Medium',
+              fontSize: 16,
+              //height: 30
+              color: Colors.white,
+            ),),
         ),
-      //),
+        /*trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            InkWell(
+              onTap: (){
+                //String callPhoneNumber = "90488878777";
+                _callPhoneNumber(callPhoneNumber);
+              },
+              child: Container(
+                  margin: EdgeInsets.only(
+                      top: size.height * 2.5 / 100,
+                      right: size.height * 2.5 / 100
+                  ),
+                  child: Image.asset("assets/image/ic_call_blue_white.png")
+              ),
+            ),
+            InkWell(
+              onTap: (){
+                print("chat mechanicId : $mechanicId  widget.bookingId '${widget.bookingId}' customerId : $customerId");
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ChatScreen(
+                          peerId: mechanicId,
+                          bookingId: '${widget.bookingId}',
+                          collectionName: 'Regular-MobileMech',
+                          currentUserId: customerId,
+                          peerName: mechanicName,
+                          peerImageUrl: mechanicProfileUrl,
+                          myImageUrl: customerProfileUrl,
+                        )));
+              },
+              child: Container(
+                  margin: EdgeInsets.only(
+                    // left: size.width * 10 / 100,
+                      top: size.height * 2.5 / 100
+                  ),
+                  child: Image.asset("assets/image/ic_chat_blue_white.png")
+              ),
+            ),
+          ],
+        ),*/
+      ),
     );
   }
 
@@ -558,7 +641,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     child: TextButton(
                       onPressed: () {
                         updateToCloudFirestoreDB("isDriveStarted","0");
-                        _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "9");
+                        _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "2");
                         //updateToCloudFirestoreDB("isDriveStartedTime","${DateFormat("hh:mm a").format(DateTime.now())}");
                         //------------------ take the current date and time & Update Firebase, change the status to
                       },
@@ -1152,7 +1235,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     padding: const EdgeInsets.only(top: 00.0),
                     child: TextButton(
                       onPressed: () {
-                        callOnFcmApiSendPushNotifications("Service for ${vehicleName} started");
+                        //callOnFcmApiSendPushNotifications("Service for ${vehicleName} started");
                         updateToCloudFirestoreDB("isWorkStarted","0");
                         _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "5");
                       },
@@ -1225,7 +1308,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('$mechanicName started work',
+                      Text('started work',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
@@ -1392,7 +1475,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('finish work',
+                      Text('Finish work',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
@@ -1416,7 +1499,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     child: TextButton(
                       onPressed: () {
                         //updateToCloudFirestoreDB("isWorkStarted","1");
-                        callOnFcmApiSendPushNotifications("Service for ${vehicleName} finished");
+                        //callOnFcmApiSendPushNotifications("Service for ${vehicleName} finished");
                         updateToCloudFirestoreDB("isWorkFinished","0");
                         _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "6");
                       },
@@ -1521,6 +1604,272 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
     );
   }
 
+  Widget requestPaymentInActiveUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy05,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_request_payment_b.svg',
+                        fit: BoxFit.contain,),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex:200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Request Payment',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                      /*Text('Mar 5,2022',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)*/
+                    ],
+                  ),
+                ),
+              ),
+              /*Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {  },
+                      child: Text('TRACK',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xff919191),
+                          fontSize: 08,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xffc9d6f2),
+                        shape:
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),*/
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
+            child: FDottedLine(
+              color: CustColors.light_navy05,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget requestPaymentActiveUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy05,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_request_payment_b.svg',
+                        fit: BoxFit.contain,),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex:200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Request Payment',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {
+                        //updateToCloudFirestoreDB("isWorkStarted","1");
+                        //callOnFcmApiSendPushNotifications("Service for ${vehicleName} finished");
+                        updateToCloudFirestoreDB("isPaymentRequested","0");
+                         _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "7");
+                      },
+                      child: Text('Request',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 08,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: CustColors.light_navy,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
+            child: FDottedLine(
+              color: CustColors.light_navy05,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget requestPaymentFinishedUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_request_payment_w.svg',
+                        fit: BoxFit.contain,
+                        //color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex:200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Requested for payment',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                      Text('at ${isPaymentRequestedTime}',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
+            child: FDottedLine(
+              color: CustColors.light_navy,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
   Widget paymentOptionInActiveUi(Size size){
     return Container(
       child: Column(
@@ -1558,7 +1907,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Payment',
+                      Text('Payment Details',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
@@ -1688,7 +2037,13 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     padding: const EdgeInsets.only(top: 00.0),
                     child: TextButton(
                       onPressed: () {
-                        updateToCloudFirestoreDB("isPayment","5");
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              dialogContext = context;
+                              return confirmPaymentReceivedDialog();
+                            });
                       },
                       child: Text('Received',
                         textAlign: TextAlign.center,
@@ -2021,6 +2376,74 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
     ]
       ),
 
+    );
+  }
+
+  Widget confirmPaymentReceivedDialog() {
+    return CupertinoAlertDialog(
+      title: Text("Confirm Payment?",
+          style: TextStyle(
+            fontFamily: 'Formular',
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: CustColors.materialBlue,
+          )),
+      content: Text("You can confirm payment received"),
+      actions: <Widget>[
+        CupertinoDialogAction(
+            textStyle: TextStyle(
+              color: CustColors.rusty_red,
+              fontWeight: FontWeight.normal,
+            ),
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(dialogContext!);
+            },
+            child: Text("Cancel")),
+        CupertinoDialogAction(
+            textStyle: TextStyle(
+              color: CustColors.rusty_red,
+              fontWeight: FontWeight.normal,
+            ),
+            isDefaultAction: true,
+            onPressed: () async {
+              setState(() {
+                /// ----------- api call for payment success ----------
+                Repository()
+                    .fetchpaymentsucess(
+                    1, serviceCost, 1, "", '${widget.bookingId}'
+                    )
+                    .then((value) => {
+                  if (value.data!.paymentCreate.paymentData!.id.toString().isNotEmpty)
+                    {
+                      updateToCloudFirestoreDB("isPayment","5"),
+                      _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "8"),
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("Response updated",
+                                style: const TextStyle(
+                                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+                            duration: const Duration(seconds: 2),
+                            backgroundColor: CustColors.light_navy,
+                          )),
+                    }
+                  else
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("Failed to updated your Response",
+                            style: const TextStyle(
+                                fontFamily: 'Roboto_Regular', fontSize: 14)),
+                        duration: const Duration(seconds: 2),
+                        backgroundColor: CustColors.light_navy,
+                      )),
+                      print("popcontext"),
+                      Navigator.pop(context)
+                    }
+                });
+                Navigator.pop(dialogContext!);
+              });
+            },
+            child: Text("Yes")),
+      ],
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:auto_fix/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
@@ -37,11 +38,9 @@ class _RegularRateMechanicScreenState extends State<RegularRateMechanicScreen> {
   String authToken="";
   String userName="";
   String mechanicName="";
-  //String totalEstimatedTime = "0";
   String totalEstimatedCost = "0";
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  var _firestoreData ;
 
   TextEditingController _feedBackController = TextEditingController();
 
@@ -60,6 +59,7 @@ class _RegularRateMechanicScreenState extends State<RegularRateMechanicScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
+      JWTTokenChecking.checking(shdPre.getString(SharedPrefKeys.token).toString(), context);
       print('authToken authToken>>>>>>>>> ' + authToken.toString());
     });
     await _firestore.collection("${widget.firebaseCollection}").doc("${widget.bookingId}").snapshots().listen((event) {
@@ -90,6 +90,13 @@ class _RegularRateMechanicScreenState extends State<RegularRateMechanicScreen> {
       }else{
         setState(() {
           //_isLoadingPage = true;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.data!.addRating!.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          ));
           setDeactivate();
 
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
@@ -106,6 +113,7 @@ class _RegularRateMechanicScreenState extends State<RegularRateMechanicScreen> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(

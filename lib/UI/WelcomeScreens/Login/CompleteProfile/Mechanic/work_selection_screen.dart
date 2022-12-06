@@ -206,99 +206,96 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     print('${_images?.path}' + ">>>>>>> image from Widget");
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: ScrollConfiguration(
-          behavior: MyBehavior(),
-          child: SingleChildScrollView(
-            child: SafeArea(
-              child:
-              widget.userCategory == TextStrings.user_category_individual
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: ScrollConfiguration(
+        behavior: MyBehavior(),
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child:
+            widget.userCategory == TextStrings.user_category_individual
                 ? Column(
+              children: [
+                completeYourProfileText(),
+                uploadMechanicProfileImage(size),
+                SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      completeYourProfileText(),
-                      uploadMechanicProfileImage(size),
-                      SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Form(
-                                autovalidateMode: _autoValidate,
-                                key: _formKey,
-                                child: Container(
-                                  margin: EdgeInsets.only(
-                                    left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
+                      Form(
+                          autovalidateMode: _autoValidate,
+                          key: _formKey,
+                          child: Container(
+                            margin: EdgeInsets.only(
+                              left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
-                                        child: Column(
-                                          children: [
-                                            workSelectionTextSelection() ,
-                                            vehicleSpecializedTextSelection(),
-                                            uploadApprenticeCertificateSelection() ,
-                                            meansOfIdentificationSelection(),
-                                            addressTextSelection(),
-                                            NextButtonMechanicIndividual(),
+                                      workSelectionTextSelection() ,
+                                      vehicleSpecializedTextSelection(),
+                                      uploadApprenticeCertificateSelection() ,
+                                      meansOfIdentificationSelection(),
+                                      addressTextSelection(),
+                                      NextButtonMechanicIndividual(),
 
-                                          ],
-                                        ),
-                                      ),
                                     ],
                                   ),
-                                )
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      )
-                    ],
-                  )
-                : Column(
-                    children: [
-                      completeYourProfileText(),
-                      uploadMechanicProfileImage(size),
-                      SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Form(
-                                autovalidateMode: _autoValidate,
-                                key: _formKey,
-                                child: Container(
-                                  margin: EdgeInsets.only(
-                                    left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
-                                        child: Column(
-                                          children: [
-                                            workSelectionTextSelection() ,
-                                            numberOfMechanicsSelection(),
-                                            rcNumberSelection(),
-                                            vehicleSpecializedTextSelection(),
-                                            yearOfExistenceSelection(),
-                                            addressTextSelection(),
-                                            NextButtonMechanicCorporate(),
-
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                            ),
-                          ],
-                        ),
-                      )
+                          )
+                      ),
                     ],
                   ),
+                )
+              ],
+            )
+                : Column(
+              children: [
+                completeYourProfileText(),
+                uploadMechanicProfileImage(size),
+                SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Form(
+                          autovalidateMode: _autoValidate,
+                          key: _formKey,
+                          child: Container(
+                            margin: EdgeInsets.only(
+                              left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
+                                  child: Column(
+                                    children: [
+                                      workSelectionTextSelection() ,
+                                      numberOfMechanicsSelection(),
+                                      rcNumberSelection(),
+                                      vehicleSpecializedTextSelection(),
+                                      yearOfExistenceSelection(),
+                                      addressTextSelection(),
+                                      NextButtonMechanicCorporate(),
 
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
+
           ),
         ),
       ),
@@ -366,20 +363,20 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                                 borderRadius: BorderRadius.circular(20.0),
                                 child: _images == null
                                     ? Container(
-                                    child:CircleAvatar(
-                                        radius: 50,
-                                        backgroundColor: Colors.white,
-                                        child: ClipOval(
-                                          child:  SvgPicture.asset('assets/image/CustomerType/upload_car_avathar.svg'),
-                                        )))
+                                      child:CircleAvatar(
+                                          radius: 50,
+                                          backgroundColor: Colors.white,
+                                          child: ClipOval(
+                                            child:  SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg'),
+                                          )))
                                     : Container(
-                                  height: 100,
-                                  width: 100,
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    backgroundImage: FileImage(_images!),
-                                  ),
-                                ),
+                                      height: 100,
+                                      width: 100,
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        backgroundImage: FileImage(_images!),
+                                      ),
+                                    ),
                               ),
                             ),
                           ),

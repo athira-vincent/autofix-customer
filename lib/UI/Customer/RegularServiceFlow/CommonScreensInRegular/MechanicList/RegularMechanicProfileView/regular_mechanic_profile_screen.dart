@@ -80,18 +80,18 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
-  final ServiceStatusUpdateBloc _serviceStatusUpdateBloc = ServiceStatusUpdateBloc();
+  //final ServiceStatusUpdateBloc _serviceStatusUpdateBloc = ServiceStatusUpdateBloc();
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   List yourItemList = [];
 
   int? reviewLength = 0;
-
+  bool _isLoading = false;
   double height = 0;
   String selectedState = "";
   double totalFees = 0.0;
-
+  bool isExpanded = false;
   String? FcmToken="";
   String authToken="";
   String userName="", userId = "";
@@ -103,7 +103,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
   String carNameModel="";
 
   String carPlateNumber="";
-  int totalAmount = 0;
+  int totalAmount = 0; String serviceFeeList = "";
 
   late StateSetter mechanicAcceptance;
 
@@ -116,17 +116,31 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       yourItemList.add({
         "serviceCategoryId": '${widget.selectedService[i].categoryId}',
         "serviceId" : '${widget.selectedService[i].id}',
+        "serviceName" : '${widget.mechanicListData!.mechanicService[i].service!.serviceName}',
+        "serviceCost" : '${widget.mechanicListData!.mechanicService[i].fee}'
+      });
+      totalAmount = totalAmount + int.parse(widget.mechanicListData!.mechanicService[i].fee);
+      if(i == widget.selectedService.length-1){
+        serviceFeeList = serviceFeeList + '${widget.mechanicListData!.mechanicService[i].fee}';
+      }
+      else{
+        serviceFeeList = serviceFeeList + '${widget.mechanicListData!.mechanicService[i].fee},';
+    }
+    }
+    print(">>>>>>serviceFeeList : $serviceFeeList");
+    /*yourItemList.add({
+        "serviceCategoryId": '${widget.selectedService[i].categoryId}',
+        "serviceId" : '${widget.selectedService[i].id}',
         "serviceName" : '${widget.selectedService[i].serviceName}',
         "serviceCost" : '${widget.selectedService[i].maxPrice}'
-      });
-      totalAmount = totalAmount + int.parse(widget.selectedService[i].maxPrice);
-    }
+      });*/
 
     print(' >>>>>>>>>>>>>> yourItemList \n $yourItemList >>>_RegularMechanicProfileViewScreenState yourItemList');
 
     print(' >>>>>>>>>>>>>> mechanicListData \n ${widget.mechanicListData} >>>>>>>_RegularMechanicProfileViewScreenState mechanicListData');
 
     getSharedPrefData();
+    _isLoading = true;
     _listen();
 
     //_listenNotification(context);
@@ -160,14 +174,16 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
     _homeCustomerBloc.MechanicProfileDetailsResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
+          _isLoading = false;
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
         });
       } else {
         setState(() {
+          _isLoading = false;
           _mechanicDetailsMdl = value;
           reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}') >= 2 ? 2 : _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length;
-
+          print(">>>> ${_mechanicDetailsMdl!.data!.mechanicDetails!.mechanicReviewsData}");
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
         });
@@ -185,7 +201,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
           print("mechanicsRegularBookingIDResponse success >>>");
           print("mechanicsRegularBookingIDResponse success booking id >>> " + '${value.data!.mechanicBooking!.id.toString()}' );
 
-          _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, value.data!.mechanicBooking!.id, "0");
+          //_serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, value.data!.mechanicBooking!.id, "0");
 
           if(widget.regularServiceType == TextStrings.txt_pick_up){
             updateToCloudFirestoreDBPickUp(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
@@ -194,7 +210,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
           }else{
             updateToCloudFirestoreDBTakeVehicle(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
           }
-          callOnFcmApiSendPushNotifications(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
+          //callOnFcmApiSendPushNotifications(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -236,6 +252,10 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         "customerLongitude": "${widget.longitude}",
         "customerAddress" : "${widget.customerAddress}",
         "customerFcmToken" : "${token}",
+        "mechanicPhone" : "${mechanicBooking!.mechanic!.phoneNo}",
+        "customerPhone" : "${mechanicBooking.customer!.phoneNo}",
+        "mechanicProfileUrl" : "${mechanicBooking.mechanic!.mechanic![0].profilePic ?? ''}",
+        "customerProfileUrl" : "${mechanicBooking.customer!.customer![0].profilePic ?? ''}",
         "mechanicId": "${widget.mechanicId}",
         "mechanicName": "${widget.mechanicListData!.firstName}",
         "mechanicLatitude": "${widget.mechanicListData!.mechanicStatus[0].latitude}",
@@ -244,20 +264,24 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         "mechanicFcmToken" : "${widget.mechanicListData!.fcmToken}",
         "serviceList" : FieldValue.arrayUnion(yourItemList),
         "serviceTotalAmount" : '${totalAmount}',
-        "vehicleId": "${mechanicBooking!.vehicle!.id}",
+        "vehicleId": "${mechanicBooking.vehicle!.id}",
         "vehicleName": "${mechanicBooking.vehicle!.brand} [ ${mechanicBooking.vehicle!.model} ]",
         "vehiclePlateNumber" : "${mechanicBooking.vehicle!.plateNo}",
         "vehicleColor" : "${mechanicBooking.vehicle!.color}",
-        'isStartedFromLocation': "-1",
-        'isArrived': "-1",
         "isBookedDate" : "-1",
-        'isPickedUpVehicle': "-1",
-        'isReachedServiceCenter': "-1",
-        'isWorkStarted': "-1",
-        'isWorkFinished': "-1",
-        'isStartedFromLocationForDropOff': "-1",
-        'isDropOff': "-1",
-        'isPayment': "-1",
+        "isStartedFromLocation" : "-1","isStartedFromLocationTime" : "",
+        "isArrived" : "-1", "isArrivedTime" : "",
+        "isPickedUpVehicle" : "-1", "isPickedUpVehicleTime" : "",
+        "isReachedServiceCenter" : "-1", "isReachedServiceCenterTime" : "",
+        "isWorkStarted" : "-1", "isWorkStartedTime" : "",
+        "isWorkFinished" : "-1", "isWorkFinishedTime" : "",
+        "isStartedFromLocationForDropOff" : "-1" , "isStartedFromLocationForDropOffTime" : "",
+        "isReachedLocationForDropOff" : "-1", "isReachedLocationForDropOffTime" : "",
+        "isDropOff" : "-1", "isDropOffTime" : "",
+        "isPaymentRequested" : "-1", "isPaymentRequestedTime" : "",
+        "isPayment" : "-1", "isPaymentTime" : "",
+
+        "isBookedDateTime" : "",
         'latitude': '${widget.latitude}',
         'longitude': '${widget.longitude}'
       })
@@ -294,6 +318,10 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "customerLongitude": "${widget.longitude}",
       "customerAddress" : "${widget.customerAddress}",
       "customerFcmToken" : "${token}",
+      "mechanicPhone" : "${mechanicBooking!.mechanic!.phoneNo}",
+      "customerPhone" : "${mechanicBooking.customer!.phoneNo}",
+      "mechanicProfileUrl" : "${mechanicBooking.mechanic!.mechanic![0].profilePic ?? ''}",
+      "customerProfileUrl" : "${mechanicBooking.customer!.customer![0].profilePic ?? ''}",
       "mechanicId": "${widget.mechanicId}",
       "mechanicName": "${widget.mechanicListData!.firstName}",
       "mechanicLatitude": "${widget.mechanicListData!.mechanicStatus[0].latitude}",
@@ -302,7 +330,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "mechanicFcmToken" : "${widget.mechanicListData!.fcmToken}",
       "serviceList" : FieldValue.arrayUnion(yourItemList),
       "serviceTotalAmount" : '${totalAmount}',
-      "vehicleId": "${mechanicBooking!.vehicle!.id}",
+      "vehicleId": "${mechanicBooking.vehicle!.id}",
       "vehicleName": "${mechanicBooking.vehicle!.brand} [ ${mechanicBooking.vehicle!.model} ]",
       "vehiclePlateNumber" : "${mechanicBooking.vehicle!.plateNo}",
       "vehicleColor" : "${mechanicBooking.vehicle!.color}",
@@ -317,6 +345,8 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "isWorkStartedTime" : "",
       "isWorkFinished" : "-1",
       "isWorkFinishedTime" : "",
+      'isPaymentRequested': "-1",
+      'isPaymentRequestedTime': "",
       "isPayment": "-1",
       "isPaymentTime": "",
     })
@@ -352,6 +382,10 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "customerLongitude": "${widget.longitude}",
       "customerAddress" : "${widget.customerAddress}",
       "customerFcmToken" : "${token}",
+      "mechanicPhone" : "${mechanicBooking!.mechanic!.phoneNo}",
+      "customerPhone" : "${mechanicBooking.customer!.phoneNo}",
+      "mechanicProfileUrl" : "${mechanicBooking.mechanic!.mechanic![0].profilePic ?? ''}",
+      "customerProfileUrl" : "${mechanicBooking.customer!.customer![0].profilePic ?? ''}",
       "mechanicId": "${widget.mechanicId}",
       "mechanicName": "${widget.mechanicListData!.firstName}",
       "mechanicLatitude": "${widget.mechanicListData!.mechanicStatus[0].latitude}",
@@ -360,19 +394,24 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "mechanicFcmToken" : "${widget.mechanicListData!.fcmToken}",
       "serviceList" : FieldValue.arrayUnion(yourItemList),
       "serviceTotalAmount" : '${totalAmount}',
-      "vehicleId": "${mechanicBooking!.vehicle!.id}",
+      "vehicleId": "${mechanicBooking.vehicle!.id}",
       "vehicleName": "${mechanicBooking.vehicle!.brand} [ ${mechanicBooking.vehicle!.model} ]",
       "vehiclePlateNumber" : "${mechanicBooking.vehicle!.plateNo}",
       "vehicleColor" : "${mechanicBooking.vehicle!.color}",
       "isDriveStarted" : "-1",
+      "isDriveStartedTime" : "",
       "isArrived" : "-1",
+      "isArrivedTime" : "",
       "isBookedDate" : "-1",
-      "isReachedServiceCenter": "-1",
-      "isReceivedVehicle" : "-1",
+      "isBookedDateTime" : "",
       "isWorkStarted" : "-1",
+      "isWorkStartedTime" : "",
       "isWorkFinished" : "-1",
-      "isPickedUpVehicle": "-1",
+      "isWorkFinishedTime" : "",
+      'isPaymentRequested': "-1",
+      'isPaymentRequestedTime': "",
       "isPayment": "-1",
+      "isPaymentTime": "",
       "paymentRecieved" : "-1",
       "completed" : "-1",
     })
@@ -460,26 +499,41 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                appBarCustomUi(size),
-                profileImageAndKmAndReviewCount(size),
-                timeAndLocationUi(size),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child:
+              _isLoading
+                  ? Visibility(
+                    visible: true,
+                    child: Container(
+                      height: size.height,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              CustColors.light_navy),
+                        ),
+                      ),
+                    ),
+                  )
+                  : Column(
+                children: [
+                  appBarCustomUi(size),
+                  profileImageAndKmAndReviewCount(size),
+                  timeAndLocationUi(size),
 
-                _mechanicDetailsMdl == null
+                  /*_mechanicDetailsMdl == null
                     ? Container()
-                    : reviewsUi(size),
-                selectedServiceDetailsUi(size),
-                acceptAndSendRequestButton( size,context)
-              ],
-            ),
-          ),
+                    : reviewsUi(size),*/
+
+                  _mechanicDetailsMdl!.data!.mechanicDetails!.mechanicReviewsData.toString() == '[]'
+                      ? Container()
+                      : reviewsUi(size),
+                  selectedServiceDetailsUi(size),
+                  acceptAndSendRequestButton( size,context)
+                ],
+              ),
         ),
       ),
     );
@@ -516,6 +570,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                     textAlign: TextAlign.center,
                     style: Styles.experienceTextBlack,
                   ),
+                  SizedBox(height: 3,),
                   Padding(
                     padding: const EdgeInsets.all(4),
                     child: Stack(
@@ -525,7 +580,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                         Container(
                           height: 60,
                           width: 60,
-                          color: Colors.white,
+                          color: CustColors.metallic_blue,
                           child: CustomPaint(
                             painter: CurvePainter(),
                           ),
@@ -533,7 +588,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            widget.mechanicListData?.mechanic?[0].yearExp != null
+                            widget.mechanicListData?.mechanic[0].yearExp != null
                                 ? '${widget.mechanicListData?.mechanic[0].yearExp} Year'
                                 : '0 Year',
                             textAlign: TextAlign.center,
@@ -828,9 +883,19 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
             InkWell(
               onTap: (){
                 setState(() {
-                  reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}');
+
+                  if(!isExpanded){
+                    reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}');
+                    isExpanded = true;
+                  }else{
+                    reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}') >= 2 ? 2 : _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length;
+                    isExpanded = false;
+                  }
+
                   print('reviewLength $reviewLength');
                   print('reviewLength ${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}');
+
+
                 });
               },
               child: Row(
@@ -845,7 +910,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text('Load more',
+                    child: Text( isExpanded ? 'Show less' : 'Load more',
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.visible,
@@ -889,7 +954,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
             ),
             Container(
               child: ListView.builder(
-                itemCount:widget.mechanicListData?.mechanicService?.length,
+                itemCount:widget.mechanicListData?.mechanicService.length,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context,index,) {
@@ -906,7 +971,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                             children: [
                               Row(
                                 children: [
-                                  Text('${widget.mechanicListData?.mechanicService?[index].service?.serviceName}',
+                                  Text('${widget.mechanicListData?.mechanicService[index].service?.serviceName}',
                                     maxLines: 2,
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.visible,
@@ -917,7 +982,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                               Spacer(),
                               Row(
                                 children: [
-                                  Text('${widget.mechanicListData?.mechanicService?[index].fee}',
+                                  Text('${widget.mechanicListData?.mechanicService[index].fee}',
                                     maxLines: 2,
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.visible,
@@ -978,6 +1043,10 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         print(">>>>>>>>>> ServiceId  ${widget.serviceIds}");
 
           print('serviceIdEmergency>>>>>>>>11111 ' + serviceIdEmergency.toString());
+        print('>>>>>>>>serviceIds ' + '['+'${widget.serviceIds}'+']');
+        print('>>>>>>>>mechanicListData ' '${widget.mechanicListData?.id}',);
+        print('>>>>>>>>serviceFeeList ' '['+'${serviceFeeList}'+']',);
+
 
           _homeCustomerBloc.postMechanicsRegularServiceBookingIDRequest(
             authToken,
@@ -987,6 +1056,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
             '${widget.latitude}',
             '${widget.longitude}',
             '['+'${widget.serviceIds}'+']',
+            '['+'${serviceFeeList}'+']',
             '${widget.mechanicListData?.id}',
             "2",
             widget.regularServiceType == TextStrings.txt_pick_up
@@ -1032,69 +1102,6 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         ),
       ),
     );
-  }
-
-  _showMechanicAcceptanceDialog(BuildContext context) async {
-    Future.delayed(const Duration(seconds: 35), () {
-
-
-      setState(() {
-        print('_showMechanicAcceptanceDialog');
-
-        Navigator.of(context, rootNavigator: true).pop();
-        Navigator.of(context).pop();
-
-      });
-
-    });
-    await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return StatefulBuilder(builder: (BuildContext context, StateSetter mechanicAcceptance1) {
-            mechanicAcceptance = mechanicAcceptance1;
-            return AlertDialog(
-                backgroundColor: Colors.white,
-                insetPadding: EdgeInsets.only(left: 20, right: 20),
-
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius. circular(10))),
-                contentPadding: const EdgeInsets.all(20),
-                content: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            "Wait few minutes !",
-                            style: Styles.waitingTextBlack17,
-                          ),
-                          Text(
-                            "Wait for the response from ${widget.mechanicListData?.firstName}!",
-                            style: Styles.awayTextBlack,
-                          ),
-                          Container(
-                            height: 150,
-                              child: SvgPicture.asset(
-                                  'assets/image/mechanicProfileView/waitForMechanic.svg',
-                                height: 200,
-                                fit: BoxFit.cover,
-                              )
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ));
-          });
-        });
-
-
   }
 
 }

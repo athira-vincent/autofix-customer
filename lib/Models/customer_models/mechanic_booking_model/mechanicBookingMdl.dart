@@ -1,4 +1,8 @@
+// To parse this JSON data, do
+//
+//     final mechanicBookingMdl = mechanicBookingMdlFromJson(jsonString);
 
+import 'package:meta/meta.dart';
 import 'dart:convert';
 
 MechanicBookingMdl mechanicBookingMdlFromJson(String str) => MechanicBookingMdl.fromJson(json.decode(str));
@@ -82,9 +86,9 @@ class MechanicBooking {
   String bookingCode;
   int reqType;
   int bookStatus;
-  var totalPrice;
+  int totalPrice;
   double tax;
-  var commission;
+  double commission;
   double serviceCharge;
   dynamic totalTime;
   String serviceTime;
@@ -103,8 +107,8 @@ class MechanicBooking {
   int mechanicId;
   int vehicleId;
   int regularType;
-  dynamic mechanic;
-  dynamic customer;
+  MechanicBookingCustomer? mechanic;
+  MechanicBookingCustomer? customer;
   Vehicle? vehicle;
   dynamic bookService;
 
@@ -115,7 +119,7 @@ class MechanicBooking {
     bookStatus: json["bookStatus"] == null ? null : json["bookStatus"],
     totalPrice: json["totalPrice"] == null ? null : json["totalPrice"],
     tax: json["tax"] == null ? null : json["tax"].toDouble(),
-    commission: json["commission"] == null ? null : json["commission"],
+    commission: json["commission"] == null ? null : json["commission"].toDouble(),
     serviceCharge: json["serviceCharge"] == null ? null : json["serviceCharge"].toDouble(),
     totalTime: json["totalTime"],
     serviceTime: json["serviceTime"] == null ? null : json["serviceTime"],
@@ -134,8 +138,8 @@ class MechanicBooking {
     mechanicId: json["mechanicId"] == null ? null : json["mechanicId"],
     vehicleId: json["vehicleId"] == null ? null : json["vehicleId"],
     regularType: json["regularType"] == null ? null : json["regularType"],
-    mechanic: json["mechanic"],
-    customer: json["customer"],
+    mechanic: json["mechanic"] == null ? null : MechanicBookingCustomer.fromJson(json["mechanic"]),
+    customer: json["customer"] == null ? null : MechanicBookingCustomer.fromJson(json["customer"]),
     vehicle: json["vehicle"] == null ? null : Vehicle.fromJson(json["vehicle"]),
     bookService: json["bookService"],
   );
@@ -166,10 +170,106 @@ class MechanicBooking {
     "mechanicId": mechanicId == null ? null : mechanicId,
     "vehicleId": vehicleId == null ? null : vehicleId,
     "regularType": regularType == null ? null : regularType,
-    "mechanic": mechanic,
-    "customer": customer,
+    "mechanic": mechanic == null ? null : mechanic!.toJson(),
+    "customer": customer == null ? null : customer!.toJson(),
     "vehicle": vehicle == null ? null : vehicle!.toJson(),
     "bookService": bookService,
+  };
+}
+
+class MechanicBookingCustomer {
+  MechanicBookingCustomer({
+    required this.id,
+    required this.userCode,
+    required this.firstName,
+    required this.lastName,
+    required this.emailId,
+    required this.phoneNo,
+    required this.status,
+    required this.userTypeId,
+    required this.jwtToken,
+    required this.fcmToken,
+    required this.otpCode,
+    required this.isProfile,
+    required this.otpVerified,
+    required this.customer,
+    required this.mechanic,
+    required this.vendor,
+  });
+
+  int id;
+  String userCode;
+  String firstName;
+  String lastName;
+  String emailId;
+  String phoneNo;
+  int status;
+  int userTypeId;
+  String jwtToken;
+  String fcmToken;
+  String otpCode;
+  int isProfile;
+  int otpVerified;
+  List<CustomerElement>? customer;
+  List<CustomerElement>? mechanic;
+  dynamic vendor;
+
+  factory MechanicBookingCustomer.fromJson(Map<String, dynamic> json) => MechanicBookingCustomer(
+    id: json["id"] == null ? null : json["id"],
+    userCode: json["userCode"] == null ? null : json["userCode"],
+    firstName: json["firstName"] == null ? null : json["firstName"],
+    lastName: json["lastName"] == null ? null : json["lastName"],
+    emailId: json["emailId"] == null ? null : json["emailId"],
+    phoneNo: json["phoneNo"] == null ? null : json["phoneNo"],
+    status: json["status"] == null ? null : json["status"],
+    userTypeId: json["userTypeId"] == null ? null : json["userTypeId"],
+    jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
+    fcmToken: json["fcmToken"] == null ? null : json["fcmToken"],
+    otpCode: json["otpCode"] == null ? null : json["otpCode"],
+    isProfile: json["isProfile"] == null ? null : json["isProfile"],
+    otpVerified: json["otpVerified"] == null ? null : json["otpVerified"],
+    customer: json["customer"] == null ? null : List<CustomerElement>.from(json["customer"].map((x) => CustomerElement.fromJson(x))),
+    mechanic: json["mechanic"] == null ? null : List<CustomerElement>.from(json["mechanic"].map((x) => CustomerElement.fromJson(x))),
+    vendor: json["vendor"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id == null ? null : id,
+    "userCode": userCode == null ? null : userCode,
+    "firstName": firstName == null ? null : firstName,
+    "lastName": lastName == null ? null : lastName,
+    "emailId": emailId == null ? null : emailId,
+    "phoneNo": phoneNo == null ? null : phoneNo,
+    "status": status == null ? null : status,
+    "userTypeId": userTypeId == null ? null : userTypeId,
+    "jwtToken": jwtToken == null ? null : jwtToken,
+    "fcmToken": fcmToken == null ? null : fcmToken,
+    "otpCode": otpCode == null ? null : otpCode,
+    "isProfile": isProfile == null ? null : isProfile,
+    "otpVerified": otpVerified == null ? null : otpVerified,
+    "customer": customer == null ? null : List<dynamic>.from(customer!.map((x) => x.toJson())),
+    "mechanic": mechanic == null ? null : List<dynamic>.from(mechanic!.map((x) => x.toJson())),
+    "vendor": vendor,
+  };
+}
+
+class CustomerElement {
+  CustomerElement({
+    required this.id,
+    required this.profilePic,
+  });
+
+  String id;
+  String profilePic;
+
+  factory CustomerElement.fromJson(Map<String, dynamic> json) => CustomerElement(
+    id: json["id"] == null ? null : json["id"],
+    profilePic: json["profilePic"] == null ? null : json["profilePic"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id == null ? null : id,
+    "profilePic": profilePic == null ? null : profilePic,
   };
 }
 
@@ -201,7 +301,7 @@ class Vehicle {
   String lastMaintenance;
   String milege;
   String vehiclePic;
-  dynamic color;
+  String color;
   double latitude;
   double longitude;
   int defaultVehicle;
@@ -218,7 +318,7 @@ class Vehicle {
     lastMaintenance: json["lastMaintenance"] == null ? null : json["lastMaintenance"],
     milege: json["milege"] == null ? null : json["milege"],
     vehiclePic: json["vehiclePic"] == null ? null : json["vehiclePic"],
-    color: json["color"],
+    color: json["color"] == null ? null : json["color"],
     latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
     longitude: json["longitude"] == null ? null : json["longitude"].toDouble(),
     defaultVehicle: json["defaultVehicle"] == null ? null : json["defaultVehicle"],
@@ -236,7 +336,7 @@ class Vehicle {
     "lastMaintenance": lastMaintenance == null ? null : lastMaintenance,
     "milege": milege == null ? null : milege,
     "vehiclePic": vehiclePic == null ? null : vehiclePic,
-    "color": color,
+    "color": color == null ? null : color,
     "latitude": latitude == null ? null : latitude,
     "longitude": longitude == null ? null : longitude,
     "defaultVehicle": defaultVehicle == null ? null : defaultVehicle,

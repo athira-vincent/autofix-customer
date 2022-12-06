@@ -7,7 +7,8 @@ import 'package:auto_fix/UI/Common/TermsAndCondition/terms_and_conditions.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyServices/mechanic_my_services.dart';
-import 'package:auto_fix/UI/Mechanic/SideBar/MyJobAppointments/my_job_appointments.dart';
+import 'package:auto_fix/UI/Mechanic/SideBar/BrandSpecialization/brand_specialization_screen.dart';
+import 'package:auto_fix/UI/Mechanic/SideBar/MechanicNotifications/mech_notification_list.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,6 +32,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
   String isOnline = "";
   String authToken="";
   String userName="", profileImageUrl = "";
+  BuildContext? dialogContext;
 
   _logout() async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
@@ -133,14 +135,14 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           },*//*
         ),*/
 
-        /*ListTile(
+        ListTile(
           contentPadding: EdgeInsets.only(left: 20.4),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
             alignment: Alignment(-1.45, 0),
             //alignment: Alignment.centerLeft,
             child: Text(
-              "My brand specialization",
+              "Brand specialization",
               style: Styles.navDrawerTextStyle02,
             ),
           ),
@@ -151,12 +153,12 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               height: 20.76,
             ),
           ),
-         *//* onTap: () {
+          onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CustomerBookNowScreen()));
-          },*//*
-        ),*/
+                MaterialPageRoute(builder: (context) => BrandSpecializationScreen()));
+          },
+        ),
 
         ListTile(
           contentPadding: EdgeInsets.only(left: 20.4),
@@ -182,7 +184,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           },
         ),
 
-       /* ListTile(
+        /* ListTile(
           contentPadding: EdgeInsets.only(left: 20.4),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
@@ -247,10 +249,34 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               height: 20.76,
             ),
           ),
-           onTap: () {
+          onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) =>Addpricefault(position: 1,)));
+          },
+        ),
+
+        ListTile(
+          contentPadding: EdgeInsets.only(left: 20.4),
+          visualDensity: VisualDensity(horizontal: 0, vertical: -3),
+          title: Align(
+            alignment: Alignment(-1.21, 0),
+            child: Text(
+              "Notification",
+              style: Styles.navDrawerTextStyle02,
+            ),
+          ),
+          leading: Container(
+            child: Image.asset(
+              'assets/images/notification.png',
+              width: 17.92,
+              height: 19.88,
+            ),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MechanicNotificationList()));
           },
         ),
 
@@ -272,11 +298,11 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             ),
           ),
           onTap: () {
-            //Navigator.pop(context);
             showDialog(
                 context: context,
-                builder: (BuildContext context)
-                {
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  dialogContext = context;
                   return deactivateDialog();
                 });
           },
@@ -366,10 +392,15 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/image/ic_home_white_outline.png',
-                  width: 20,
-                  height: 20,
+                InkWell(
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                  child: Image.asset(
+                    'assets/image/ic_home_white_outline.png',
+                    width: 20,
+                    height: 20,
+                  ),
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 14.6, top: 4),
@@ -428,11 +459,11 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
                                     child: ClipOval(
                                         child: profileImageUrl != null && profileImageUrl != ""
                                             ?
-                                         Image.network(profileImageUrl,
+                                        Image.network(profileImageUrl,
                                           width: 150,
                                           height: 150,
                                           fit: BoxFit.cover,
-                                         )
+                                        )
                                             :
                                         SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
                                     )))
@@ -440,7 +471,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
                         ),
                       ),
 
-                     /* Positioned(
+                      /* Positioned(
                         right: 1.5,
                         bottom: 1,
                         child: ClipRRect(
@@ -463,7 +494,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
                   ),
                   Container(
                     margin: EdgeInsets.only(
-                      top: 5
+                        top: 5
                     ),
                     child: Text(
                       //_userName.toString(),
@@ -505,6 +536,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             isDefaultAction: true,
             onPressed: () {
               Navigator.pop(context);
+              Navigator.pop(dialogContext!);
             },
             child: Text("Cancel")),
         CupertinoDialogAction(
@@ -515,13 +547,14 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             isDefaultAction: true,
             onPressed: () async {
               setState(() {
+                Navigator.pop(context);
+                Navigator.pop(dialogContext!);
                 setDeactivate();
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                         builder: (context) => LoginScreen()),
                     ModalRoute.withName("/LoginScreen"));
-
               });
             },
             child: Text("Logout")),

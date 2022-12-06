@@ -4,7 +4,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/direct_payment_success_screen.dart';
-import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/payment_failed_screen.dart';
+import 'package:auto_fix/UI/Common/payment_failed_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
@@ -204,7 +204,10 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => PaymentFailedScreen()));
+              builder: (context) => PaymentFailedScreen(
+                bookingId: bookingIdEmergency,
+                firebaseCollection: "ResolMech",
+              )));
     }
     else if(!widget.isMechanicApp && !widget.isPaymentFailed){
 

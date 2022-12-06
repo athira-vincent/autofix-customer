@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_fix/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
@@ -7,9 +8,10 @@ import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/mechanic_profile_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/ChangePassword/change_password_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StatesList/states_list_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -74,9 +76,8 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   TextEditingController _yearOfExistenceController = TextEditingController();
   FocusNode _yearOfExistenceFocusNode = FocusNode();
 
-
-  TextEditingController _photoController = TextEditingController();
-  FocusNode _photoFocusNode = FocusNode();
+  TextEditingController _pswdController = TextEditingController();
+  FocusNode _pswdFocusNode = FocusNode();
 
   TextEditingController _phoneController = TextEditingController();
   FocusNode _phoneFocusNode = FocusNode();
@@ -100,6 +101,8 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
 
   String authToken="";
   String id="", isOnline = "";
+  BuildContext? dialogContext;
+  String email = "";
 
   @override
   void initState() {
@@ -120,10 +123,10 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       id = shdPre.getString(SharedPrefKeys.userID).toString();
       isOnline = shdPre.getString(SharedPrefKeys.mechanicIsOnline).toString();
+      JWTTokenChecking.checking(shdPre.getString(SharedPrefKeys.token).toString(), context);
       print('userFamilyId'+authToken.toString());
       _isLoadingPage=true;
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken,id);
-
     });
   }
 
@@ -221,6 +224,9 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     _orgTypeController.text = value.data!.mechanicDetails!.mechanic![0].orgType.toString();
     _userName = value.data!.mechanicDetails!.firstName.toString();
     _imageUrl = value.data!.mechanicDetails!.mechanic![0].profilePic.toString();
+    email = value.data!.mechanicDetails!.emailId.toString();
+    _pswdController.text = "Password@123";
+
     print("fkjhkhkjhkhk $_imageUrl");
 
     print(">>>>>>>>>>>>> _userType : " + _userType);
@@ -230,7 +236,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
         TextStrings.user_mechanic,
         value.data!.mechanicDetails!.mechanic![0].mechType.toString() == "1"
             ? TextStrings.user_category_individual
-            : TextStrings.user_category_corporate ,              //change after merge on 18-08-2022
+            : TextStrings.user_category_corporate,              //change after merge on 18-08-2022
         _imageUrl,
         value.data!.mechanicDetails!.firstName.toString(),
         value.data!.mechanicDetails!.id.toString(),
@@ -265,6 +271,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             PhoneTextUi(),
                             //AddressTextUi(size),
                             StateTextUi(),
+                            PasswordTextUi(size),
                             editProfileEnabled  == true ? NextButton() : Container(),
                           ],
                         )
@@ -280,6 +287,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             EmailTextUi(),
                             PhoneTextUi(),
                             StateTextUi(),
+                            PasswordTextUi(size),
                             editProfileEnabled == true ? NextButton() : Container(),
                           ],
                         ):Column()
@@ -419,13 +427,19 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               top: size.height * 10 / 100
                           ),
                           child: InkWell(
-                            onTap: (){
+                            onTap: ()async{
                               showDialog(
                                   context: context,
-                                  builder: (BuildContext context)
-                                  {
+                                  barrierDismissible: false,
+                                  builder: (BuildContext context) {
+                                    dialogContext = context;
                                     return deactivateDialog();
                                   });
+
+                              SharedPreferences sharedPreferences =
+                                  await SharedPreferences.getInstance();
+                              sharedPreferences.remove("starttime");
+                              sharedPreferences.remove("endtime");
                             },
                             child: Row(
                               children: [
@@ -1400,13 +1414,120 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
         :  Container();
   }
 
+  Widget PasswordTextUi(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: () async {
+              if (editProfileEnabled == true) {
+                /*final result = await*/ Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChangePasswordScreen(
+                        email: email,
+                      ),
+                    ));
+                print("Change Password");
+              }
+            },
+            child: Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: CustColors.whiteBlueish,
+                      borderRadius: BorderRadius.circular(11.0)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: SvgPicture.asset(
+                      'assets/image/ic_lock.svg',
+                      height: size.height * 2.5 / 100,
+                      width: size.width * 2.5 / 100,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: TextFormField(
+                            readOnly: true,
+                            enabled: false,
+                            obscureText: true,
+                            obscuringCharacter: '*',
+                            textAlignVertical: TextAlignVertical.center,
+                            maxLines: 1,
+                            style: Styles.appBarTextBlack15,
+                            focusNode: _pswdFocusNode,
+                            keyboardType: TextInputType.name,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[a-zA-Z ]')),
+                            ],
+                            validator:
+                            InputValidator(ch: 'Password').emptyChecking,
+                            controller: _pswdController,
+                            cursorColor: CustColors.light_navy,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              hintText: 'Password',
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 2.8,
+                                horizontal: 0.0,
+                              ),
+                              hintStyle: Styles.appBarTextBlack15,
+                            ),
+                          ),
+                        ),
+                        editProfileEnabled != true
+                            ? Text(
+                          'Your Password ',
+                          textAlign: TextAlign.center,
+                          style: Styles.textLabelSubTitle,
+                        )
+                            : Container(),
+                      ],
+                    ),
+                  ),
+                ),
+                //Spacer(),
+                editProfileEnabled == true
+                    ? Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child:
+                      Icon(Icons.edit, size: 15, color: CustColors.blue),
+                    ))
+                    : Container(),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+            child: Divider(),
+          )
+        ],
+      ),
+    );
+  }
+
   void _awaitReturnValueFromSecondScreen(BuildContext context) async {
 
     // start the SecondScreen and wait for it to finish with a result
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SelectStateScreen(),
+          builder: (context) => SelectStatesScreen(),
         ));
     setState(() {
       selectedState = result;
@@ -1668,9 +1789,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
             ),
             isDefaultAction: true,
             onPressed: () {
-              Navigator.pop(context);
-
-
+              Navigator.pop(dialogContext!);
             },
             child: Text("Cancel")),
         CupertinoDialogAction(
@@ -1680,8 +1799,8 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
             ),
             isDefaultAction: true,
             onPressed: () async {
-
               setState(() {
+                Navigator.pop(dialogContext!);
                 setDeactivate();
                 Navigator.pushAndRemoveUntil(
                     context,

@@ -6,7 +6,7 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/ExtraDiagnosisScreen/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/mechanic_waiting_payment.dart';
 import 'package:auto_fix/Widgets/Countdown.dart';
-import 'package:auto_fix/Widgets/count_down_widget.dart';
+import 'package:auto_fix/AA/count_down_widget.dart';
 import 'package:auto_fix/Widgets/mechanicWorkTimer.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -111,26 +111,28 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     });
 
     await _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
-      setState(() {
-        extendedTime= event.get("extendedTime");
-        currentUpdatedTime = event.get("currentUpdatedTime");
-        isPaymentRequested = event.get("isPaymentRequested");
-        isWorkCompleted = event.get("isWorkCompleted");
-        mechanicDiagonsisState = event.get("mechanicDiagonsisState");
-        totalEstimatedTime = event.get('timerCounter');
-        mechanicName = event.get('mechanicName');
-        int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
-        levelClock = sec;
-        _controller = AnimationController(
-            vsync: this,
-            duration: Duration(
-                seconds:
-                levelClock)
-        );
-        _controller.forward();
-        _updateTimerListener();
+      if(mounted){
+        setState(() {
+          extendedTime= event.get("extendedTime");
+          currentUpdatedTime = event.get("currentUpdatedTime");
+          isPaymentRequested = event.get("isPaymentRequested");
+          isWorkCompleted = event.get("isWorkCompleted");
+          mechanicDiagonsisState = event.get("mechanicDiagonsisState");
+          totalEstimatedTime = event.get('timerCounter');
+          mechanicName = event.get('mechanicName');
+          int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
+          levelClock = sec;
+          _controller = AnimationController(
+              vsync: this,
+              duration: Duration(
+                  seconds:
+                  levelClock)
+          );
+          _controller.forward();
+          _updateTimerListener();
 
-      });
+        });
+      }
     });
   }
 
@@ -599,6 +601,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                 Column(
                   children: [
                     CountdownMechanicTimer(
+
                       animation: StepTween(
                         begin: levelClock, // THIS IS A USER ENTERED NUMBER
                         end: 0,

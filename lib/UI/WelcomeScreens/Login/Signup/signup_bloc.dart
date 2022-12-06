@@ -1,7 +1,8 @@
+import 'package:auto_fix/AA/StateList/states_mdl.dart';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Models/resend_otp_model/resend_otp_model.dart';
 import 'package:auto_fix/Repository/repository.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/signUp_Mdl.dart';
 
 import 'package:rxdart/rxdart.dart';
@@ -40,6 +41,26 @@ class SignupBloc {
     print("token===================================${shdPre.getString(SharedPrefKeys.token)}");
   }
 
+  void userDefaultData(String token,String userType, String imageUrl,
+      String userName, String userId, ) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    shdPre.setString(SharedPrefKeys.token, token);
+    shdPre.setString(SharedPrefKeys.userType, userType);
+    shdPre.setString(SharedPrefKeys.userName, userName);
+    shdPre.setString(SharedPrefKeys.userID, userId);
+    shdPre.setString(SharedPrefKeys.profileImageUrl,imageUrl);
+    GqlClient.I.config(token: shdPre.getString(SharedPrefKeys.token).toString());
+    print("token===================================${shdPre.getString(SharedPrefKeys.token)}");
+  }
+
+  void setProfileStatus(int status) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    shdPre.setInt(SharedPrefKeys.isProfileCompleted, status);
+
+    GqlClient.I.config(token: shdPre.getString(SharedPrefKeys.token).toString());
+    print("token===================================${shdPre.getString(SharedPrefKeys.token)}");
+  }
+
   /// ---------------  SignUp Starts -------------------- ///
 
 
@@ -65,25 +86,33 @@ class SignupBloc {
 
   /// --------------- Otp Verification Starts -------------------- ///
 
-
   final postOtpVerification = PublishSubject<OtpVerificationMdl>();
   Stream<OtpVerificationMdl> get otpVerificationResponse => postOtpVerification.stream;
 
 
   postOtpVerificationRequest(
-      token,
       otp,
       userTypeId
       ) async {
     OtpVerificationMdl _otpVerificationMdl = await repository.postOtpVerificationRequest(
-      token,
       otp,
       userTypeId);
     postOtpVerification.sink.add(_otpVerificationMdl);
   }
 
+/// ------------- Resend OTP
+
+  final postResendOtp = PublishSubject<ResendOtpModel>();
+  Stream<ResendOtpModel> get resendOtpResponse => postResendOtp.stream;
 
 
+  postResendOtpRequest(
+      email, phone
+      ) async {
+    ResendOtpModel _otpVerificationMdl = await repository.postResentOtpRequest(
+        email, phone);
+    postResendOtp.sink.add(_otpVerificationMdl);
+  }
 
   /// --------------- Phone Login Otp Verification Starts -------------------- ///
 
@@ -92,13 +121,12 @@ class SignupBloc {
   Stream<PhoneLoginOtpVerificationMdl> get phoneLoginOtpVerificationResponse => postPhoneLoginOtpVerification.stream;
 
 
+  //------- signIn_Otp api ----------
   postPhoneLoginOtpVerificationRequest(
-      token,
       otp,
       userTypeId
       ) async {
     PhoneLoginOtpVerificationMdl phoneOtpVerificationMdl = await repository.postPhoneLoginOtpVerificationRequest(
-        token,
         otp,
         userTypeId);
     postPhoneLoginOtpVerification.sink.add(phoneOtpVerificationMdl);

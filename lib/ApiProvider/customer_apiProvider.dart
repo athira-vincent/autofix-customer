@@ -23,11 +23,18 @@ import 'package:auto_fix/Models/customer_models/update_mechanic_booking_model/up
 import 'package:auto_fix/Models/customer_rating_model/customer_rating_model.dart';
 import 'package:auto_fix/Models/customer_wallet_detail_model/customer_wallet_detail_model.dart';
 import 'package:auto_fix/Models/delete_cart_model/delete_cart_model.dart';
+import 'package:auto_fix/Models/notification_model/notification_model.dart';
 import 'package:auto_fix/Models/wallet_history_model/wallet_history_model.dart';
 import 'package:auto_fix/QueryProvider/query_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/customer_active_service_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
+
+import '../Models/new_checkout_model/new_checkout_model.dart';
+import '../Models/payment_success_model/payment_success_model.dart';
+import '../Models/time_difference_model/time_difference_model.dart';
+import '../Models/wallet_check_balance_model.dart';
 
 class CustomerApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
@@ -98,7 +105,7 @@ class CustomerApiProvider {
       time,
       latitude,
       longitude,
-      serviceId,
+      serviceId,serviceCost,
       mechanicId,
       reqType,
       regularServiceType,
@@ -112,7 +119,7 @@ class CustomerApiProvider {
             time,
             latitude,
             longitude,
-            serviceId,
+            serviceId,serviceCost,
             mechanicId,
             reqType,
             regularServiceType,
@@ -144,7 +151,7 @@ class CustomerApiProvider {
       time,
       latitude,
       longitude,
-      serviceId,
+      serviceId, serviceCost,
       mechanicId,
       reqType,
       totalPrice,
@@ -157,7 +164,7 @@ class CustomerApiProvider {
             time,
             latitude,
             longitude,
-            serviceId,
+            serviceId, serviceCost,
             mechanicId,
             reqType,
             totalPrice,
@@ -254,6 +261,28 @@ class CustomerApiProvider {
       }
     } else {
       final errorMsg = CustomerAddMoreServiceMdl(
+          status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+  Future<CustomerActiveServiceUpdateMdl> postCustomerActiveServiceRequest(
+      token, userId) async {
+    Map<String, dynamic> _resp =
+    await _queryProvider.postCustomerActiveServiceRequest(
+        token, userId);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = CustomerActiveServiceUpdateMdl(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return CustomerActiveServiceUpdateMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = CustomerActiveServiceUpdateMdl(
           status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
@@ -589,12 +618,11 @@ class CustomerApiProvider {
     }
   }
 
-
   /// placeorder
   Future<PlaceOrderModel> fetchServiceplaceorderlist(
-      qty,totprice,productid,addressid) async {
-    Map<String, dynamic> _resp =
-    await _queryProvider.fetchServiceplaceorderlist(qty,totprice,productid,addressid);
+      qty, totprice, productid, addressid) async {
+    Map<String, dynamic> _resp = await _queryProvider
+        .fetchServiceplaceorderlist(qty, totprice, productid, addressid);
     if (_resp != null) {
       if (_resp['status'] == "error") {
         final errorMsg = PlaceOrderModel(
@@ -611,12 +639,10 @@ class CustomerApiProvider {
     }
   }
 
-
   /// orderlist
-  Future<OrderDetails> fetchServiceorderdetailslist(
-      ) async {
+  Future<OrderDetails> fetchServiceorderdetailslist() async {
     Map<String, dynamic> _resp =
-    await _queryProvider.fetchServiceorderdetailslist();
+        await _queryProvider.fetchServiceorderdetailslist();
     if (_resp != null) {
       if (_resp['status'] == "error") {
         final errorMsg = OrderDetails(
@@ -634,14 +660,13 @@ class CustomerApiProvider {
   }
 
   /// cancelorder
-  Future<CancelOrder> fetchcancelorderlist(orderid
-      ) async {
+  Future<CancelOrder> fetchcancelorderlist(orderid) async {
     Map<String, dynamic> _resp =
-    await _queryProvider.fetchcacncelorder(orderid);
+        await _queryProvider.fetchcacncelorder(orderid);
     if (_resp != null) {
       if (_resp['status'] == "error") {
-        final errorMsg = CancelOrder(
-            status: "error", message: _resp['message'], data: null);
+        final errorMsg =
+            CancelOrder(status: "error", message: _resp['message'], data: null);
         return errorMsg;
       } else {
         var data = {"data": _resp};
@@ -654,16 +679,14 @@ class CustomerApiProvider {
     }
   }
 
-
   /// cod
-  Future<Codmodel> fetchcodlist(amount,orderid
-      ) async {
+  Future<Codmodel> fetchcodlist(amount, orderid) async {
     Map<String, dynamic> _resp =
-    await _queryProvider.fetchcodapprove(amount,orderid);
+        await _queryProvider.fetchcodapprove(amount, orderid);
     if (_resp != null) {
       if (_resp['status'] == "error") {
-        final errorMsg = Codmodel(
-            status: "error", message: _resp['message'], data: null);
+        final errorMsg =
+            Codmodel(status: "error", message: _resp['message'], data: null);
         return errorMsg;
       } else {
         var data = {"data": _resp};
@@ -676,12 +699,9 @@ class CustomerApiProvider {
     }
   }
 
-
   /// wallethistorymerchant
-  Future<WalletistoryModel> fetchwallethistory(date
-      ) async {
-    Map<String, dynamic> _resp =
-    await _queryProvider.fetchwallethistory(date);
+  Future<WalletistoryModel> fetchwallethistory(date) async {
+    Map<String, dynamic> _resp = await _queryProvider.fetchwallethistory(date);
     if (_resp != null) {
       if (_resp['status'] == "error") {
         final errorMsg = WalletistoryModel(
@@ -698,12 +718,11 @@ class CustomerApiProvider {
     }
   }
 
-
   /// customerrating
-  Future<CustomerRatingModel> fetchcustrating(rating, orderid, productid
-      ) async {
+  Future<CustomerRatingModel> fetchcustrating(
+      rating, orderid, productid) async {
     Map<String, dynamic> _resp =
-    await _queryProvider.fetchcustrating(rating, orderid, productid);
+        await _queryProvider.fetchcustrating(rating, orderid, productid);
     if (_resp != null) {
       if (_resp['status'] == "error") {
         final errorMsg = CustomerRatingModel(
@@ -722,10 +741,9 @@ class CustomerApiProvider {
 
   /// =============== Customer My Wallet ================== ///
 
-  Future<CustomerWalletDetailModel> fetchcustomerwallet(/*date*/
-      ) async {
+  Future<CustomerWalletDetailModel> fetchcustomerwallet(/*date*/) async {
     Map<String, dynamic> _resp =
-    await _queryProvider.fetchcustomerwallet(/*date*/);
+        await _queryProvider.fetchcustomerwallet(/*date*/);
     if (_resp != null) {
       if (_resp['status'] == "error") {
         final errorMsg = CustomerWalletDetailModel(
@@ -741,9 +759,128 @@ class CustomerApiProvider {
       return errorMsg;
     }
   }
+
+  /// placeorderallitem
+  Future<PlaceOrderModel> placeorderallitem(addressid) async {
+    Map<String, dynamic> _resp =
+        await _queryProvider.fetchServiceplaceorderallitemlist(addressid);
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = PlaceOrderModel(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return PlaceOrderModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = PlaceOrderModel(
+          status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+  ///----- Customer Notification List----------///
+
+  Future<NotificationModel> customernotification() async {
+    Map<String, dynamic> _resp =
+        await _queryProvider.fetchcustomernotification();
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = NotificationModel(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return NotificationModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = NotificationModel(
+          status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+  ///----- Customer Payment Success----------///
+
+  Future<PaymentSuccessModel> fetchpaymentsucess(
+      transtype, amount, paymenttype, transid, orderid) async {
+    Map<String, dynamic> _resp = await _queryProvider.fetchpaymentsucess(
+        transtype, amount, paymenttype, transid, orderid);
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = PaymentSuccessModel(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return PaymentSuccessModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = PaymentSuccessModel(
+          status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+  ///----- wallet balance response----------///
+
+  Future<WalletCheckBalanceModel> fetchwalletcheckbalance(bookingid) async {
+    Map<String, dynamic> _resp =
+        await _queryProvider.fetchwalletcheckbalance(bookingid);
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = WalletCheckBalanceModel(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return WalletCheckBalanceModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = WalletCheckBalanceModel(
+          status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+  /// checkout api
+  Future<NewCheckoutModel> newcheckoutapi(cartid, addressid) async {
+    Map<String, dynamic> _resp =
+        await _queryProvider.newcheckoutapi(cartid, addressid);
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = NewCheckoutModel(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return NewCheckoutModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = NewCheckoutModel(
+          status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+  /// timedifference api
+  Future<TimeDifferenceModel> timedifferenceapi(starttime,endtime) async {
+    Map<String, dynamic> _resp =
+        await _queryProvider.timedifferenceapi(starttime,endtime);
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = TimeDifferenceModel(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return TimeDifferenceModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = TimeDifferenceModel(
+          status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
 }
-
-
-
-
-

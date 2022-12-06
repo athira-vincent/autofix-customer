@@ -63,7 +63,7 @@ class SparePartsList {
     required this.vehicleModel,
     required this.inCart,
     required this.reviewCount,
-    //required this.avgRate,
+    required this.avgRate,
 
   });
 
@@ -81,7 +81,7 @@ class SparePartsList {
   bool inCart;
 
   int reviewCount;
-  //double avgRate;
+  double avgRate;
 
 
   factory SparePartsList.fromMap(Map<String, dynamic> json) => SparePartsList(
@@ -98,7 +98,7 @@ class SparePartsList {
     vehicleModel: VehicleModel.fromMap(json["vehicleModel"]),
     inCart: json["inCart"],
     reviewCount: json["reviewCount"],
-    //avgRate: json["avgRate"],
+    avgRate: json["avgRate"].toDouble(),
 
   );
 
@@ -116,7 +116,7 @@ class SparePartsList {
     "vehicleModel": vehicleModel.toMap(),
     "inCart": inCart,
     "reviewCount": reviewCount,
-    //"avgRate": avgRate,
+    "avgRate": avgRate,
 
   };
 }

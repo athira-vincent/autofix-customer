@@ -137,7 +137,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
   String latitude = '10.5075868';
   String longitude = '76.2424536';
 
-
+  BuildContext? dialogContext;
   @override
   void initState() {
     // TODO: implement initState
@@ -272,6 +272,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                  }
                else
                  {
+                   _shdPre.setInt(SharedPrefKeys.isProfileCompleted, 3);
                    _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 3);
                    _shdPre.setString(SharedPrefKeys.defaultBrandID, value.data!.vehicleCreate!.brand.toString());
                    Navigator.pushReplacement(
@@ -992,7 +993,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
       onTap: (){
         showDialog(
             context: context,
+            barrierDismissible: false,
             builder: (BuildContext context) {
+              dialogContext = context;
               return AlertDialog(
                 contentPadding: const EdgeInsets.all(0.0),
                 content: StatefulBuilder(
@@ -1118,12 +1121,47 @@ class _AddCarScreenState extends State<AddCarScreen> {
               // ignore: missing_required_param
                 child: FlutterSlider(
                   values: [_lowerValue],
-                  max: 500,
+                  max: 150000,
                   min: 0,
+                  step: FlutterSliderStep(step: 500),
+                  handlerHeight: _setValue(25),
+                  handlerWidth: _setValue(25),
                   tooltip: FlutterSliderTooltip(
-                      custom: (value) {
-                        return Text(value.toString());
+                    custom: (value) {
+                      int intVal = double.parse(value.toString()).round();
+                      if (intVal <= 99000) {
+                        int data = (intVal / 1000).round();
+                        return Text(
+                          '$data' + " K",
+                          style: TextStyle(
+                              fontFamily:
+                              "Montserrat_SemiBold",
+                              fontSize: 10,
+                              color: CustColors.blue),
+                        );
+                      } else {
+                        var data = (intVal / 100000).toStringAsFixed(1);
+                        return Text(
+                          '$data' + " L",
+                          style: TextStyle(
+                              fontFamily:
+                              "Montserrat_SemiBold",
+                              fontSize: 10,
+                              color: CustColors.blue),
+                        );
                       }
+                    },
+                    alwaysShowTooltip: true,
+                    boxStyle: FlutterSliderTooltipBox(
+                        decoration: BoxDecoration(
+                            color: Colors.transparent)),
+                    positionOffset:
+                    FlutterSliderTooltipPositionOffset(
+                        top: 41),
+                    textStyle: TextStyle(
+                        fontFamily: "Corbel_Regular",
+                        fontSize: 10,
+                        color: CustColors.blue),
                   ),
                   trackBar: FlutterSliderTrackBar(
                     inactiveTrackBar: BoxDecoration(
@@ -1755,7 +1793,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               child: MaterialButton(
                 onPressed: () {
 
-                  Navigator.pop(context);
+                  Navigator.pop(dialogContext!);
                   setState(() {
 
                     _lastMaintenanceController.text = '$selectedMonthText  $selectedYearText';

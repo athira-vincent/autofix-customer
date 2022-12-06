@@ -69,20 +69,18 @@ class _MechanicArrivedScreenState extends State<MechanicArrivedScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
 
-              children: [
-                appBarCustomUi(size),
-                bagroundBgText(size),
-                diagonosisCurvedUi( size),
+            children: [
+              appBarCustomUi(size),
+              bagroundBgText(size),
+              diagonosisCurvedUi( size),
 
-              ],
-            ),
+            ],
           ),
         ),
       ),

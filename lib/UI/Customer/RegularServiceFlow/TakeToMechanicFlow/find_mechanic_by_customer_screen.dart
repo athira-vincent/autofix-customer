@@ -3,11 +3,10 @@ import 'dart:developer';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:auto_fix/Common/chat/chat.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
-import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicStartService/mechanic_start_service_screen.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
-import 'package:auto_fix/UI/chat/chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,14 +19,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../Constants/cust_colors.dart';
 import '../../../../../../Constants/styles.dart';
 import 'dart:ui' as ui;
 
-import 'cust_take_vehicle_track_service_screen.dart';
 
 
 
@@ -86,27 +86,34 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
   String location ='';
   String Address = '';
   String authToken="", bookingId = "", carName = "", customerAddress = "",
-      plateNumber = "", vehicleColor = "",
-      isReachedServiceCenter = "";
+      plateNumber = "", vehicleColor = "";
 
-  bool isArrived = false;
-  String userid="";
+  bool isArrived = false; bool isLoading = true;
+  String userid="", myProfileUrl = "", mechanicProfileUrl = "",
+      mechanicAddress = "", customerId = "", mechanicId = "", mechanicName = "", callPhoneNumber = "";
+
+  String customerCurrentLat = "", customerCurrentLng = "";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     mapStyling();
-    customerMarker (LatLng(double.parse(
+    mechanicMarker (LatLng(double.parse(
         widget.latitude.toString()), double.parse(widget.longitude.toString())));
     getGoogleMapCameraPosition(LatLng(double.parse(widget.latitude.toString()),
         double.parse(widget.longitude.toString())));
     _getCurrentLocation();
-    Timer.periodic(Duration(seconds: 20), (Timer t) {
+    Timer.periodic(Duration(seconds: 18), (Timer t) {
       _getCurrentLocation();
     });
     getSharedPrefData();
     _listenServiceListResponse();
+    Timer(const Duration(seconds: 2), () {
+      setState(() {
+        isLoading = false;
+      });
+    });
   }
 
   mapStyling() {
@@ -130,7 +137,6 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
         icon: customerIcon!, //Icon for Marker
       ));
     });
-
   }
 
   static Future<Uint8List> getBytesFromAsset(String path, int width) async {
@@ -154,7 +160,7 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
 
   _listenServiceListResponse() {
 
-    _mechanicOrderStatusUpdateBloc.MechanicOrderStatusUpdateResponse.listen((value) {
+    _serviceStatusUpdateBloc.postStatusUpdate.listen((value) {
       if (value.status == "error") {
         setState(() {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -167,10 +173,18 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
         });
       } else {
         setState(() {
-          Navigator.pushReplacement(
+          /*Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => MechanicStartServiceScreen()));
+                  builder: (context) => MechanicStartServiceScreen()));*/
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.data!.regularMechStatusUpdate!.msg!.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          ));
+          Navigator.pop(context);
         });
       }
     });
@@ -181,8 +195,8 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       userid=shdPre.getString(SharedPrefKeys.userID).toString();
+      bookingId = widget.bookingId;
 
       print('userFamilyId FindYourCustomerScreen '+authToken.toString());
       print('bookingId FindYourCustomerScreen '+bookingId.toString());
@@ -191,7 +205,14 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
         customerAddress = event.get('customerAddress');
         plateNumber =  event.get('vehiclePlateNumber');
         vehicleColor =  event.get('vehicleColor');
-        isReachedServiceCenter = event.get("isReachedServiceCenter");
+
+        myProfileUrl = event.get('customerProfileUrl');
+        mechanicProfileUrl = event.get('mechanicProfileUrl');
+        mechanicAddress = event.get('mechanicAddress');
+        customerId = event.get('customerId');
+        mechanicId = event.get('mechanicId');
+        mechanicName = event.get('mechanicName');
+        callPhoneNumber = event.get('mechanicPhone');
       });
     });
   }
@@ -245,14 +266,19 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
             'latitude': value1.latitude.toString(),
             'longitude': value1.longitude.toString()
         })
-            .then((value) => print("Location Added"))
+            .then((value) {
+          print("Location Added");
+          customerCurrentLat = value1.latitude.toString();
+          customerCurrentLng = value1.longitude.toString();
+
+        })
             .catchError((error) =>
             print("Failed to add Location: $error"));
       });
       print("value1 $value1");
-      LatLng latLng=LatLng(double.parse(value1.latitude.toString()), double.parse(value1.longitude.toString()));
+      LatLng latLng=LatLng(double.parse(customerCurrentLat.toString()), double.parse(customerCurrentLng.toString()));
       print("latLng 001 ${latLng.latitude}");
-      mechanicMarker (latLng);
+      customerMarker (latLng);
         distanceInMeters = Geolocator.distanceBetween(double.parse(widget.latitude), double.parse(widget.longitude), double.parse('${latLng.latitude}'), double.parse('${latLng.longitude}'));
       print('DISTANCE getPositionStream distanceInMeter===== : ${distanceInMeters.toStringAsFixed(2)}');
       print('DISTANCE getPositionStream distanceInKillometer===== : ${distanceInMeters/1000}');
@@ -282,9 +308,7 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
         print("markers ${markers.length}");
         setPolyline(LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())), latLng,);
       });
-
     });
-
   }
 
   setPolyline(LatLng startlatLng, LatLng endlatLng,) async {
@@ -407,35 +431,13 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
 
   }
 
-  void updateFirestoreDB() {
-   print('+++abd ${widget.bookingId}');
+  void updateToCloudFirestoreDB() {
     _firestore
         .collection("Regular-TakeVehicle")
-        .doc(widget.bookingId)
+        .doc('${widget.bookingId}')
         .update({
-        'isArrived': "0",
-          })
-        .then((value) => print("Location Added"))
-        .catchError((error) =>
-        print("Failed to add Location: $error"));
-  }
-  void updateToCloudFirestoreDB(
-      isDriveStarted ,
-      isReachedServiceCenter ,
-      isWorkStarted ,
-      isWorkFinished ,
-      paymentStatus) {
-    _firestore
-        .collection("Regular-TakeVehicle")
-        .doc(widget.bookingId)
-        .update({
-      'isDriveStarted' : "$isDriveStarted",
-      'isReachedServiceCenter' : "$isReachedServiceCenter",
-      'isWorkStarted' : "$isWorkStarted",
-      'isWorkFinished' : "$isWorkFinished",
-      'paymentStatus' : "$paymentStatus",
-      // 'paymentRecieved' : "$paymentRecieved"
-      //'isPaymentRequested': "1",
+      'isArrived': "0",
+      'isArrivedTime': "${DateFormat("hh:mm a").format(DateTime.now())}",
     })
         .then((value) => print("Location Added"))
         .catchError((error) =>
@@ -445,10 +447,18 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Container(
+        body: isLoading == true
+            ?
+        Container(
+            width: size.width,
+            height: size.height,
+            child: Center(child: CircularProgressIndicator(color: CustColors.light_navy)))
+            :
+        Container(
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
@@ -566,7 +576,7 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
                                               style: Styles.waitingTextBlack17,
                                             ),
                                             Text(
-                                              customerAddress,
+                                              mechanicAddress,
                                               //"Elenjikkal house,Residency Empyreal Garden Anchery P.o Thrissur-680006",
                                               style: Styles.awayTextBlack,
                                               textAlign: TextAlign.start,
@@ -607,16 +617,9 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
 
                                           child: MaterialButton(
                                             onPressed: () {
-                                              updateFirestoreDB();
-                                              updateToCloudFirestoreDB(
-                                                '0',
-                                                '0',
-                                                '-1',
-                                                '-1',
-                                                '-1',
-                                              );
-                                              Navigator.pop(context);
-                                              _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, widget.bookingId, "15");
+
+                                              updateToCloudFirestoreDB();
+                                              _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "15");
                                             },
                                             child: SizedBox(
                                               height: 30,
@@ -651,7 +654,7 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
                       Container(
                         height: 50,
                         decoration: BoxDecoration(
-                          color: CustColors.blue,
+                          color: CustColors.light_navy,
                           borderRadius: BorderRadius.only(
                               bottomRight:   Radius.circular(20),
                               bottomLeft:  Radius.circular(20)),
@@ -659,30 +662,52 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
                         child: Row(
                           children: [
                             Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: const[
-                                  Icon(Icons.phone, color: Colors.white),
-                                  Text(
-                                    "Call",
-                                    style: Styles.popUPTextStyle,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            InkWell(
-                              onTap: (){
-                                // Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChatScreen(userid:userid,peerId: "123")));
-
-
-                              },
-                              child: Expanded(
-                                child:  Column(
+                              child: InkWell(
+                                onTap : (){
+                                  _callPhoneNumber(callPhoneNumber);
+                                },
+                                child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Icon(Icons.chat, color: Colors.white),
+                                  children: [
+                                    Container(
+                                        height : 25,
+                                        width: 25,
+                                        child: Image.asset("assets/image/ic_call_blue_white.png")
+                                    ),
+                                    Text(
+                                      "Call",
+                                      style: Styles.popUPTextStyle,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child:  InkWell(
+                                onTap: (){
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ChatScreen(
+                                            peerId: mechanicId,
+                                            bookingId: '$bookingId',
+                                            collectionName: 'Regular-TakeVehicle',
+                                            currentUserId: customerId,
+                                            peerName: mechanicName,
+                                            myImageUrl: myProfileUrl,
+                                            peerImageUrl: mechanicProfileUrl,
+                                          )));
+                                },
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                        height : 25,
+                                        width: 25,
+                                        child: Image.asset("assets/image/ic_chat_blue_white.png")
+                                    ),
                                     Text(
                                       "Chat",
                                       style: Styles.popUPTextStyle,
@@ -692,17 +717,27 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
                               ),
                             ),
                             Expanded(
-                              child:  Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.smartphone_sharp, color: Colors.white),
-                                    Text(
-                                      "Call via ResolMech",
-                                      style: Styles.popUPTextStyle,
-                                    ),
-                                  ],
+                              child:  InkWell(
+                                onTap: (){
+                                  launchMapsUrl(customerCurrentLat,customerCurrentLng,
+                                      double.parse('${widget.latitude}'), double.parse('${widget.longitude}',));
+                                },
+                                child: Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                          height : 25,
+                                          width: 25,
+                                          child: Image.asset("assets/image/ic_navigate_blue_white.png")
+                                      ),
+                                      Text(
+                                        "Navigate",
+                                        style: Styles.popUPTextStyle,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -770,6 +805,34 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
       ),
     );
   }
+
+  void _callPhoneNumber(String phoneNumber) async {
+    var url = 'tel://$phoneNumber';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Error Occurred';
+    }
+  }
+
+  static void launchMapsUrl(
+      sourceLatitude,
+      sourceLongitude,
+      destinationLatitude,
+      destinationLongitude) async {
+    String mapOptions = [
+      'saddr=$sourceLatitude,$sourceLongitude',
+      'daddr=$destinationLatitude,$destinationLongitude',
+      'dir_action=navigate'
+    ].join('&');
+
+    final url = 'https://www.google.com/maps?$mapOptions';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }  }
+
 
   @override
   void dispose() {

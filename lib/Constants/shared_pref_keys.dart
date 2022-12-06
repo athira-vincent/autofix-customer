@@ -14,10 +14,11 @@ class SharedPrefKeys {
   static const preferredLatitude = "preferredLatitude";
   static const preferredLongitude = "preferredLongitude";
   static const preferredAddress = "preferredAddress";
-
+  static const isProfileCompleted = "isProfileCompleted";
 
   //---------------------Customer
   static const isUserLoggedIn = "is_Logged_In";
+  static const appState = "appState";
   static const userName = "userName";
   static const userEmail = "userEmail";
   static const userID = "userID";
@@ -40,6 +41,8 @@ class SharedPrefKeys {
   static const mechanicID = "mechanicID";
   static const mechanicIsOnline = "mechanicIsOnline";
   static const isWorkProfileCompleted = "isWorkProfileCompleted";
+  static const haveActiveServiceRequest = "haveActiveServiceRequest";
+  static const activeServiceRequestData = "activeServiceRequest";
 
   ///========= Customer Tracking Variables ==============///
 

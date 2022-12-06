@@ -1,9 +1,11 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/error_strings.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
@@ -11,6 +13,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../../main.dart';
 
@@ -70,35 +73,67 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
             // String msg = value.message.split(":").last.toString();
             SnackBarWidget().setMaterialSnackBar("Account doesn't exist",_scaffoldKey);
           }
-          else{
+          else if(value.message.contains(ErrorStrings.error_202) ){
+            // String msg = value.message.split(":").last.toString();
+            SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_202,_scaffoldKey);
+          }else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_208){
+            SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_208, _scaffoldKey);
+          } else{
             SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
           }
         });
       } else {
         setState(() {
           _isLoading = false;
-          _signinBloc.userDefaultData(
-            value.data!.signInPhoneNo!.jwtToken.toString(),
-              value.data!.signInPhoneNo!.userTypeId.toString(),
-            "",
-              value.data!.signInPhoneNo!.firstName.toString(),
-            value.data!.signInPhoneNo!.id.toString(),
-                         //----- profile image url should b updated
-              );
-          Navigator.push(
-            context,
-            MaterialPageRoute(
+          // _signinBloc.userDefaultData(
+          //   //value.data!.signInPhoneNo!.jwtToken.toString(),
+          //     value.data!.signInPhoneNo!.userTypeId.toString(),
+          //   "",
+          //     value.data!.signInPhoneNo!.firstName.toString(),
+          //   value.data!.signInPhoneNo!.id.toString(),
+          //                //----- profile image url should b updated
+          //     );
+          if(value.data!.signInPhoneNo!.message.contains(ErrorStrings.error_205) ){
+            SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_205,_scaffoldKey);
+          }
+          else if(value.data!.signInPhoneNo!.userData!.isProfile.toString() == "0" ){
+            SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_301,_scaffoldKey);
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
                 builder: (context) =>
                     OtpVerificationScreen(
                       userType: "0",
                       userCategory: "0",
                       phoneNumber: "${_phoneNoController.text}",
-                      otpNumber: "${value.data?.signInPhoneNo?.otp}",
-                      userTypeId: "${value.data?.signInPhoneNo?.userTypeId}",
+                      otpNumber: "${value.data?.signInPhoneNo?.userData!.otp}",
+                      userTypeId: "${value.data?.signInPhoneNo?.userData!.userTypeId}",
                       fromPage: "2",
                     ),
-            ),
-          );
+              ),
+            );
+          }
+          else if(value.data!.signInPhoneNo!.message.contains(ErrorStrings.error_206) ){
+            SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_206,_scaffoldKey);
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    OtpVerificationScreen(
+                      userType: "0",
+                      userCategory: "0",
+                      phoneNumber: "${_phoneNoController.text}",
+                      otpNumber: "${value.data?.signInPhoneNo?.userData!.otp}",
+                      userTypeId: "${value.data?.signInPhoneNo?.userData!.userTypeId}",
+                      fromPage: "2",
+                    ),
+              ),
+            );
+          }else {
+            SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+          }
         });
       }
     });
@@ -114,183 +149,163 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: CustColors.whiteBlueish,
-          body: ScrollConfiguration(
-            behavior: MyBehavior(),
-            child: SingleChildScrollView(
-              // ignore: avoid_unnecessary_containers
-              child: Column(
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height *0.40 ,
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: SvgPicture.asset('assets/image/phoneLogin/otp_login_bg.svg',height: MediaQuery.of(context).size.height *0.23,),
-                          ),
-                        ],
-                      ),
+    return Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: CustColors.whiteBlueish,
+        body: ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: SingleChildScrollView(
+            // ignore: avoid_unnecessary_containers
+            child: Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height *0.40 ,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      // ignore: prefer_const_literals_to_create_immutables
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: SvgPicture.asset('assets/image/phoneLogin/otp_login_bg.svg',height: MediaQuery.of(context).size.height *0.23,),
+                        ),
+                      ],
                     ),
                   ),
-                  CurvedBottomSheetContainer(
-                    percentage:0.60,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Form(
-                            autovalidateMode: _autoValidate,
-                            key: _formKey,
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  InkWell(
-                                    onTap: (){
-                                      if(language_en_ar==true)
-                                      {
-                                        MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
-                                        setState(() {
-                                          language_en_ar=false;
-                                        });
-                                      }
-                                      else
-                                      {
-                                        MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
-                                        setState(() {
-                                          language_en_ar=true;
-                                        });
-                                      }
-
-                                    },
-                                    child: Container(
-                                      child: Text(
-                                        'Phone Number',   //'Phone Number',
-                                        style: Styles.textHeadLogin,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(left: 10, right: 10, top: 15,bottom: 10),
-                                    padding: EdgeInsets.all(5),
-                                    alignment: Alignment.centerLeft,
-                                    //color: Colors.red,
+                ),
+                CurvedBottomSheetContainer(
+                  percentage:0.60,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Form(
+                          autovalidateMode: _autoValidate,
+                          key: _formKey,
+                          child: Container(
+                            margin: EdgeInsets.only(
+                              left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                InkWell(
+                                  child: Container(
                                     child: Text(
-                                      'Enter your phone number ,you will receive a 4 digit code for  phone number verification. Select your country code before enter your Number.',
-                                      textAlign: TextAlign.left,
-                                      softWrap: true,
-                                      style: Styles.textLabelSubTitle12,
+                                      'Phone Number',   //'Phone Number',
+                                      style: Styles.textHeadLogin,
                                     ),
                                   ),
-                                  Padding(
-                                    padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(top: _setValue(15.5)),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                'Phone Number',   //'Phone Number',
-                                                style: Styles.textLabelTitle,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Center(
-                                                    child: CountryCodePicker(
-
-                                                      onChanged: _onCountryChange,
-                                                      // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-                                                      initialSelection: 'IT',
-                                                      favorite: ['+234','FR'],
-                                                      // optional. Shows only country name and flag
-                                                      showCountryOnly: false,
-                                                      // optional. Shows only country name and flag when popup is closed.
-                                                      showOnlyCountryWhenClosed: false,
-                                                      // optional. aligns the flag and the Text left
-                                                      alignLeft: false,
-
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: TextFormField(
-                                                      textAlignVertical: TextAlignVertical.center,
-                                                      maxLines: 1,
-                                                      style: Styles.textLabelSubTitle,
-                                                      focusNode: _phoneNoFocusNode,
-                                                      keyboardType: TextInputType.phone,
-                                                      validator: InputValidator(
-                                                          ch: 'Phone Number',   //"Phone number"
-                                                      ).phoneNumChecking,
-                                                      controller: _phoneNoController,
-                                                      //cursorColor: CustColors.whiteBlueish,
-                                                      cursorColor: Colors.black,
-                                                      decoration: InputDecoration(
-                                                        isDense: true,
-                                                        hintText: 'Enter your Phone number',  //'Enter your phone Number',
-                                                        border: UnderlineInputBorder(
-                                                          borderSide: BorderSide(
-                                                            color: CustColors.greyish,
-                                                            width: .5,
-                                                          ),
-                                                        ),
-                                                        focusedBorder: UnderlineInputBorder(
-                                                          borderSide: BorderSide(
-                                                            color: CustColors.greyish,
-                                                            width: .5,
-                                                          ),
-                                                        ),
-                                                        enabledBorder: UnderlineInputBorder(
-                                                          borderSide: BorderSide(
-                                                            color: CustColors.greyish,
-                                                            width: .5,
-                                                          ),
-                                                        ),
-                                                        contentPadding: EdgeInsets.symmetric(
-                                                          vertical: 12.8,
-                                                          horizontal: 0.0,
-                                                        ),
-                                                        hintStyle: Styles.textLabelSubTitle,),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(top: 20.8),
-                                          child: _isLoading
-                                              ? Center(
-                                            child: Container(
-                                              height: _setValue(28),
-                                              width: _setValue(28),
-                                              child: CircularProgressIndicator(
-                                                valueColor: AlwaysStoppedAnimation<Color>(
-                                                    CustColors.light_navy),
-                                              ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(left: 10, right: 10, top: 15,bottom: 10),
+                                  padding: EdgeInsets.all(5),
+                                  alignment: Alignment.centerLeft,
+                                  //color: Colors.red,
+                                  child: Text(
+                                    'Enter your phone number ,you will receive a 4 digit code for  phone number verification. Select your country code before enter your Number.',
+                                    textAlign: TextAlign.left,
+                                    softWrap: true,
+                                    style: Styles.textLabelSubTitle12,
+                                  ),
+                                ),
+                                Padding(
+                                  padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(top: _setValue(15.5)),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Phone Number',   //'Phone Number',
+                                              style: Styles.textLabelTitle,
                                             ),
-                                          )
-                                              : Container(
+                                            Row(
+                                              children: [
+                                                Center(
+                                                  child: CountryCodePicker(
+                                                    onChanged: _onCountryChange,
+                                                    // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+                                                    initialSelection: 'NG',
+                                                    favorite: ['+234','NG'],
+                                                    // optional. Shows only country name and flag
+                                                    showCountryOnly: false,
+                                                    // optional. Shows only country name and flag when popup is closed.
+                                                    showOnlyCountryWhenClosed: false,
+                                                    // optional. aligns the flag and the Text left
+                                                    alignLeft: false,
+                                                    enabled: false,
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: TextFormField(
+                                                    textAlignVertical: TextAlignVertical.center,
+                                                    maxLines: 1,
+                                                    style: Styles.textLabelSubTitle,
+                                                    focusNode: _phoneNoFocusNode,
+                                                    keyboardType: TextInputType.phone,
+                                                    validator: InputValidator(
+                                                      ch: 'Phone Number',   //"Phone number"
+                                                    ).phoneNumChecking,
+                                                    controller: _phoneNoController,
+                                                    //cursorColor: CustColors.whiteBlueish,
+                                                    cursorColor: Colors.black,
+                                                    decoration: InputDecoration(
+                                                      isDense: true,
+                                                      hintText: 'Enter your Phone number',  //'Enter your phone Number',
+                                                      border: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      focusedBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      enabledBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      contentPadding: EdgeInsets.symmetric(
+                                                        vertical: 12.8,
+                                                        horizontal: 0.0,
+                                                      ),
+                                                      hintStyle: Styles.textLabelSubTitle,),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(top: 20.8),
+                                        child: _isLoading
+                                            ? Center(
+                                          child: Container(
+                                            height: _setValue(28),
+                                            width: _setValue(28),
+                                            child: CircularProgressIndicator(
+                                              valueColor: AlwaysStoppedAnimation<Color>(
+                                                  CustColors.light_navy),
+                                            ),
+                                          ),
+                                        )
+                                            : Container(
 
-                                            child: MaterialButton(
-                                              onPressed: () {
-                                                print("${_phoneNoController.text}");
-                                                setState(() {
+                                          child: MaterialButton(
+                                            onPressed: () {
+                                              print("${_phoneNoController.text}");
+                                              setState(() {
 
                                                 if (_formKey.currentState!.validate()) {
                                                   print("_formKey.currentState!.validate()");
@@ -301,71 +316,72 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                                   setState(() => _autoValidate = AutovalidateMode.always);
                                                 }
 
-                                                });
-                                              },
-                                              child: Container(
-                                                height: 45,
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      'Send',
-                                                      textAlign: TextAlign.center,
-                                                      style: Styles.textButtonLabelSubTitle,
-                                                    ),
-                                                  ],
-                                                ),
+                                              });
+                                            },
+                                            child: Container(
+                                              height: 45,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    'Send',
+                                                    textAlign: TextAlign.center,
+                                                    style: Styles.textButtonLabelSubTitle,
+                                                  ),
+                                                ],
                                               ),
-                                              color: CustColors.materialBlue,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(
-                                                      _setValue(13))),
                                             ),
+                                            color: CustColors.materialBlue,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                    _setValue(13))),
                                           ),
                                         ),
-                                        Container(
-                                          margin: EdgeInsets.only(top: 15.8),
-                                          child: RichText(
-                                            maxLines: 2,
-                                            text: TextSpan(
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text: 'Back to ',  // "Back to ",
-                                                  style: Styles.textLabelSubTitle,
-                                                ),
-                                                TextSpan(
-                                                    text: 'Sign Up',  //'SignUp',
-                                                    style: Styles.textLabelTitle_10,
-                                                    recognizer: TapGestureRecognizer()
-                                                      ..onTap = () {
-                                                        Navigator.pushReplacement(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  SignupScreen( userType: '1', userCategory: '1',)),
-                                                        );
-                                                      }),
-                                              ],
-                                            ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(top: 15.8),
+                                        child: RichText(
+                                          maxLines: 2,
+                                          text: TextSpan(
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: 'Back to ',  // "Back to ",
+                                                style: Styles.textLabelSubTitle,
+                                              ),
+                                              TextSpan(
+                                                  text: 'Sign Up',  //'SignUp',
+                                                  style: Styles.textLabelTitle_10,
+                                                  recognizer: TapGestureRecognizer()
+                                                    ..onTap = () {
+                                                      Navigator.pushReplacement(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                            UserSelectionScreen()
+                                                          //SignupScreen( userType: '1', userCategory: '1',)
+                                                        ),
+                                                      );
+                                                    }),
+                                            ],
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          )),
-    );
+          ),
+        ));
   }
 
   void _onCountryChange(CountryCode countryCode) {

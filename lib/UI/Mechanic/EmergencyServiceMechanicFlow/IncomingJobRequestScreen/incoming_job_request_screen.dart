@@ -1,9 +1,10 @@
 import 'dart:async';
 
+import 'package:auto_fix/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
@@ -11,10 +12,11 @@ import 'package:auto_fix/Widgets/Countdown.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slider_button/slider_button.dart';
 
@@ -44,7 +46,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  bool _isLoading = false;
+  //bool _isLoading = false;
   //late bool _isJobOfferAccepted;
 
   late int isAccepted;
@@ -54,26 +56,26 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
     return value * per + value;
   }
 
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
   bool language_en_ar=true;
 
   bool SliderVal = false;
   String? FcmToken ="";
 
-  int _counter = 0;
   late AnimationController _controller;
   int levelClock = 30;
   String authToken = "", userId = "";
   List yourItemList = [];
+  String worldTimeNotificationCreated = "", currentDateTime = "";
 
   @override
   void initState() {
     super.initState();
+    calculateTime();
     customerToken = widget.notificationPayloadMdl.customerFcmToken;
     bookingIdEmergency = widget.notificationPayloadMdl.bookingId;
+
     serviceName = widget.notificationPayloadMdl.serviceName;
+
     getSharedPrefData();
     _getApiResponse();
     _controller = AnimationController(
@@ -88,9 +90,46 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       if (status == AnimationStatus.completed) {
         print("levelClock >>>>>> " + levelClock.toString() );
         isAccepted = 0;
+        setClearSharedPrefData();
         Navigator.of(context, rootNavigator: true).pop(context);
       }
     });
+  }
+
+  void calculateTime(){
+    Duration time;
+    Repository().getCurrentWorldTime("Nairobi").then((value01) => {
+
+      currentDateTime = value01.datetime!.millisecondsSinceEpoch.toString(),
+      print(">>>> customerCurrentTime currentDateTime : $currentDateTime"),
+
+     time = DateTime.fromMillisecondsSinceEpoch( int.parse(widget.notificationPayloadMdl.customerCurrentTime)).
+      difference(DateTime.fromMillisecondsSinceEpoch(int.parse(currentDateTime))),
+      print( "time difference >>> ${time.inSeconds}"),
+      if(mounted){
+          if(time.inSeconds > -30){
+            setState(() {
+            levelClock = levelClock + time.inSeconds;
+            }),
+          }
+          else{
+            setState(() {
+              _controller.stop(canceled: true);
+              levelClock = 0;
+              SliderVal = true;
+              Fluttertoast.showToast(msg: "Time Expired");
+              Navigator.of(context, rootNavigator: true).pop(context);
+            }),
+          }
+      }
+    });
+  }
+
+  Future<void> setClearSharedPrefData() async {
+    print('setClearSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    shdPre.setBool(SharedPrefKeys.haveActiveServiceRequest, false);
+    shdPre.setString(SharedPrefKeys.activeServiceRequestData, "");
   }
 
   Future<void> getSharedPrefData() async {
@@ -130,6 +169,8 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         "id": "1",
         "status": "done",
         "screen": "MechanicTrackingScreen",
+        "customerCurrentTime": "",
+        "mechanicCurrentTime" : "",
         "bookingId" : "${widget.notificationPayloadMdl.bookingId}",
         "serviceName" : "${widget.notificationPayloadMdl.serviceName}",
         "serviceId" : "${widget.notificationPayloadMdl.serviceId}",
@@ -147,6 +188,10 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         "customerID" : "${widget.notificationPayloadMdl.customerID}",
         "mechanicPhone" : "${widget.notificationPayloadMdl.mechanicPhone}",
         "customerPhone" : "${widget.notificationPayloadMdl.customerPhone}",
+        "mechanicProfileUrl" :"${widget.notificationPayloadMdl.mechanicProfileUrl}",                    ///----detailsMdl.data!.bookingDetails!.mechanic.profileurl
+        "customerProfileUrl" : "${widget.notificationPayloadMdl.customerProfileUrl}",
+        "mechanicEmail" : "${widget.notificationPayloadMdl.mechanicEmail}",
+        "customerEmail" : "${widget.notificationPayloadMdl.customerEmail}",
         "mechanicAddress" : "${widget.notificationPayloadMdl.mechanicAddress}",
         "mechanicLatitude" : "${widget.notificationPayloadMdl.mechanicLatitude}",
         "mechanicLongitude" : "${widget.notificationPayloadMdl.mechanicLongitude}",
@@ -213,7 +258,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
           shdPre.setString(SharedPrefKeys.bookingIdEmergency, widget.notificationPayloadMdl.bookingId);
 
           updateToCloudFirestoreDB();
-
+          setClearSharedPrefData();
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -256,7 +301,12 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "carPlateNumber" : "${widget.notificationPayloadMdl.carPlateNumber}",
       "carColor" : "${widget.notificationPayloadMdl.carColor}",
       "customerID" : "${widget.notificationPayloadMdl.customerID}",
+      "mechanicPhone" : "${widget.notificationPayloadMdl.mechanicPhone}",
       "customerPhone" : "${widget.notificationPayloadMdl.customerPhone}",
+      "mechanicProfileUrl" :"${widget.notificationPayloadMdl.mechanicProfileUrl}",                    ///----detailsMdl.data!.bookingDetails!.mechanic.profileurl
+      "customerProfileUrl" : "${widget.notificationPayloadMdl.customerProfileUrl}",
+      "mechanicEmail" : "${widget.notificationPayloadMdl.mechanicEmail}",
+      "customerEmail" : "${widget.notificationPayloadMdl.customerEmail}",
       "customerName" : "${widget.notificationPayloadMdl.customerName}",
       "customerAddress" : "${widget.notificationPayloadMdl.customerAddress}",
       "customerLatitude" : "${widget.notificationPayloadMdl.customerLatitude}",
@@ -264,7 +314,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "customerFcmToken" : "${widget.notificationPayloadMdl.customerFcmToken}",
       "mechanicName" : "${widget.notificationPayloadMdl.mechanicName}",
       "mechanicID" : "${widget.notificationPayloadMdl.mechanicID}",
-      "mechanicPhone" : "${widget.notificationPayloadMdl.mechanicPhone}",
+
       "mechanicAddress" :"${widget.notificationPayloadMdl.mechanicAddress}",
       "mechanicLatitude" : "${widget.notificationPayloadMdl.mechanicLatitude}",
       "mechanicLongitude" : "${widget.notificationPayloadMdl.mechanicLongitude}",
@@ -277,8 +327,8 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "totalTimeTakenByMechanic": "0",
       "timerCounter": "${widget.notificationPayloadMdl.serviceTime}",
       "currentUpdatedTime": "${widget.notificationPayloadMdl.serviceTime}",
-      "customerFromPage" : "MechanicTrackingScreen",
-      "mechanicFromPage" : "FindYourCustomerScreen",
+      "customerFromPage" : "C1",
+      "mechanicFromPage" : "M1",
       "isWorkStarted" : "0",
       "isWorkCompleted" : "0",
       "latitude": "${widget.notificationPayloadMdl.mechanicLatitude}",
@@ -304,37 +354,13 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "mechanicArrivalState": "0",
       "mechanicDiagonsisState": "0",
       "customerDiagonsisApproval": "0",
+      "totalstarttimecurrenttimevalue" : "",
     })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>
         print("Failed to add row: $error"));
 
   }
-
-  /*void changeScreen(){
-    if (widget.serviceModel == "0"){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
-    }else if (widget.serviceModel == "1"){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
-     // PickUpCustomerLocationScreen
-    }else if (widget.serviceModel == "2"){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
-    }else if (widget.serviceModel == "3"){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
-    }
-  }*/
 
   @override
   void dispose() {
@@ -349,7 +375,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
     _mechanicOrderStatusUpdateBloc.MechanicOrderStatusUpdateResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
-          _isLoading = false;
+          //_isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.message.toString(),
                 style: const TextStyle(
@@ -361,7 +387,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         });
       } else {
         setState(() {
-          _isLoading = false;
+          //_isLoading = false;
           print('getSharedPrefData');
           callOnFcmApiSendPushNotifications(1);
           /*Navigator.pushReplacement(context,
@@ -627,8 +653,6 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       ],
     );
   }
-
-
 
 }
 

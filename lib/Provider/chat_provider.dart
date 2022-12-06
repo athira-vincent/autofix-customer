@@ -1,10 +1,9 @@
 import 'dart:io';
 
 import 'package:auto_fix/Constants/firestore_constants.dart';
-import 'package:auto_fix/Models/chat_messages.dart';
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 class ChatProvider {
@@ -38,7 +37,7 @@ class ChatProvider {
         .doc(groupChatId)
         //.collection(groupChatId)
         .collection("messages")
-        .orderBy(FirestoreConstants.timestamp, descending: true)
+        .orderBy(FirestoreConstants.timestamp, descending: true,)
         .limit(limit)
         .snapshots();
   }
@@ -66,20 +65,38 @@ class ChatProvider {
 
   void sendChatMessage(String content, int type, String collection, String groupChatId,
       String currentUserId, String peerId) {
-    print(">>>>02");
+    String currentWorldTime = "";
 
-    FirebaseFirestore.instance
-        .collection('${collection}')
+    Repository().getCurrentWorldTime("Nairobi").then((value01) => {
+      currentWorldTime = value01.datetime!.microsecondsSinceEpoch.toString(),
+      if(currentWorldTime.isNotEmpty){
+        FirebaseFirestore.instance
+            .collection('${collection}')
+            .doc("${groupChatId}")
+            .collection("messages")
+            .add({
+          'content': content,
+          'idFrom': currentUserId,
+          'idTo': peerId,
+          'type': type,
+          'timestamp': currentWorldTime.toString(),
+        })
+      }else{
+        FirebaseFirestore.instance
+            .collection('${collection}')
         .doc("${groupChatId}")
         .collection("messages")
         .add({
-      'content': content,
-      'idFrom': currentUserId,
-      'idTo': peerId,
-      'type': type,
-      'timestamp': DateTime.now()
-          .millisecondsSinceEpoch
-          .toString(),
+          'content': content,
+          'idFrom': currentUserId,
+          'idTo': peerId,
+          'type': type,
+          'timestamp': DateTime
+              .now()
+              .microsecondsSinceEpoch
+              .toString(),
+        })
+      }
     });
   }
 }

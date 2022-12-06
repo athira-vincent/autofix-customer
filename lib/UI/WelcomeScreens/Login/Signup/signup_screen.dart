@@ -1,32 +1,31 @@
 import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/error_strings.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StatesList/states_list_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
 import 'package:auto_fix/Utility/check_network.dart';
-import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
+import 'package:auto_fix/Utility/network_error_screen.dart';
 import 'package:auto_fix/Widgets/indicator_widget.dart';
 
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart' as path;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignupScreen extends StatefulWidget {
   final String userType;
@@ -56,7 +55,7 @@ class _SignupScreenState extends State<SignupScreen> {
   FocusNode _nameFocusNode = FocusNode();
   FocusNode _emailFocusNode = FocusNode();
   FocusNode _phoneFocusNode = FocusNode();
-  FocusNode _stateFocusNode = FocusNode();
+  //FocusNode _stateFocusNode = FocusNode();
   FocusNode _photoFocusNode = FocusNode();
   FocusNode _passwordFocusNode = FocusNode();
   FocusNode _confirmPswdFocusNode = FocusNode();
@@ -73,7 +72,7 @@ class _SignupScreenState extends State<SignupScreen> {
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final SignupBloc _signupBloc = SignupBloc();
   bool _isLoading = false;
-  List<StateDetails> _countryData = [];
+  //List<StateDetails> _countryData = [];
   List<String> orgTypeList = [
     "Business name",
     "Private Limited Company",
@@ -157,8 +156,8 @@ class _SignupScreenState extends State<SignupScreen> {
     super.initState();
     callOnFcmApiSendPushNotifications();
     _getCurrentCustomerLocation();
-    _signupBloc.dialStatesListRequest();
-    _populateCountryList();
+    //_signupBloc.dialStatesListRequest();
+    //_populateCountryList();
     _setSignUpVisitFlag();
     _passwordVisible = false;
     _confirmPasswordVisible = false;
@@ -183,82 +182,95 @@ class _SignupScreenState extends State<SignupScreen> {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
-          SnackBarWidget().setMaterialSnackBar(
-              "${value.message.toString().split(":").last}", _scaffoldKey);
-          /*SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpMechanic >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpMechanic >>>>>>>  ${value.status}");
-          _isLoading = false;*/
         });
+        if(value.message == ErrorStrings.error_no_network){
+          SnackBarWidget().setMaterialSnackBar(ErrorStrings.error_no_network, _scaffoldKey);
+        }else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_210){
+          SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_210, _scaffoldKey);
+        }else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_201){
+          SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_201, _scaffoldKey);
+        }else if(value.message.toString().split(":").last.trim() == ErrorStrings.error_203){
+          SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_203, _scaffoldKey);
+        }else{
+            SnackBarWidget().setMaterialSnackBar("${value.message.toString().split(":").last}", _scaffoldKey);
+        }
       } else {
         setState(() {
-          SnackBarWidget()
-              .setMaterialSnackBar("Successfully Registered", _scaffoldKey);
-          print("success postSignUpMechanic >>>>>>>  ${value.status}");
-          print(
-              "success Auth token >>>>>>>  ${value.data!.signUp!.token.toString()}");
           _isLoading = false;
-         /* _signupBloc.userDefault(
+        });
+        if(value.data!.signUp!.message == ErrorStrings.error_209
+            || value.data!.signUp!.message == ErrorStrings.error_205 ){
+          setState(() {
+            SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_209, _scaffoldKey);             // Successfully Registered
+            print("success postSignUpMechanic >>>>>>>  ${value.status}");
+            print("success Auth token >>>>>>>  ${value.data!.signUp!.token.toString()}");
+             /*_signupBloc.userDefault(
             value.data!.signUp!.token.toString(),
             TextStrings.user_mechanic,
             value.data!.signUp!.customer.toString(),
             value.data!.signUp!.token.toString(),
           );*/
-          if (value.data?.signUp?.customer == null) {
-            _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 1);
-            _signupBloc.userDefault(
-              value.data!.signUp!.token.toString(),
-              TextStrings.user_mechanic,
-              "${value.data!.signUp!.mechanic?.firstName.toString()}",
-              "${value.data!.signUp!.mechanic?.id.toString()}",
-              "${value.data!.signUp!.mechanic?.userCode.toString()}",
-              "${value.data!.signUp!.mechanic?.phoneNo.toString()}",
-              "${value.data!.signUp!.mechanic?.otpCode.toString()}",
-              "${value.data!.signUp!.mechanic?.userTypeId.toString()}",
-            );
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => OtpVerificationScreen(
-                          userType: widget.userType,
-                          userCategory: widget.userCategory,
-                          phoneNumber:
-                              "${value.data!.signUp!.mechanic?.phoneNo.toString()}",
-                          otpNumber:
-                              "${value.data!.signUp!.mechanic?.otpCode.toString()}",
-                          userTypeId:
-                              "${value.data!.signUp!.mechanic?.userTypeId.toString()}",
-                          fromPage: "1",
-                        )));
-          } else {
-            _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 1);
-            _signupBloc.userDefault(
-              value.data!.signUp!.token.toString(),
-              TextStrings.user_customer,
-              "${value.data!.signUp!.customer?.firstName.toString()}",
-              "${value.data!.signUp!.customer?.id.toString()}",
-              "${value.data!.signUp!.customer?.userCode.toString()}",
-              "${value.data!.signUp!.customer?.phoneNo.toString()}",
-              "${value.data!.signUp!.customer?.otpCode.toString()}",
-              "${value.data!.signUp!.customer?.userTypeId.toString()}",
-            );
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => OtpVerificationScreen(
-                          userType: widget.userType,
-                          userCategory: widget.userCategory,
-                          phoneNumber:
-                              "${value.data!.signUp!.customer?.phoneNo.toString()}",
-                          otpNumber:
-                              "${value.data!.signUp!.customer?.otpCode.toString()}",
-                          userTypeId:
-                              "${value.data!.signUp!.customer?.userTypeId.toString()}",
-                          fromPage: "1",
-                        )));
-          }
-          FocusScope.of(context).unfocus();
-        });
+            if (value.data?.signUp?.customer == null) {
+              _shdPre.setInt(SharedPrefKeys.isProfileCompleted, 1);
+              //_shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 1);
+              _signupBloc.userDefault(
+                value.data!.signUp!.token.toString(),
+                TextStrings.user_mechanic,
+                "${value.data!.signUp!.mechanic?.firstName.toString()}",
+                "${value.data!.signUp!.mechanic?.id.toString()}",
+                "${value.data!.signUp!.mechanic?.userCode.toString()}",
+                "${value.data!.signUp!.mechanic?.phoneNo.toString()}",
+                "${value.data!.signUp!.mechanic?.otpCode.toString()}",
+                "${value.data!.signUp!.mechanic?.userTypeId.toString()}",
+              );
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OtpVerificationScreen(
+                        userType: widget.userType,
+                        userCategory: widget.userCategory,
+                        phoneNumber:
+                        "${value.data!.signUp!.mechanic?.phoneNo.toString()}",
+                        otpNumber:
+                        "${value.data!.signUp!.mechanic?.otpCode.toString()}",
+                        userTypeId:
+                        "${value.data!.signUp!.mechanic?.userTypeId.toString()}",
+                        fromPage: "1",
+                      )));
+            } else {
+              _shdPre.setInt(SharedPrefKeys.isProfileCompleted, 1);
+              //_shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 1);
+              _signupBloc.userDefault(
+                value.data!.signUp!.token.toString(),
+                TextStrings.user_customer,
+                "${value.data!.signUp!.customer?.firstName.toString()}",
+                "${value.data!.signUp!.customer?.id.toString()}",
+                "${value.data!.signUp!.customer?.userCode.toString()}",
+                "${value.data!.signUp!.customer?.phoneNo.toString()}",
+                "${value.data!.signUp!.customer?.otpCode.toString()}",
+                "${value.data!.signUp!.customer?.userTypeId.toString()}",
+              );
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OtpVerificationScreen(
+                        userType: widget.userType,
+                        userCategory: widget.userCategory,
+                        phoneNumber:
+                        "${value.data!.signUp!.customer?.phoneNo.toString()}",
+                        otpNumber:
+                        "${value.data!.signUp!.customer?.otpCode.toString()}",
+                        userTypeId:
+                        "${value.data!.signUp!.customer?.userTypeId.toString()}",
+                        fromPage: "1",
+                      )));
+            }
+            FocusScope.of(context).unfocus();
+          });
+        }else{
+          SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.text_went_wrong_try, _scaffoldKey);               //  Something went wrong. Try Again
+        }
+
       }
     });
   }
@@ -398,7 +410,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     children: [
                                       Container(
                                         child: Text(
-                                          'Sign Up',
+                                          AppLocalizations.of(context)!.text_sign_up,         //'Sign Up',
                                           style: Styles.textHeadLogin,
                                         ),
                                       ),
@@ -424,8 +436,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           widget.userCategory ==
                                                                   TextStrings
                                                                       .user_category_individual
-                                                              ? 'Name'
-                                                              : 'Name of Organization',
+                                                              ?  AppLocalizations.of(context)!.text_name                      //'Name'
+                                                              :  AppLocalizations.of(context)!.text_organization_name,         //'Name of Organization',
                                                           style: Styles
                                                               .textLabelTitle,
                                                         ),
@@ -450,8 +462,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                   ch: widget.userCategory ==
                                                                           TextStrings
                                                                               .user_category_individual
-                                                                      ? 'Name'
-                                                                      : 'Name of Organization')
+                                                                      ? AppLocalizations.of(context)!.text_name                        ///'Name'
+                                                                      : AppLocalizations.of(context)!.text_organization_name)             //'Name of Organization')
                                                               .nameChecking,
                                                           controller:
                                                               _nameController,
@@ -466,8 +478,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                         .userCategory ==
                                                                     TextStrings
                                                                         .user_category_individual
-                                                                ? 'Your Name'
-                                                                : 'Your Organization Name',
+                                                                ? AppLocalizations.of(context)!.text_hint_name                     //'Your Name'
+                                                                : AppLocalizations.of(context)!.text_hint_organization_name,         //'Your Organization Name',
                                                             border:
                                                                 UnderlineInputBorder(
                                                               borderSide:
@@ -520,7 +532,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          'Type of Organization',
+                                                          AppLocalizations.of(context)!.text_organization_type,        //'Type of Organization',
                                                           style: Styles
                                                               .textLabelTitle,
                                                         ),
@@ -529,6 +541,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                             showOrganisationTypeSelector();
                                                             print(
                                                                 "Type of Organisation");
+                                                            _nameFocusNode.unfocus();
                                                           },
                                                           child: TextFormField(
                                                             enabled: false,
@@ -580,7 +593,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 ),
                                                               ),
                                                               isDense: true,
-                                                              hintText: 'Select your organization from list',
+                                                              hintText: AppLocalizations.of(context)!.text_hint_organization_type,       //'Select your organization from list',
                                                               errorStyle: TextStyle(color: Colors.red),
                                                               border:
                                                                   UnderlineInputBorder(
@@ -636,16 +649,20 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          'State/FCT',
+                                                          AppLocalizations.of(context)!.text_state,          ///'State/FCT',
                                                           style: Styles
                                                               .textLabelTitle,
                                                         ),
                                                         InkWell(
                                                           onTap: () async {
+                                                            //FocusManager.instance.primaryFocus?.unfocus();
+                                                            //_emailFocusNode.unfocus();
+
                                                             print(
                                                                 "on tap state ");
                                                             _awaitReturnValueFromSecondScreen(
                                                                 context);
+                                                            _emailFocusNode.unfocus();
                                                           },
                                                           child: TextFormField(
                                                             readOnly: true,
@@ -656,11 +673,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                                             maxLines: 1,
                                                             style: Styles
                                                                 .textLabelSubTitle,
-                                                            focusNode:
-                                                                _stateFocusNode,
+                                                            // focusNode:
+                                                            //     _stateFocusNode,
                                                             //keyboardType: TextInputType.phone,
                                                             validator: InputValidator(
-                                                                    ch: 'State/FCT')
+                                                                    ch: AppLocalizations.of(context)!.text_state)          //'State/FCT')
                                                                 .emptyChecking,
                                                             controller:
                                                                 _stateController,
@@ -697,7 +714,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 ),
                                                               ),
                                                               isDense: true,
-                                                              hintText: 'Select your state/ FCT',
+                                                              hintText: AppLocalizations.of(context)!.text_hint_state,         //'Select your state/ FCT',
                                                               errorStyle: TextStyle(color: Colors.red),
                                                               border:
                                                                   UnderlineInputBorder(
@@ -753,7 +770,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          'Ministry/Govt. Agency',
+                                                          AppLocalizations.of(context)!.text_ministry_govt,          //'Ministry/Govt. Agency',
                                                           style: Styles
                                                               .textLabelTitle,
                                                         ),
@@ -811,7 +828,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 ),
                                                               ),
                                                               isDense: true,
-                                                              hintText: 'Select your ministry/govt agency from list',
+                                                              hintText: AppLocalizations.of(context)!.text_hint_ministry_govt,         //'Select your ministry/govt agency from list',
                                                               errorStyle: TextStyle(color: Colors.red),
                                                               border:
                                                                   UnderlineInputBorder(
@@ -870,7 +887,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          'Contact Person Name',
+                                                          AppLocalizations.of(context)!.text_contact_person,       //'Contact Person Name',
                                                           style: Styles
                                                               .textLabelTitle,
                                                         ),
@@ -893,7 +910,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           ],
                                                           validator:
                                                               InputValidator(
-                                                            ch: 'Contact Person Name',
+                                                            ch: AppLocalizations.of(context)!.text_contact_person,         //'Contact Person Name',
                                                           ).nameChecking,
                                                           controller:
                                                               _contactPersonController,
@@ -904,7 +921,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               InputDecoration(
                                                             errorStyle: TextStyle(color: Colors.red),
                                                             isDense: true,
-                                                            hintText: 'Enter your name',
+                                                            hintText: AppLocalizations.of(context)!.text_hint_contact_person,        //'Enter your name',
                                                             border:
                                                                 UnderlineInputBorder(
                                                               borderSide:
@@ -954,7 +971,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Phone Number',
+                                                    AppLocalizations.of(context)!.text_phone,            //'Phone Number',
                                                     style:
                                                         Styles.textLabelTitle,
                                                   ),
@@ -973,7 +990,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           15),
                                                     ],
                                                     validator: InputValidator(
-                                                      ch: 'Phone Number',
+                                                      ch: AppLocalizations.of(context)!.text_phone,          //'Phone Number',
                                                     ).phoneNumChecking,
                                                     controller:
                                                         _phoneController,
@@ -983,7 +1000,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       errorStyle: TextStyle(color: Colors.red),
                                                       isDense: true,
                                                       hintText:
-                                                          'Enter your Phone number',
+                                                      AppLocalizations.of(context)!.text_hint_phone,           //'Enter your Phone number',
                                                       border:
                                                           UnderlineInputBorder(
                                                         borderSide: BorderSide(
@@ -1028,7 +1045,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Email',
+                                                    AppLocalizations.of(context)!.text_email,            //'Email',
                                                     style:
                                                         Styles.textLabelTitle,
                                                   ),
@@ -1043,7 +1060,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     keyboardType: TextInputType
                                                         .emailAddress,
                                                     validator: InputValidator(
-                                                            ch: 'Email')
+                                                            ch: AppLocalizations.of(context)!.text_email)              //'Email')
                                                         .emailValidator,
                                                     controller:
                                                         _emailController,
@@ -1053,7 +1070,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       errorStyle: TextStyle(color: Colors.red),
                                                       isDense: true,
                                                       hintText:
-                                                          'Your email id',
+                                                      AppLocalizations.of(context)!.text_hint_email,           //'Your email id',
                                                       border:
                                                           UnderlineInputBorder(
                                                         borderSide: BorderSide(
@@ -1102,7 +1119,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          'State/FCT',
+                                                          AppLocalizations.of(context)!.text_state,          ///'State/FCT',
                                                           style: Styles
                                                               .textLabelTitle,
                                                         ),
@@ -1112,6 +1129,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 "on tap state ");
                                                             _awaitReturnValueFromSecondScreen(
                                                                 context);
+                                                            _emailFocusNode.unfocus();
                                                           },
                                                           child: TextFormField(
                                                             readOnly: true,
@@ -1122,11 +1140,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                                             maxLines: 1,
                                                             style: Styles
                                                                 .textLabelSubTitle,
-                                                            focusNode:
-                                                                _stateFocusNode,
+                                                            // focusNode:
+                                                            //     _stateFocusNode,
                                                             //keyboardType: TextInputType.phone,
                                                             validator: InputValidator(
-                                                                    ch: 'State/FCT')
+                                                                    ch: AppLocalizations.of(context)!.text_state)        //'State/FCT')
                                                                 .emptyChecking,
                                                             controller:
                                                                 _stateController,
@@ -1164,7 +1182,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 ),
                                                               ),
                                                               isDense: true,
-                                                              hintText: 'Select your state/ FCT',
+                                                              hintText: AppLocalizations.of(context)!.text_hint_state,         ///'Select your state/ FCT',
                                                               errorStyle: TextStyle(color: Colors.red),
                                                               border:
                                                                   UnderlineInputBorder(
@@ -1223,7 +1241,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          'Year of experience',
+                                                          AppLocalizations.of(context)!.text_experience_year,        ///'Year of experience',
                                                           style: Styles
                                                               .textLabelTitle,
                                                         ),
@@ -1252,7 +1270,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           decoration:
                                                               InputDecoration(
                                                             isDense: true,
-                                                            hintText: 'Add your year of experience',
+                                                            hintText: AppLocalizations.of(context)!.text_hint_experience_year,       //'Add your year of experience',
                                                             errorStyle: TextStyle(color: Colors.red),
                                                             border:
                                                                 UnderlineInputBorder(
@@ -1306,7 +1324,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          'Upload photo',
+                                                          AppLocalizations.of(context)!.text_upload_photo,       //'Upload photo',
                                                           style: Styles
                                                               .textLabelTitle,
                                                         ),
@@ -1315,6 +1333,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                             _showDialogSelectPhoto();
                                                             print(
                                                                 "on tap photo ");
+                                                            _emailFocusNode.unfocus();
                                                           },
                                                           child: TextFormField(
                                                             enabled: false,
@@ -1364,7 +1383,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 ),
                                                               ),
                                                               isDense: true,
-                                                              hintText: 'Upload your profile photo',
+                                                              hintText: AppLocalizations.of(context)!.text_hint_upload_photo,      //'Upload your profile photo',
                                                               errorStyle: TextStyle(color: Colors.red),
                                                               border:
                                                                   UnderlineInputBorder(
@@ -1416,7 +1435,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Password',
+                                                    AppLocalizations.of(context)!.text_password,         //'Password',
                                                     style:
                                                         Styles.textLabelTitle,
                                                   ),
@@ -1427,7 +1446,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     obscureText:
                                                         !_passwordVisible!,
                                                     validator: InputValidator(
-                                                            ch: 'Password')
+                                                            ch: AppLocalizations.of(context)!.text_password)           //'Password')
                                                         .passwordChecking,
                                                     controller:
                                                         _passwordController,
@@ -1471,7 +1490,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                         ),
                                                       ),
                                                       hintText:
-                                                          'Password',
+                                                      AppLocalizations.of(context)!.text_password,             //'Password',
                                                       errorStyle: TextStyle(color: Colors.red),
                                                       errorMaxLines: 3,
                                                       border:
@@ -1507,28 +1526,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           .textLabelSubTitle,
                                                     ),
                                                   ),
-                                                  /*Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                  children: [
-                                                    InkWell(
-                                                      onTap: () {
-                                                        Navigator.pushReplacement(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    ForgotPasswordScreen()));
-                                                      },
-                                                      child: Container(
-                                                        margin: EdgeInsets.only(top: _setValue(10)),
-                                                        child: Text(
-                                                          'Forgot password?',
-                                                          style: Styles.textLabelSubTitle,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )*/
                                                 ],
                                               ),
                                             ),
@@ -1540,7 +1537,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Confirm password',
+                                                    AppLocalizations.of(context)!.text_confirm_password,         //'Confirm password',
                                                     style:
                                                         Styles.textLabelTitle,
                                                   ),
@@ -1551,7 +1548,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     obscureText:
                                                         !_confirmPasswordVisible!,
                                                     validator: InputValidator(
-                                                            ch: 'Password')
+                                                            ch: AppLocalizations.of(context)!.text_password)         //'Password')
                                                         .passwordChecking,
                                                     controller:
                                                         _confirmPwdController,
@@ -1596,7 +1593,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                         ),
                                                       ),
                                                       hintText:
-                                                          'Password',
+                                                      AppLocalizations.of(context)!.text_password,       //'Password',
                                                       errorMaxLines: 3,
                                                       border:
                                                           UnderlineInputBorder(
@@ -1678,44 +1675,55 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       child: MaterialButton(
                                                         onPressed: () {
                                                           print(">>>>>>>>>>>>>>>> imageFirebaseUrl " +
-                                                              imageFirebaseUrl
-                                                                  .toString());
-                                                          if (_formKey.currentState!.validate()) {
-                                                            print(
-                                                                "_formKey.currentState!.validate()");
-                                                            widget.userCategory ==
-                                                                        TextStrings
-                                                                            .user_category_individual &&
+                                                              imageFirebaseUrl.toString());
+
+                                                          _checkInternet.check().then((intenet) {
+                                                            if (intenet != null && intenet) {
+                                                              if (_formKey.currentState!.validate()) {
+                                                                print("_formKey.currentState!.validate()");
+                                                                widget.userCategory ==
+                                                                    TextStrings
+                                                                        .user_category_individual &&
                                                                     widget.userType ==
                                                                         TextStrings
                                                                             .user_customer
-                                                                ? signUpCustomerIndividual(
+                                                                    ? signUpCustomerIndividual(
                                                                     context)
-                                                                : widget.userCategory ==
-                                                                            TextStrings
-                                                                                .user_category_individual &&
-                                                                        widget.userType ==
-                                                                            TextStrings
-                                                                                .user_mechanic
+                                                                    : widget.userCategory ==
+                                                                    TextStrings
+                                                                        .user_category_individual &&
+                                                                    widget.userType ==
+                                                                        TextStrings
+                                                                            .user_mechanic
                                                                     ? signUpMechanicIndividual(
-                                                                        context)
+                                                                    context)
                                                                     : widget.userCategory == TextStrings.user_category_corporate &&
-                                                                            widget.userType ==
-                                                                                TextStrings
-                                                                                    .user_customer
-                                                                        ? signUpCustomerCorporate(
-                                                                            context)
-                                                                        : widget.userCategory == TextStrings.user_category_corporate &&
-                                                                                widget.userType == TextStrings.user_mechanic
-                                                                            ? signUpMechanicCorporate(context)
-                                                                            : signUpCustomerGovernment(context);
-                                                          } else {
-                                                            print("_formKey.currentState!.validate() - else");
-                                                            setState(() =>
+                                                                    widget.userType ==
+                                                                        TextStrings
+                                                                            .user_customer
+                                                                    ? signUpCustomerCorporate(
+                                                                    context)
+                                                                    : widget.userCategory == TextStrings.user_category_corporate &&
+                                                                    widget.userType == TextStrings.user_mechanic
+                                                                    ? signUpMechanicCorporate(context)
+                                                                    : signUpCustomerGovernment(context);
+                                                              } else {
+                                                                print("_formKey.currentState!.validate() - else");
+                                                                setState(() =>
                                                                 _autoValidate =
                                                                     AutovalidateMode
                                                                         .always);
-                                                          }
+                                                              }
+                                                            } else {
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) =>
+                                                                          NetworkErrorScreen())).then((value) {
+                                                                /// ----------- repeat the work
+                                                              });
+                                                            }
+                                                          });
                                                         },
                                                         child: Container(
                                                           height: 45,
@@ -1728,7 +1736,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                     .center,
                                                             children: [
                                                               Text(
-                                                               'Sign Up',
+                                                                AppLocalizations.of(context)!.text_sign_up,      //'Sign Up',
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -1757,13 +1765,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 text: TextSpan(
                                                   children: <TextSpan>[
                                                     TextSpan(
-                                                      text:'Already have an account ? ',
+                                                      text: AppLocalizations.of(context)!.text_already_have_account,       //'Already have an account ? ',
                                                       style: Styles
                                                           .textLabelSubTitle,
                                                     ),
                                                     TextSpan(
                                                         text:
-                                                            'Sign in',
+                                                        AppLocalizations.of(context)!.text_sign_in,        //'Sign in',
                                                         style: Styles
                                                             .textLabelTitle_10,
                                                         recognizer:
@@ -1803,7 +1811,7 @@ class _SignupScreenState extends State<SignupScreen> {
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SelectStateScreen(),
+          builder: (context) => SelectStatesScreen(),
         ));
     setState(() {
       selectedState = result;
@@ -1815,16 +1823,16 @@ class _SignupScreenState extends State<SignupScreen> {
   bool validateSignUpCustomerIndividual() {
     print("validateSignUpCustomerIndividual - loaded");
     if (_nameController.text.isEmpty) {
-      errorMsg = "Name cannot Empty";
+      errorMsg = AppLocalizations.of(context)!.text_error_name_empty;       //"Name cannot Empty";
       return false;
     } else if (_phoneController.text.isEmpty) {
-      errorMsg = "Phone Number cannot Empty";
+      errorMsg = AppLocalizations.of(context)!.text_error_phone_empty;       //"Phone Number cannot Empty";
       return false;
     } else if (_emailController.text.isEmpty) {
-      errorMsg = "Email cannot Empty";
+      errorMsg = AppLocalizations.of(context)!.text_error_email_empty;        //"Email cannot Empty";
       return false;
     } else if (_stateController.text.isEmpty) {
-      errorMsg = "Select State";
+      errorMsg = AppLocalizations.of(context)!.text_error_state_empty;        //"Email cannot Empty";
       return false;
     }
     /*else if(_photoController.text.isEmpty){
@@ -1832,14 +1840,14 @@ class _SignupScreenState extends State<SignupScreen> {
       return false;
     }*/
     else if (_passwordController.text.isEmpty) {
-      errorMsg = "Fill Password";
+      errorMsg = AppLocalizations.of(context)!.text_error_password_empty;          //"Fill Password";
       return false;
     } else if (_confirmPwdController.text.isEmpty) {
-      errorMsg = "Enter Confirm Password";
+      errorMsg = AppLocalizations.of(context)!.text_error_cpassword_empty;          //"Enter Confirm Password";
       return false;
     } else if (_passwordController.text.toString() !=
         _confirmPwdController.text.toString()) {
-      errorMsg = "Passwords are different!";
+      errorMsg = AppLocalizations.of(context)!.text_error_password_different;       //"Passwords are different!";
       setState(() {
         _passwordController.text = "";
         _confirmPwdController.text = "";
@@ -1907,19 +1915,19 @@ class _SignupScreenState extends State<SignupScreen> {
   bool validateSignUpMechanicIndividual() {
     print("validateSignUpCustomerIndividual");
     if (_nameController.text.isEmpty) {
-      errorMsg = "Name cannot Empty";
+      errorMsg = AppLocalizations.of(context)!.text_error_name_empty;          //"Name cannot Empty";
       return false;
     } else if (_phoneController.text.isEmpty) {
-      errorMsg = "Phone Number cannot Empty";
+      errorMsg = AppLocalizations.of(context)!.text_error_phone_empty;           //"Phone Number cannot Empty";
       return false;
     } else if (_emailController.text.isEmpty) {
-      errorMsg = "Email cannot Empty";
+      errorMsg = AppLocalizations.of(context)!.text_error_email_empty;          // "Email cannot Empty";
       return false;
     } else if (_stateController.text.isEmpty) {
-      errorMsg = "Select State";
+      errorMsg = AppLocalizations.of(context)!.text_error_state_empty;           //"Select State";
       return false;
     } else if (_yearOfExperienceController.text.isEmpty) {
-      errorMsg = "Enter Year of Experience";
+      errorMsg = AppLocalizations.of(context)!.text_error_experience_empty;      // "Enter Year of Experience";
       return false;
     }
     /*else if(_photoController.text.isEmpty){
@@ -1927,14 +1935,14 @@ class _SignupScreenState extends State<SignupScreen> {
       return false;
     }*/
     else if (_passwordController.text.isEmpty) {
-      errorMsg = "Fill Password";
+      errorMsg = AppLocalizations.of(context)!.text_error_password_empty;        //   "Fill Password";
       return false;
     } else if (_confirmPwdController.text.isEmpty) {
-      errorMsg = "Enter Confirm Password";
+      errorMsg = AppLocalizations.of(context)!.text_error_cpassword_empty;       //"Enter Confirm Password";
       return false;
     } else if (_passwordController.text.toString() !=
         _confirmPwdController.text.toString()) {
-      errorMsg = "Passwords are different!";
+      errorMsg = AppLocalizations.of(context)!.text_error_password_different;   //"Passwords are different!";
       setState(() {
         _passwordController.text = "";
         _confirmPwdController.text = "";
@@ -2004,22 +2012,22 @@ class _SignupScreenState extends State<SignupScreen> {
   bool validateSignUpCustomerCorporate() {
     print("validateSignUpCustomerIndividual");
     if (_nameController.text.isEmpty) {
-      errorMsg = "Organisation Name cannot Empty";
+      errorMsg = AppLocalizations.of(context)!.text_error_org_name_empty;       //"Organisation Name cannot Empty";
       return false;
     } else if (_orgTypeController.text.isEmpty) {
-      errorMsg = "Organisation Type cannot Empty";
+      errorMsg = AppLocalizations.of(context)!.text_error_org_type_empty;       //"Organisation Type cannot Empty";
       return false;
     } else if (_contactPersonController.text.isEmpty) {
-      errorMsg = "Contact Person cannot Empty";
+      errorMsg = AppLocalizations.of(context)!.text_error_contact_person_empty;  // "Contact Person cannot Empty";
       return false;
     } else if (_phoneController.text.isEmpty) {
-      errorMsg = "Phone Number cannot empty";
+      errorMsg = AppLocalizations.of(context)!.text_error_phone_empty;          // "Phone Number cannot empty";
       return false;
     } else if (_emailController.text.isEmpty) {
-      errorMsg = "Enter Email Id";
+      errorMsg = AppLocalizations.of(context)!.text_error_enter_email_empty;    //"Enter Email Id";
       return false;
     } else if (_stateController.text.isEmpty) {
-      errorMsg = "Select State";
+      errorMsg = AppLocalizations.of(context)!.text_error_state_empty;          // "Select State";
       return false;
     }
     /*else if(_photoController.text.isEmpty){
@@ -2027,14 +2035,14 @@ class _SignupScreenState extends State<SignupScreen> {
       return false;
     }*/
     else if (_passwordController.text.isEmpty) {
-      errorMsg = "Fill Password";
+      errorMsg = AppLocalizations.of(context)!.text_error_password_empty;       //"Fill Password";
       return false;
     } else if (_confirmPwdController.text.isEmpty) {
-      errorMsg = "Enter Confirm Password";
+      errorMsg = AppLocalizations.of(context)!.text_error_cpassword_empty;      //"Enter Confirm Password";
       return false;
     } else if (_passwordController.text.toString() !=
         _confirmPwdController.text.toString()) {
-      errorMsg = "Passwords are different!";
+      errorMsg = AppLocalizations.of(context)!.text_error_password_different;      //"Passwords are different!";
       setState(() {
         _passwordController.text = "";
         _confirmPwdController.text = "";
@@ -2100,22 +2108,22 @@ class _SignupScreenState extends State<SignupScreen> {
   bool validateSignUpMechanicCorporate() {
     print("validateSignMechanicCorporate");
     if (_nameController.text.isEmpty) {
-      errorMsg = "Organisation Name cannot Empty";
+      errorMsg = AppLocalizations.of(context)!.text_error_org_name_empty;    //"Organisation Name cannot Empty";
       return false;
     } else if (_orgTypeController.text.isEmpty) {
-      errorMsg = "Organisation Type cannot Empty";
+      errorMsg = AppLocalizations.of(context)!.text_error_org_type_empty;    //"Organisation Type cannot Empty";
       return false;
     } else if (_contactPersonController.text.isEmpty) {
-      errorMsg = "Contact Person cannot Empty";
+      errorMsg = AppLocalizations.of(context)!.text_error_contact_person_empty;    //"Contact Person cannot Empty";
       return false;
     } else if (_phoneController.text.isEmpty) {
-      errorMsg = "Phone Number cannot empty";
+      errorMsg = AppLocalizations.of(context)!.text_error_phone_empty;    //"Phone Number cannot empty";
       return false;
     } else if (_emailController.text.isEmpty) {
-      errorMsg = "Enter Email Id";
+      errorMsg = AppLocalizations.of(context)!.text_error_enter_email_empty;    // "Enter Email Id";
       return false;
     } else if (_stateController.text.isEmpty) {
-      errorMsg = "Select State";
+      errorMsg = AppLocalizations.of(context)!.text_error_state_empty;           //"Select State";
       return false;
     }
     /*else if(_photoController.text.isEmpty){
@@ -2123,14 +2131,14 @@ class _SignupScreenState extends State<SignupScreen> {
       return false;
     }*/
     else if (_passwordController.text.isEmpty) {
-      errorMsg = "Fill Password";
+      errorMsg = AppLocalizations.of(context)!.text_error_password_empty;        //"Fill Password";
       return false;
     } else if (_confirmPwdController.text.isEmpty) {
-      errorMsg = "Enter Confirm Password";
+      errorMsg = AppLocalizations.of(context)!.text_error_cpassword_empty;        //"Enter Confirm Password";
       return false;
     } else if (_passwordController.text.toString() !=
         _confirmPwdController.text.toString()) {
-      errorMsg = "Passwords are different!";
+      errorMsg = AppLocalizations.of(context)!.text_error_password_different;       // "Passwords are different!";
       setState(() {
         _passwordController.text = "";
         _confirmPwdController.text = "";
@@ -2204,19 +2212,19 @@ class _SignupScreenState extends State<SignupScreen> {
   bool validateSignUpCustomerGovernment() {
     print("validateSignMechanicCorporate");
     if (_stateController.text.isEmpty) {
-      errorMsg = "Select State";
+      errorMsg = AppLocalizations.of(context)!.text_error_state_empty;    //"Select State";
       return false;
     } else if (_ministryGovtController.text.isEmpty) {
-      errorMsg = "Select Ministry";
+      errorMsg = AppLocalizations.of(context)!.text_error_ministry_empty;   // "Select Ministry";
       return false;
     } else if (_contactPersonController.text.isEmpty) {
-      errorMsg = "Contact Person cannot Empty";
+      errorMsg = AppLocalizations.of(context)!.text_error_contact_person_empty;    //"Contact Person cannot Empty";
       return false;
     } else if (_phoneController.text.isEmpty) {
-      errorMsg = "Phone Number cannot empty";
+      errorMsg = AppLocalizations.of(context)!.text_error_phone_empty;     //"Phone Number cannot empty";
       return false;
     } else if (_emailController.text.isEmpty) {
-      errorMsg = "Enter Email Id";
+      errorMsg = AppLocalizations.of(context)!.text_error_enter_email_empty;    //"Enter Email Id";
       return false;
     }
     /*else if(_photoController.text.isEmpty){
@@ -2224,14 +2232,14 @@ class _SignupScreenState extends State<SignupScreen> {
       return false;
     }*/
     else if (_passwordController.text.isEmpty) {
-      errorMsg = "Fill Password";
+      errorMsg = AppLocalizations.of(context)!.text_error_password_empty;   // "Fill Password";
       return false;
     } else if (_confirmPwdController.text.isEmpty) {
-      errorMsg = "Enter Confirm Password";
+      errorMsg = AppLocalizations.of(context)!.text_error_cpassword_empty;     // "Enter Confirm Password";
       return false;
     } else if (_passwordController.text.toString() !=
         _confirmPwdController.text.toString()) {
-      errorMsg = "Passwords are different!";
+      errorMsg = AppLocalizations.of(context)!.text_error_password_different;   // "Passwords are different!";
       setState(() {
         _passwordController.text = "";
         _confirmPwdController.text = "";
@@ -2298,7 +2306,7 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   void showOrganisationTypeSelector() {
-    _signupBloc.searchStates("");
+    //_signupBloc.searchStates("");
     showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -2475,7 +2483,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                           },
                                         )
                                       : Center(
-                                          child: Text('No Results found.'),
+                                          child: Text(AppLocalizations.of(context)!.error_not_found),       //'No Results found.'
                                         ),
                                 ),
                               ])),
@@ -2494,7 +2502,6 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   void showMinistryGovtSelector() {
-    _signupBloc.searchStates("");
     showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -2672,7 +2679,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                           },
                                         )
                                       : Center(
-                                          child: Text('No Results found.'),
+                                          child: Text(AppLocalizations.of(context)!.error_not_found),
                                         ),
                                 ),
                               ])),
@@ -2690,14 +2697,14 @@ class _SignupScreenState extends State<SignupScreen> {
         });
   }
 
-  _populateCountryList() {
+  /*_populateCountryList() {
     _signupBloc.statesCode.listen((value) {
       setState(() {
         isloading = false;
         _countryData = value.cast<StateDetails>();
       });
     });
-  }
+  }*/
 
   _showDialogSelectPhoto() async {
     showModalBottomSheet(
@@ -2715,7 +2722,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       Icons.camera_alt,
                       color: CustColors.blue,
                     ),
-                    title: Text("Camera",
+                    title: Text(AppLocalizations.of(context)!.text_camera,     //"Camera",
                         style: TextStyle(
                             fontFamily: 'Corbel_Regular',
                             fontWeight: FontWeight.normal,
@@ -2741,7 +2748,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       Icons.image,
                       color: CustColors.blue,
                     ),
-                    title: Text("Gallery",
+                    title: Text(AppLocalizations.of(context)!.text_gallery,    //"Gallery",
                         style: TextStyle(
                             fontFamily: 'Corbel_Regular',
                             fontWeight: FontWeight.normal,

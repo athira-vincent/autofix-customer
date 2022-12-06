@@ -1,5 +1,9 @@
+import 'package:auto_fix/AA/GenerateAuthorization/generate_athorization_api_provider.dart';
 import 'package:auto_fix/ApiProvider/customer_apiProvider.dart';
 import 'package:auto_fix/ApiProvider/mechanic_api_provider.dart';
+import 'package:auto_fix/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
+import 'package:auto_fix/Common/GlobelTime/timeApiProvider.dart';
+import 'package:auto_fix/Common/GlobelTime/timeMdl.dart';
 import 'package:auto_fix/Models/cod_model/cod_model.dart';
 import 'package:auto_fix/Models/customer_models/add_address_model/add_address_model.dart';
 import 'package:auto_fix/Models/customer_models/add_cart_model/add_cart_model.dart';
@@ -10,22 +14,23 @@ import 'package:auto_fix/Models/customer_models/get_address_model/get_address_mo
 import 'package:auto_fix/Models/customer_models/order_list_model/order_list_model.dart';
 import 'package:auto_fix/Models/customer_models/place_order_model/place_order_model.dart';
 import 'package:auto_fix/Models/customer_models/spare_parts_list_model/spare_parts_list_model.dart';
-import 'package:auto_fix/Models/customer_models/spare_parts_model/spare_parts_model.dart';
 import 'package:auto_fix/Models/customer_rating_model/customer_rating_model.dart';
 import 'package:auto_fix/Models/customer_wallet_detail_model/customer_wallet_detail_model.dart';
 import 'package:auto_fix/Models/delete_cart_model/delete_cart_model.dart';
+import 'package:auto_fix/Models/notification_model/notification_model.dart';
+import 'package:auto_fix/Models/time_difference_model/time_difference_model.dart';
 import 'package:auto_fix/Models/wallet_history_model/wallet_history_model.dart';
-import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
-import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/customer_active_service_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_api_provider.dart';
-import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_password_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault_api_provider.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_active_service_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_api_provider/mechanic_profile_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyJobReview/my_job_review_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_api_provider.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/ChangePassword/change_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CategoryList/category_list_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CompleteProfile/mechanic_complete_profile_api_provider.dart';
@@ -33,7 +38,12 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/Servic
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/ResetPasswordScreen/create_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_api_provider.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/CityList/city_list_api_provider.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StatesList/states_list_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_api_provider.dart';
+import '../Models/new_checkout_model/new_checkout_model.dart';
+import '../Models/payment_success_model/payment_success_model.dart';
+import '../Models/wallet_check_balance_model.dart';
 import '../UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_api_provider.dart';
 import '../UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_api_provider.dart';
 import '../UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicleSpecialization_api_provider.dart';
@@ -41,6 +51,8 @@ import '../UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecializati
 class Repository {
   final _customerApiProvider = CustomerApiProvider();
   final _mechanicApiProvider = MechanicApiProvider();
+  final _cityListApiProvider = CityListApiProvider();
+  final _statesListApiProvider = StatesListApiProvider();
 
   final _signupApiProvider = SignupApiProvider();
   final _customerFetchProfileApiProvider = CustomerProfileApiProvider();
@@ -82,6 +94,23 @@ class Repository {
   final _codprovider=CustomerApiProvider();
   final _wallethistoryprovider=CustomerApiProvider();
   final _customerratingprovider=CustomerApiProvider();
+  final _notificationprovider = CustomerApiProvider();
+  final _vendornotificationprovider = MechanicApiProvider();
+  final _apiTimeProvider = WorldTimeApiProvider();
+  final _paymentsuccessprovider=CustomerApiProvider();
+  final _newcheckoutprovider=CustomerApiProvider();
+  final _timedifferenceprovider=CustomerApiProvider();
+
+// City List
+  Future<dynamic> getCityList(String token, search) =>
+      _cityListApiProvider.postCityListRequest(
+          token, search);
+
+  // States List
+  Future<dynamic> getStatesList(String token, search) =>
+      _statesListApiProvider.postStatesListRequest(
+          token, search);
+
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>
       _serviceListApiProvider.getServiceListRequest(
@@ -179,19 +208,37 @@ class Repository {
         longitude,
       );
 
+  //EditCar Of Customer
+  Future<dynamic> postEditCarRequest(
+      token,
+      vehicleId, year,
+      lastMaintenance, milege,
+      vehiclePic, color,
+      ) =>
+      _addCarApiProvider.postEditCarRequest(
+        token,
+        vehicleId, year,
+        lastMaintenance, milege,
+        vehiclePic, color,
+      );
+
   //Update Default Vehicle
   Future<dynamic> postUpdateDefaultVehicle(token, vehicleId, customerId) =>
       _addCarApiProvider.postUpdateDefaultVehicle(token, vehicleId, customerId);
 
   //Otp Verification
-  Future<dynamic> postOtpVerificationRequest(token, otp, userTypeId) =>
-      _signupApiProvider.postOtpVerificationRequest(token, otp, userTypeId);
+  Future<dynamic> postOtpVerificationRequest( otp, userTypeId) =>
+      _signupApiProvider.postOtpVerificationRequest( otp, userTypeId);
+
+  //Resend OTP
+  Future<dynamic> postResentOtpRequest(email, phone) =>
+      _signupApiProvider.postResendOtpRequest(email, phone);
 
   //Phone Login Otp Verification
   Future<dynamic> postPhoneLoginOtpVerificationRequest(
-          token, otp, userTypeId) =>
+           otp, userTypeId) =>
       _signupApiProvider.postPhoneLoginOtpVerificationRequest(
-          token, otp, userTypeId);
+           otp, userTypeId);
 
   /// =============== Mechanics Regular Service Booking Id  ================== ///
 
@@ -201,7 +248,7 @@ class Repository {
           time,
           latitude,
           longitude,
-          serviceId,
+          serviceId, serviceCost,
           mechanicId,
           reqType,
           regularServiceType,
@@ -214,7 +261,7 @@ class Repository {
           time,
           latitude,
           longitude,
-          serviceId,
+          serviceId, serviceCost,
           mechanicId,
           reqType,
           regularServiceType,
@@ -230,7 +277,7 @@ class Repository {
           time,
           latitude,
           longitude,
-          serviceId,
+          serviceId, serviceCost,
           mechanicId,
           reqType,
           totalPrice,
@@ -242,7 +289,7 @@ class Repository {
           time,
           latitude,
           longitude,
-          serviceId,
+          serviceId, serviceCost,
           mechanicId,
           reqType,
           totalPrice,
@@ -320,8 +367,8 @@ class Repository {
       _addCarApiProvider.postVechicleUpdateRequest(token, id, status);
 
   // Mechanic My Wallet
-  Future<dynamic> postMechanicFetchMyWalletRequest(token, type) =>
-      _addMechanicMyWalletApiProvider.postMechanicMyWalletRequest(token, type);
+  Future<dynamic> postMechanicFetchMyWalletRequest(String token, mechanicId, type,String customeDate) =>
+      _addMechanicMyWalletApiProvider.postMechanicMyWalletRequest(token, mechanicId, type, customeDate);
 
   // Mechanic My Job Review
   Future<dynamic> postMechanicFetchMyJobReviewRequest(token, type) =>
@@ -373,6 +420,12 @@ class Repository {
 
   Future<dynamic> postBrandDetailsRequest(token, search) =>
       _vehicleSpecializationApiProvider.postBrandDetailsRequest(token, search);
+
+  Future<dynamic> postMechBrandDetailsRequest(token, userId) =>
+      _vehicleSpecializationApiProvider.postMechBrandDetailsRequest(token, userId);
+
+  Future<dynamic> postMechBrandUpdateDetailsRequest(token, userId, brandNames) =>
+      _vehicleSpecializationApiProvider.postMechBrandUpdateRequest(token, userId, brandNames);
 
   // Get vehicleSpecialization
   Future<dynamic> getvehicleSpecializationList() =>
@@ -437,13 +490,17 @@ class Repository {
           token, brandName);
 
   // Fetch Mechanic Upcoming Service Request
-  Future<dynamic> postMechanicUpComingServiceRequest(token, type, mechanicId) =>
+  Future<dynamic> postMechanicUpComingServiceRequest(token, type, mechanicId, page, size) =>
       _mechanicApiProvider.postMechanicUpcomingServiceRequest(
-          token, type, mechanicId);
+          token, type, mechanicId, );
 
   // Fetch Mechanic Active Service Request
-  Future<dynamic> postMechanicActiveServiceRequest(token, mechanicId) =>
+  Future<MechanicActiveServiceUpdateMdl> postMechanicActiveServiceRequest(token, mechanicId) =>
       _mechanicApiProvider.postMechanicActiveServiceRequest(token, mechanicId);
+
+  // Fetch Customer Active Service Request
+  Future<CustomerActiveServiceUpdateMdl> postCustomerActiveServiceRequest(token, customerId) =>
+      _customerApiProvider.postCustomerActiveServiceRequest(token, customerId);
 
   // Fetch Mechanic Online Offline Request
   Future<dynamic> postMechanicIncomingRequestUpdate(
@@ -676,4 +733,70 @@ class Repository {
 
   Future<CustomerRatingModel> custrating(rating, orderid, productid) =>
       _customerratingprovider.fetchcustrating(rating, orderid, productid);
+
+
+  Future<PlaceOrderModel> placeorderallitem(addressid) =>
+      _placeorderprovider.placeorderallitem(addressid);
+
+  Future<NotificationModel> customernotification() =>
+      _notificationprovider.customernotification();
+
+  Future<NotificationModel> vendornotification() =>
+      _vendornotificationprovider.vendornotification();
+
+  Future<TimeModel> getCurrentWorldTime(parameter) =>
+      _apiTimeProvider.getTimeRequest(parameter);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Future<PaymentSuccessModel> fetchpaymentsucess(transtype, amount, paymenttype, transid, orderid) =>
+      _paymentsuccessprovider.fetchpaymentsucess(transtype, amount, paymenttype, transid, orderid);
+
+
+  Future<WalletCheckBalanceModel> fetchwalletcheckbalance(bookingid) =>
+      _paymentsuccessprovider.fetchwalletcheckbalance(bookingid);
+  Future<NewCheckoutModel> newcheckoutapi(cartid, addressid) =>
+      _newcheckoutprovider.newcheckoutapi(cartid, addressid);
+
+
+  Future<TimeDifferenceModel> timedifferenceapi(starttime,endtime) =>
+      _timedifferenceprovider.timedifferenceapi(starttime,endtime);
 }

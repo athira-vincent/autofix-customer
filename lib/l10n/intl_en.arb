@@ -1,17 +1,19 @@
 {
-  "helloWorld": "Hello World!",
   "login": "Login",
   "welcome_to": "WELCOME TO",
   "next": "Next",
   "forgot_password": "Forgot password",
   "text_forgot_password": "Forgot password?",
-  "itsmemaria": "It's Me Maria!",
 
   "text_customer": "Customer",
   "text_mechanic": "Mechanic",
   "text_individual": "Individual",
   "text_corporate": "Corporate",
   "text_govt_bodies": "Government Bodies",
+  "text_login_success_cust" : "Customer Login Successful",
+  "text_login_success_mech" : "Mechanic Login Successful",
+  "text_login_using_relex" : "Please login through Relex App",
+  "text_went_wrong_try" : "Something went wrong. Try Again",
 
   "text_select_language": "SELECT LANGUAGE",
   "text_walk_through1_small_title": "WELCOME TO",
@@ -74,7 +76,41 @@
   "text_check_mail_screen_desc": "Please check your email , we have sent you an \nemail that contains a link to reset your password. ",
   "text_btn_go_to_mail": "Go to email",
   "text_check_spam": "Did not receive the email? Check your spam filter Or ",
-  "text_try_another": "try another email address "
+  "text_try_another": "try another email address ",
+
+  "text_error_name_empty": "Name cannot Empty",
+  "text_error_phone_empty": "Phone Number cannot Empty",
+  "text_error_email_empty": "Email cannot Empty",
+  "text_error_state_empty": "Select State",
+  "text_error_password_empty": "Fill Password",
+  "text_error_cpassword_empty": "Enter Confirm Password",
+  "text_error_password_different": "Passwords are different!",
+  "text_error_experience_empty": "Enter Year of Experience",
+  "text_error_org_name_empty": "Organisation Name cannot Empty",
+  "text_error_org_type_empty": "Organisation Type cannot Empty",
+  "text_error_contact_person_empty": "Contact Person cannot Empty",
+  "text_error_enter_email_empty": "Enter Email Id",
+  "text_error_ministry_empty": "Select Ministry",
+  "text_camera": "Camera",
+  "text_gallery": "Gallery",
+
+  "error_201" : "This email already exists",
+  "error_200" : "codeSuccess",
+  "error_404" : "codeError",
+  "error_207" : "Password is incorrect!!!",
+  "error_202" : "This account does not exist! Please try again",
+  "error_203" : "Phone number already exists!!",
+  "error_204" : "Please complete your profile",
+  "error_205" : "Otp is not verified",
+  "error_206" : "Successfully logged in",
+  "error_208" : "Cannot login.Mechanic is not approved yet!!!",
+  "error_209" : "Successfully registered",
+  "error_210" : "Account Exist.Please Login!",
+  "error_211" : "OTP Not Verified! Try Again!",
+  "error_213" : "User Not Registered",
+  "error_301" : "Profile Not Completed! Try Login with username Password",
+  "error_not_found" : "No Results found."
+
 
 
 }

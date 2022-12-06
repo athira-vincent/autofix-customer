@@ -1,12 +1,8 @@
+import 'package:auto_fix/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
-import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
-import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mechanic_tracking_Screen.dart';
-import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
-import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
-import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -86,7 +82,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userID = shdPre.getString(SharedPrefKeys.userID).toString();
-
+      JWTTokenChecking.checking(authToken, context);
       print('userFamilyId'+authToken.toString());
       _homeCustomerBloc.postCustomerCompletedOrdersRequest(authToken, 300, "0", "$userID");
       _homeCustomerBloc.postCustomerUpcomingOrdersRequest(authToken, 300, "1", "$userID");
@@ -558,7 +554,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                           height: 25,
                                                           width: 50,
                                                           alignment: Alignment.center,
-                                                          color: CustColors.blue,
+                                                          color: CustColors.light_navy,
                                                           child: Text('Emergency Service',
                                                             textAlign: TextAlign.center,
                                                             style: Styles.badgeTextStyle2,
@@ -569,20 +565,20 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                           height: 25,
                                                           width: 50,
                                                           alignment: Alignment.center,
-                                                          color: CustColors.blue,
+                                                          color: CustColors.light_navy,
                                                           child: Text('Regular Service',
                                                             textAlign: TextAlign.center,
                                                             style: Styles.badgeTextStyle2,
                                                           ),
                                                         ),
-                                                        SizedBox(height: 5,),
+                                                        SizedBox(height: 3,),
                                                         Stack(
                                                           alignment: Alignment.topCenter,
                                                           children: [
                                                             Container(
                                                               height: 50,
                                                               width: 50,
-                                                              color: Colors.white,
+                                                              color: CustColors.light_navy,
                                                               child: CustomPaint(
                                                                 painter: CurvePainter(),
                                                               ),
@@ -864,7 +860,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                             height: 25,
                                                             width: 50,
                                                             alignment: Alignment.center,
-                                                            color: CustColors.blue,
+                                                            color: CustColors.cloudy_blue,
                                                             child: Text('Emergency Service',
                                                               textAlign: TextAlign.center,
                                                               style: Styles.badgeTextStyle2,
@@ -875,13 +871,13 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                             height: 25,
                                                             width: 50,
                                                             alignment: Alignment.center,
-                                                            color: CustColors.blue,
+                                                            color: CustColors.cloudy_blue,
                                                             child: Text('Regular Service',
                                                               textAlign: TextAlign.center,
                                                               style: Styles.badgeTextStyle2,
                                                             ),
                                                           ),
-                                                          SizedBox(height: 5,),
+                                                          SizedBox(height: 3,),
                                                           Stack(
                                                             alignment: Alignment.topCenter,
                                                             children: [
@@ -889,7 +885,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                               Container(
                                                                 height: 50,
                                                                 width: 50,
-                                                                color: Colors.white,
+                                                                color: CustColors.cloudy_blue,
                                                                 child: CustomPaint(
                                                                   painter: CurvePainter(),
                                                                 ),
@@ -1169,7 +1165,8 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                           height: 25,
                                                           width: 50,
                                                           alignment: Alignment.center,
-                                                          color: CustColors.blue,
+                                                          color: CustomerAllServicesList?.custCompletedOrders![index01].bookStatus.toString() == "8"
+                                                              ? CustColors.cloudy_blue : CustColors.light_navy,
                                                           child: Text('Emergency Service',
                                                             textAlign: TextAlign.center,
                                                             style: Styles.badgeTextStyle2,
@@ -1180,13 +1177,14 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                           height: 25,
                                                           width: 50,
                                                           alignment: Alignment.center,
-                                                          color: CustColors.blue,
+                                                          color: CustomerAllServicesList?.custCompletedOrders![index01].bookStatus.toString() == "8"
+                                                              ? CustColors.cloudy_blue : CustColors.light_navy,
                                                           child: Text('Regular Service',
                                                             textAlign: TextAlign.center,
                                                             style: Styles.badgeTextStyle2,
                                                           ),
                                                         ),
-                                                        SizedBox(height: 5,),
+                                                        SizedBox(height: 3,),
                                                         Stack(
                                                           alignment: Alignment.topCenter,
                                                           children: [
@@ -1194,7 +1192,8 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                             Container(
                                                               height: 50,
                                                               width: 50,
-                                                              color: Colors.white,
+                                                              color: CustomerAllServicesList?.custCompletedOrders![index01].bookStatus.toString() == "8"
+                                                                  ? CustColors.cloudy_blue : CustColors.light_navy,
                                                               child: CustomPaint(
                                                                 painter: CurvePainter(),
                                                               ),
@@ -1275,44 +1274,6 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
     );
   }
 
-  void changeScreen(String firebaseScreen){
-    if(firebaseScreen == "C1"){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>   MechanicTrackingScreen(latitude: "${firebaseCustomerLatitude}", longitude:  "${firebaseCustomerLongitude}",)
-          )).then((value){
-      });
-    }else if(firebaseScreen == "C2" || firebaseScreen == "C4" || firebaseScreen == "C5" ){     //firebaseScreen == "C3"
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1")
-          )).then((value){
-      });
-    }else if(firebaseScreen == "C3"){
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  CustomerApprovedScreen()
-          )).then((value){
-      });
-    }else if(firebaseScreen == "C4"){
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MechanicWorkCompletedScreen()));
-    }else if(firebaseScreen == "C5"){
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  DirectPaymentScreen(isMechanicApp: true, isPaymentFailed: true,)
-          )).then((value){
 
-      });
-    }else if(firebaseScreen == "C6"){
-      print("Service Completed");
-    }
-  }
 
 }

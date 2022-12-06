@@ -1,18 +1,28 @@
+import 'dart:async';
+import 'package:auto_fix/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
+import 'package:auto_fix/Common/Location/change_location.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
-import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
-import 'package:auto_fix/UI/Common/Location/change_location.dart';
+import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_part_bloc/home_spare_part_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_part_bloc/home_spare_part_event.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_part_bloc/home_spare_part_state.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mechanic_tracking_Screen.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/ExtraDiagnosisScreen/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_screen.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/mechanic_waiting_payment.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/AddRegularMoreServices/add_more_regular_service_list_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,13 +48,15 @@ class HomeCustomerUIScreen extends StatefulWidget {
   }
 }
 
-class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
+class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> with WidgetsBindingObserver{
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
   TextEditingController searchController = new TextEditingController();
   late final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   FcmTokenUpdateBloc _fcmTokenUpdateBloc = FcmTokenUpdateBloc();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   customerCompletedOrdersListMdl.Data? CustomerUpcomingServicesList;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   final SparePartBloc _sparepartbloc = SparePartBloc();
 
@@ -55,13 +67,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   String mechanicIdEmergency = "";
   String bookingIdEmergency = "";
   String addressLocationText = "";
-
-  final List<String> imageList = [
-    "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
-    'https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage2.png?alt=media&token=419e2555-5c26-4295-8201-6c78f1ed563e',
-    "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
-    'https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage2.png?alt=media&token=419e2555-5c26-4295-8201-6c78f1ed563e',
-  ];
 
   bool isEmergencyService = false;
   bool isRegularService = true;
@@ -80,6 +85,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   String serviceIds = "";
 
   double per = .10;
+  bool _hasActiveService = false;
+  String firebaseCustomerLatitude = "", firebaseScreen = "", firebaseCustomerLongitude = "" ;
 
 
   double _setValue(double value) {
@@ -88,6 +95,20 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   bool _isLoading = false;
   bool isLoadingUpcomingServices = true;
+  String mechanicId = "", bookingId = "", vehicleName = "", customerName = "";
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _hasActiveService = false;
+    // Timer.periodic(const Duration(seconds: 90), (Timer t) {
+    //   _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
+    // });
+    getSharedPrefData();
+    _getCurrentCustomerLocation(false);
+    _listenServiceListResponse();
+  }
 
   @override
   void didChangeDependencies() {
@@ -102,14 +123,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     super.didUpdateWidget(oldWidget);
     _getCurrentCustomerLocation(false);
     getSharedPrefData();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getSharedPrefData();
-    _getCurrentCustomerLocation(false);
-    _listenServiceListResponse();
   }
 
   Future<void> setFcmToken(String Authtoken) async {
@@ -131,10 +144,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           shdPre.getString(SharedPrefKeys.preferredLongitude).toString();
       preferredAddress =
           shdPre.getString(SharedPrefKeys.preferredAddress).toString();
-
-
-
-
 
       if ((preferredLatitude.toString() != "" &&
               preferredLatitude.toString() != "null") &&
@@ -164,6 +173,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         print(
             'serviceIdEmergency>>>>>>>>000000' + serviceIdEmergency.toString());
       }
+      _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
 
       _homeCustomerBloc.postEmergencyServiceListRequest(
           "$authToken", "1", null, null);
@@ -186,9 +196,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
     _homeCustomerBloc.regularServiceListResponse.listen((value) {
       if (value.status == "error") {
-        setState(() {});
+        /*setState(() {});*/
       } else {
-        setState(() {});
+        /*setState(() {});*/
       }
     });
 
@@ -203,6 +213,64 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           CustomerUpcomingServicesList = value.data;
         });
       }
+    });
+
+    _homeCustomerBloc.postCustomerActiveServiceResponse.listen((value) {
+      if(value.status == "error"){
+        SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+        if(mounted){
+          setState(() {
+            //_isLoading = false;
+            _hasActiveService = false;
+            print("snackbareerror");
+          });
+        }
+
+      }else{
+        print("hasActiveService>>>> ${value.data?.currentlyWorkingServiceCustomer.toString()}");
+        print(value.data?.currentlyWorkingServiceCustomer.toString());
+        if(value.data?.currentlyWorkingServiceCustomer.toString() != []
+            && value.data?.currentlyWorkingServiceCustomer.toString() != '[]'
+            && value.data?.currentlyWorkingServiceCustomer.toString() != null
+            && value.data?.currentlyWorkingServiceCustomer.toString() != 'null')
+        {
+          if(mounted){
+            setState(() {
+              _hasActiveService = true;
+              setReminderData(value.data?.currentlyWorkingServiceCustomer![0].id.toString());
+              print("hasActiveService>>>> true");
+            });
+          }
+        }
+        else {
+          if(mounted){
+            setState(()  {
+              _hasActiveService = false;
+              print("hasActiveService>>>> false");
+            });
+          }
+        }
+      }
+    });
+  }
+
+  Future<void> setReminderData(String? bookedId01) async {
+    /*SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+    });*/
+     _firestore.collection("ResolMech").doc('$bookedId01').snapshots().listen((event) {
+      print('_firestore >>> $bookedId01' );
+      setState(() {
+        vehicleName = event.get('carName');
+        customerName = event.get('mechanicName');
+        firebaseScreen = event.get('customerFromPage');
+        bookingIdEmergency = bookedId01!;
+        firebaseCustomerLatitude = event.get('customerLatitude');
+        firebaseCustomerLongitude = event.get('customerLongitude');
+
+
+      });
     });
   }
 
@@ -282,6 +350,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
+      key: _scaffoldKey,
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -290,17 +359,122 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         ],
         child: Scaffold(
           backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                searchYouService(context, size),
-                serviceBanners(),
-                emergencyService(size),
-                regularService(),
-                upcomingServices(size),
-                sparePartsServices()
-              ],
-            ),
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    searchYouService(context, size),
+                    serviceBanners(),
+                    emergencyService(size),
+                    regularService(),
+                    upcomingServices(size),
+                    sparePartsServices(),
+                    _hasActiveService
+                        ? SizedBox(
+                      height: size.height * 0.092,
+                    )
+                        : Container(),
+                  ],
+                ),
+              ),
+              _hasActiveService ? emergencyServiceReminder(size) : Container(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget emergencyServiceReminder(Size size){
+    return Positioned(
+      bottom: size.height * 1.70 / 100,
+      child: InkWell(
+        onTap: (){
+          print("firebaseScreen >>>>> $firebaseScreen");
+          if(firebaseScreen == "C1"){
+            Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  MechanicTrackingScreen(
+                latitude: "${firebaseCustomerLatitude}",
+                longitude:  "${firebaseCustomerLongitude}",
+                bookingId: bookingIdEmergency,)
+          )).then((value){
+              _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
+      });
+          }else if(firebaseScreen == "C2" || firebaseScreen == "C4" || firebaseScreen == "C5" ){     //firebaseScreen == "C3"
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1")
+                )).then((value){
+              _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
+            });
+          }else if(firebaseScreen == "C3"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  ExtraServiceDiagonsisScreen(isEmergency: true,)
+                )).then((value){
+              _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
+            });
+          }else if(firebaseScreen == "C4"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MechanicWorkCompletedScreen())).then((value){
+              _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
+            });
+          }else if(firebaseScreen == "C5"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  DirectPaymentScreen(isMechanicApp: true, isPaymentFailed: true,)
+                )).then((value){
+              _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
+            });
+          }else if(firebaseScreen == "C6"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  MechanicWaitingPaymentScreen()
+                )).then((value){
+              _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
+            });
+
+            print("Service Completed");
+          }
+        },
+        child: Container(
+          height: size.height * 10 / 100,
+          width: size.width,
+          color: Colors.white,
+          margin: const EdgeInsets.only(
+            // left: size.width * 5 / 100,
+            //bottom: size.height * .5 / 100
+          ),
+          padding: EdgeInsets.only(
+            left: size.width * 5 / 100,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("You have one Emergency service ",
+                    style: TextStyle(color: CustColors.light_navy),),
+                  Text("Service from $customerName ", ),
+                  Text("$vehicleName", )
+                ],
+              ),
+              SvgPicture.asset(
+                "assets/image/img_mech_home_car_bg.svg",
+                height: size.height * 10 / 100,
+              )
+            ],
           ),
         ),
       ),
@@ -551,7 +725,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                             .icon
                                                             .toString() !=
                                                         "null"
-                                                ? SvgPicture.network(
+                                                ? Image.network(
                                                     snapshot
                                                         .data
                                                         ?.data
@@ -1328,7 +1502,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                   decoration: Styles.serviceIconBoxDecorationStyle,
                   child: service.icon.toString() != ""
                       || service.icon.toString() != "null"
-                      ? SvgPicture.network(
+                      ? Image.network(
                           service.icon,
                           width: 40,
                           height: 25,
@@ -1484,6 +1658,12 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       color: Colors.black,
       letterSpacing: .7,
       wordSpacing: .7);
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 }
 
 class MyBehavior extends ScrollBehavior {

@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/error_strings.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Models/customer_wallet_detail_model/customer_wallet_detail_model.dart';
@@ -12,7 +13,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:isw_mobile_sdk/isw_mobile_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../Repository/repository.dart';
 
 class CustomerWalletScreen extends StatefulWidget {
   const CustomerWalletScreen({Key? key}) : super(key: key);
@@ -22,10 +27,12 @@ class CustomerWalletScreen extends StatefulWidget {
 }
 
 class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
-
-  TextEditingController _phoneController = TextEditingController();
-  FocusNode _phoneFocusNode = FocusNode();
+  TextEditingController _amountController = TextEditingController();
+  FocusNode _amountFocusNode = FocusNode();
   String profileUrl = "";
+  String name = "";
+  String userid = "";
+  bool buttonEnable = false;
 
   @override
   void initState() {
@@ -39,6 +46,12 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       profileUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
+      name = shdPre.getString(SharedPrefKeys.userName).toString();
+      userid = shdPre.getString(SharedPrefKeys.userID).toString();
+
+      print("credentials");
+      print(name);
+      print(userid);
     });
     print(">>>profileUrl >>> " + profileUrl);
   }
@@ -50,8 +63,8 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => CustomerWalletBloc()
-              ..add(FetchCustomerWalletEvent()),
+            create: (context) =>
+                CustomerWalletBloc()..add(FetchCustomerWalletEvent()),
           ),
         ],
         child: Scaffold(
@@ -61,28 +74,24 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
             width: size.width,
             child: SingleChildScrollView(
               child: BlocBuilder<CustomerWalletBloc, CustomerWalletState>(
-                builder: (context, snapshot) {
-
-                  if(snapshot is CustomerWalletLoadingState){
-                    return Container(
-                      margin: EdgeInsets.only(
-                        top: size.height * .40
+                  builder: (context, snapshot) {
+                if (snapshot is CustomerWalletLoadingState) {
+                  return Container(
+                    margin: EdgeInsets.only(top: size.height * .40),
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: CustColors.light_navy,
                       ),
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: CustColors.light_navy,
-                        ),
-                      ),
-                    );
-                  }else if(snapshot is CustomerWalletLoadedState){
-                    return mainUI(size, snapshot.walletistoryModel);
-                  }else if (snapshot is CustomerWalletErrorState) {
-                    return mainUI(size, null);
-                  }else{
-                    return Container();
-                  }
+                    ),
+                  );
+                } else if (snapshot is CustomerWalletLoadedState) {
+                  return mainUI(size, snapshot.walletistoryModel);
+                } else if (snapshot is CustomerWalletErrorState) {
+                  return mainUI(size, null);
+                } else {
+                  return Container();
                 }
-              ),
+              }),
             ),
           ),
         ),
@@ -90,7 +99,8 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
     );
   }
 
-  Widget mainUI(Size size, CustomerWalletDetailModel? customerWalletDetailModel){
+  Widget mainUI(
+      Size size, CustomerWalletDetailModel? customerWalletDetailModel) {
     return Stack(
       children: [
         BottomLightBackground(size, customerWalletDetailModel),
@@ -104,7 +114,8 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
     );
   }
 
-  Widget appBarCustomUi(Size size, CustomerWalletDetailModel? walletistoryModel) {
+  Widget appBarCustomUi(
+      Size size, CustomerWalletDetailModel? walletistoryModel) {
     return Row(
       children: [
         IconButton(
@@ -117,12 +128,12 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
           style: Styles.appBarTextBlue,
         ),
         const Spacer(),
-
       ],
     );
   }
 
-  Widget profileImageAndWalletTotal(CustomerWalletDetailModel? walletistoryModel) {
+  Widget profileImageAndWalletTotal(
+      CustomerWalletDetailModel? walletistoryModel) {
     return Wrap(
       children: [
         SizedBox(
@@ -161,12 +172,10 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                                     height: 106.0,
                                     width: 106.0,
                                     child: ClipOval(
-                                      child: profileUrl != null
-                                          ?
-                                      Image.network(profileUrl)
-                                          :
-                                      SvgPicture.asset(
-                                          'assets/image/MechanicType/work_selection_avathar.svg'),
+                                      child: profileUrl == null || profileUrl == "" || profileUrl.isEmpty
+                                          ? SvgPicture.asset(
+                                          'assets/image/MechanicType/work_selection_avathar.svg')
+                                          : Image.network(profileUrl),
                                     ),
                                   ))),
                         ),
@@ -191,14 +200,18 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 100.0),
                             child: Row(children: [
-                              Text(
+                              const Text(
                                 "₦ ",
                                 style: Styles.myWalletCardText01,
                               ),
                               Text(
-                                walletistoryModel != null
-                                    ? walletistoryModel.data!.walletDetails.amount.toString()
-                                    : "0",
+                                walletistoryModel == null ||
+                                        walletistoryModel.data!.walletDetails ==
+                                            "null"
+                                    ? "0"
+                                    : walletistoryModel
+                                        .data!.walletDetails.totalBalance
+                                        .toString(),
                                 style: Styles.myWalletCardText01,
                               )
                             ]),
@@ -216,7 +229,8 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
     );
   }
 
-  Widget BottomLightBackground(Size size, CustomerWalletDetailModel? walletistoryModel) {
+  Widget BottomLightBackground(
+      Size size, CustomerWalletDetailModel? walletistoryModel) {
     return Container(
       height: MediaQuery.of(context).size.height * .50,
       margin: EdgeInsets.only(
@@ -249,21 +263,36 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                       right: size.width * 9 / 100,
                     ),
                     child: Row(
-                      mainAxisAlignment:
-                      MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         SubTitleTextRound(
                             size,
                             "Total spent",
-                            walletistoryModel != null
-                                ? walletistoryModel.data!.walletDetails.balance.toString() : "0"),
+                            walletistoryModel == null ||
+                                    walletistoryModel
+                                            .data!.walletDetails.walletData ==
+                                        "null" ||
+                                    walletistoryModel
+                                            .data!.walletDetails.walletData ==
+                                        null
+                                ? "0"
+                                : walletistoryModel
+                                    .data!.walletDetails.walletData!.amount
+                                    .toString()),
                         SubTitleTextRound(
                             size,
                             "Total balance",
-                            walletistoryModel != null
-                                ? walletistoryModel.data!.walletDetails.amount.toString()
-                                : "0"
-                        ),
+                            walletistoryModel == null ||
+                                    walletistoryModel
+                                            .data!.walletDetails.walletData ==
+                                        "null" ||
+                                    walletistoryModel
+                                            .data!.walletDetails.walletData ==
+                                        null
+                                ? "0"
+                                : walletistoryModel
+                                    .data!.walletDetails.walletData!.balance
+                                    .toString()),
                       ],
                     ),
                   ),
@@ -275,22 +304,21 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                 child: addMoneyWidget(size),
               ),
             ),
-          )
-      ),
+          )),
     );
   }
 
-  Widget addMoneyWidget(Size size){
-    return  Container(
+  Widget addMoneyWidget(Size size) {
+    return Container(
       margin: EdgeInsets.only(
         //top: size.height * .2 / 100,
         bottom: size.width * .2 / 100,
       ),
       child: Column(
         children: [
-        FDottedLine(
-          color: CustColors.grey_04,
-          width: double.infinity,
+          FDottedLine(
+            color: CustColors.grey_04,
+            width: double.infinity,
           ),
           Align(
             alignment: Alignment.topCenter,
@@ -321,86 +349,131 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
-                margin: EdgeInsets.only(
-                  top: size.height * 2 / 100,
-                  left: size.width * 9 / 100,
-                  right: size.width * 9 / 100,
-                ),
-                child: TextFormField(
-                  textAlignVertical: TextAlignVertical.center,
-                  maxLines: 1,
-                  style: Styles.textLabelSubTitle01,
-                  focusNode: _phoneFocusNode,
-                  keyboardType:
-                  TextInputType.number,
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(
-                        15),
-                  ],
-                  validator: InputValidator(
-                    ch: 'Amount',
-                  ).phoneNumChecking,
-                  controller: _phoneController,
-                  cursorColor: CustColors.materialBlue,
-                  decoration: InputDecoration(
-                    errorStyle: TextStyle(color: Colors.red),
-                    isDense: true,
-                    hintText:
-                    'Enter Amount',
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: CustColors.white_02,
-                            width: .5,
-                          ),
-                        ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: CustColors.white_02,
-                          width: .5,
-                        )
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                    color: CustColors.white_02,
-                    width: .5,
-                  )
-                ),
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 12.8,
-                      horizontal: 8.0,
-                    ),
-                    hintStyle: Styles.textLabelSubTitle,
-                  ),
-                ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              width: double.infinity,
               margin: EdgeInsets.only(
                 top: size.height * 2 / 100,
                 left: size.width * 9 / 100,
                 right: size.width * 9 / 100,
               ),
-              padding: EdgeInsets.only(
-                top: size.height * 1.5 / 100,
-                bottom: size.height * 1.5 / 100,
-              ),
-              color: CustColors.light_navy,
-              child: Center(
-                child: Text("Add Money",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontFamily: 'Samsung_SharpSans_Bold'
+              child: TextFormField(
+                textAlignVertical: TextAlignVertical.center,
+                maxLines: 1,
+                style: Styles.textLabelSubTitle01,
+                focusNode: _amountFocusNode,
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(15),
+                ],
+                validator: InputValidator(
+                  ch: 'Amount',
+                ).phoneNumChecking,
+                controller: _amountController,
+                cursorColor: CustColors.materialBlue,
+                decoration: const InputDecoration(
+                  errorStyle: const TextStyle(color: Colors.red),
+                  isDense: true,
+                  hintText: 'Enter Amount',
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: CustColors.white_02,
+                      width: .5,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                    color: CustColors.white_02,
+                    width: .5,
+                  )),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                    color: CustColors.white_02,
+                    width: .5,
+                  )),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 12.8,
+                    horizontal: 8.0,
+                  ),
+                  hintStyle: Styles.textLabelSubTitle,
                 ),
-                ),
+                onChanged: (text){
+                  if(text.length > 0){
+                    setState(() {
+                      buttonEnable = true;
+                    });
+                  }else{
+                    setState(() {
+                      buttonEnable = false;
+                    });
+                  }
+                },
               ),
             ),
           ),
+          buttonEnable == true
+              ?
+          InkWell(
+            onTap: (){
+              initPlatformState();
+            },
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.only(
+                  top: size.height * 2 / 100,
+                  left: size.width * 9 / 100,
+                  right: size.width * 9 / 100,
+                ),
+                padding: EdgeInsets.only(
+                  top: size.height * 1.5 / 100,
+                  bottom: size.height * 1.5 / 100,
+                ),
+                color: CustColors.light_navy,
+                child: const Center(
+                  child: Text(
+                    "Add Money",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontFamily: 'Samsung_SharpSans_Bold'),
+                  ),
+                ),
+              ),
+            ),
+          )
+              :
+          InkWell(
+            onTap: (){
+              Fluttertoast.showToast(msg: "Enter Amount");
+            },
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.only(
+                  top: size.height * 2 / 100,
+                  left: size.width * 9 / 100,
+                  right: size.width * 9 / 100,
+                ),
+                padding: EdgeInsets.only(
+                  top: size.height * 1.5 / 100,
+                  bottom: size.height * 1.5 / 100,
+                ),
+                color: CustColors.cloudy_blue,
+                child: const Center(
+                  child: Text(
+                    "Add Money",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontFamily: 'Samsung_SharpSans_Bold'),
+                  ),
+                ),
+              ),
+            ),
+          )
+          ,
         ],
       ),
     );
@@ -415,7 +488,7 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
         children: [
           Container(
               margin:
-              const EdgeInsets.only(top: 2, left: 2, right: 2, bottom: 0),
+                  const EdgeInsets.only(top: 2, left: 2, right: 2, bottom: 0),
               child: Text(
                 titleText,
                 textAlign: TextAlign.center,
@@ -440,10 +513,9 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
     );
   }
 
-  Widget noPaymentsWidget(Size size){
+  Widget noPaymentsWidget(Size size) {
     return Padding(
-      padding: const EdgeInsets.only(
-          left: 25.0, right: 25.0, top: 16.0),
+      padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 16.0),
       child: Container(
         height: 80,
         width: double.infinity,
@@ -453,24 +525,19 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
           color: Colors.white,
         ),
         child: Padding(
-          padding: const EdgeInsets.only(
-              left: 15.0, top: 10),
+          padding: const EdgeInsets.only(left: 15.0, top: 10),
           child: Column(
             children: [
-              SvgPicture.asset(
-                  "assets/image/ic_walletnotify.svg",
-                  width: 40,
-                  height: 40),
+              SvgPicture.asset("assets/image/ic_walletnotify.svg",
+                  width: 40, height: 40),
               const Expanded(
                 flex: 1,
                 child: Padding(
-                  padding: EdgeInsets.only(
-                      left: 12.0, top: 10),
+                  padding: EdgeInsets.only(left: 12.0, top: 10),
                   child: Text(
                     "You have no payments to show",
                     style: TextStyle(
-                      fontFamily:
-                      'SamsungSharpSans-Regular',
+                      fontFamily: 'SamsungSharpSans-Regular',
                       color: CustColors.light_navy,
                       fontSize: 12,
                     ),
@@ -482,5 +549,93 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> initPlatformState() async {
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    pay(context);
+    try {
+      String merchantId = "IKIABFC88BB635BAE1C834A37CF63FB68B4D19CE8742";
+      String merchantCode = "MX104222";
+      String merchantKey = "ELjqMeFJxYHAPDM";
+
+      var config = IswSdkConfig(merchantId, merchantKey, merchantCode, "566");
+
+      await IswMobileSdk.initialize(config, Environment.TEST);
+    } on PlatformException {}
+  }
+
+  Future<void> pay(BuildContext context) async {
+    String customerId = userid,
+        customerName = name, //replace with your customer Name
+        customerEmail = "cust@gmail.com", //replace with your customer Email
+        customerMobile = "8547101855", //replace with your customer Mobile Nu
+        reference = "pay" + DateTime.now().millisecond.toString();
+
+    int amount;
+    // initialize amount
+    if (_amountController.text.isEmpty) {
+      //amount = 2500 * 100;
+      amount = 0;
+    } else {
+      amount = int.parse(_amountController.text) * 100;
+    }
+
+    // create payment info
+    IswPaymentInfo iswPaymentInfo = IswPaymentInfo(customerId, customerName,
+        customerEmail, customerMobile, reference, amount);
+
+    // trigger payment
+    var result = await IswMobileSdk.pay(iswPaymentInfo);
+
+    var message;
+    if (result.hasValue) {
+      Repository()
+          .fetchpaymentsucess(3, int.parse(_amountController.text), 2,
+              result.value.transactionReference, null)
+          .then((value) => {
+                if (value.data!.paymentCreate.msg!.message.toString() == ErrorStrings.error_214)
+                  {
+                    // Navigator.of(context).push(MaterialPageRoute(
+                    //     builder: (context) => CustomerMainLandingScreen()))
+                    Fluttertoast.showToast(msg: "Amount added to wallet"),
+                    print("Amount added to wallet >>> repeat Wallet details"),
+                    Navigator.pushReplacement(context,
+                    MaterialPageRoute(
+                    builder: (BuildContext context) => super.widget))
+                    //BlocProvider.of<CustomerWalletBloc>(context)..add(FetchCustomerWalletEvent()),
+                  }
+                else
+                  {
+                    print("popcontext"),
+                    Navigator.pop(context),
+                    Fluttertoast.showToast(msg: "Failed to add Money to wallet")
+                  }
+              });
+    } else {
+      message = "You cancelled the transaction pls try again";
+      Fluttertoast.showToast(msg: "You cancelled the transaction. Try again");
+    }
+
+    message = "You completed txn using: " +
+        result.value.channel.name +
+        result.value.channel.index.toString() +
+        result.value.amount.toString() +
+        result.value.isSuccessful.toString() +
+        result.value.responseCode +
+        result.value.responseDescription +
+        result.value.transactionReference;
+
+    print("transactioncredntials");
+    print(result.value.channel.name);
+    print(result.value.amount);
+    print(result.value.isSuccessful);
+    print(result.value.responseCode);
+    print(result.value.responseDescription);
+    print(result.value.transactionReference);
+    // Scaffold.of(context).showSnackBar(SnackBar(
+    //   content: Text(message),
+    //   duration: const Duration(seconds: 3),
+    // ));
   }
 }

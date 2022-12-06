@@ -45,58 +45,90 @@ class Data {
   );
 
   Map<String, dynamic> toJson() => {
-    "signIn_phoneNo": signInPhoneNo == null ? null : signInPhoneNo?.toJson(),
+    "signIn_phoneNo": signInPhoneNo == null ? null : signInPhoneNo!.toJson(),
   };
 }
 
 class SignInPhoneNo {
   SignInPhoneNo({
-    required this.otp,
-    required this.phoneNo,
-    required this.id,
-    required this.lastName,
-    required this.fcmToken,
-    required this.firstName,
-    required this.emailId,
-    required this.status,
-    required this.userTypeId,
-    required this.jwtToken,
+    required this.token,
+    required this.userData,
+    required this.message,
   });
 
-  String otp;
-  String phoneNo;
-  int id;
-  String lastName;
-  String fcmToken;
-  String firstName;
-  String emailId;
-  int status;
-  int userTypeId;
-  String jwtToken;
+  String token;
+  UserData? userData;
+  String message;
 
   factory SignInPhoneNo.fromJson(Map<String, dynamic> json) => SignInPhoneNo(
-    otp: json["otp"] == null ? null : json["otp"],
-    phoneNo: json["phoneNo"] == null ? null : json["phoneNo"],
-    id: json["id"] == null ? null : json["id"],
-    lastName: json["lastName"] == null ? null : json["lastName"],
-    fcmToken: json["fcmToken"] == null ? null : json["fcmToken"],
-    firstName: json["firstName"] == null ? null : json["firstName"],
-    emailId: json["emailId"] == null ? null : json["emailId"],
-    status: json["status"] == null ? null : json["status"],
-    userTypeId: json["userTypeId"] == null ? null : json["userTypeId"],
-    jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
+    token: json["token"] == null ? null : json["token"],
+    userData: json["userData"] == null ? null : UserData.fromJson(json["userData"]),
+    message: json["message"] == null ? null : json["message"],
   );
 
   Map<String, dynamic> toJson() => {
-    "otp": otp == null ? null : otp,
+    "token": token == null ? null : token,
+    "userData": userData == null ? null : userData!.toJson(),
+    "message": message == null ? null : message,
+  };
+}
+
+class UserData {
+  UserData({
+    required this.otp,
+    required this.phoneNo,
+    required this.id,
+    required this.userTypeId,
+    required this.jwtToken,
+    required this.firstName,
+    required this.lastName,
+    required this.emailId,
+    required this.fcmToken,
+    required this.status,
+    required this.isProfile,
+    required this.otpVerified,
+  });
+
+  dynamic otp;
+  String phoneNo;
+  int id;
+  int userTypeId;
+  String jwtToken;
+  String firstName;
+  String lastName;
+  String emailId;
+  String fcmToken;
+  int status;
+  int isProfile;
+  int otpVerified;
+
+  factory UserData.fromJson(Map<String, dynamic> json) => UserData(
+    otp: json["otp"],
+    phoneNo: json["phoneNo"] == null ? null : json["phoneNo"],
+    id: json["id"] == null ? null : json["id"],
+    userTypeId: json["userTypeId"] == null ? null : json["userTypeId"],
+    jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
+    firstName: json["firstName"] == null ? null : json["firstName"],
+    lastName: json["lastName"] == null ? null : json["lastName"],
+    emailId: json["emailId"] == null ? null : json["emailId"],
+    fcmToken: json["fcmToken"] == null ? null : json["fcmToken"],
+    status: json["status"] == null ? null : json["status"],
+    isProfile: json["isProfile"] == null ? null : json["isProfile"],
+    otpVerified: json["otpVerified"] == null ? null : json["otpVerified"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "otp": otp,
     "phoneNo": phoneNo == null ? null : phoneNo,
     "id": id == null ? null : id,
-    "lastName": lastName == null ? null : lastName,
-    "fcmToken": fcmToken == null ? null : fcmToken,
-    "firstName": firstName == null ? null : firstName,
-    "emailId": emailId == null ? null : emailId,
-    "status": status == null ? null : status,
     "userTypeId": userTypeId == null ? null : userTypeId,
     "jwtToken": jwtToken == null ? null : jwtToken,
+    "firstName": firstName == null ? null : firstName,
+    "lastName": lastName == null ? null : lastName,
+    "emailId": emailId == null ? null : emailId,
+    "fcmToken": fcmToken == null ? null : fcmToken,
+    "status": status == null ? null : status,
+    "isProfile": isProfile == null ? null : isProfile,
+    "otpVerified": otpVerified == null ? null : otpVerified,
   };
 }

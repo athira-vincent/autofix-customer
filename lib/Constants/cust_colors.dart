@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustColors {
-  static const peaGreen = Color(0xff18582E);
+  static const peaGreen = Color(0xff173a8d);
   static const borderColor = Color(0xff707070);
   static const blue = Color(0xff2a569f);
   static const blueLight = Color(0xff2c4d9b);
@@ -77,5 +77,8 @@ class CustColors {
   static const pinkish_grey05= Color(0xffc7c7c7);
   static const chatcolor= Color(0xffE6E6E6);
   static const grey_04= Color(0xffbdc5dc);
+  static const addresstilecolor=Color(0xffd4d4d8);
+  static const metallic_blue=Color(0xff4f6b8e);
+
 
 }

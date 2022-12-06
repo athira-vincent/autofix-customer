@@ -3,6 +3,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
+import 'package:auto_fix/UI/Customer/SideBar/EditVehicle/edit_car_screen.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
@@ -74,7 +75,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
   String isDefaultId ="";
 
 
-
+  BuildContext? dialogContext;
 
   @override
   void initState() {
@@ -82,8 +83,6 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
     super.initState();
     getSharedPrefData();
     _listenServiceListResponse();
-
-
   }
 
   Future<void> getSharedPrefData() async {
@@ -385,8 +384,9 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                                     {
                                       showDialog(
                                           context: context,
-                                          builder: (BuildContext context)
-                                          {
+                                          barrierDismissible: false,
+                                          builder: (BuildContext context) {
+                                            dialogContext = context;
                                             return deleteVehicleDialog(i,snapshot.data?.data?.custVehicleList);
                                           });
                                     }
@@ -583,12 +583,27 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                     child: Container(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             "Selected vehicle details",
                             style: Styles.MyVechiclesSubTitleBlue,
                           ),
-
+                          InkWell(
+                            onTap: (){
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          EditCarScreen(vehicleData: custVehicleList!,))).then((value) {
+                                getSharedPrefData();
+                              });
+                            },
+                            child: Icon(
+                              Icons.edit,
+                              color: CustColors.light_navy,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -1104,7 +1119,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
             ),
             isDefaultAction: true,
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(dialogContext!);
             },
             child: Text("Cancel")),
         CupertinoDialogAction(
@@ -1119,7 +1134,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                     authToken, custVehicleList?[i].id,
                     "0");
                 custVehicleList?.removeAt(i);
-                Navigator.pop(context);
+                Navigator.pop(dialogContext!);
 
               });
             },

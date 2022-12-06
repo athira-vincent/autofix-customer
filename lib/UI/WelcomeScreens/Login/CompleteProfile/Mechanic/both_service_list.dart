@@ -158,6 +158,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           print("success refNumber: userCode, >>>>>>>  ${userCode}");
           SharedPreferences _shdPre = await SharedPreferences.getInstance();
           _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 3);
+          _shdPre.setInt(SharedPrefKeys.isProfileCompleted, 3);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -195,57 +196,51 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: CustColors.materialBlue,
-      ),
-      home: Scaffold(
-        body: SafeArea(
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          height: size.height,
+          width:  size.width,
+          color: Colors.white,
           child: Container(
-            height: size.height,
-            width:  size.width,
-            color: Colors.white,
-            child: Container(
-              margin: EdgeInsets.only(
-                left: size.width * 6 /100,
-                right: size.width * 5.9 / 100,
-                bottom: size.height * 2.7 / 100,
-                top: size.height * 3.2 / 100,
-              ),
-              child: Column(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        isRegularSelected = !isRegularSelected ;
-                        print("isRegularSelected >>>>>> " +isRegularSelected.toString());
-                        //searchText = "";
-                      });
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(
+            margin: EdgeInsets.only(
+              left: size.width * 6 /100,
+              right: size.width * 5.9 / 100,
+              bottom: size.height * 2.7 / 100,
+              top: size.height * 3.2 / 100,
+            ),
+            child: Column(
+              children: [
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      isRegularSelected = !isRegularSelected ;
+                      print("isRegularSelected >>>>>> " +isRegularSelected.toString());
+                      //searchText = "";
+                    });
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(
                         bottom: size.height * 0.8 / 100
-                      ),
-                      child: Text(isRegularSelected ? "Emergency " : "Regular",
-                          softWrap: true,
-                          style: Styles.hiddenTextBlack,
-                      ),
+                    ),
+                    child: Text(isRegularSelected ? "Emergency " : "Regular",
+                      softWrap: true,
+                      style: Styles.hiddenTextBlack,
                     ),
                   ),
+                ),
 
-                  Expanded(
-                      child: isRegularSelected ? regularServiceListUi(size) : emergencyServiceListUi(size)
-                  ),
+                Expanded(
+                    child: isRegularSelected ? regularServiceListUi(size) : emergencyServiceListUi(size)
+                ),
 
-                  _isLoadingPage == true
-                      ?
-                  Container()
-                      :
-                  nextButtons(size),
+                _isLoadingPage == true
+                    ?
+                Container()
+                    :
+                nextButtons(size),
 
-                ],
-              ),
+              ],
             ),
           ),
         ),

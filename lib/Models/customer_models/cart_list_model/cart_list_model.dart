@@ -74,7 +74,7 @@ class CartList {
         data: List<Datum>.from(json["data"].map((x) => Datum.fromMap(x))),
         totalPages: json["totalPages"] ?? "",
         currentPage: json["currentPage"] ?? "",
-        totalPrice: json["totalPrice"]??"",
+        totalPrice: json["totalPrice"] ?? "",
         count: json["count"] ?? "",
         deliveryCharge: json["deliveryCharge"] ?? "",
       );
@@ -131,28 +131,35 @@ class Datum {
 }
 
 class Customer {
-  Customer({
-    required this.id,
-    required this.address,
-  });
+  Customer({required this.id, required this.address, required this.emailId,required this.firstName,required this.phoneNo});
 
   int id;
   List<Address> address;
+  String emailId;
+  String firstName;
+  String phoneNo;
 
   factory Customer.fromMap(Map<String, dynamic> json) => Customer(
         id: json["id"],
         address:
             List<Address>.from(json["address"].map((x) => Address.fromMap(x))),
+        emailId: json["emailId"] ?? "",
+    firstName: json["firstName"] ?? "",
+      phoneNo:json["phoneNo"] ?? "",
       );
 
   Map<String, dynamic> toMap() => {
         "id": id,
         "address": List<dynamic>.from(address.map((x) => x.toMap())),
+        "emailId": emailId,
+    "firstName":firstName,
+    "phoneNo":phoneNo
       };
 }
 
 class Address {
   Address({
+    required this.id,
     required this.fullName,
     required this.phoneNo,
     required this.pincode,
@@ -160,6 +167,7 @@ class Address {
     required this.state,
   });
 
+  String id;
   String fullName;
   String phoneNo;
   String pincode;
@@ -167,20 +175,22 @@ class Address {
   String state;
 
   factory Address.fromMap(Map<String, dynamic> json) => Address(
-        fullName: json["fullName"] ?? "",
-        phoneNo: json["phoneNo"] ?? "",
-        pincode: json["pincode"] ?? "",
-        city: json["city"] ?? "",
-        state: json["state"] ?? "",
-      );
+    id: json["id"],
+    fullName: json["fullName"] ?? "",
+    phoneNo: json["phoneNo"] ?? "",
+    pincode: json["pincode"] ?? "",
+    city: json["city"] ?? "",
+    state: json["state"] ?? "",
+  );
 
   Map<String, dynamic> toMap() => {
-        "fullName": fullName,
-        "phoneNo": phoneNo,
-        "pincode": pincode,
-        "city": city,
-        "state": state,
-      };
+    "id": id,
+    "fullName": fullName,
+    "phoneNo": phoneNo,
+    "pincode": pincode,
+    "city": city,
+    "state": state,
+  };
 }
 
 class Product {

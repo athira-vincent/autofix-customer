@@ -2,8 +2,11 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:flutter/material.dart';
 
 class CountdownMechanicTimer extends AnimatedWidget {
-  CountdownMechanicTimer({required this.animation}) : super( listenable: animation);
+
+
+  CountdownMechanicTimer({required this.animation,}) : super( listenable: animation);
   Animation<int> animation;
+
 
   @override
   build(BuildContext context) {
@@ -19,7 +22,7 @@ class CountdownMechanicTimer extends AnimatedWidget {
     // print('inSeconds.remainder ${clockTimer.inSeconds.remainder(60).toString()}');
 
     return Text(
-      "$timerText",
+      timerText,
       textAlign: TextAlign.center,
       softWrap: true,
       style: Styles.textCountdownMechanicTimer,

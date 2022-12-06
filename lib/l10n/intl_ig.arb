@@ -1,16 +1,35 @@
 {
-  "helloWorld": "¡Hola Mundo!",
   "login": "Banye",
   "welcome_to": "Nnọọ",
   "next": "Osote",
   "forgot_password": "Forgot password!!!",
   "text_forgot_password": "Chefuru okwuntughe?",
+  "text_login_success_cust" : "Customer Login Successful_ig",
+  "text_login_success_mech" : "Mechanic Login Successful_ig",
+  "text_login_using_relex" : "Please login through Relex App_ig",
+  "text_went_wrong_try" : "Something went wrong. Try Again_ig",
 
   "text_customer": "Onye ahịa",
   "text_mechanic": "Mekaniki",
   "text_individual": "Onye ọ bụla",
   "text_corporate": "Ụlọọrụ",
   "text_govt_bodies": "Ndị otu gọọmentị",
+
+  "text_error_name_empty": "Name cannot Empty",
+    "text_error_phone_empty": "Phone Number cannot Empty",
+    "text_error_email_empty": "Email cannot Empty",
+    "text_error_state_empty": "Select State",
+    "text_error_password_empty": "Fill Password",
+    "text_error_cpassword_empty": "Enter Confirm Password",
+    "text_error_password_different": "Passwords are different!",
+    "text_error_experience_empty": "Enter Year of Experience",
+    "text_error_org_name_empty": "Organisation Name cannot Empty",
+    "text_error_org_type_empty": "Organisation Type cannot Empty",
+    "text_error_contact_person_empty": "Contact Person cannot Empty",
+    "text_error_enter_email_empty": "Enter Email Id",
+    "text_error_ministry_empty": "Select Ministry",
+    "text_camera": "Camera",
+    "text_gallery": "Gallery",
 
   "text_select_language": "Họrọ Asụsụ",
   "text_walk_through1_small_title": "Nnọọ",
@@ -72,7 +91,24 @@
     "text_check_mail_screen_desc": "Biko lelee email gị, anyị eziterela gị email \n nwere njikọ iji tọgharịa paswọọdụ gị. ",
     "text_btn_go_to_mail": "Gaa na email",
     "text_check_spam": "Anataghị email ahụ? Lelee ihe nzacha spam gị ma ọ bụ ",
-    "text_try_another": "nwaa adreesị ozi-e ọzọ "
+    "text_try_another": "nwaa adreesị ozi-e ọzọ ",
+  "error_201" : "This email already exists",
+    "error_200" : "codeSuccess",
+    "error_404" : "codeError",
+    "error_207" : "Password is incorrect!!!",
+    "error_202" : "This account does not exist! Please try again",
+    "error_203" : "Phone number already exists!!",
+    "error_204" : "Please complete your profile",
+    "error_205" : "Otp is not verified",
+    "error_206" : "Successfully logged in",
+    "error_208" : "Cannot login.Mechanic is not approved yet!!!",
+    "error_209" : "Successfully registered",
+    "error_210" : "Account Exist.Please Login!",
+    "error_211" : "OTP Not Verified! Try Again!",
+    "error_213" : "User Not Registered",
+    "error_301" : "Profile Not Completed! Try Login with username Password",
+    "error_not_found" : "No Results found._ig"
+
 
 
 }

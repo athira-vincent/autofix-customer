@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'dart:core';
 
+import 'package:auto_fix/Common/TokenChecking/JWTTokenChecking.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
@@ -9,7 +10,6 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/categor
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/AddRegularMoreServices/add_more_regular_service_list_screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ScheduleRegularService/schedule_regular_service_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -77,6 +77,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      JWTTokenChecking.checking(shdPre.getString(SharedPrefKeys.token).toString(), context);
       print('userFamilyId'+authToken.toString());
       _homeCustomerBloc.postSearchServiceRequest("$authToken", null, null,null,null);
       _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2", null, null);
@@ -189,22 +190,19 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                appBarCustomUi(size),
-                searchYouService(),
-                emergencyService(size),
-                SizedBox(
-                  height: 10,
-                ),
-                regularService(),
-              ],
-            ),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              appBarCustomUi(size),
+              searchYouService(),
+              emergencyService(size),
+              SizedBox(
+                height: 10,
+              ),
+              regularService(),
+            ],
           ),
         ),
       ),
@@ -361,7 +359,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                                 });
 
                                               },
-                                              child: snapshot.data?.data?.serviceListAll?[index].category?.catType.toString() =='1' && snapshot.data?.data?.serviceListAll?[index].category?.catType != null
+                                              child: snapshot.data?.data?.serviceListAll?[index].category![0].catType.toString() =='1' && snapshot.data?.data?.serviceListAll?[index].category![0].catType != null
                                                   ? Container(
                                                       child: Padding(
                                                         padding: const EdgeInsets.fromLTRB(30,0,30,0),
@@ -641,7 +639,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                       print(">>>>>>>>>> Longitude  $CurrentLongitude");
                       print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
                       print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
-                      serviceIds = '${service.category!.id}';
+                      serviceIds = '${service.category![0].id}';
                       print(">>>>>>>>>> ServiceId  $serviceIds");
 
 

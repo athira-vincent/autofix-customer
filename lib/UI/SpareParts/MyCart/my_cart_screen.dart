@@ -1,35 +1,32 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/Customer/payment_main_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_state.dart';
-import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_oder_bloc.dart';
-import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_oder_state.dart';
-import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_order_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_state.dart';
 import 'package:auto_fix/UI/SpareParts/change_delivery_address_screen.dart';
-import 'package:auto_fix/UI/SpareParts/purchase_response_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
-import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
-import 'package:auto_fix/Widgets/input_validator.dart';
-import 'package:auto_fix/Widgets/screen_size.dart';
-import 'package:auto_fix/Widgets/show_pop_up_widget.dart';
-import 'package:auto_fix/main.dart';
+import 'package:auto_fix/UI/SpareParts/mycheckoutscreen.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../../Models/customer_models/cart_list_model/cart_list_model.dart';
 import 'showcartpopbloc/show_cart_pop_event.dart';
 
 class MyCartScreen extends StatefulWidget {
-  const MyCartScreen({Key? key}) : super(key: key);
+  final bool isFromHome;
+  final String addressid, addresstext;
+
+  const MyCartScreen({
+    Key? key,
+    required this.isFromHome,
+    required this.addressid,
+    required this.addresstext,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -46,6 +43,11 @@ class _MyCartScreenState extends State<MyCartScreen> {
   bool _isLoading = false;
   double per = .10;
   double perfont = .10;
+  bool allitems = false;
+  String id = "";
+  String name = "";
+  String email = "";
+  String phone = "";
 
   double _setValue(double value) {
     return value * per + value;
@@ -63,6 +65,8 @@ class _MyCartScreenState extends State<MyCartScreen> {
   String states = "";
   String city = "";
   String pincode = "";
+
+  String newamount = "";
 
   @override
   void initState() {
@@ -159,10 +163,11 @@ class _MyCartScreenState extends State<MyCartScreen> {
                     itemCount:
                         state.cartlistmodel.data?.cartList.data.length ?? 0,
                     itemBuilder: (context, index) {
-                      // image = state.cartlistmodel.data!.cartList.data[index].product.productImage
-                      //     .replaceAll("[", "")
-                      //     .replaceAll("]", "")
-                      //     .split(",");
+                      image = state.cartlistmodel.data!.cartList.data[index]
+                          .product.productImage
+                          .replaceAll("[", "")
+                          .replaceAll("]", "")
+                          .split(",");
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         print("WidgetsBinding");
                         states = state.cartlistmodel.data!.cartList.data[index]
@@ -171,7 +176,25 @@ class _MyCartScreenState extends State<MyCartScreen> {
                             .customer.address.first.city;
                         pincode = state.cartlistmodel.data!.cartList.data[index]
                             .customer.address.first.pincode;
+
+                        id = state.cartlistmodel.data!.cartList.data[index]
+                            .customer.id
+                            .toString();
+                        name = state.cartlistmodel.data!.cartList.data[index]
+                            .customer.firstName;
+                        email = state.cartlistmodel.data!.cartList.data[index]
+                            .customer.emailId;
+                        phone = state.cartlistmodel.data!.cartList.data[index]
+                            .customer.phoneNo;
                       });
+
+                      int sum = 0;
+                      state.cartlistmodel.data!.cartList.data
+                          .forEach((element) {
+                        sum = sum + element.product.price * element.quantity;
+                      });
+
+                      newamount = sum.toString();
 
                       print("nocunter");
                       print(states);
@@ -224,13 +247,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                   ),
                                                 )
                                               : Image.network(
-                                                  state
-                                                      .cartlistmodel
-                                                      .data!
-                                                      .cartList
-                                                      .data[index]
-                                                      .product
-                                                      .productImage,
+                                                  image[0],
                                                   fit: BoxFit.cover,
                                                 ),
                                         ),
@@ -362,6 +379,76 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                                     .quantity
                                                                     .toString(),
                                                                 "1"));
+                                                          } else {
+                                                            showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (context) {
+                                                                  return CupertinoAlertDialog(
+                                                                    title: const Text(
+                                                                        "Confirm",
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontFamily:
+                                                                              'Formular',
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                          fontSize:
+                                                                              18,
+                                                                          color:
+                                                                              CustColors.materialBlue,
+                                                                        )),
+                                                                    content:
+                                                                        const Text(
+                                                                            "Are you sure you want to delete?"),
+                                                                    actions: <
+                                                                        Widget>[
+                                                                      CupertinoDialogAction(
+                                                                          textStyle:
+                                                                              const TextStyle(
+                                                                            color:
+                                                                                CustColors.rusty_red,
+                                                                            fontWeight:
+                                                                                FontWeight.normal,
+                                                                          ),
+                                                                          isDefaultAction:
+                                                                              true,
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.pop(context);
+                                                                          },
+                                                                          child:
+                                                                              const Text("No")),
+                                                                      CupertinoDialogAction(
+                                                                          textStyle:
+                                                                              const TextStyle(
+                                                                            color:
+                                                                                CustColors.rusty_red,
+                                                                            fontWeight:
+                                                                                FontWeight.normal,
+                                                                          ),
+                                                                          isDefaultAction:
+                                                                              true,
+                                                                          onPressed:
+                                                                              () async {
+                                                                            final deletcartBloc =
+                                                                                BlocProvider.of<DeleteCartBloc>(context);
+                                                                            deletcartBloc.add(FetchDeleteCartEvent(
+                                                                                state.cartlistmodel.data!.cartList.data[index].product.id.toString(),
+                                                                                "1",
+                                                                                "0"));
+                                                                            Navigator.pop(context);
+                                                                            Fluttertoast.showToast(
+                                                                              msg: "Removed from cart successfully!!",
+                                                                              timeInSecForIosWeb: 1,
+                                                                            );
+                                                                          },
+                                                                          child:
+                                                                              const Text("Yes")),
+                                                                    ],
+                                                                  );
+                                                                });
                                                           }
                                                         },
                                                         child: Container(
@@ -555,10 +642,13 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                       );
                                                     });
                                               },
-                                              child: SvgPicture.asset(
-                                                'assets/image/home_customer/deleteMyCart.svg',
-                                                height: 20,
-                                                width: 20,
+                                              child: Visibility(
+                                                visible: false,
+                                                child: SvgPicture.asset(
+                                                  'assets/image/home_customer/deleteMyCart.svg',
+                                                  height: 20,
+                                                  width: 20,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -566,7 +656,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                             padding: const EdgeInsets.fromLTRB(
                                                 0, 8, 0, 0),
                                             child: Text(
-                                              "\$ " +
+                                              " ₦" +
                                                   state
                                                       .cartlistmodel
                                                       .data!
@@ -584,47 +674,75 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                                 0, 8, 0, 0),
                                             child: InkWell(
                                               onTap: () {
+                                                int totalprice = state
+                                                        .cartlistmodel
+                                                        .data!
+                                                        .cartList
+                                                        .data[index]
+                                                        .quantity *
+                                                    state
+                                                        .cartlistmodel
+                                                        .data!
+                                                        .cartList
+                                                        .data[index]
+                                                        .product
+                                                        .price;
 
-                                                int totalprice= state
-                                                    .cartlistmodel
-                                                    .data!
-                                                    .cartList
-                                                    .data[index]
-                                                    .quantity*state
-                                                    .cartlistmodel
-                                                    .data!
-                                                    .cartList
-                                                    .data[index]
-                                                    .product
-                                                    .price;
-
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ChangeDeliveryAddressScreen(
-                                                              quantity: state
-                                                                  .cartlistmodel
-                                                                  .data!
-                                                                  .cartList
-                                                                  .data[index]
-                                                                  .quantity
-                                                                  .toString(),
-                                                              productprice: totalprice.toString(),
-                                                              productid: state
-                                                                  .cartlistmodel
-                                                                  .data!
-                                                                  .cartList
-                                                                  .data[index]
-                                                                  .product
-                                                                  .id
-                                                                  .toString(),
-
-                                                            )));
+                                                // Navigator.push(
+                                                //     context,
+                                                //     MaterialPageRoute(
+                                                //         builder: (context) => ChangeDeliveryAddressScreen(
+                                                //             quantity: state
+                                                //                 .cartlistmodel
+                                                //                 .data!
+                                                //                 .cartList
+                                                //                 .data[index]
+                                                //                 .quantity
+                                                //                 .toString(),
+                                                //             productprice: totalprice
+                                                //                 .toString(),
+                                                //             productid: state
+                                                //                 .cartlistmodel
+                                                //                 .data!
+                                                //                 .cartList
+                                                //                 .data[index]
+                                                //                 .product
+                                                //                 .id
+                                                //                 .toString(),
+                                                //             allitems: false,
+                                                //             customerid: state
+                                                //                 .cartlistmodel
+                                                //                 .data!
+                                                //                 .cartList
+                                                //                 .data[index]
+                                                //                 .customer
+                                                //                 .id
+                                                //                 .toString(),
+                                                //             customername: state
+                                                //                 .cartlistmodel
+                                                //                 .data!
+                                                //                 .cartList
+                                                //                 .data[index]
+                                                //                 .customer
+                                                //                 .firstName,
+                                                //             customeremail: state
+                                                //                 .cartlistmodel
+                                                //                 .data!
+                                                //                 .cartList
+                                                //                 .data[index]
+                                                //                 .customer
+                                                //                 .emailId,
+                                                //             customerphone: state.cartlistmodel.data!.cartList.data[index].customer.phoneNo)));
                                               },
                                               child: Container(
-                                                height: 20,
-                                                width: 70,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.03,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.23,
                                                 alignment: Alignment.center,
                                                 color: CustColors.light_navy,
                                                 child: const Text(
@@ -654,7 +772,8 @@ class _MyCartScreenState extends State<MyCartScreen> {
                   //     state.cartlistmodel.data!.cartList.totalItems,
                   //     state.cartlistmodel.data!.cartList.deliveryCharge),
                   const Divider(),
-                  continueButtonUi(),
+                  continueButtonUi(state.cartlistmodel.data!.cartList.data,
+                      state.cartlistmodel.data!.cartList.totalItems.toString()),
                 ],
               )
             : Center(
@@ -752,7 +871,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                         width: 70,
                         alignment: Alignment.center,
                         color: CustColors.light_navy,
-                        child: Text(
+                        child: const Text(
                           "Place order",
                           style: Styles.badgeTextStyle1,
                         ),
@@ -788,22 +907,58 @@ class _MyCartScreenState extends State<MyCartScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                        child: Text(
-                          "Delivering to : " " " +
-                              states +
-                              " , " +
-                              city +
-                              " ," +
-                              pincode,
-                          maxLines: 2,
-                          style: Styles.sparePartNameTextBlack17,
-                        ),
+                        child: widget.isFromHome == false
+                            ? Text(widget.addresstext)
+                            : Text(
+                                "Delivering to : " " " +
+                                    states +
+                                    " , " +
+                                    city +
+                                    " ," +
+                                    pincode,
+                                style: Styles.sparePartNameTextBlack17,
+                              ),
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                              onTap: () {
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             ChangeDeliveryAddressScreen(
+                                //               allitems: false,
+                                //               customerid: '',
+                                //               customeremail: '',
+                                //               customerphone: '',
+                                //               customername: '',
+                                //             )));
+
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChangeDeliveryAddressScreen(
+                                              allitems: false,
+                                              customerid: '',
+                                              customeremail: '',
+                                              customerphone: '',
+                                              customername: '',
+                                            )));
+                              },
+                              child: Text(
+                                "Change address",
+                                style: Styles.sparePartNameTextBlack17,
+                              )),
+                        ],
+                      )
                     ],
                   ),
                 ),
               ),
-              Padding(
+              /*Padding(
                 padding: const EdgeInsets.all(8),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -818,10 +973,10 @@ class _MyCartScreenState extends State<MyCartScreen> {
                               MaterialPageRoute(
                                   builder: (context) =>
                                       ChangeDeliveryAddressScreen(
-                                        quantity: "",
-                                        productprice: "",
-                                        productid: "",
-                                      )));
+                                          quantity: "",
+                                          productprice: "",
+                                          productid: "",
+                                          allitems: false)));
                         },
                         child: Container(
                           height: 25,
@@ -829,7 +984,8 @@ class _MyCartScreenState extends State<MyCartScreen> {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                               color: Colors.white,
-                              border: Border.all(color: CustColors.light_navy),
+                              border:
+                                  Border.all(color: CustColors.materialBlue),
                               borderRadius: BorderRadius.circular(4)),
                           child: const Text(
                             "Change",
@@ -840,7 +996,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                     ),
                   ],
                 ),
-              ),
+              ),*/
             ],
           )),
     );
@@ -972,11 +1128,13 @@ class _MyCartScreenState extends State<MyCartScreen> {
     );
   }
 
-  Widget continueButtonUi() {
+  Widget continueButtonUi(List<Datum> data, String totalitems) {
+    var newid;
+    var newaddressid;
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 5, 20, 10),
+          padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
           child: Container(
             margin: const EdgeInsets.only(top: 5, bottom: 5),
             child: _isLoading
@@ -986,30 +1144,68 @@ class _MyCartScreenState extends State<MyCartScreen> {
                       width: _setValue(28),
                       child: const CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(
-                            CustColors.light_navy),
+                            CustColors.materialBlue),
                       ),
                     ),
                   )
                 : MaterialButton(
                     onPressed: () {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => ChangeDeliveryAddressScreen(
+                      //             quantity: "",
+                      //             productprice: "",
+                      //             productid: "",
+                      //             allitems: true)));
+
+                      List<int> newitems = [];
+
+                      data.forEach((element) {
+                        print(element.id);
+
+                        newid = element.id;
+                        newaddressid = element.customer.address.first.id;
+
+                        newitems.add(element.id);
+                      });
+                      print("newids");
+
+                      print(newitems);
+                      print(newaddressid);
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Payment_Main_Screen(
-                                  amount: "", orderid: "")));
+                              builder: (context) => MyCheckoutScreen(
+                                    newitems: newitems,
+                                    newaddressid: newaddressid,
+                                  )));
                     },
-                    child: SizedBox(
-                      height: 50,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          Text(
-                            'Continue',
-                            textAlign: TextAlign.center,
-                            style: Styles.textButtonLabelSubTitle,
-                          ),
-                        ],
+                    child: ListTile(
+                      leading: SvgPicture.asset(
+                        "assets/images/ic_selected_blue_white_tick.svg",
+                        height: MediaQuery.of(context).size.height * 10 / 100,
+                        width: MediaQuery.of(context).size.width * 10 / 100,
+                      ),
+                      title: Text(
+                        'Checkout all products',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Samsung_SharpSans_Medium',
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                      trailing: Text(
+                        " ₦ " + newamount,
+                        style: TextStyle(
+                          fontFamily: 'Samsung_SharpSans_Medium',
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                          fontSize: 10,
+                        ),
                       ),
                     ),
                     color: CustColors.materialBlue,
