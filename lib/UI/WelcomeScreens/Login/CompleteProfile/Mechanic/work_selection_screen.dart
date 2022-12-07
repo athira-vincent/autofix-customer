@@ -307,7 +307,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
       padding: const EdgeInsets.only(top: 20),
       child: Container(
         child: Text(
-          'Complete your profile',
+          AppLocalizations.of(context)!.text_complete_your_profile,
           style: Styles.textCompleteYourProfile,
         ),
       ),
@@ -345,8 +345,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                   children: [
                     Container(
                       width: 150,
-                      child: Text(
-                        'Upload Your \n Profile Photo',
+                        AppLocalizations.of(context)!.text_upload_your_profile_photo,
                         textAlign: TextAlign.center,
                         style: Styles.textUploadYourProfilePic,
                       ),
@@ -425,7 +424,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Work Selection",
+              AppLocalizations.of(context)!.text_work_selection,
               style: Styles.textLabelTitle,
             ),
             TextFormField(
@@ -441,7 +440,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
               ],
               validator: InputValidator(
                   ch :
-                  'Work Selection').nameChecking,
+                  AppLocalizations.of(context)!.text_work_selection).nameChecking,
               controller: _workSelectionController,
               cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
@@ -452,7 +451,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                   child: SvgPicture.asset('assets/image/arrow_down.svg',height: 7,width: 7,)
                 ),
                 hintText:
-                "Select your service type(Emergency/regular…)",
+                AppLocalizations.of(context)!.text_select_your_service_type,
                 border: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
@@ -495,7 +494,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Choose vehicle specialised",
+              AppLocalizations.of(context)!.text_choose_vehicle_specialised,
               style: Styles.textLabelTitle,
             ),
             TextFormField(
@@ -510,7 +509,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                     RegExp('[a-zA-Z0-9 ]')),
               ],
               validator: InputValidator(
-                  ch :'vehicle specialised').nameCheckingWithNumericAndBracket,
+                  ch :AppLocalizations.of(context)!.text_vehicle_specialised).nameCheckingWithNumericAndBracket,
               controller: _chooseVechicleSpecializedController,
               cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
@@ -650,7 +649,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Upload certificate of apprentice ",
+              AppLocalizations.of(context)!.text_upload_certificate_apprentice,
               style: Styles.textLabelTitle,
             ),
             TextFormField(
@@ -665,7 +664,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                     RegExp('[a-zA-Z ]')),
               ],
               validator: InputValidator(
-                  ch :'Upload certificate of apprentice ').emptyChecking,
+                  ch :AppLocalizations.of(context)!.text_upload_certificate_apprentice).emptyChecking,
               controller: _apprenticeCertificateController,
               cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
@@ -676,7 +675,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                     child: SvgPicture.asset('assets/image/attach_icon.svg',height: 9,width: 9,)
                 ),
                 hintText:
-                "Attach your certificates ",
+                AppLocalizations.of(context)!.text_attach_your_certificates,
                 border: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
@@ -730,13 +729,13 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                   RegExp('[a-zA-Z0-9 .,:()-]')),
             ],
             validator: InputValidator(
-                ch :'Address').emptyChecking,
+                ch :AppLocalizations.of(context)!.text_address).emptyChecking,
             controller: _addressController,
             cursorColor: CustColors.light_navy,
             decoration: InputDecoration(
               isDense: true,
               hintText:
-              "Enter your address",
+              AppLocalizations.of(context)!.text_enter_address,
               border: UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: CustColors.greyish,
@@ -778,7 +777,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Means of identification ",
+              AppLocalizations.of(context)!.text_means_identification,
               style: Styles.textLabelTitle,
             ),
             TextFormField(
@@ -793,7 +792,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                     RegExp('[a-zA-Z ]')),
               ],
               validator: InputValidator(
-                  ch :'Means of identification' ).emptyChecking,
+                  ch :AppLocalizations.of(context)!.text_means_identification ).emptyChecking,
               controller: _identificationProofController,
               cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
@@ -804,7 +803,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                     child: SvgPicture.asset('assets/image/attach_icon.svg',height: 9,width: 9,)
                 ),
                 hintText:
-                "Attach any identification proof",
+                AppLocalizations.of(context)!.text_attach_any_identification_proof,
                 border: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
@@ -848,7 +847,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Number of mechanics",
+              AppLocalizations.of(context)!.text_number_mechanics,
               style: Styles.textLabelTitle,
             ),
             TextFormField(
@@ -864,7 +863,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
               ],
               validator: InputValidator(
                   ch :
-                  'Mechanic strength').nameCheckingWithNumeric,
+                  AppLocalizations.of(context)!.text_mechanic_strength).nameCheckingWithNumeric,
               controller: _noOfMechanicsController,
               cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
@@ -875,7 +874,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                     child: SvgPicture.asset('assets/image/arrow_down.svg',height: 7,width: 7,)
                 ),
                 hintText:
-                "Select your mechanic strength",
+                AppLocalizations.of(context)!.text_select_your_mechanic_strength,
                 border: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
@@ -915,7 +914,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
         children: [
           Text(
 
-            "RC number",
+            AppLocalizations.of(context)!.text_RC_number,
             style: Styles.textLabelTitle,
           ),
           TextFormField(
@@ -929,13 +928,13 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                   RegExp('[a-zA-Z0-9 ]')),
             ],
             validator: InputValidator(
-                ch : 'RC number').nameCheckingWithNumeric,
+                ch : AppLocalizations.of(context)!.text_RC_number).nameCheckingWithNumeric,
             controller: _rcNumberController,
             cursorColor: CustColors.light_navy,
             decoration: InputDecoration(
               isDense: true,
               hintText:
-              "Enter your  RC number",
+              AppLocalizations.of(context)!.text_enter_your_RC_number,
               border: UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: CustColors.greyish,
@@ -974,7 +973,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
         children: [
           Text(
 
-            "Year of existence",
+            AppLocalizations.of(context)!.text_year_of_existence,
             style: Styles.textLabelTitle,
           ),
           TextFormField(
@@ -989,13 +988,13 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
               LengthLimitingTextInputFormatter(3),
             ],
             validator: InputValidator(
-                ch : 'Year of existence' ).nameCheckingWithNumeric,
+                ch : AppLocalizations.of(context)!.text_year_of_existence ).nameCheckingWithNumeric,
             controller: _yearOfExistenceController,
             cursorColor: CustColors.light_navy,
             decoration: InputDecoration(
               isDense: true,
               hintText:
-              "Enter you year of existence ",
+              AppLocalizations.of(context)!.text_enter_you_year_of_existence,
               border: UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: CustColors.greyish,
@@ -1085,7 +1084,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              'Next',
+                              AppLocalizations.of(context)!.next,
                               textAlign: TextAlign.center,
                               style: Styles.textButtonLabelSubTitle,
                             ),
@@ -1170,7 +1169,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              'Next',
+                              AppLocalizations.of(context)!.next,
                               textAlign: TextAlign.center,
                               style: Styles.textButtonLabelSubTitle,
                             ),
@@ -1206,7 +1205,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                       Icons.camera_alt,
                       color: CustColors.blue,
                     ),
-                    title: Text("Camera",
+                    title: Text(AppLocalizations.of(context)!.text_camera,
                         style: TextStyle(
                             fontFamily: 'Corbel_Regular',
                             fontWeight: FontWeight.normal,
@@ -1232,7 +1231,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                       Icons.image,
                       color: CustColors.blue,
                     ),
-                    title: Text("Gallery",
+                    title: Text(AppLocalizations.of(context)!.text_gallery,
                         style: TextStyle(
                             fontFamily: 'Corbel_Regular',
                             fontWeight: FontWeight.normal,
