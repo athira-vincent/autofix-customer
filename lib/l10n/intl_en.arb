@@ -163,6 +163,11 @@
   "text_enter_you_year_of_existence": "Enter you year of existence",
   "text_select_preferred_services": "select preferred services",
   "text_select_regular_services": "Select regular Services",
-  "text_search_your_service": "Search Your Service"
+  "text_search_your_service": "Search Your Service",
+  "text_select_emergency_services": "select emergency services!!",
+  "text_select_services": "select services",
+  "text_select_brands": "Select brands",
+  "text_choose_multiple_brands_specialised": "Choose multiple brands you specialised in",
+  "text_no_brandList_found": "No BrandList found."
 
 }

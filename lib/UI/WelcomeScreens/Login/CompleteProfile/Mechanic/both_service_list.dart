@@ -259,7 +259,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                  right: size.width * 30 / 100,
                  top: size.height * 2.7 / 100
              ),
-             child: const Text("Regular",
+             child: const Text(AppLocalizations.of(context)!.text_regular,
                 softWrap: true,
                 style: Styles.TitleTextBlack,
              )
@@ -324,7 +324,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                        textAlign: TextAlign.left,
                        style: Styles.searchTextStyle01,
                        decoration: InputDecoration(
-                           hintText: "Search Your Service",
+                           hintText: AppLocalizations.of(context)!.text_search_your_service,
                            border: InputBorder.none,
                            contentPadding: new EdgeInsets.only(bottom: 15),
                            hintStyle: Styles.searchTextStyle01
@@ -368,7 +368,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                itemCount: regularCategoryList.length,
                              )
                            : Center(
-                              child: Text('No Results found.'),
+                              child: Text(AppLocalizations.of(context)!.error_not_found),
                        ),
                      ),
                    ),
@@ -391,7 +391,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
               margin: EdgeInsets.only(
                   top: size.height * 2.7 / 100
               ),
-              child: Text("Emergency",
+              child: Text(AppLocalizations.of(context)!.text_emergency,
                 softWrap: true,
                 style: Styles.TitleTextBlack,)
           ),
@@ -454,7 +454,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                         textAlign: TextAlign.left,
                         style: Styles.searchTextStyle01,
                         decoration: InputDecoration(
-                            hintText: "Search Your Service",
+                            hintText: AppLocalizations.of(context)!.text_search_your_service,
                             border: InputBorder.none,
                             contentPadding: new EdgeInsets.only(bottom: 15),
                             hintStyle: Styles.searchTextStyle01
@@ -697,7 +697,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                           },
                         )
                             : Center(
-                              child: Text('No Results found.'),
+                              child: Text(AppLocalizations.of(context)!.error_not_found),
                         ),
                       ),
                     ),
@@ -1029,19 +1029,19 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
               serviceId,  feeList, timeList, null);     // catType - 1/2 - doubt
         }else if(isRegularServiceSelected){
           Fluttertoast.showToast(
-            msg: "select emergency services!!",
+            msg: AppLocalizations.of(context)!.text_select_emergency_services,
             backgroundColor: CustColors.light_navy,
             timeInSecForIosWeb: 1,
           );
         }else if(isEmergencyServiceSelected){
           Fluttertoast.showToast(
-            msg: "select regular services!!",
+            msg: AppLocalizations.of(context)!.text_select_regular_services,
             backgroundColor: CustColors.light_navy,
             timeInSecForIosWeb: 1,
           );
         }else{
           Fluttertoast.showToast(
-            msg: "select services!!",
+            msg: AppLocalizations.of(context)!.text_select_services,
             backgroundColor: CustColors.light_navy,
             timeInSecForIosWeb: 1,
           );
@@ -1065,7 +1065,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           borderRadius: BorderRadius.circular(7),
         ),
         child:  Text(
-          "Next",
+          AppLocalizations.of(context)!.next,
           style: TextStyle(
               color: Colors.white,
               fontFamily: 'Corbel_Bold',
