@@ -157,7 +157,6 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
         print("fjfghfjfhjhkhklj 000333 ");
       // Handle this case
         break;
-
       case AppLifecycleState.detached:
         print("fjfghfjfhjhkhklj 000444 ");
         break;
