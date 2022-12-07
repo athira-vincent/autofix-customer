@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/ExtraDiagnosisScreen/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/mechanic_waiting_payment.dart';
 import 'package:auto_fix/Widgets/Countdown.dart';
@@ -13,13 +14,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicWorkProgressScreen extends StatefulWidget {
 
   final String workStatus;
+  final String bookingId;
 
-  MechanicWorkProgressScreen({required this.workStatus});
+  MechanicWorkProgressScreen({required this.workStatus, required this.bookingId});
 
   @override
   State<StatefulWidget> createState() {
@@ -61,16 +64,17 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   String mechanicIdEmergency="";
   String extendedTime="0";
   String currentUpdatedTime="0";
+  String totalstarttimecurrenttimevalue = "";
 
 
   String extendedTimeFirstTymCall="0";
 
   late AnimationController _controller;
   int levelClock = 0;
-
+  bool isLoading = true;
   Timer? timerForCouterTime;
   Timer? timerCouterTime;
-
+  int remaintime = 0;
 
 
   @override
@@ -79,12 +83,47 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     super.initState();
     getSharedPrefData();
     workStatus = widget.workStatus.toString();
+    bookingIdEmergency = widget.bookingId.toString();
     _controller = AnimationController(
         vsync: this,
         duration: Duration(
             seconds:
             levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
-       );
+    );
+    if(workStatus == "2"){
+      setTimer();
+    }
+  }
+
+  Future<void> setTimer() async {
+
+    if(DateFormat("HH:mm:ss").format(DateTime.now())==totalstarttimecurrenttimevalue){
+      print("work finished");
+
+    }
+    else{
+      await Repository().timedifferenceapi(DateFormat("HH:mm:ss").format(DateTime.now()), totalstarttimecurrenttimevalue).then((value) => {
+        if (value.data!.timeDifference.remTime.isNotEmpty)
+          {
+            setState(() {
+              String string = value.data!.timeDifference.remTime;
+              int hour = int.parse(string.split(":")[0]);
+              int minute = int.parse(string.split(":")[1]);
+              int second = int.parse(string.split(":")[2]);
+              Duration duration = Duration(hours: hour, minutes: minute, seconds: second);
+              print("Minutes is: ${duration.inMinutes}");
+              print("inSeconds is: ${duration.inSeconds}");
+              remaintime = int.parse(duration.inSeconds.toString());
+              _controller.stop();
+              levelClock = remaintime;
+              _controller.forward();
+              print("remaintime");
+              print(remaintime);
+
+            })
+          }
+      });
+    }
   }
 
   @override
@@ -94,7 +133,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     super.didUpdateWidget(oldWidget);
   }
 
-
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
@@ -103,14 +141,14 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
-      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      //bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       updateToCloudFirestoreMechanicCurrentScreenDB();
       listenToCloudFirestoreDB();
       print('MechanicWorkProgressScreen bookingIdEmergency ++++ ${bookingIdEmergency} ');
 
     });
 
-    await _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
+     _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
       if(mounted){
         setState(() {
           extendedTime= event.get("extendedTime");
@@ -130,6 +168,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           );
           _controller.forward();
           _updateTimerListener();
+          totalstarttimecurrenttimevalue = event.get("totalstarttimecurrenttimevalue");
 
         });
       }
@@ -177,7 +216,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
   }
 
-
   void listenToCloudFirestoreDB() {
     DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("$bookingIdEmergency");
     reference.snapshots().listen((querySnapshot) {
@@ -218,7 +256,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: true,)
+                  builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: true,bookingId: widget.bookingId,)
               )).then((value){
           });
         }
@@ -227,7 +265,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MechanicWorkProgressScreen(workStatus: "2",)));
+                    builder: (context) => MechanicWorkProgressScreen(workStatus: "2",bookingId: widget.bookingId,)));
           }
 
       }
@@ -238,7 +276,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => MechanicWorkProgressScreen(workStatus: "3",))
+                  builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: widget.bookingId,))
           ).then((value){
           });
         }
@@ -254,21 +292,25 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
         }
       }
+        Timer(const Duration(seconds: 2), () {
+          setState(() {
+            isLoading = false;
+          });
+        });
     });
   }
-
 
   void changeScreen(){
     if(workStatus == "1"){
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: true,)));
+              builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: true,bookingId: widget.bookingId,)));
     }else if(workStatus == "2"){
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => MechanicWorkProgressScreen(workStatus: "3",)));
+              builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: widget.bookingId,)));
     }else if(workStatus == "3"){
       Navigator.pushReplacement(
           context,
@@ -279,42 +321,54 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: false,)));
+              builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: false,bookingId: widget.bookingId,)));
     }
     else if(workStatus == "5"){
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: false,)));
+              builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: false,bookingId: widget.bookingId,)));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
-    return  SafeArea(
-      child: Scaffold(
-        key: _scaffoldKey,
-        body: SingleChildScrollView(
-          child: Container(
-            width: size.width,
-            height: size.height,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                startedWorkScreenTitle(size),
+    return SafeArea(
+      child: WillPopScope(
+        onWillPop: () async{
+          Navigator.pushNamed(context, '/customerMainLandingScreen').then((_) => setState(() {}));
+          return true;
+        },
+        child: Scaffold(
+          key: _scaffoldKey,
+          body: SingleChildScrollView(
+            child: isLoading == true
+              ?
+            Container(
+          width: size.width,
+              height: size.height,
+              child: Center(child: CircularProgressIndicator(color: CustColors.light_navy)))
+              :
+            Container(
+              width: size.width,
+              height: size.height,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  startedWorkScreenTitle(size),
 
-                startedWorkScreenTitleImage(size),
+                  startedWorkScreenTitleImage(size),
 
-                startedWorkScreenBottomCurve(size),
+                  startedWorkScreenBottomCurve(size),
 
-                workStatus == "2"
-                    ? startedWorkScreenTimer(size)
-                    : workStatus == "3"
-                    ? startedWorkScreenSuccess(size)
-                    : startedWorkScreenWarningText(size) ,
-              ],
+                  workStatus == "2"
+                      ? startedWorkScreenTimer(size)
+                      : workStatus == "3"
+                      ? startedWorkScreenSuccess(size)
+                      : startedWorkScreenWarningText(size) ,
+                ],
+              ),
             ),
           ),
         ),
@@ -547,7 +601,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     );
   }
 
-
   Widget startedWorkScreenTimer(Size size){
     return Container(
       alignment: Alignment.center,
@@ -666,7 +719,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     );
   }
 
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -677,9 +729,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     super.dispose();
     print("dispose");
   }
-
-
-
 
   cancelTimer2() {
 
@@ -693,7 +742,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       timerObj1 = null;
     }
   }
-
 
   void _updateTimerListener() {
 

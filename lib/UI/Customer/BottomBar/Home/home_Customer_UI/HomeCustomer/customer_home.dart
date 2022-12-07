@@ -261,16 +261,16 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> with Widget
     });*/
      _firestore.collection("ResolMech").doc('$bookedId01').snapshots().listen((event) {
       print('_firestore >>> $bookedId01' );
-      setState(() {
-        vehicleName = event.get('carName');
-        customerName = event.get('mechanicName');
-        firebaseScreen = event.get('customerFromPage');
-        bookingIdEmergency = bookedId01!;
-        firebaseCustomerLatitude = event.get('customerLatitude');
-        firebaseCustomerLongitude = event.get('customerLongitude');
-
-
-      });
+      if(mounted){
+        setState(() {
+          vehicleName = event.get('carName');
+          customerName = event.get('mechanicName');
+          firebaseScreen = event.get('customerFromPage');
+          bookingIdEmergency = bookedId01!;
+          firebaseCustomerLatitude = event.get('customerLatitude');
+          firebaseCustomerLongitude = event.get('customerLongitude');
+        });
+      }
     });
   }
 
@@ -391,6 +391,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> with Widget
       bottom: size.height * 1.70 / 100,
       child: InkWell(
         onTap: (){
+          print("Booking id : $bookingIdEmergency");
           print("firebaseScreen >>>>> $firebaseScreen");
           if(firebaseScreen == "C1"){
             Navigator.pushReplacement(
@@ -404,10 +405,13 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> with Widget
               _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
       });
           }else if(firebaseScreen == "C2" || firebaseScreen == "C4" || firebaseScreen == "C5" ){     //firebaseScreen == "C3"
+
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1")
+                    builder: (context) =>  MechanicWorkProgressScreen(
+                        bookingId: bookingIdEmergency,
+                        workStatus: "1")
                 )).then((value){
               _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
             });
@@ -415,7 +419,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> with Widget
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>  ExtraServiceDiagonsisScreen(isEmergency: true,)
+                    builder: (context) =>  ExtraServiceDiagonsisScreen(isEmergency: true, bookingId: bookingIdEmergency,)
                 )).then((value){
               _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
             });

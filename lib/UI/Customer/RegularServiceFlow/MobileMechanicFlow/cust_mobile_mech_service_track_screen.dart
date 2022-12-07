@@ -145,10 +145,10 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: isLoading == true
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: isLoading == true
             ?
         Container(
             width: size.width,

@@ -18,8 +18,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ExtraServiceDiagonsisScreen extends StatefulWidget {
 
   final bool isEmergency;
+  final String bookingId;
 
-  ExtraServiceDiagonsisScreen({required this.isEmergency,});
+  ExtraServiceDiagonsisScreen({required this.isEmergency,required this.bookingId});
 
   @override
   State<StatefulWidget> createState() {
@@ -77,7 +78,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MechanicWorkProgressScreen(workStatus: "2",)));
+                        builder: (context) => MechanicWorkProgressScreen(workStatus: "2",bookingId: widget.bookingId,)));
             }
           }
       });
