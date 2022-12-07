@@ -247,6 +247,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                   distanceFilter: 6))
           .listen((event) {
         var value1 = event;
+        if(mounted)
         setState(() {
           _firestore.collection("ResolMech").doc(bookingId).update({
             'latitude': value1.latitude.toString(),
