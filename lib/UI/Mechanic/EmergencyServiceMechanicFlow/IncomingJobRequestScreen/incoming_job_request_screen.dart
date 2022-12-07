@@ -265,6 +265,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                   builder: (context) => FindYourCustomerScreen(
                     latitude: widget.notificationPayloadMdl.customerLatitude/*"10.0159"*/,
                     longitude: widget.notificationPayloadMdl.customerLongitude/*"76.3419"*/,
+                    bookingid:widget.notificationPayloadMdl.bookingId
                     //notificationPayloadMdl: widget.notificationPayloadMdl,
                   )));
         }

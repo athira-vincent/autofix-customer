@@ -19,7 +19,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../Models/mechanic_models/mechanic_Services_List_Mdl/mechanicServicesListMdl.dart';
 
 class MechanicStartServiceScreen extends StatefulWidget {
-  MechanicStartServiceScreen();
+  final String bookingId;
+  MechanicStartServiceScreen({required this.bookingId});
 
   @override
   State<StatefulWidget> createState() {
@@ -93,8 +94,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      bookingId =
-          shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      bookingId =widget.bookingId;
       print('MechanicStartServiceScreen bookingId ++++ ${bookingId} ');
       updateToCloudFirestoreMechanicCurrentScreenDB();
       listenToCloudFirestoreDB();

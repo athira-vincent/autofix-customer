@@ -17,12 +17,11 @@ class CustomerApprovedScreen extends StatefulWidget {
   final String remaintime, starttime, endtime;
   final bool isFromHome;
 
-  CustomerApprovedScreen({
-    required this.remaintime,
-    required this.starttime,
-    required this.endtime,
-    required this.isFromHome
-  });
+  CustomerApprovedScreen(
+      {required this.remaintime,
+      required this.starttime,
+      required this.endtime,
+      required this.isFromHome});
 
   @override
   State<StatefulWidget> createState() {
@@ -76,33 +75,23 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen>
   String currenttime = "";
 
   bool apivalue = false;
+  int remtime = 0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("widgetstarttime");
-    print("widgetendtime");
-    print(widget.starttime);
-    print(widget.endtime);
 
-
-    int remtime = int.parse(widget.remaintime);
-
+    remtime = int.parse(widget.remaintime);
 
     setState(() {
       levelClock = remtime;
     });
 
-    print("levelclock");
-    print(levelClock);
-
-    //storetime(widget.starttime, widget.endtime);
     _controller = AnimationController(
         vsync: this, duration: Duration(seconds: levelClock));
-    if(widget.isFromHome==true){
+    if (widget.isFromHome == true) {
       _controller.forward();
-
     }
     getSharedPrefData();
   }
@@ -129,12 +118,19 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen>
         customerDiagonsisApproval = event.get('customerDiagonsisApproval');
         mechanicDiagonsisState = event.get('mechanicDiagonsisState');
         if (listenToFirestoreTime == "0") {
-          levelClock = int.parse('${updatedServiceTime.split(":").first}');
-          int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;
-          levelClock = sec;
-          _controller = AnimationController(
-              vsync: this, duration: Duration(seconds: levelClock));
-          listenToFirestoreTime = "1";
+          if (widget.isFromHome == true) {
+            levelClock = remtime;
+          } else {
+            levelClock = int.parse('${updatedServiceTime.split(":").first}');
+            int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;
+            levelClock = sec;
+            print("levelClocksec");
+            print(levelClock);
+            _controller = AnimationController(
+                vsync: this, duration: Duration(seconds: levelClock));
+            listenToFirestoreTime = "1";
+          }
+
           if (mechanicDiagonsisState == "2") {
             setState(() {
               print("updateToCloudFirestoreDB isStartedWork $isStartedWork");
@@ -462,7 +458,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen>
             isStartedWork = true;
             _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
                 authToken, bookingId, "5");
-           // storetime(widget.starttime, widget.endtime);
+            // storetime(widget.starttime, widget.endtime);
 
           } else {
             SharedPreferences sharedPreferences =
