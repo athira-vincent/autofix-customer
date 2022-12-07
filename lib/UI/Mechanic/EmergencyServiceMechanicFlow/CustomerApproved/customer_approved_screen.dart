@@ -88,8 +88,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen>
       levelClock = remtime;
     });
 
-    // _controller = AnimationController(
-    //     vsync: this, duration: Duration(seconds: levelClock));
+    _controller = AnimationController(
+        vsync: this, duration: Duration(seconds: levelClock));
     if (widget.isFromHome == true) {
       _controller.forward();
     }
