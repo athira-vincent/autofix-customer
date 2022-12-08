@@ -19,10 +19,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
-import 'brand_model_engine/makeBrandDetails_Mdl.dart';
 import 'brand_model_engine/modelDetails_Mdl.dart';
 import 'package:path/path.dart' as path;
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class AddCarScreen extends StatefulWidget {
@@ -359,7 +358,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Container(
-        child: const Text(
+        child: Text(
           AppLocalizations.of(context)!.text_complete_your_profile,
           style: Styles.textCompleteYourProfile,
         ),
@@ -398,7 +397,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   children: [
                     Container(
                       width: 150,
-                      child: const Text(
+                      child: Text(
                         AppLocalizations.of(context)!.text_upload_vehicle_photo,
                         textAlign: TextAlign.center,
                         style: Styles.textUploadYourProfilePic,
@@ -481,7 +480,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
+                   Text(
                     AppLocalizations.of(context)!.text_brand,
                     style: Styles.textLabelTitle,
                   ),
@@ -507,7 +506,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     RegExp('[a-zA-Z ]')),
               ],
               validator: InputValidator(
-                  ch : AppLocalizations.of(context)!.text_brandName ).nameCheckingWithNumeric,
+                  ch : AppLocalizations.of(context)!.text_brand_name ).nameCheckingWithNumeric,
               controller: _brandController,
               cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
@@ -588,7 +587,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
+                   Text(
                     AppLocalizations.of(context)!.text_model,
                     style: Styles.textLabelTitle,
                   ),
@@ -689,8 +688,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-
+             Text(
               AppLocalizations.of(context)!.text_engine_type,
               style: Styles.textLabelTitle,
             ),
@@ -710,7 +708,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   AppLocalizations.of(context)!.text_engine_type ).nameCheckingWithNumericAndBracket,
               controller: _engineTypeController,
               cursorColor: CustColors.light_navy,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                /* suffixIconConstraints: BoxConstraints(
                   minWidth: 25,
                   minHeight: 25,
@@ -731,8 +729,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   ),
                 ),*/
                 isDense: true,
-                hintText:
-                AppLocalizations.of(context)!.text_select_model,
+                hintText: AppLocalizations.of(context)!.text_select_model,
                 border:  UnderlineInputBorder(
                   borderSide:  BorderSide(
                     color: CustColors.greyish,
@@ -782,7 +779,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+             Text(
               AppLocalizations.of(context)!.text_year,
               style: Styles.textLabelTitle,
             ),
@@ -802,7 +799,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   AppLocalizations.of(context)!.text_year ).nameCheckingWithNumeric,
               controller: _yearController,
               cursorColor: CustColors.light_navy,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 /*suffixIconConstraints: BoxConstraints(
                   minWidth: 25,
                   minHeight: 25,
@@ -823,8 +820,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   ),
                 ),*/
                 isDense: true,
-                hintText:
-                AppLocalizations.of(context)!.text_selct_manf_date,
+                hintText: AppLocalizations.of(context)!.text_selct_manf_date,
                 border: const UnderlineInputBorder(
                   borderSide: const BorderSide(
                     color: CustColors.greyish,
@@ -862,8 +858,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-
+           Text(
             AppLocalizations.of(context)!.text_color,
             style: Styles.textLabelTitle,
           ),
@@ -888,10 +883,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
               });
             },
             cursorColor: CustColors.light_navy,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               isDense: true,
-              hintText:
-              AppLocalizations.of(context)!.text_enter_veh_color,
+              hintText: AppLocalizations.of(context)!.text_enter_veh_color,
               border: const UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: CustColors.greyish,
@@ -928,8 +922,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-
+           Text(
             AppLocalizations.of(context)!.text_plate_number,
             style: Styles.textLabelTitle,
           ),
@@ -954,10 +947,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
               });
             },
             cursorColor: CustColors.light_navy,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               isDense: true,
-              hintText:
-              AppLocalizations.of(context)!.text_enter_plate_number,
+              hintText: AppLocalizations.of(context)!.text_enter_plate_number,
               border: UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: CustColors.greyish,
@@ -1012,7 +1004,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+             Text(
               AppLocalizations.of(context)!.text_last_maintenance,
               style: Styles.textLabelTitle,
             ),
@@ -1101,7 +1093,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            child: const Text(
+            child: Text(
               AppLocalizations.of(context)!.text_approximate_mileage,
               style: Styles.textLabelTitle,
             ),
@@ -1109,7 +1101,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Container(
-              child: const Text(
+              child: Text(
                 AppLocalizations.of(context)!.text_select_total_kilometres,
                 style: Styles.textLabelSubTitle,
               ),
@@ -1285,7 +1277,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const[
+                            children: [
                                Text(
                                 AppLocalizations.of(context)!.text_add_more_vehicles,
                                 textAlign: TextAlign.center,
@@ -1376,7 +1368,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Text(
+                             Text(
                               AppLocalizations.of(context)!.text_finish,
                               textAlign: TextAlign.center,
                               style: Styles.textButtonLabelSubTitle12,
@@ -1413,7 +1405,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       Icons.camera_alt,
                       color: CustColors.blue,
                     ),
-                    title: const Text(AppLocalizations.of(context)!.text_camera,
+                    title:  Text(AppLocalizations.of(context)!.text_camera,
                         style: TextStyle(
                             fontFamily: 'Corbel_Regular',
                             fontWeight: FontWeight.normal,
@@ -1439,7 +1431,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       Icons.image,
                       color: CustColors.blue,
                     ),
-                    title: const Text(AppLocalizations.of(context)!.text_gallery,
+                    title: Text(AppLocalizations.of(context)!.text_gallery,
                         style: TextStyle(
                             fontFamily: 'Corbel_Regular',
                             fontWeight: FontWeight.normal,
@@ -1658,7 +1650,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               height: 50,
               color: CustColors.blue,
               alignment: Alignment.center,
-              child: const Text(AppLocalizations.of(context)!.text_select_date,
+              child: Text(AppLocalizations.of(context)!.text_select_date,
                 style: Styles.textButtonLabelSubTitle,)
           ),
           Expanded(
@@ -1667,7 +1659,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 Expanded(
                   child: Column(
                     children: [
-                      const Padding(
+                       Padding(
                         padding: EdgeInsets.only(top: 8.0),
                         child: Text(AppLocalizations.of(context)!.text_month,
                           style: Styles.textLabelTitle14,),
@@ -1714,7 +1706,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 Expanded(
                   child: Column(
                     children: [
-                      const Padding(
+                       Padding(
                         padding: EdgeInsets.only(top: 8.0),
                         child: Text(AppLocalizations.of(context)!.text_year,
                           style: Styles.textLabelTitle14,),

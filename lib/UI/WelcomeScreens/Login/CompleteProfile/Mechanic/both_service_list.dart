@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/category_service_list_mdl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 
@@ -259,7 +260,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                  right: size.width * 30 / 100,
                  top: size.height * 2.7 / 100
              ),
-             child: const Text(AppLocalizations.of(context)!.text_regular,
+             child: Text(AppLocalizations.of(context)!.text_regular,
                 softWrap: true,
                 style: Styles.TitleTextBlack,
              )

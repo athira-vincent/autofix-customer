@@ -22,6 +22,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class WorkSelectionScreen extends StatefulWidget {
@@ -345,6 +346,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                   children: [
                     Container(
                       width: 150,
+                       child: Text(
                         AppLocalizations.of(context)!.text_upload_your_profile_photo,
                         textAlign: TextAlign.center,
                         style: Styles.textUploadYourProfilePic,
@@ -873,8 +875,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                     heightFactor: 3.0,
                     child: SvgPicture.asset('assets/image/arrow_down.svg',height: 7,width: 7,)
                 ),
-                hintText:
-                AppLocalizations.of(context)!.text_select_your_mechanic_strength,
+                hintText: AppLocalizations.of(context)!.text_select_your_mechanic_strength,
                 border: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
@@ -913,7 +914,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-
             AppLocalizations.of(context)!.text_RC_number,
             style: Styles.textLabelTitle,
           ),
