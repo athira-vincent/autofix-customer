@@ -68,6 +68,8 @@ class _MyCartScreenState extends State<MyCartScreen> {
 
   String newamount = "";
 
+bool  addressstatus=false;
+
   @override
   void initState() {
     final addcartsBloc = BlocProvider.of<ShowCartPopBloc>(context);
@@ -186,6 +188,11 @@ class _MyCartScreenState extends State<MyCartScreen> {
                             .customer.emailId;
                         phone = state.cartlistmodel.data!.cartList.data[index]
                             .customer.phoneNo;
+
+                        addressstatus=state.cartlistmodel.data!.cartList.data[index]
+                            .customer.address.isEmpty;
+                       print("adddressheck");
+                       print(addressstatus);
                       });
 
                       int sum = 0;
@@ -886,8 +893,9 @@ class _MyCartScreenState extends State<MyCartScreen> {
   }
 
   Widget changeAddressUi() {
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      padding: const EdgeInsets.all(8.0),
       child: SizedBox(
           width: double.infinity,
           child: Row(
@@ -908,7 +916,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                         child: widget.isFromHome == false
-                            ? Text(widget.addresstext)
+                            ? Text(widget.addresstext, style: Styles.sparePartNameTextBlack17,)
                             : Text(
                                 "Delivering to : " " " +
                                     states +
@@ -922,36 +930,102 @@ class _MyCartScreenState extends State<MyCartScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          InkWell(
-                              onTap: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) =>
-                                //             ChangeDeliveryAddressScreen(
-                                //               allitems: false,
-                                //               customerid: '',
-                                //               customeremail: '',
-                                //               customerphone: '',
-                                //               customername: '',
-                                //             )));
+                          // InkWell(
+                          //     onTap: () {
+                          //
+                          //
+                          //
+                          //
+                          //
+                          //
+                          //
+                          //       Navigator.push(
+                          //           context,
+                          //           MaterialPageRoute(
+                          //               builder: (context) =>
+                          //                   ChangeDeliveryAddressScreen(
+                          //                     allitems: false,
+                          //                     customerid: '',
+                          //                     customeremail: '',
+                          //                     customerphone: '',
+                          //                     customername: '',
+                          //                   )));
+                          //     },
+                          //     child: Text(
+                          //       "Change address",
+                          //       style: Styles.sparePartNameTextBlack17,
+                          //     )),
 
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ChangeDeliveryAddressScreen(
-                                              allitems: false,
-                                              customerid: '',
-                                              customeremail: '',
-                                              customerphone: '',
-                                              customername: '',
-                                            )));
-                              },
-                              child: Text(
+
+                          InkWell(
+                            onTap: (){
+                              //
+
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => ChangeDeliveryAddressScreen(
+                                allitems: false,
+                                customerid: '',
+                                customeremail: '',
+                                customerphone: '',
+                                customername: '',
+                              )));
+
+                            },
+                            child: addressstatus==false?Container(
+                              height: MediaQuery.of(context)
+                                  .size
+                                  .height *
+                                  0.04,
+                              width: MediaQuery.of(context)
+                                  .size
+                                  .width *
+                                  0.29,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 0.0,
+                                  // assign the color to the border color
+                                  color:CustColors.light_navy,
+                                ),
+                              ),
+                              alignment: Alignment.center,
+                              // color: CustColors.white_02,
+                              child: const Text(
                                 "Change address",
-                                style: Styles.sparePartNameTextBlack17,
-                              )),
+                                style: TextStyle(
+                                    fontSize: 11,
+                                    color: CustColors.light_navy,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily:'Samsung_SharpSans_Medium'
+                                ),
+                              ),
+                            ):Container(
+                              height: MediaQuery.of(context)
+                                  .size
+                                  .height *
+                                  0.03,
+                              width: MediaQuery.of(context)
+                                  .size
+                                  .width *
+                                  0.23,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 0.0,
+                                  // assign the color to the border color
+                                  color:CustColors.light_navy,
+                                ),
+                              ),
+                              alignment: Alignment.center,
+                             // color: CustColors.white_02,
+                              child: const Text(
+                                "Add address",
+                                style: TextStyle(
+                                    fontSize: 11,
+                                    color: CustColors.light_navy,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily:'Samsung_SharpSans_Medium'
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       )
                     ],
@@ -1165,7 +1239,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                         print(element.id);
 
                         newid = element.id;
-                        newaddressid = element.customer.address.first.id;
+
 
                         newitems.add(element.id);
                       });
@@ -1174,19 +1248,27 @@ class _MyCartScreenState extends State<MyCartScreen> {
                       print(newitems);
                       print(newaddressid);
 
+                      // if(widget.isFromHome==false){
+                      //   newaddressid = widget.addresstext;
+                      // }
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => MyCheckoutScreen(
                                     newitems: newitems,
-                                    newaddressid: newaddressid,
+                                    newaddressid:widget.isFromHome==false?widget.addresstext: states +
+                                        " , " +
+                                        city +
+                                        " ," +
+                                        pincode,
                                   )));
                     },
                     child: ListTile(
                       leading: SvgPicture.asset(
-                        "assets/images/ic_selected_blue_white_tick.svg",
-                        height: MediaQuery.of(context).size.height * 10 / 100,
-                        width: MediaQuery.of(context).size.width * 10 / 100,
+                        "assets/image/ic_selected_blue_white_tick.svg",
+                        height: 30,
+                        width: 30,
                       ),
                       title: Text(
                         'Checkout all products',

@@ -295,7 +295,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
           index: _index,
           children: <Widget>[
             HomeCustomerUIScreen(),
-            MyCartScreen(isFromHome: false, addresstext: '', addressid: '',),
+            MyCartScreen(isFromHome: true, addresstext: '', addressid: '',),
             CustomerMyServicesScreen(),
             CustomerMyProfileScreen(
               isEnableEditing: false,
