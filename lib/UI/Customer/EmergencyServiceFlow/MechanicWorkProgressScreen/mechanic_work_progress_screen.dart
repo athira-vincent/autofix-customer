@@ -18,11 +18,11 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicWorkProgressScreen extends StatefulWidget {
-
   final String workStatus;
   final String bookingId;
 
-  MechanicWorkProgressScreen({required this.workStatus, required this.bookingId});
+  MechanicWorkProgressScreen(
+      {required this.workStatus, required this.bookingId});
 
   @override
   State<StatefulWidget> createState() {
@@ -30,10 +30,9 @@ class MechanicWorkProgressScreen extends StatefulWidget {
   }
 }
 
-class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen> with TickerProviderStateMixin{
-
-
-  String workStatus = "";     // 1 - arrived - screen 075,
+class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
+    with TickerProviderStateMixin {
+  String workStatus = ""; // 1 - arrived - screen 075,
   // 2 - started working - screen 078,
   // 3 - completed - screen 079,
   // 4 - ready to pickup vehicle - screen 094
@@ -51,23 +50,20 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
   String totalEstimatedTime = "00";
   String mechanicName = "";
-  String bookingIdEmergency="";
-
+  String bookingIdEmergency = "";
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  String authToken="";
-  String userName="";
+  String authToken = "";
+  String userName = "";
 
-
-  String serviceIdEmergency="";
-  String mechanicIdEmergency="";
-  String extendedTime="0";
-  String currentUpdatedTime="0";
+  String serviceIdEmergency = "";
+  String mechanicIdEmergency = "";
+  String extendedTime = "0";
+  String currentUpdatedTime = "0";
   String totalstarttimecurrenttimevalue = "";
 
-
-  String extendedTimeFirstTymCall="0";
+  String extendedTimeFirstTymCall = "0";
 
   late AnimationController _controller;
   int levelClock = 0;
@@ -75,7 +71,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   Timer? timerForCouterTime;
   Timer? timerCouterTime;
   int remaintime = 0;
-
 
   @override
   void initState() {
@@ -88,41 +83,42 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
         vsync: this,
         duration: Duration(
             seconds:
-            levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
-    );
-    if(workStatus == "2"){
+                levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+        );
+    if (workStatus == "2") {
       setTimer();
     }
   }
 
   Future<void> setTimer() async {
-
-    if(DateFormat("HH:mm:ss").format(DateTime.now())==totalstarttimecurrenttimevalue){
+    if (DateFormat("HH:mm:ss").format(DateTime.now()) ==
+        totalstarttimecurrenttimevalue) {
       print("work finished");
-
-    }
-    else{
-      await Repository().timedifferenceapi(DateFormat("HH:mm:ss").format(DateTime.now()), totalstarttimecurrenttimevalue).then((value) => {
-        if (value.data!.timeDifference.remTime.isNotEmpty)
-          {
-            setState(() {
-              String string = value.data!.timeDifference.remTime;
-              int hour = int.parse(string.split(":")[0]);
-              int minute = int.parse(string.split(":")[1]);
-              int second = int.parse(string.split(":")[2]);
-              Duration duration = Duration(hours: hour, minutes: minute, seconds: second);
-              print("Minutes is: ${duration.inMinutes}");
-              print("inSeconds is: ${duration.inSeconds}");
-              remaintime = int.parse(duration.inSeconds.toString());
-              _controller.stop();
-              levelClock = remaintime;
-              _controller.forward();
-              print("remaintime");
-              print(remaintime);
-
-            })
-          }
-      });
+    } else {
+      await Repository()
+          .timedifferenceapi(DateFormat("HH:mm:ss").format(DateTime.now()),
+              totalstarttimecurrenttimevalue)
+          .then((value) => {
+                if (value.data!.timeDifference.remTime.isNotEmpty)
+                  {
+                    setState(() {
+                      String string = value.data!.timeDifference.remTime;
+                      int hour = int.parse(string.split(":")[0]);
+                      int minute = int.parse(string.split(":")[1]);
+                      int second = int.parse(string.split(":")[2]);
+                      Duration duration = Duration(
+                          hours: hour, minutes: minute, seconds: second);
+                      print("Minutes is: ${duration.inMinutes}");
+                      print("inSeconds is: ${duration.inSeconds}");
+                      remaintime = int.parse(duration.inSeconds.toString());
+                      _controller.stop();
+                      levelClock = remaintime;
+                      _controller.forward();
+                      print("remaintime");
+                      print(remaintime);
+                    })
+                  }
+              });
     }
   }
 
@@ -139,195 +135,194 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
-      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
-      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
+      serviceIdEmergency =
+          shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
+      mechanicIdEmergency =
+          shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       //bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       updateToCloudFirestoreMechanicCurrentScreenDB();
       listenToCloudFirestoreDB();
-      print('MechanicWorkProgressScreen bookingIdEmergency ++++ ${bookingIdEmergency} ');
-
+      print(
+          'MechanicWorkProgressScreen bookingIdEmergency ++++ ${bookingIdEmergency} ');
     });
 
-     _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
-      if(mounted){
+    _firestore
+        .collection("ResolMech")
+        .doc('$bookingIdEmergency')
+        .snapshots()
+        .listen((event) {
+      if (mounted) {
         setState(() {
-          extendedTime= event.get("extendedTime");
+          extendedTime = event.get("extendedTime");
           currentUpdatedTime = event.get("currentUpdatedTime");
           isPaymentRequested = event.get("isPaymentRequested");
           isWorkCompleted = event.get("isWorkCompleted");
           mechanicDiagonsisState = event.get("mechanicDiagonsisState");
           totalEstimatedTime = event.get('timerCounter');
           mechanicName = event.get('mechanicName');
-          int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
+          int sec = Duration(
+                  minutes: int.parse('${totalEstimatedTime.split(":").first}'))
+              .inSeconds;
           levelClock = sec;
           _controller = AnimationController(
-              vsync: this,
-              duration: Duration(
-                  seconds:
-                  levelClock)
-          );
+              vsync: this, duration: Duration(seconds: levelClock));
           _controller.forward();
           _updateTimerListener();
-          totalstarttimecurrenttimevalue = event.get("totalstarttimecurrenttimevalue");
-
+          totalstarttimecurrenttimevalue =
+              event.get("totalstarttimecurrenttimevalue");
         });
       }
     });
   }
 
   void updateToCloudFirestoreMechanicCurrentScreenDB() {
-
-    if(widget.workStatus == "1")
-    {
+    if (widget.workStatus == "1") {
       _firestore
           .collection("ResolMech")
           .doc('${bookingIdEmergency}')
           .update({
-            "customerFromPage" : "C2",
+            "customerFromPage": "C2",
           })
           .then((value) => print("Location Added"))
-          .catchError((error) =>
-          print("Failed to add Location: $error"));
-    }
-    else if(widget.workStatus == "2")
-    {
+          .catchError((error) => print("Failed to add Location: $error"));
+    } else if (widget.workStatus == "2") {
       _firestore
           .collection("ResolMech")
           .doc('${bookingIdEmergency}')
           .update({
-            "customerFromPage" : "C4",
+            "customerFromPage": "C4",
           })
           .then((value) => print("Location Added"))
-          .catchError((error) =>
-          print("Failed to add Location: $error"));
-    }
-    else if(widget.workStatus == "3")
-    {
+          .catchError((error) => print("Failed to add Location: $error"));
+    } else if (widget.workStatus == "3") {
       _firestore
           .collection("ResolMech")
           .doc('${bookingIdEmergency}')
           .update({
-            "customerFromPage" : "C5",
+            "customerFromPage": "C5",
           })
           .then((value) => print("Location Added"))
-          .catchError((error) =>
-          print("Failed to add Location: $error"));
+          .catchError((error) => print("Failed to add Location: $error"));
     }
-
   }
 
   void listenToCloudFirestoreDB() {
-    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("$bookingIdEmergency");
+    DocumentReference reference = FirebaseFirestore.instance
+        .collection('ResolMech')
+        .doc("$bookingIdEmergency");
     reference.snapshots().listen((querySnapshot) {
-        if(widget.workStatus =="1") {
-          mechanicDiagonsisState = querySnapshot.get("mechanicDiagonsisState");
-          print('mechanicDiagonsisState ++++ $mechanicDiagonsisState');
-        }
-        else if(widget.workStatus =="2") {
-          isWorkCompleted = querySnapshot.get("isWorkCompleted");
-          extendedTime = querySnapshot.get("extendedTime");
-          currentUpdatedTime = querySnapshot.get("timerCounter");
-          print('isWorkCompleted ++++ $isWorkCompleted');
-          print('extendedTime ++++ $extendedTime');
-          print('currentUpdatedTime ++++ $currentUpdatedTime');
+      if (widget.workStatus == "1") {
+        mechanicDiagonsisState = querySnapshot.get("mechanicDiagonsisState");
+        print('mechanicDiagonsisState ++++ $mechanicDiagonsisState');
+      } else if (widget.workStatus == "2") {
+        isWorkCompleted = querySnapshot.get("isWorkCompleted");
+        extendedTime = querySnapshot.get("extendedTime");
+        currentUpdatedTime = querySnapshot.get("timerCounter");
+        print('isWorkCompleted ++++ $isWorkCompleted');
+        print('extendedTime ++++ $extendedTime');
+        print('currentUpdatedTime ++++ $currentUpdatedTime');
 
-          if(extendedTime.toString() != "0")
-          {
-            if(extendedTimeFirstTymCall == "0")
-            {
-              SnackBarWidget().setMaterialSnackBar( "Mechanic added extra time for work completion.", _scaffoldKey);
-              extendedTimeFirstTymCall = "1";
-              setState(() {
-                int sec = Duration(minutes: int.parse('${currentUpdatedTime.split(":").first}')).inSeconds;
-                levelClock = sec;
-              });
-            }
+        if (extendedTime.toString() != "0") {
+          if (extendedTimeFirstTymCall == "0") {
+            SnackBarWidget().setMaterialSnackBar(
+                "Mechanic added extra time for work completion.", _scaffoldKey);
+            extendedTimeFirstTymCall = "1";
+            setState(() {
+              int sec = Duration(
+                      minutes:
+                          int.parse('${currentUpdatedTime.split(":").first}'))
+                  .inSeconds;
+              levelClock = sec;
+            });
           }
         }
-        else if(widget.workStatus =="3") {
-          isPaymentRequested = querySnapshot.get("isPaymentRequested");
-          print('isPaymentRequested ++++ $isPaymentRequested');
-        }
+      } else if (widget.workStatus == "3") {
+        isPaymentRequested = querySnapshot.get("isPaymentRequested");
+        print('isPaymentRequested ++++ $isPaymentRequested');
+      }
 
-      if(widget.workStatus =="1")
-      {
-        if(mechanicDiagonsisState =="1")
-        {
+      if (widget.workStatus == "1") {
+        if (mechanicDiagonsisState == "1") {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: true,bookingId: widget.bookingId,)
-              )).then((value){
-          });
-        }
-        else if(mechanicDiagonsisState =="2")
-          {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MechanicWorkProgressScreen(workStatus: "2",bookingId: widget.bookingId,)));
-          }
-
-      }
-      else if(widget.workStatus =="2")
-      {
-        if(isWorkCompleted =="1")
-        {
+                  builder: (context) => ExtraServiceDiagonsisScreen(
+                        isEmergency: true,
+                        bookingId: widget.bookingId,
+                      ))).then((value) {});
+        } else if (mechanicDiagonsisState == "2") {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: widget.bookingId,))
-          ).then((value){
-          });
+                  builder: (context) => MechanicWorkProgressScreen(
+                        workStatus: "2",
+                        bookingId: widget.bookingId,
+                      )));
         }
-      }
-      else if(widget.workStatus =="3")
-      {
-        if(isPaymentRequested =="1")
-        {
+      } else if (widget.workStatus == "2") {
+        if (isWorkCompleted == "1") {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MechanicWorkProgressScreen(
+                        workStatus: "3",
+                        bookingId: widget.bookingId,
+                      ))).then((value) {});
+        }
+      } else if (widget.workStatus == "3") {
+        if (isPaymentRequested == "1") {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => MechanicWaitingPaymentScreen()));
-
         }
       }
-        Timer(const Duration(seconds: 2), () {
-          setState(() {
-            isLoading = false;
-          });
+      Timer(const Duration(seconds: 2), () {
+        setState(() {
+          isLoading = false;
         });
+      });
     });
   }
 
-  void changeScreen(){
-    if(workStatus == "1"){
+  void changeScreen() {
+    if (workStatus == "1") {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: true,bookingId: widget.bookingId,)));
-    }else if(workStatus == "2"){
+              builder: (context) => ExtraServiceDiagonsisScreen(
+                    isEmergency: true,
+                    bookingId: widget.bookingId,
+                  )));
+    } else if (workStatus == "2") {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: widget.bookingId,)));
-    }else if(workStatus == "3"){
+              builder: (context) => MechanicWorkProgressScreen(
+                    workStatus: "3",
+                    bookingId: widget.bookingId,
+                  )));
+    } else if (workStatus == "3") {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) => MechanicWaitingPaymentScreen()));
-    }
-    else if(workStatus == "4"){
+    } else if (workStatus == "4") {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: false,bookingId: widget.bookingId,)));
-    }
-    else if(workStatus == "5"){
+              builder: (context) => ExtraServiceDiagonsisScreen(
+                    isEmergency: false,
+                    bookingId: widget.bookingId,
+                  )));
+    } else if (workStatus == "5") {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: false,bookingId: widget.bookingId,)));
+              builder: (context) => ExtraServiceDiagonsisScreen(
+                    isEmergency: false,
+                    bookingId: widget.bookingId,
+                  )));
     }
   }
 
@@ -336,51 +331,48 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: WillPopScope(
-        onWillPop: () async{
-          Navigator.pushNamed(context, '/customerMainLandingScreen').then((_) => setState(() {}));
+        onWillPop: () async {
+          Navigator.pushNamed(context, '/customerMainLandingScreen')
+              .then((_) => setState(() {}));
           return true;
         },
         child: Scaffold(
           key: _scaffoldKey,
           body: SingleChildScrollView(
             child: isLoading == true
-              ?
-            Container(
-          width: size.width,
-              height: size.height,
-              child: Center(child: CircularProgressIndicator(color: CustColors.light_navy)))
-              :
-            Container(
-              width: size.width,
-              height: size.height,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  startedWorkScreenTitle(size),
-
-                  startedWorkScreenTitleImage(size),
-
-                  startedWorkScreenBottomCurve(size),
-
-                  workStatus == "2"
-                      ? startedWorkScreenTimer(size)
-                      : workStatus == "3"
-                      ? startedWorkScreenSuccess(size)
-                      : startedWorkScreenWarningText(size) ,
-                ],
-              ),
-            ),
+                ? Container(
+                    width: size.width,
+                    height: size.height,
+                    child: Center(
+                        child: CircularProgressIndicator(
+                            color: CustColors.light_navy)))
+                : Container(
+                    width: size.width,
+                    height: size.height,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        startedWorkScreenTitle(size),
+                        startedWorkScreenTitleImage(size),
+                        startedWorkScreenBottomCurve(size),
+                        workStatus == "2"
+                            ? startedWorkScreenTimer(size)
+                            : workStatus == "3"
+                                ? startedWorkScreenSuccess(size)
+                                : startedWorkScreenWarningText(size),
+                      ],
+                    ),
+                  ),
           ),
         ),
       ),
     );
-
   }
 
-  Widget startedWorkScreenTitle(Size size){
+  Widget startedWorkScreenTitle(Size size) {
     return Container(
       margin: EdgeInsets.only(
-        left: size.width * 6 /100,
+        left: size.width * 6 / 100,
         // bottom: size.height * 1 /100,
         top: size.height * 3 / 100,
       ),
@@ -388,32 +380,35 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
         workStatus == "1"
             ? "Mechanic arrived"
             : workStatus == "2"
-            ? "Mechanic start repair"
-            : workStatus == "3"
-            ? "Job completed"
-            : workStatus == "4"
-            ? "Ready to pick up your vehicle "
-            : "Mechanic reached your location.",
-        style: Styles.workProgressTitleText,),
-    );
-  }
-
-  Widget startedWorkScreenTitleImage(Size size){
-    return Center(
-      child: Container(
-        height: 150,
-        margin: EdgeInsets.only(
-           left: size.width * 6 /100,
-           right: size.width * 6 / 100,
-          // bottom: size.height * 1 /100,
-          top: size.height * 3.5 / 100,
-        ),
-        child: Image.asset('assets/image/img_started_work_bg.png',),
+                ? "Mechanic start repair"
+                : workStatus == "3"
+                    ? "Job completed"
+                    : workStatus == "4"
+                        ? "Ready to pick up your vehicle "
+                        : "Mechanic reached your location.",
+        style: Styles.workProgressTitleText,
       ),
     );
   }
 
-  Widget startedWorkScreenBottomCurve(Size size){
+  Widget startedWorkScreenTitleImage(Size size) {
+    return Center(
+      child: Container(
+        height: 150,
+        margin: EdgeInsets.only(
+          left: size.width * 6 / 100,
+          right: size.width * 6 / 100,
+          // bottom: size.height * 1 /100,
+          top: size.height * 3.5 / 100,
+        ),
+        child: Image.asset(
+          'assets/image/img_started_work_bg.png',
+        ),
+      ),
+    );
+  }
+
+  Widget startedWorkScreenBottomCurve(Size size) {
     return Center(
       child: Container(
         margin: EdgeInsets.only(
@@ -422,53 +417,43 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
         child: Stack(
           children: [
             curvedBottomContainer(
-              size,
-              "1",
-              size.height * 14 / 100,
-              Text(
-                workStatus == "1"
-                    ? //"Hi.. $userName congratulations! Your mechanic reached near you. He fix your vehicle faults."
+                size,
+                "1",
+                size.height * 14 / 100,
+                Text(
+                  workStatus == "1"
+                      ? //"Hi.. $userName congratulations! Your mechanic reached near you. He fix your vehicle faults."
                       "Hi, $userName, Your Mechanic is close to your location. He will fix your vehicle."
-                    : workStatus == "2"
-                    ? "Hi, $userName,Your mechanic has started the repairs of your vehicle. Kindly wait for the countdown stop."
-                    : workStatus == "3"
-                    ? "Hi, $userName, congratulations!,  Your mechanic completed his Work wait for the payment process"
-                    : "Hi, $userName, congratulations!,  Your mechanic reached near you. He list your vehicle faults.Then read the estimate. if you can afford the service charge  then agree. ",
-
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.white,
-                ),
-              )
-            ),
-
+                      : workStatus == "2"
+                          ? "Hi, $userName,Your mechanic has started the repairs of your vehicle. Kindly wait for the countdown stop."
+                          : workStatus == "3"
+                              ? "Hi, $userName, congratulations!,  Your mechanic completed his Work wait for the payment process"
+                              : "Hi, $userName, congratulations!,  Your mechanic reached near you. He list your vehicle faults.Then read the estimate. if you can afford the service charge  then agree. ",
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.white,
+                  ),
+                )),
             Container(
-              margin: EdgeInsets.only(
-                top: size.height * 9.3 / 100
-              ),
-              child: curvedBottomContainer(
-                  size,
-                  "2",
-                  size.height * 19 / 100,
-                  mechanicImageAndName(size)
-              ),
+              margin: EdgeInsets.only(top: size.height * 9.3 / 100),
+              child: curvedBottomContainer(size, "2", size.height * 19 / 100,
+                  mechanicImageAndName(size)),
             )
-
           ],
         ),
       ),
     );
   }
 
-  Widget curvedBottomContainer(Size size,String colorsInt,double height, Widget child){
+  Widget curvedBottomContainer(
+      Size size, String colorsInt, double height, Widget child) {
     return Container(
       height: height,
       width: size.width,
       padding: EdgeInsets.only(
-        left: size.width * 6 / 100,
-        right: size.width * 8 / 100,
-        top: size.width * 6 / 100
-      ),
+          left: size.width * 6 / 100,
+          right: size.width * 8 / 100,
+          top: size.width * 6 / 100),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(30),
@@ -480,11 +465,9 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     );
   }
 
-  Widget mechanicImageAndName(Size size){
+  Widget mechanicImageAndName(Size size) {
     return Container(
-      margin: EdgeInsets.only(
-        left: size.width * 2 / 100
-      ),
+      margin: EdgeInsets.only(left: size.width * 2 / 100),
       child: Row(
         children: [
           Stack(
@@ -504,12 +487,12 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
               ),
               ClipRRect(
                 child: Container(
-                    child:CircleAvatar(
+                    child: CircleAvatar(
                         radius: 35,
                         backgroundColor: Colors.white,
                         child: ClipOval(
-                          child:SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
-                        ))),
+                            child: SvgPicture.asset(
+                                'assets/image/CustomerType/profileAvathar.svg')))),
                 borderRadius: BorderRadius.circular(44),
               ),
             ],
@@ -523,22 +506,27 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
             children: [
               Text(
                 "$mechanicName",
-                  style: TextStyle(
+                style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,
                   fontFamily: "Samsung_SharpSans_Medium",
                   fontWeight: FontWeight.bold,
-                ),),
+                ),
+              ),
               Text(
-               //workStatus == "1" ? "Started diagnostic test!" :
-                workStatus == "2" ? "Started repair" :
-                workStatus == "3" ? "Completed his work" : "Started diagnostic test!",
+                //workStatus == "1" ? "Started diagnostic test!" :
+                workStatus == "2"
+                    ? "Started repair"
+                    : workStatus == "3"
+                        ? "Completed his work"
+                        : "Started diagnostic test!",
                 style: TextStyle(
-                fontSize: 8,
-                color: CustColors.light_navy,
-                fontFamily: "Samsung_SharpSans_Medium",
-                fontWeight: FontWeight.w400,
-              ),)
+                  fontSize: 8,
+                  color: CustColors.light_navy,
+                  fontFamily: "Samsung_SharpSans_Medium",
+                  fontWeight: FontWeight.w400,
+                ),
+              )
             ],
           ),
 
@@ -548,23 +536,19 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     );
   }
 
-  Widget startedWorkScreenWarningText(Size size){
+  Widget startedWorkScreenWarningText(Size size) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(8),
-          ),
-          border: Border.all(
-              color: CustColors.greyish,
-              width: 0.3
-          ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+        border: Border.all(color: CustColors.greyish, width: 0.3),
         color: CustColors.pale_grey,
       ),
       margin: EdgeInsets.only(
           left: size.width * 6 / 100,
           right: size.width * 6 / 100,
-          top: size.height * 4.8 / 100
-      ),
+          top: size.height * 4.8 / 100),
       child: Padding(
         padding: const EdgeInsets.all(5),
         child: Row(
@@ -576,10 +560,12 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                   child: Container(
                     padding: EdgeInsets.only(
                         top: size.width * 3 / 100,
-                        bottom: size.width * 3 / 100
+                        bottom: size.width * 3 / 100),
+                    child: SvgPicture.asset(
+                      "assets/image/ic_info_blue_white.svg",
+                      height: size.height * 3 / 100,
+                      width: size.width * 3 / 100,
                     ),
-                    child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
-                      height: size.height * 3 / 100,width: size.width * 3 / 100,),
                   ),
                 ),
               ],
@@ -601,7 +587,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     );
   }
 
-  Widget startedWorkScreenTimer(Size size){
+  Widget startedWorkScreenTimer(Size size) {
     return Container(
       alignment: Alignment.center,
       child: Column(
@@ -613,12 +599,15 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
-
               children: [
-                SvgPicture.asset('assets/image/ic_alarm.svg',
+                SvgPicture.asset(
+                  'assets/image/ic_alarm.svg',
                   width: size.width * 4 / 100,
-                  height: size.height * 4 / 100,),
-                SizedBox(width: 20,),
+                  height: size.height * 4 / 100,
+                ),
+                SizedBox(
+                  width: 20,
+                ),
                 /*Expanded(
                   child: Text("$totalEstimatedTime",
                     style: TextStyle(
@@ -654,30 +643,22 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                 Column(
                   children: [
                     CountdownMechanicTimer(
-
                       animation: StepTween(
                         begin: levelClock, // THIS IS A USER ENTERED NUMBER
                         end: 0,
                       ).animate(_controller),
                     ),
-
                   ],
                 ),
-
               ],
             ),
           ),
-
           Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(
                   Radius.circular(13),
                 ),
-                border: Border.all(
-                    color: CustColors.light_navy02,
-                    width: 0.3
-                )
-            ),
+                border: Border.all(color: CustColors.light_navy02, width: 0.3)),
             padding: EdgeInsets.only(
               left: size.width * 4 / 100,
               right: size.width * 4 / 100,
@@ -691,31 +672,27 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     );
   }
 
-  Widget startedWorkScreenSuccess(Size size){
+  Widget startedWorkScreenSuccess(Size size) {
     return Container(
-     child: Column(
-       children: [
-         Container(
-           margin: EdgeInsets.only(
-             left: size.width * 2.5 / 100,
-             right: size.width * 2.5 / 100
-           ),
-             child: SvgPicture.asset(
-               "assets/image/img_success_bg.svg",
-               height: size.height * 28 / 100,
-               width:size.width * 90 / 100,)),
-
-         Container(
-           alignment: Alignment.bottomCenter,
-           child: Text("Job Completed successfully!",
-             style: TextStyle(
-               fontSize: 20,
-               color: CustColors.light_navy
-             ),
-           ),
-         ),
-       ],
-     ),
+      child: Column(
+        children: [
+          Container(
+              margin: EdgeInsets.only(
+                  left: size.width * 2.5 / 100, right: size.width * 2.5 / 100),
+              child: SvgPicture.asset(
+                "assets/image/img_success_bg.svg",
+                height: size.height * 28 / 100,
+                width: size.width * 90 / 100,
+              )),
+          Container(
+            alignment: Alignment.bottomCenter,
+            child: Text(
+              "Job Completed successfully!",
+              style: TextStyle(fontSize: 20, color: CustColors.light_navy),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -723,7 +700,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   void dispose() {
     // TODO: implement dispose
     _controller.dispose();
-    if(widget.workStatus =="3") {
+    if (widget.workStatus == "3") {
       cancelTimer2();
     }
     super.dispose();
@@ -731,7 +708,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   }
 
   cancelTimer2() {
-
     if (timerObjVar1 != null) {
       timerObjVar1?.cancel();
       timerObjVar1 = null;
@@ -744,7 +720,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   }
 
   void _updateTimerListener() {
-
     timeCounter = _controller.duration!.inMinutes;
     timerObj1 = Timer.periodic(Duration(minutes: 1), (Timer t) {
       timerObjVar1 = t;
@@ -754,5 +729,4 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       print("timeCounter >>>>>> " + timeCounter.toString());
     });
   }
-
 }

@@ -139,7 +139,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen>
               updateToCloudFirestoreDB("1", "0", "0", "0");
             });
             _controller.forward();
-            _totalTimeCounter();
+           // _totalTimeCounter();
             _updateTimerListener(int.parse(updatedServiceTime));
             isStartedWork = true;
             //storetime(widget.starttime, widget.endtime);
@@ -453,7 +453,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen>
               updateToCloudFirestoreDB("1", "0", "0", "0");
             });
             _controller.forward();
-            _totalTimeCounter();
+            //_totalTimeCounter();
             _updateTimerListener(int.parse(updatedServiceTime));
             isStartedWork = true;
             _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
@@ -523,9 +523,11 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen>
       }
       print("timeCounter >>>>>> " + timeCounter.toString());
       if (timeCounter < 6) {
-        setState(() {
-          isEnableAddMoreBtn = true;
-        });
+        if(mounted){
+          setState(() {
+            isEnableAddMoreBtn = true;
+          });
+        }
       }
     });
   }

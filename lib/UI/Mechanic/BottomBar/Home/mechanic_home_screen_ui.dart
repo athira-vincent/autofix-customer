@@ -78,11 +78,11 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> with Widget
     _hasActiveService = false;
     getSharedPrefData();
 
-    Timer.periodic(const Duration(seconds: 90), (Timer t) {
-      // _mechanicHomeBloc.postMechanicActiveServiceRequest(
-      //     "$authToken", mechanicId);
-      _getCurrentMechanicLocation();
-    });
+    // Timer.periodic(const Duration(seconds: 90), (Timer t) {
+    //   // _mechanicHomeBloc.postMechanicActiveServiceRequest(
+    //   //     "$authToken", mechanicId);
+    //   _getCurrentMechanicLocation();
+    // });
 
     _listenApiResponse();
     _getCurrentMechanicLocation();
