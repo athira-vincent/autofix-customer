@@ -7,6 +7,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_UI/HomeCustomer/customer_home.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_arrived_screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
@@ -132,16 +133,14 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
              Navigator.pushReplacement(
                  context,
                  MaterialPageRoute(
-                     builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1",bookingId: widget.bookingId,)
+                     builder: (context) =>  MechanicWorkProgressArrivedScreen(
+                       workStatus: "1",bookingId: widget.bookingId,)
                  ));
            }
          });
        }
     });
-    /*DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${widget.bookingId}");
-    reference.snapshots().listen((querySnapshot) {
 
-    });*/
   }
 
   void updateToCloudFirestoreMechanicCurrentScreenDB() {

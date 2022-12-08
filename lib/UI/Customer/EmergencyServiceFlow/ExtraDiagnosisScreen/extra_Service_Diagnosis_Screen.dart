@@ -78,7 +78,10 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MechanicWorkProgressScreen(workStatus: "2",bookingId: widget.bookingId,)));
+                        builder: (context) => MechanicWorkProgressScreen(workStatus: "2",bookingId: widget.bookingId,isFromHome: false,
+                          remaintime: "0",
+                          starttime: "",
+                          endtime: "",)));
             }
           }
       });

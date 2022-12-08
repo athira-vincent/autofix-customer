@@ -5,6 +5,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/ExtraDiagnosisScreen/extra_Service_Diagnosis_Screen.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/mechanic_waiting_payment.dart';
 import 'package:auto_fix/Widgets/Countdown.dart';
 import 'package:auto_fix/AA/count_down_widget.dart';
@@ -17,23 +18,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class MechanicWorkProgressScreen extends StatefulWidget {
+class MechanicWorkProgressArrivedScreen extends StatefulWidget {
 
   final String workStatus;
   final String bookingId;
-  final bool isFromHome;
-  final String remaintime;
-  final String starttime;
-  final String endtime;
-  MechanicWorkProgressScreen({required this.workStatus, required this.bookingId, required this.isFromHome, required this.remaintime, required this.starttime, required this.endtime});
+  MechanicWorkProgressArrivedScreen({required this.workStatus, required this.bookingId, });
 
   @override
   State<StatefulWidget> createState() {
-    return _MechanicWorkProgressScreenState();
+    return _MechanicWorkProgressArrivedScreenState();
   }
 }
 
-class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen> with TickerProviderStateMixin{
+class _MechanicWorkProgressArrivedScreenState extends State<MechanicWorkProgressArrivedScreen> with TickerProviderStateMixin{
 
 
   String workStatus = "";
@@ -45,8 +42,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Timer? timerObj1;
-  Timer? timerObjVar1;
   int timeCounter = 0;
 
   String mechanicDiagonsisState = "0";
@@ -73,11 +68,8 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
   String extendedTimeFirstTymCall="0";
 
-  late AnimationController _controller;
   int levelClock = 0;
   bool isLoading = true;
-  Timer? timerForCouterTime;
-  Timer? timerCouterTime;
   int remaintime = 0;
 
 
@@ -89,26 +81,12 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     workStatus = widget.workStatus.toString();
     bookingIdEmergency = widget.bookingId.toString();
 
-    remaintime = int.parse(widget.remaintime);
-
-    setState(() {
-      levelClock = remaintime;
-    });
-
-    _controller = AnimationController(
-        vsync: this, duration: Duration(seconds: levelClock));
-    if (widget.isFromHome == true) {
-      _controller.forward();
-    }
-
-
-
   }
 
 
 
   @override
-  void didUpdateWidget(covariant MechanicWorkProgressScreen oldWidget) {
+  void didUpdateWidget(covariant MechanicWorkProgressArrivedScreen oldWidget) {
     // TODO: implement didUpdateWidget
     getSharedPrefData();
     super.didUpdateWidget(oldWidget);
@@ -140,44 +118,12 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           totalEstimatedTime = event.get('timerCounter');
           mechanicName = event.get('mechanicName');
 
-          if(workStatus == "2"){
-
-
-            /// here work starts
-            if (widget.isFromHome == true) {
-              levelClock=remaintime;
-              print("levelClock01");
-              print(levelClock);
-            }
-          }
-          else{
-            // int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
-            // levelClock = sec;
-            print("levelClock02");
-            print(levelClock);
-            levelClock=remaintime;
-            _controller.forward();
-            // _controller = AnimationController(
-            //     vsync: this,
-            //     duration: Duration(
-            //         seconds:
-            //         levelClock)
-            // );
-
-            //_updateTimerListener();
-          }
-
-
-
         });
       }
     });
   }
 
   void updateToCloudFirestoreMechanicCurrentScreenDB() {
-
-    if(widget.workStatus == "1")
-    {
       _firestore
           .collection("ResolMech")
           .doc('${bookingIdEmergency}')
@@ -187,32 +133,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           .then((value) => print("Location Added"))
           .catchError((error) =>
           print("Failed to add Location: $error"));
-    }
-    else if(widget.workStatus == "2")
-    {
-      _firestore
-          .collection("ResolMech")
-          .doc('${bookingIdEmergency}')
-          .update({
-            "customerFromPage" : "C4",
-          })
-          .then((value) => print("Location Added"))
-          .catchError((error) =>
-          print("Failed to add Location: $error"));
-    }
-    else if(widget.workStatus == "3")
-    {
-      _firestore
-          .collection("ResolMech")
-          .doc('${bookingIdEmergency}')
-          .update({
-            "customerFromPage" : "C5",
-          })
-          .then((value) => print("Location Added"))
-          .catchError((error) =>
-          print("Failed to add Location: $error"));
-    }
-
   }
 
   void listenToCloudFirestoreDB() {
@@ -372,11 +292,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
                   startedWorkScreenBottomCurve(size),
 
-                  workStatus == "2"
-                      ? startedWorkScreenTimer(size)
-                      : workStatus == "3"
-                      ? startedWorkScreenSuccess(size)
-                      : startedWorkScreenWarningText(size) ,
+                  startedWorkScreenWarningText(size)
                 ],
               ),
             ),
@@ -397,10 +313,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       child: Text(
         workStatus == "1"
             ? "Mechanic arrived"
-            : workStatus == "2"
-            ? "Mechanic start repair"
-            : workStatus == "3"
-            ? "Job completed"
             : workStatus == "4"
             ? "Ready to pick up your vehicle "
             : "Mechanic reached your location.",
@@ -436,15 +348,8 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
               "1",
               size.height * 14 / 100,
               Text(
-                workStatus == "1"
-                    ? //"Hi.. $userName congratulations! Your mechanic reached near you. He fix your vehicle faults."
-                      "Hi, $userName, Your Mechanic is close to your location. He will fix your vehicle."
-                    : workStatus == "2"
-                    ? "Hi, $userName,Your mechanic has started the repairs of your vehicle. Kindly wait for the countdown stop."
-                    : workStatus == "3"
-                    ? "Hi, $userName, congratulations!,  Your mechanic completed his Work wait for the payment process"
-                    : "Hi, $userName, congratulations!,  Your mechanic reached near you. He list your vehicle faults.Then read the estimate. if you can afford the service charge  then agree. ",
-
+                 //"Hi.. $userName congratulations! Your mechanic reached near you. He fix your vehicle faults."
+                "Hi, $userName, Your Mechanic is close to your location. He will fix your vehicle.",
                 style: TextStyle(
                   fontSize: 13,
                   color: Colors.white,
@@ -611,96 +516,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     );
   }
 
-  Widget startedWorkScreenTimer(Size size){
-    return Container(
-      alignment: Alignment.center,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            alignment: Alignment.center,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-
-              children: [
-                SvgPicture.asset('assets/image/ic_alarm.svg',
-                  width: size.width * 4 / 100,
-                  height: size.height * 4 / 100,),
-                SizedBox(width: 20,),
-                /*Expanded(
-                  child: Text("$totalEstimatedTime",
-                    style: TextStyle(
-                        fontSize: 36,
-                        fontFamily: "SharpSans_Bold",
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        letterSpacing: .7
-                    ),
-                  ),
-                ),*/
-                /*TweenAnimationBuilder<Duration>(
-                    duration: Duration(seconds: levelClock),
-                    tween: Tween(begin: Duration(seconds: levelClock), end: Duration.zero),
-                    onEnd: () {
-                      print('Timer ended');
-                    },
-                    builder: (BuildContext context, Duration value, Widget? child) {
-                      print('Timer loop $value');
-                      print('Timer loop $levelClock1');
-
-                      final minutes = value.inMinutes;
-                      final seconds = value.inSeconds % 60;
-                      return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Text('$minutes:$seconds',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 40)));
-                    }),*/
-                Column(
-                  children: [
-                    CountdownMechanicTimer(
-
-                      animation: StepTween(
-                        begin: levelClock, // THIS IS A USER ENTERED NUMBER
-                        end: 0,
-                      ).animate(_controller),
-                    ),
-
-                  ],
-                ),
-
-              ],
-            ),
-          ),
-
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(13),
-                ),
-                border: Border.all(
-                    color: CustColors.light_navy02,
-                    width: 0.3
-                )
-            ),
-            padding: EdgeInsets.only(
-              left: size.width * 4 / 100,
-              right: size.width * 4 / 100,
-              top: size.height * 1 / 100,
-              bottom: size.height * 1 / 100,
-            ),
-            child: Text("Total estimated time "),
-          )
-        ],
-      ),
-    );
-  }
-
   Widget startedWorkScreenSuccess(Size size){
     return Container(
      child: Column(
@@ -732,37 +547,10 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   @override
   void dispose() {
     // TODO: implement dispose
-    _controller.dispose();
-    if(widget.workStatus =="3") {
-      cancelTimer2();
-    }
+
     super.dispose();
     print(">>>dispose");
   }
 
-  cancelTimer2() {
-
-    if (timerObjVar1 != null) {
-      timerObjVar1?.cancel();
-      timerObjVar1 = null;
-    }
-
-    if (timerObj1 != null) {
-      timerObj1?.cancel();
-      timerObj1 = null;
-    }
-  }
-
-  // void _updateTimerListener() {
-  //
-  //   timeCounter = _controller.duration!.inMinutes;
-  //   timerObj1 = Timer.periodic(Duration(minutes: 1), (Timer t) {
-  //     timerObjVar1 = t;
-  //
-  //     print('Timer timerObj ++++++' + timerObjVar1.toString());
-  //     timeCounter = timeCounter - 1;
-  //     print("timeCounter >>>>>> " + timeCounter.toString());
-  //   });
-  // }
 
 }
