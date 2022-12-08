@@ -20,9 +20,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MechanicWorkProgressScreen extends StatefulWidget {
   final String workStatus;
   final String bookingId;
-
-  MechanicWorkProgressScreen(
-      {required this.workStatus, required this.bookingId});
+  final bool isFromHome;
+  final String remaintime;
+  final String starttime;
+  final String endtime;
+  MechanicWorkProgressScreen({required this.workStatus, required this.bookingId, required this.isFromHome, required this.remaintime, required this.starttime, required this.endtime});
 
   @override
   State<StatefulWidget> createState() {
@@ -30,9 +32,11 @@ class MechanicWorkProgressScreen extends StatefulWidget {
   }
 }
 
-class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
-    with TickerProviderStateMixin {
-  String workStatus = ""; // 1 - arrived - screen 075,
+class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen> with TickerProviderStateMixin{
+
+
+  String workStatus = "";
+  // 1 - arrived - screen 075,
   // 2 - started working - screen 078,
   // 3 - completed - screen 079,
   // 4 - ready to pickup vehicle - screen 094
@@ -79,48 +83,24 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     getSharedPrefData();
     workStatus = widget.workStatus.toString();
     bookingIdEmergency = widget.bookingId.toString();
+
+    remaintime = int.parse(widget.remaintime);
+
+    setState(() {
+      levelClock = remaintime;
+    });
+
     _controller = AnimationController(
-        vsync: this,
-        duration: Duration(
-            seconds:
-                levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
-        );
-    if (workStatus == "2") {
-      setTimer();
+        vsync: this, duration: Duration(seconds: levelClock));
+    if (widget.isFromHome == true) {
+      _controller.forward();
     }
+
+
+
   }
 
-  Future<void> setTimer() async {
-    if (DateFormat("HH:mm:ss").format(DateTime.now()) ==
-        totalstarttimecurrenttimevalue) {
-      print("work finished");
-    } else {
-      await Repository()
-          .timedifferenceapi(DateFormat("HH:mm:ss").format(DateTime.now()),
-              totalstarttimecurrenttimevalue)
-          .then((value) => {
-                if (value.data!.timeDifference.remTime.isNotEmpty)
-                  {
-                    setState(() {
-                      String string = value.data!.timeDifference.remTime;
-                      int hour = int.parse(string.split(":")[0]);
-                      int minute = int.parse(string.split(":")[1]);
-                      int second = int.parse(string.split(":")[2]);
-                      Duration duration = Duration(
-                          hours: hour, minutes: minute, seconds: second);
-                      print("Minutes is: ${duration.inMinutes}");
-                      print("inSeconds is: ${duration.inSeconds}");
-                      remaintime = int.parse(duration.inSeconds.toString());
-                      _controller.stop();
-                      levelClock = remaintime;
-                      _controller.forward();
-                      print("remaintime");
-                      print(remaintime);
-                    })
-                  }
-              });
-    }
-  }
+
 
   @override
   void didUpdateWidget(covariant MechanicWorkProgressScreen oldWidget) {
@@ -160,16 +140,36 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           mechanicDiagonsisState = event.get("mechanicDiagonsisState");
           totalEstimatedTime = event.get('timerCounter');
           mechanicName = event.get('mechanicName');
-          int sec = Duration(
-                  minutes: int.parse('${totalEstimatedTime.split(":").first}'))
-              .inSeconds;
-          levelClock = sec;
-          _controller = AnimationController(
-              vsync: this, duration: Duration(seconds: levelClock));
-          _controller.forward();
-          _updateTimerListener();
-          totalstarttimecurrenttimevalue =
-              event.get("totalstarttimecurrenttimevalue");
+
+          if(workStatus == "2"){
+
+
+            /// here work starts
+            if (widget.isFromHome == true) {
+              levelClock=remaintime;
+              print("levelClock01");
+              print(levelClock);
+            }
+          }
+          else{
+            // int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
+            // levelClock = sec;
+            print("levelClock02");
+            print(levelClock);
+            levelClock=remaintime;
+            _controller.forward();
+            // _controller = AnimationController(
+            //     vsync: this,
+            //     duration: Duration(
+            //         seconds:
+            //         levelClock)
+            // );
+
+            //_updateTimerListener();
+          }
+
+
+
         });
       }
     });
@@ -259,15 +259,31 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                         bookingId: widget.bookingId,
                       )));
         }
-      } else if (widget.workStatus == "2") {
-        if (isWorkCompleted == "1") {
+        else if(mechanicDiagonsisState =="2")
+          {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MechanicWorkProgressScreen(workStatus: "2",bookingId: widget.bookingId,isFromHome: false,
+                      remaintime: "0",
+                      starttime: "",
+                      endtime: "",)));
+          }
+
+      }
+      else if(widget.workStatus =="2")
+      {
+        if(isWorkCompleted =="1")
+        {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => MechanicWorkProgressScreen(
-                        workStatus: "3",
-                        bookingId: widget.bookingId,
-                      ))).then((value) {});
+                  builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: widget.bookingId,isFromHome: false,
+                    remaintime: "0",
+                    starttime: "",
+                    endtime: "",))
+          ).then((value){
+          });
         }
       } else if (widget.workStatus == "3") {
         if (isPaymentRequested == "1") {
@@ -277,9 +293,12 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                   builder: (context) => MechanicWaitingPaymentScreen()));
         }
       }
-      Timer(const Duration(seconds: 2), () {
-        setState(() {
-          isLoading = false;
+        Timer(const Duration(seconds: 2), () {
+          if(mounted){
+            setState(() {
+              isLoading = false;
+            });
+          }
         });
       });
     });
@@ -298,11 +317,11 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => MechanicWorkProgressScreen(
-                    workStatus: "3",
-                    bookingId: widget.bookingId,
-                  )));
-    } else if (workStatus == "3") {
+              builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: widget.bookingId,isFromHome: true,
+                remaintime: "0",
+                starttime: "",
+                endtime: "",)));
+    }else if(workStatus == "3"){
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -704,7 +723,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       cancelTimer2();
     }
     super.dispose();
-    print("dispose");
+    print(">>>dispose");
   }
 
   cancelTimer2() {
@@ -719,14 +738,16 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     }
   }
 
-  void _updateTimerListener() {
-    timeCounter = _controller.duration!.inMinutes;
-    timerObj1 = Timer.periodic(Duration(minutes: 1), (Timer t) {
-      timerObjVar1 = t;
+  // void _updateTimerListener() {
+  //
+  //   timeCounter = _controller.duration!.inMinutes;
+  //   timerObj1 = Timer.periodic(Duration(minutes: 1), (Timer t) {
+  //     timerObjVar1 = t;
+  //
+  //     print('Timer timerObj ++++++' + timerObjVar1.toString());
+  //     timeCounter = timeCounter - 1;
+  //     print("timeCounter >>>>>> " + timeCounter.toString());
+  //   });
+  // }
 
-      print('Timer timerObj ++++++' + timerObjVar1.toString());
-      timeCounter = timeCounter - 1;
-      print("timeCounter >>>>>> " + timeCounter.toString());
-    });
-  }
 }

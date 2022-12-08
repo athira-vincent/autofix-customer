@@ -49,7 +49,7 @@ class _SelectStatesScreenState extends State<SelectStatesScreen> {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId CustomerMyProfileScreen'+authToken.toString());
     });
-    _cityListBloc.postStatesListRequest(authToken, "123");
+    _cityListBloc.postStatesListRequest("", "123");
   }
 
   _listenApiResponse() {
