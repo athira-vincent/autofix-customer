@@ -1133,22 +1133,5 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     }
   }
 
-  startnormaltimer(String remaintime) {
-    const oneSec = Duration(seconds: 1);
-    int remtime = int.parse(remaintime);
-    _timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        if (remtime == 0) {
-          // setState(() {
-          //   timer.cancel();
-          // });
-        } else {
-          setState(() {
-            remtime--;
-          });
-        }
-      },
-    );
-  }
+
 }

@@ -287,7 +287,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
              }
 
 
-          SnackBarWidget().setMaterialSnackBar( "Successfully Created", _scaffoldKey);
+          SnackBarWidget().setMaterialSnackBar( AppLocalizations.of(context)!.text_successfully_created, _scaffoldKey);
 
 
         });
@@ -360,7 +360,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
       padding: const EdgeInsets.only(top: 20),
       child: Container(
         child: const Text(
-          'Complete your profile',
+          AppLocalizations.of(context)!.text_complete_your_profile,
           style: Styles.textCompleteYourProfile,
         ),
       ),
@@ -399,7 +399,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     Container(
                       width: 150,
                       child: const Text(
-                        'Upload your vehicle photo',
+                        AppLocalizations.of(context)!.text_upload_vehicle_photo,
                         textAlign: TextAlign.center,
                         style: Styles.textUploadYourProfilePic,
                       ),
@@ -482,7 +482,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
-                    "Brand",
+                    AppLocalizations.of(context)!.text_brand,
                     style: Styles.textLabelTitle,
                   ),
                   const Spacer(),
@@ -507,7 +507,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     RegExp('[a-zA-Z ]')),
               ],
               validator: InputValidator(
-                  ch : 'Brand name' ).nameCheckingWithNumeric,
+                  ch : AppLocalizations.of(context)!.text_brandName ).nameCheckingWithNumeric,
               controller: _brandController,
               cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
@@ -532,7 +532,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 ),
                 isDense: true,
                 hintText:
-                "Select your vehicle brand",
+                AppLocalizations.of(context)!.text_select_brand,
                 border: const UnderlineInputBorder(
                   borderSide: const BorderSide(
                     color: CustColors.greyish,
@@ -570,7 +570,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
         if(selectedBrand=='')
           {
-            SnackBarWidget().setMaterialSnackBar( "Please select brand first", _scaffoldKey);
+            SnackBarWidget().setMaterialSnackBar( AppLocalizations.of(context)!.text_select_brand, _scaffoldKey);
           }
         else
           {
@@ -589,7 +589,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
-                    "Model",
+                    AppLocalizations.of(context)!.text_model,
                     style: Styles.textLabelTitle,
                   ),
                   const Spacer(),
@@ -615,7 +615,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               ],
               validator: InputValidator(
                   ch :
-                  'Model name'  ).nameCheckingWithNumeric,
+                  AppLocalizations.of(context)!.text_model_name  ).nameCheckingWithNumeric,
               controller: _modelController,
               cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
@@ -640,7 +640,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 ),
                 isDense: true,
                 hintText:
-                "Select your car variant",
+                AppLocalizations.of(context)!.text_select_car_variant,
                 border: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
@@ -691,7 +691,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
           children: [
             const Text(
 
-              "Engine Type",
+              AppLocalizations.of(context)!.text_engine_type,
               style: Styles.textLabelTitle,
             ),
             TextFormField(
@@ -707,7 +707,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               ],
               validator: InputValidator(
                   ch :
-                  'Engine Type' ).nameCheckingWithNumericAndBracket,
+                  AppLocalizations.of(context)!.text_engine_type ).nameCheckingWithNumericAndBracket,
               controller: _engineTypeController,
               cursorColor: CustColors.light_navy,
               decoration: const InputDecoration(
@@ -732,7 +732,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 ),*/
                 isDense: true,
                 hintText:
-                "Select your engine model",
+                AppLocalizations.of(context)!.text_select_model,
                 border:  UnderlineInputBorder(
                   borderSide:  BorderSide(
                     color: CustColors.greyish,
@@ -783,7 +783,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Year",
+              AppLocalizations.of(context)!.text_year,
               style: Styles.textLabelTitle,
             ),
             TextFormField(
@@ -799,7 +799,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               ],
               validator: InputValidator(
                   ch :
-                  'Year' ).nameCheckingWithNumeric,
+                  AppLocalizations.of(context)!.text_year ).nameCheckingWithNumeric,
               controller: _yearController,
               cursorColor: CustColors.light_navy,
               decoration: const InputDecoration(
@@ -824,7 +824,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 ),*/
                 isDense: true,
                 hintText:
-                "Select your vehicle manufacture date",
+                AppLocalizations.of(context)!.text_selct_manf_date,
                 border: const UnderlineInputBorder(
                   borderSide: const BorderSide(
                     color: CustColors.greyish,
@@ -864,7 +864,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         children: [
           const Text(
 
-            "Color",
+            AppLocalizations.of(context)!.text_color,
             style: Styles.textLabelTitle,
           ),
           TextFormField(
@@ -878,7 +878,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   RegExp('[a-zA-Z0-9 ]')),
             ],
             validator: InputValidator(
-                ch :'Vehicle color').emptyChecking,
+                ch :AppLocalizations.of(context)!.text_vehicle_color).emptyChecking,
             controller: _vehicleColorController,
             onChanged: (value){
               setState(() {
@@ -891,7 +891,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
             decoration: const InputDecoration(
               isDense: true,
               hintText:
-              "Enter your Vehicle color",
+              AppLocalizations.of(context)!.text_enter_veh_color,
               border: const UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: CustColors.greyish,
@@ -930,7 +930,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         children: [
           const Text(
 
-            "Plate number",
+            AppLocalizations.of(context)!.text_plate_number,
             style: Styles.textLabelTitle,
           ),
           TextFormField(
@@ -944,7 +944,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   RegExp('[a-zA-Z0-9 ]')),
             ],
             validator: InputValidator(
-                ch :'Plate number').nameCheckingWithNumeric,
+                ch :AppLocalizations.of(context)!.text_plate_number).nameCheckingWithNumeric,
             controller: _plateNumberController,
             onChanged: (value){
               setState(() {
@@ -957,7 +957,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
             decoration: const InputDecoration(
               isDense: true,
               hintText:
-              "Enter your Plate number",
+              AppLocalizations.of(context)!.text_enter_plate_number,
               border: UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: CustColors.greyish,
@@ -1013,7 +1013,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Last maintenance",
+              AppLocalizations.of(context)!.text_last_maintenance,
               style: Styles.textLabelTitle,
             ),
             TextFormField(
@@ -1029,7 +1029,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               ],
               validator: InputValidator(
                   ch :
-                  'Last maintenance date' ).nameCheckingWithNumeric,
+                  AppLocalizations.of(context)!.text_last_maintenance_date ).nameCheckingWithNumeric,
               controller: _lastMaintenanceController,
               onChanged: (value){
                 setState(() {
@@ -1041,7 +1041,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
                 isDense: true,
-                hintText: "Select your last service date ",
+                hintText: AppLocalizations.of(context)!.text_select_service_date,
                 suffixIconConstraints: const BoxConstraints(
                   minWidth: 25,
                   minHeight: 25,
@@ -1102,7 +1102,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         children: [
           Container(
             child: const Text(
-              "Approximate mileage",
+              AppLocalizations.of(context)!.text_approximate_mileage,
               style: Styles.textLabelTitle,
             ),
           ),
@@ -1110,7 +1110,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
             padding: const EdgeInsets.only(top: 8.0),
             child: Container(
               child: const Text(
-                "Select your vehicle total kilometres",
+                AppLocalizations.of(context)!.text_select_total_kilometres,
                 style: Styles.textLabelSubTitle,
               ),
             ),
@@ -1287,7 +1287,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: const[
                                Text(
-                                'Add more vehicles',
+                                AppLocalizations.of(context)!.text_add_more_vehicles,
                                 textAlign: TextAlign.center,
                                 style: Styles.textButtonLabelSubTitle12,
                               ),
@@ -1377,7 +1377,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const Text(
-                              'Finish',
+                              AppLocalizations.of(context)!.text_finish,
                               textAlign: TextAlign.center,
                               style: Styles.textButtonLabelSubTitle12,
                             ),
@@ -1413,7 +1413,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       Icons.camera_alt,
                       color: CustColors.blue,
                     ),
-                    title: const Text("Camera",
+                    title: const Text(AppLocalizations.of(context)!.text_camera,
                         style: TextStyle(
                             fontFamily: 'Corbel_Regular',
                             fontWeight: FontWeight.normal,
@@ -1439,7 +1439,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       Icons.image,
                       color: CustColors.blue,
                     ),
-                    title: const Text("Gallery",
+                    title: const Text(AppLocalizations.of(context)!.text_gallery,
                         style: TextStyle(
                             fontFamily: 'Corbel_Regular',
                             fontWeight: FontWeight.normal,
@@ -1658,7 +1658,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               height: 50,
               color: CustColors.blue,
               alignment: Alignment.center,
-              child: const Text('Select Date',
+              child: const Text(AppLocalizations.of(context)!.text_select_date,
                 style: Styles.textButtonLabelSubTitle,)
           ),
           Expanded(
@@ -1669,7 +1669,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     children: [
                       const Padding(
                         padding: EdgeInsets.only(top: 8.0),
-                        child: Text('Month',
+                        child: Text(AppLocalizations.of(context)!.text_month,
                           style: Styles.textLabelTitle14,),
                       ),
                       Expanded(
@@ -1716,7 +1716,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     children: [
                       const Padding(
                         padding: EdgeInsets.only(top: 8.0),
-                        child: Text('Year',
+                        child: Text(AppLocalizations.of(context)!.text_year,
                           style: Styles.textLabelTitle14,),
                       ),
                       Expanded(

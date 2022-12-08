@@ -102,7 +102,7 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
         ),
         backgroundColor: Colors.white,
         title: Text(
-          'Select brands',
+          AppLocalizations.of(context)!.text_select_brands,
           textAlign: TextAlign.center,
           style: Styles.textLabelTitle,
         ),
@@ -115,7 +115,7 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('Choose multiple brands you specialised in',
+                  child: Text(AppLocalizations.of(context)!.text_choose_multiple_brands_specialised,
                     maxLines: 2,
                     textAlign: TextAlign.start,
                     overflow: TextOverflow.visible,
@@ -298,7 +298,7 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                             ),
                           )
                         : Center(
-                            child: Text('No BrandList found.'),
+                            child: Text(AppLocalizations.of(context)!.text_no_brandList_found),
                           )
                     :Center(
                       child: Container(
@@ -336,7 +336,7 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                           borderRadius: BorderRadius.circular(7),
                         ),
                         child:  Text(
-                          "Next",
+                          AppLocalizations.of(context)!.next,
                           style: TextStyle(
                               color: Colors.white,
                               fontFamily: 'Corbel_Bold',
