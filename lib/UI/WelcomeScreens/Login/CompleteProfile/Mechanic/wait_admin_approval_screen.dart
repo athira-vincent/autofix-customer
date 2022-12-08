@@ -66,8 +66,8 @@ class _WaitAdminApprovalScreenState extends State<WaitAdminApprovalScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Successfully  ", style: Styles.textSuccessfulTitleStyle01,),
-                        Text("registered!", style: Styles.textSuccessfulTitleStyle02,)
+                        Text(AppLocalizations.of(context)!.text_successfully, style: Styles.textSuccessfulTitleStyle01,),
+                        Text(AppLocalizations.of(context)!.text_registered, style: Styles.textSuccessfulTitleStyle02,)
                       ],
                     ),
                   ),
@@ -84,7 +84,7 @@ class _WaitAdminApprovalScreenState extends State<WaitAdminApprovalScreen> {
                             bottom: size.height * 0.048
                         ),
                         alignment: Alignment.bottomCenter,
-                        child: Text("Wait for Approval from admin!  ",style: Styles.textSuccessfulTitle03Style,)
+                        child: Text(AppLocalizations.of(context)!.text_wait_for_approval_from_admin,style: Styles.textSuccessfulTitle03Style,)
                     ),
                   )
                 ],
