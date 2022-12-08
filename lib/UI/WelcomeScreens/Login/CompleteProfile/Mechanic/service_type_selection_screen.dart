@@ -4,6 +4,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/Servic
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regular_service_list.dart';
 import 'package:auto_fix/Widgets/service_type_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ServiceTypeSelectionScreen extends StatefulWidget {
 
