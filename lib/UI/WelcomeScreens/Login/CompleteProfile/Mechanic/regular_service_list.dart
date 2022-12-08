@@ -48,7 +48,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
         setState(() {
           _isLoadingPage = false;
           Fluttertoast.showToast(
-            msg: "select preferred services!!",
+            msg: AppLocalizations.of(context)!.text_select_preferred_services,
             backgroundColor: CustColors.light_navy,
             timeInSecForIosWeb: 1,
           );
@@ -170,7 +170,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                   ),
                   child: Container(
                       alignment: Alignment.centerLeft,
-                      child: Text("Select regular Services",
+                      child: Text(AppLocalizations.of(context)!.text_select_regular_services,
                         style: Styles.serviceSelectionTitle01Style,)),
                 ),
 
@@ -230,7 +230,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                               textAlign: TextAlign.left,
                               style: Styles.searchTextStyle01,
                               decoration: InputDecoration(
-                                  hintText: "Search Your Service",
+                                  hintText: AppLocalizations.of(context)!.text_search_your_service,
                                   border: InputBorder.none,
                                   contentPadding: new EdgeInsets.only(bottom: 15),
                                   hintStyle: Styles.searchTextStyle01
@@ -278,7 +278,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                             )
                                 :
                             Center(
-                              child: Text('No Results found.'),
+                              child: Text(AppLocalizations.of(context)!.error_not_found),
                             ),
 
                           ),
@@ -376,7 +376,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                         borderRadius: BorderRadius.circular(7),
                       ),
                       child:  Text(
-                        "Next",
+                        AppLocalizations.of(context)!.next,
                         style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'Corbel_Bold',
