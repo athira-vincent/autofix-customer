@@ -71,7 +71,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
           _isLoading = false;
           if(value.message.contains(TextStrings.error_txt_account_not_exist) ){
             // String msg = value.message.split(":").last.toString();
-            SnackBarWidget().setMaterialSnackBar("Account doesn't exist",_scaffoldKey);
+            SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.text_Account_not_exist,_scaffoldKey);
           }
           else if(value.message.contains(ErrorStrings.error_202) ){
             // String msg = value.message.split(":").last.toString();
@@ -194,7 +194,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                 InkWell(
                                   child: Container(
                                     child: Text(
-                                      'Phone Number',   //'Phone Number',
+                                      AppLocalizations.of(context)!.text_phone,   //'Phone Number',
                                       style: Styles.textHeadLogin,
                                     ),
                                   ),
@@ -205,7 +205,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                   alignment: Alignment.centerLeft,
                                   //color: Colors.red,
                                   child: Text(
-                                    'Enter your phone number ,you will receive a 4 digit code for  phone number verification. Select your country code before enter your Number.',
+                                    AppLocalizations.of(context)!.text_phone_screen_desc,
                                     textAlign: TextAlign.left,
                                     softWrap: true,
                                     style: Styles.textLabelSubTitle12,
@@ -221,7 +221,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'Phone Number',   //'Phone Number',
+                                              AppLocalizations.of(context)!.text_phone,   //'Phone Number',
                                               style: Styles.textLabelTitle,
                                             ),
                                             Row(
@@ -249,14 +249,14 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                                     focusNode: _phoneNoFocusNode,
                                                     keyboardType: TextInputType.phone,
                                                     validator: InputValidator(
-                                                      ch: 'Phone Number',   //"Phone number"
+                                                      ch: AppLocalizations.of(context)!.text_phone,   //"Phone number"
                                                     ).phoneNumChecking,
                                                     controller: _phoneNoController,
                                                     //cursorColor: CustColors.whiteBlueish,
                                                     cursorColor: Colors.black,
                                                     decoration: InputDecoration(
                                                       isDense: true,
-                                                      hintText: 'Enter your Phone number',  //'Enter your phone Number',
+                                                      hintText: AppLocalizations.of(context)!.text_hint_phone,  //'Enter your phone Number',
                                                       border: UnderlineInputBorder(
                                                         borderSide: BorderSide(
                                                           color: CustColors.greyish,
@@ -325,7 +325,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                                 crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
                                                   Text(
-                                                    'Send',
+                                                    AppLocalizations.of(context)!.text_btn_send,
                                                     textAlign: TextAlign.center,
                                                     style: Styles.textButtonLabelSubTitle,
                                                   ),
@@ -346,11 +346,11 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                           text: TextSpan(
                                             children: <TextSpan>[
                                               TextSpan(
-                                                text: 'Back to ',  // "Back to ",
+                                                text: AppLocalizations.of(context)!.text_back_to,  // "Back to ",
                                                 style: Styles.textLabelSubTitle,
                                               ),
                                               TextSpan(
-                                                  text: 'Sign Up',  //'SignUp',
+                                                  text: AppLocalizations.of(context)!.text_sign_up,  //'SignUp',
                                                   style: Styles.textLabelTitle_10,
                                                   recognizer: TapGestureRecognizer()
                                                     ..onTap = () {
