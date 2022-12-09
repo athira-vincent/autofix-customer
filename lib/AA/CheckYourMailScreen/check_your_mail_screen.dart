@@ -8,6 +8,7 @@ import 'package:auto_fix/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CheckYourMailScreen extends StatefulWidget {
   const CheckYourMailScreen({Key? key}) : super(key: key);
@@ -67,8 +68,10 @@ class _CheckYourMailScreenState extends State<CheckYourMailScreen> {
       } else {
         setState(() {
           _isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(AppLocalizations.of(context)!.text_Password_reset_enabled_check_mail,
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            content: Text(
+                "Password Reset Enabled.\nCheck Your mail",
+                //AppLocalizations.of(context)!.text_Password_reset_enabled_check_mail,
                 style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: Duration(seconds: 2),
             backgroundColor: CustColors.light_navy,

@@ -71,7 +71,8 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
           _isLoading = false;
           if(value.message.contains(TextStrings.error_txt_account_not_exist) ){
             // String msg = value.message.split(":").last.toString();
-            SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.text_Account_not_exist,_scaffoldKey);
+            //SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.text_Account_not_exist,_scaffoldKey);
+            SnackBarWidget().setMaterialSnackBar("Account doesn't exist",_scaffoldKey);
           }
           else if(value.message.contains(ErrorStrings.error_202) ){
             // String msg = value.message.split(":").last.toString();
