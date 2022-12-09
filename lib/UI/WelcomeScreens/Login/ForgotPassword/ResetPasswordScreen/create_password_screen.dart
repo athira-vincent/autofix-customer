@@ -84,7 +84,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           //   duration: Duration(seconds: 2),
           //   backgroundColor: CustColors.light_navy,
           // ));
-          SnackBarWidget().setMaterialSnackBar( "Password Reset Successful", _scaffoldKey);
+          SnackBarWidget().setMaterialSnackBar( AppLocalizations.of(context)!.error_210, _scaffoldKey);
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -151,7 +151,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           children: [
                             Container(
                               child: Text(
-                                'Create password',
+                                AppLocalizations.of(context)!.Create password,
                                 style: Styles.textHeadLogin,
                               ),
                             ),
@@ -161,8 +161,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               alignment: Alignment.centerLeft,
                               //color: Colors.red,
                               child: Text(
-                                "Create new password.Your new password must "
-                                "be different from previous used passwords.",
+                                AppLocalizations.of(context)!.text_Create_new_password,
                                 textAlign: TextAlign.justify,
                                 softWrap: true,
                                 style: Styles.textLabelSubTitle12,
@@ -174,13 +173,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Password',
+                                  Text(AppLocalizations.of(context)!.text_password,
                                     style: Styles.textLabelTitle,
                                   ),
                                   TextFormField(
                                     textAlignVertical: TextAlignVertical.center,
                                     obscureText: _passwordVisible,
-                                    validator: InputValidator(ch: 'Password').passwordChecking,
+                                    validator: InputValidator(ch: AppLocalizations.of(context)!.text_password).passwordChecking,
                                     controller: _newPasswordController,
                                     focusNode: _newPasswordFocusNode,
                                     maxLines: 1,
@@ -213,7 +212,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                           },
                                         ),
                                       ),
-                                      hintText: 'Password',
+                                      hintText: AppLocalizations.of(context)!.text_password,
                                       errorMaxLines: 3,
                                       border: UnderlineInputBorder(
                                         borderSide: BorderSide(
@@ -270,14 +269,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Confirm password',
+                                  Text(AppLocalizations.of(context)!.text_confirm_password,
                                     style: Styles.textLabelTitle,
                                   ),
                                   TextFormField(
                                     textAlignVertical: TextAlignVertical.center,
                                     obscureText: _confirmPasswordVisible,
                                     validator:
-                                    InputValidator(ch: 'Confirm Password').passwordChecking,
+                                    InputValidator(ch: AppLocalizations.of(context)!.text_confirm_password).passwordChecking,
                                     controller: _confirmPwdController,
                                     focusNode: _confirmPwdFocusNode,
                                     maxLines: 1,
@@ -310,7 +309,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                           },
                                         ),
                                       ),
-                                      hintText: 'Password',
+                                      hintText: AppLocalizations.of(context)!.text_password,
                                       errorMaxLines: 3,
                                       border: UnderlineInputBorder(
                                         borderSide: BorderSide(
@@ -397,7 +396,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Text(
-                                                'Reset password',
+                                                AppLocalizations.of(context)!.text_Reset_password,
                                                 textAlign: TextAlign.center,
                                                 style: Styles.textButtonLabelSubTitle,
                                               ),
@@ -432,7 +431,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     if (pwds != cndpwd) {
       //toastMsg.toastMsg(msg: "Passwords are different!");
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Passwords are different!",
+        content: Text(AppLocalizations.of(context)!.text_error_password_different,
             style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
         duration: Duration(seconds: 2),
         backgroundColor: CustColors.light_navy,
