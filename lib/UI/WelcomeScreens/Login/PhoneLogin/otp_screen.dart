@@ -150,7 +150,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             }
             else{
               _isLoading = false;
-              SnackBarWidget().setMaterialSnackBar( "Otp Verification failed", _scaffoldKey);
+              SnackBarWidget().setMaterialSnackBar( AppLocalizations.of(context)!.text_Otp_Verification_failed, _scaffoldKey);
             }
           }
           else{
@@ -159,7 +159,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
         }else{
           SnackBarWidget().setMaterialSnackBar(
-              "Verification failed. Try again. ", _scaffoldKey);
+              AppLocalizations.of(context)!.text_Verification_failed, _scaffoldKey);
           ///------------- msg to send otp again --------------
         }
       }
@@ -429,7 +429,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                     //color: Colors.red,
                                     child: Text(
                                       //AppLocalizations.of(context)!.text_otp_screen_desc,
-                                      "Please enter the verification code sent to your phone number. ",
+                                      AppLocalizations.of(context)!.text_Please_enter_verification_code,
                                       /*"Enter your code number to verify your phone \n"
                                       "Enter the 4 digit code .",*/
                                       textAlign: TextAlign.left,
