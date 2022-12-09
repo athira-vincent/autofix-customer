@@ -229,16 +229,16 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                                 Center(
                                                   child: CountryCodePicker(
                                                     onChanged: _onCountryChange,
+                                                    enabled: false,
                                                     // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
                                                     initialSelection: 'NG',
                                                     favorite: ['+234','NG'],
-                                                    // optional. Shows only country name and flag
+                                                    showFlag: true,
+                                                    hideMainText: true,
                                                     showCountryOnly: false,
-                                                    // optional. Shows only country name and flag when popup is closed.
                                                     showOnlyCountryWhenClosed: false,
                                                     // optional. aligns the flag and the Text left
                                                     alignLeft: false,
-                                                    enabled: false,
                                                   ),
                                                 ),
                                                 Expanded(

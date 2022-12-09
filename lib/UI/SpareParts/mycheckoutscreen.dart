@@ -726,11 +726,7 @@ class _MyCheckoutScreenState extends State<MyCheckoutScreen> {
                         padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                         child: Text(
                           "Delivering to : " " " +
-                              states +
-                              " , " +
-                              city +
-                              " ," +
-                              pincode,
+                              widget.newaddressid,
                           maxLines: 2,
                           style: Styles.sparePartNameTextBlack17,
                         ),

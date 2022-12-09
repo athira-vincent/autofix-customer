@@ -172,21 +172,23 @@ class _ChangeDeliveryAddressScreenState
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                     onTap: () {
-                                      addresstext=state.addressModel.data!
-                                          .selectAddress[index].address +" "+" "+state.addressModel.data!.selectAddress[index].addressLine2+state
-                                          .addressModel
-                                          .data!
-                                          .selectAddress[index]
-                                          .state +
-                                          " " +
-                                          state.addressModel.data!
-                                              .selectAddress[index].city +
-                                          " "+state.addressModel.data!
-                                          .selectAddress[index].pincode;
+                                      // addresstext=state.addressModel.data!
+                                      //     .selectAddress[index].address +" "+" "+state.addressModel.data!.selectAddress[index].addressLine2+state
+                                      //     .addressModel
+                                      //     .data!
+                                      //     .selectAddress[index]
+                                      //     .state +
+                                      //     " " +
+                                      //     state.addressModel.data!
+                                      //         .selectAddress[index].city +
+                                      //     " "+state.addressModel.data!
+                                      //     .selectAddress[index].pincode;
 
                                       addressid = state.addressModel.data!
                                           .selectAddress[index].id;
                                       setState(() {
+                                        addresstext=state.addressModel.data!
+                                            .selectAddress[index].address;
                                         isdefault = state.addressModel.data!
                                             .selectAddress[index].isDefault;
                                         selectedindex = index++;
@@ -195,10 +197,11 @@ class _ChangeDeliveryAddressScreenState
                                         } else {
                                           isAddressSelected = true;
                                         }
+
+
                                       });
 
-                                      addresstext=state.addressModel.data!
-                                          .selectAddress[index].address;
+
                                     },
                                     child: Container(
                                       margin: EdgeInsets.only(
@@ -689,7 +692,8 @@ class _ChangeDeliveryAddressScreenState
           //       addressid));
           // }
 
-
+          print("addresstext");
+          print(addresstext);
           Navigator.push(
               context,
               MaterialPageRoute(

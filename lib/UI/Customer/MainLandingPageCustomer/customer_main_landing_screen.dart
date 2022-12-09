@@ -9,6 +9,8 @@ import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/my_cart_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_event.dart';
+import 'package:auto_fix/Utility/check_network.dart';
+import 'package:auto_fix/Utility/network_error_screen.dart';
 import 'package:auto_fix/Widgets/show_pop_up_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,21 +40,18 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
   String authToken = "", profileImageUrl = "";
   String userName = "";
   DateTime timeBackPressed = DateTime.now();
+  CheckInternet _checkInternet = CheckInternet();
 
   double _setValue(double value) {
     return value * per + value;
   }
 
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
-
   }
 
   Future<void> getSharedPrefData() async {
@@ -66,11 +65,22 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
       localProfileName = shdPre.getString(SharedPrefKeys.userName).toString();
       localProfileUrl =
           shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
-      JWTTokenChecking.checking(authToken, context);
       Provider.of<ProfileDataProvider>(context, listen: false)
           .setProfile(localUserId, localProfileName, localProfileUrl);
       print('authToken>>>>>>>>> ' + authToken.toString());
-      //print('profileImageUrl>>>>>>>>> CustomerMainLandingScreen' + profileImageUrl.toString());
+    });
+    _checkInternet.check().then((intenet){
+      if (intenet != null && intenet) {
+        JWTTokenChecking.checking(authToken, context);
+      }else{
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    NetworkErrorScreen())).then((value) {
+          JWTTokenChecking.checking(authToken, context);
+        });
+      }
     });
   }
 
@@ -295,7 +305,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
           index: _index,
           children: <Widget>[
             HomeCustomerUIScreen(),
-            MyCartScreen(isFromHome: false, addresstext: '', addressid: '',),
+            MyCartScreen(isFromHome: true, addresstext: '', addressid: '',),
             CustomerMyServicesScreen(),
             CustomerMyProfileScreen(
               isEnableEditing: false,
