@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/error_strings.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../../main.dart';
 import '../PhoneLogin/otp_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -67,8 +69,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
-          SnackBarWidget().setMaterialSnackBar( "${value.message.toString().split(":").last}", scaffoldKey);
         });
+       if(value.message.toString().split(":").last.trim() == ErrorStrings.error_202){
+        SnackBarWidget().setMaterialSnackBar(AppLocalizations.of(context)!.error_202, scaffoldKey);
+      }else{
+         SnackBarWidget().setMaterialSnackBar( "${value.message.toString().split(":").last}", scaffoldKey);
+       }
       } else {
         setState(() {
           _isLoading = false;

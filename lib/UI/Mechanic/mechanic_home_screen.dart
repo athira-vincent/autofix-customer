@@ -12,6 +12,8 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_screen_ui.dart
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyServices/mechanic_my_services.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/mechanic_side_bar.dart';
+import 'package:auto_fix/Utility/check_network.dart';
+import 'package:auto_fix/Utility/network_error_screen.dart';
 import 'package:auto_fix/Widgets/show_pop_up_widget.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -52,6 +54,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   DateTime timeBackPressed = DateTime.now();
+  CheckInternet _checkInternet = CheckInternet();
 
   String location = 'Null, Press Button';
   String CurrentLatitude = "";
@@ -69,7 +72,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     getSharedPrefData();
     _listenApiResponse();
     _getCurrentMechanicLocation();
-    //_listenNotification(context);
   }
 
   Future<void> getSharedPrefData() async {
@@ -85,12 +87,25 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       localProfileUrl =
           shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
     });
-    JWTTokenChecking.checking(
-        shdPre.getString(SharedPrefKeys.token).toString(), context);
     print('userFamilyId  MechanicHomeScreen ' + authToken.toString());
     print('userId  MechanicHomeScreen ' + userId.toString());
     print('userName  MechanicHomeScreen ' + userName.toString());
     print('isOnline  MechanicHomeScreen ' + isOnline.toString());
+
+    _checkInternet.check().then((intenet){
+      if (intenet != null && intenet) {
+        JWTTokenChecking.checking(shdPre.getString(SharedPrefKeys.token).toString(), context);
+      }else{
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    NetworkErrorScreen())).then((value) {
+          JWTTokenChecking.checking(shdPre.getString(SharedPrefKeys.token).toString(), context);
+        });
+      }
+    });
+
     Provider.of<ProfileDataProvider>(context, listen: false).setProfile(
         userId, localProfileName, localProfileUrl);
   }
@@ -162,142 +177,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       }
     });
   }
-
-  /*_listenNotification(BuildContext context){
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-
-      print("message received onMessage");
-
-      //Future<void>.delayed(const Duration(seconds: 2));//faking task delay
-
-      setState(() {
-        _counter += 1;
-        //_notificationPayloadMdl = event.data;
-      });
-      print("event.notification!.data " + event.data.toString());
-
-      String screen = event.data['screen'];
-      if(screen.toString() == "IncomingJobOfferScreen"){
-        NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
-
-        //var data = message['data'] ?? message;
-        String bookingId = event.data['bookingId'];
-        print("bookingId >>>>> " + bookingId );
-
-        final provider = Provider.of<LocaleProvider>(context,listen: false);
-        provider.setPayload(notificationPayloadMdl);
-
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>  IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)
-            )).then((value){
-        });
-      }
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
-
-      print("message received onMessageOpenedApp");
-
-      setState(() {
-        _counter += 1;
-      });
-
-      print("event.notification!.data " + event.data.toString());
-      String screen = event.data['screen'];
-      if(screen.toString() == "IncomingJobOfferScreen"){
-        NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
-        print("_notificationPayloadMdl >>>>> " + notificationPayloadMdl.toString());
-
-        final provider = Provider.of<LocaleProvider>(context,listen: false);
-        provider.setPayload(notificationPayloadMdl);
-
-        //var data = message['data'] ?? message;
-        String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-        //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-        print("bookingId >>>>> " + bookingId );
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>  IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)
-            )).then((value){
-        });
-      }else if(screen.toString() == "mechanicServiceDetails"){
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>  MechServiceRegularDetailsScreen(
-                  bookingId: event.data['bookingId'],
-                  firebaseCollection: event.data['regularType'].toString()  == "1"
-                      ?
-                  TextStrings.firebase_pick_up
-                      : event.data['regularType'].toString()  == "2" ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle ,
-                )
-            )).then((value){
-        });
-      }else if(screen.toString() == "customerServiceDetails"){
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>  CustServiceRegularDetailsScreen(
-                  bookingId: event.data['bookingId'],
-                  firebaseCollection: event.data['regularType'].toString()  == "1"
-                      ?
-                  TextStrings.firebase_pick_up
-                      : event.data['regularType'].toString()  == "2" ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle ,
-                )
-            )).then((value){
-        });
-      }
-    });
-
-    FirebaseMessaging.onBackgroundMessage((message) async {
-      print("onBackgroundMessage " + message.data.toString());
-
-      setState(() {
-        _counter += 1;
-        //_notificationPayloadMdl = event.data;
-      });
-      print("message.notification!.data " + message.data.toString());
-      print("event.notification!.data " + message.data.toString());
-      String screen = message.data['screen'];
-      if(screen.toString() == "IncomingJobOfferScreen"){
-        NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(message.data);
-        print("_notificationPayloadMdl >>>>> " + notificationPayloadMdl.toString());
-
-        final provider = Provider.of<LocaleProvider>(context,listen: false);
-        provider.setPayload(notificationPayloadMdl);
-
-        //var data = message['data'] ?? message;
-        String bookingId = message.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-        //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-        print("bookingId >>>>> " + bookingId );
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>  IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)
-            )).then((value){
-        });
-      }else if(screen.toString() == "mechanicServiceDetails"){
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>  MechServiceRegularDetailsScreen(
-                  bookingId: message.data['bookingId'],
-                  firebaseCollection: message.data['regularType'].toString()  == "1"
-                      ?
-                  TextStrings.firebase_pick_up
-                      : message.data['regularType'].toString()  == "2" ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle ,
-                )
-            )).then((value){
-        });
-      }
-
-    });
-
-  }*/
 
   @override
   Widget build(BuildContext context) {
