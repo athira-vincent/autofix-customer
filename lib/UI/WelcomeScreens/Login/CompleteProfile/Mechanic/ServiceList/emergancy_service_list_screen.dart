@@ -164,7 +164,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                   ),
                   child: Container(
                       alignment: Alignment.centerLeft,
-                      child: const Text("Select Emergency Services",
+                      child:  Text(AppLocalizations.of(context)!.text_select_emergency_services,
                         style: Styles.serviceSelectionTitle01Style,)),
                 ),
 
@@ -222,7 +222,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                               textAlign: TextAlign.left,
                               style: Styles.searchTextStyle01,
                               decoration: InputDecoration(
-                                  hintText: "Search Your Service",
+                                  hintText: AppLocalizations.of(context)!.text_search_your_service,
                                   border: InputBorder.none,
                                   contentPadding: new EdgeInsets.only(bottom: 15),
                                   hintStyle: Styles.searchTextStyle01
@@ -491,7 +491,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                 },
                               )
                                   : Center(
-                                child: Text('No Results found.'),
+                                child: Text(AppLocalizations.of(context)!.error_not_found),
                               ),
                             ),
                           ),
@@ -571,7 +571,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                         borderRadius: BorderRadius.circular(7),
                       ),
                       child:  Text(
-                        "Next",
+                        AppLocalizations.of(context)!.next,
                         style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'Corbel_Bold',

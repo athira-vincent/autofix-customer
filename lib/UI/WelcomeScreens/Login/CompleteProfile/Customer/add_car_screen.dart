@@ -1801,9 +1801,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const[
+                    children: [
                        Text(
-                        'Done',
+                        AppLocalizations.of(context)!.text_done,
                         textAlign: TextAlign.center,
                         style: Styles.textButtonLabelSubTitle,
                       ),
