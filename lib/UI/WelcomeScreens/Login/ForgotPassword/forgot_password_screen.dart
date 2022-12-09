@@ -143,31 +143,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                InkWell(
-                                  onTap: (){
-                                    if(language_en_ar==true)
-                                    {
-                                      MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
-                                      setState(() {
-                                        language_en_ar=false;
-                                      });
-                                    }
-                                    else
-                                    {
-                                      MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
-                                      setState(() {
-                                        language_en_ar=true;
-                                      });
-                                    }
 
-                                  },
-                                  child: Container(
+                                 Container(
                                     child: Text(
                                       'Forgot password',
                                       style: Styles.textHeadLogin,
                                     ),
                                   ),
-                                ),
                                 Container(
                                   margin: EdgeInsets.only(left: 10, right: 10, top: 15,bottom: 10),
                                   padding: EdgeInsets.all(5),
