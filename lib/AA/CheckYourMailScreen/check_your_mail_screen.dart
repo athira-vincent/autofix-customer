@@ -68,7 +68,7 @@ class _CheckYourMailScreenState extends State<CheckYourMailScreen> {
         setState(() {
           _isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Password Reset Enabled.\nCheck Your mail",
+            content: Text(AppLocalizations.of(context)!.text_Password_reset_enabled_check_mail,
                 style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: Duration(seconds: 2),
             backgroundColor: CustColors.light_navy,
@@ -150,7 +150,7 @@ class _CheckYourMailScreenState extends State<CheckYourMailScreen> {
                               },
                               child: Container(
                                 child: Text(
-                                  'Check your mail',   //'Check your mail',
+                                  AppLocalizations.of(context)!.text_check_mail,   //'Check your mail',
                                   style: Styles.textHeadLogin,
                                 ),
                               ),
@@ -161,7 +161,7 @@ class _CheckYourMailScreenState extends State<CheckYourMailScreen> {
                               alignment: Alignment.centerLeft,
                               //color: Colors.red,
                               child: Text(
-                                'Please check your email , we have sent you an \nemail that contains a link to reset your password. ',
+                                AppLocalizations.of(context)!.text_check_mail_screen_desc,
                                 textAlign: TextAlign.justify,
                                 softWrap: true,
                                 style: Styles.textLabelSubTitle12,
@@ -213,7 +213,7 @@ class _CheckYourMailScreenState extends State<CheckYourMailScreen> {
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Text(
-                                                'Go to email',     //'Go to email',
+                                                AppLocalizations.of(context)!.text_btn_go_to_mail,     //'Go to email',
                                                 textAlign: TextAlign.center,
                                                 style: Styles.textButtonLabelSubTitle,
                                               ),
@@ -241,11 +241,11 @@ class _CheckYourMailScreenState extends State<CheckYourMailScreen> {
                                       text: TextSpan(
                                         children: <TextSpan>[
                                           TextSpan(
-                                            text: 'Did not receive the email? Check your spam filter Or ',     //"Did not receive the email? Check your spam filter Or ",
+                                            text: AppLocalizations.of(context)!.text_check_spam,     //"Did not receive the email? Check your spam filter Or ",
                                             style: Styles.textLabelSubTitle,
                                           ),
                                           TextSpan(
-                                              text: 'try another email address ',   //'try another email address ',
+                                              text: AppLocalizations.of(context)!.text_try_another,   //'try another email address ',
                                               style: Styles.textLabelTitle_10,
                                               recognizer: TapGestureRecognizer()
                                                 ..onTap = () {
