@@ -5,7 +5,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/svg.dart';import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -151,7 +151,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           children: [
                             Container(
                               child: Text(
-                                AppLocalizations.of(context)!.Create password,
+                                //AppLocalizations.of(context)!.Create password,
+                                'Create password',
                                 style: Styles.textHeadLogin,
                               ),
                             ),
@@ -161,7 +162,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               alignment: Alignment.centerLeft,
                               //color: Colors.red,
                               child: Text(
-                                AppLocalizations.of(context)!.text_Create_new_password,
+                                //AppLocalizations.of(context)!.text_Create_new_password,
+                                "Create new password.Your new password must "
+                                    "be different from previous used passwords.",
                                 textAlign: TextAlign.justify,
                                 softWrap: true,
                                 style: Styles.textLabelSubTitle12,
@@ -396,7 +399,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Text(
-                                                AppLocalizations.of(context)!.text_Reset_password,
+                                                //AppLocalizations.of(context)!.text_Reset_password,
+                                                'Reset password',
                                                 textAlign: TextAlign.center,
                                                 style: Styles.textButtonLabelSubTitle,
                                               ),
@@ -430,7 +434,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   void checkPassWord(String pwds, String cndpwd) {
     if (pwds != cndpwd) {
       //toastMsg.toastMsg(msg: "Passwords are different!");
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(
         content: Text(AppLocalizations.of(context)!.text_error_password_different,
             style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
         duration: Duration(seconds: 2),

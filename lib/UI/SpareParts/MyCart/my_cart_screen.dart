@@ -35,11 +35,7 @@ class MyCartScreen extends StatefulWidget {
 }
 
 class _MyCartScreenState extends State<MyCartScreen> {
-  final FocusNode _emailFocusNode = FocusNode();
-  final TextStyle _labelStyleEmail = const TextStyle();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  AutovalidateMode _autoValidate = AutovalidateMode.disabled;
-  final ForgotPasswordBloc _forgotPasswordBloc = ForgotPasswordBloc();
+
   bool _isLoading = false;
   double per = .10;
   double perfont = .10;
@@ -783,44 +779,12 @@ bool  addressstatus=false;
                       state.cartlistmodel.data!.cartList.totalItems.toString()),
                 ],
               )
-            : Center(
-                child: Column(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.2,
-                  ),
-                  Image.asset(
-                    "assets/image/ic_cart_empty.png",
-                    width: MediaQuery.of(context).size.width * 0.6,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05,
-                  ),
-                  const Text(
-                    "Cart Empty",
-                    style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'Samsung_SharpSans_Medium'),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.01,
-                  ),
-                  const Text(
-                    "Your cart is empty",
-                    style: Styles.sparePartNameTextBlack17,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.014,
-                  ),
-                  const Text(
-                    "Go to product section and add product to cart",
-                    style: Styles.sparePartNameTextBlack17,
-                  ),
-                ],
-              ));
-      } else {
+            : pageErrorUI();
+      } else if(state is ShowCartPopErrorState){
+        print("cart message>>>" );
+        print(state.message);
+        return pageErrorUI();
+      } else{
         return Container();
       }
     });
@@ -1298,6 +1262,46 @@ bool  addressstatus=false;
         ),
       ],
     );
+  }
+
+  Widget pageErrorUI(){
+    return Center(
+        child: Column(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.2,
+            ),
+            Image.asset(
+              "assets/image/ic_cart_empty.png",
+              width: MediaQuery.of(context).size.width * 0.6,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
+            const Text(
+              "Cart Empty",
+              style: TextStyle(
+                  fontSize: 22,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Samsung_SharpSans_Medium'),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
+            ),
+            const Text(
+              "Your cart is empty",
+              style: Styles.sparePartNameTextBlack17,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.014,
+            ),
+            const Text(
+              "Go to product section and add product to cart",
+              style: Styles.sparePartNameTextBlack17,
+            ),
+          ],
+        ));
   }
 }
 

@@ -29,6 +29,7 @@ class _SelectStatesScreenState extends State<SelectStatesScreen> {
   String selectedState = "";
   bool isloading = false;
   bool _isLoadingPage = true;
+  int itemCount = 0;
 
 
   @override
@@ -70,7 +71,7 @@ class _SelectStatesScreenState extends State<SelectStatesScreen> {
           _isLoadingPage = false;
           _countryDataAll = value.data!.statesList!;
           _countryData = value.data!.statesList!;
-
+          itemCount = _countryData.length;
         });
       }
     });
@@ -159,13 +160,21 @@ class _SelectStatesScreenState extends State<SelectStatesScreen> {
                             textAlignVertical: TextAlignVertical.center,
                             onChanged: (text) {
                               if(text.isNotEmpty){
-                                _countryData = _countryData
-                                    .where((element) => element.name
-                                    .toLowerCase()
-                                    .contains(text.toLowerCase()))
-                                    .toList();
+                                setState((){
+                                  _countryData = _countryData
+                                      .where((element) => element.name
+                                      .toLowerCase()
+                                      .contains(text.toLowerCase()))
+                                      .toList();
+                                  itemCount = _countryData.length;
+                                });
+
                               }else{
-                                _countryData = _countryDataAll;
+                                setState((){
+                                  _countryData = _countryDataAll;
+                                  itemCount = _countryData.length;
+                                });
+
                               }
                          },
                             textAlign: TextAlign.left,
@@ -193,7 +202,7 @@ class _SelectStatesScreenState extends State<SelectStatesScreen> {
                       ? ListView.separated(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
-                      itemCount: _countryData.length,
+                      itemCount: itemCount,
                       itemBuilder: (context, index) {
                         return InkWell(
                             onTap: () {
