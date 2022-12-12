@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Models/customer_models/spare_parts_list_model/spare_parts_list_model.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_bloc.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SparePartsListScreen extends StatefulWidget {
   final String modelname;
@@ -45,9 +47,34 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
   bool ischanged = false;
   List<SparePartsList> sparepartslistsearch = [];
   List<SparePartsList> spareparts = [];
+  String username = "", authToken = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSharedPrefData();
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData ManagerHomeScreen');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      username = shdPre.getString(SharedPrefKeys.userName).toString();
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      print('userFamilyId' + authToken.toString());
+      removepref();
+    });
+  }
+
+  void removepref() async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    shdPre.remove("ischanged");
+  }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: MultiBlocProvider(
         providers: [
@@ -99,7 +126,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                       _isSearching == true
                           ? _buildSearchField()
                           : appBarCustomUi(),
-                      SparePartsListUi(),
+                      SparePartsListUi(size),
                     ],
                   ),
                   addToCart == true ? ViewCartUi() : Container(),
@@ -158,7 +185,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
     );
   }
 
-  Widget SparePartsListUi() {
+  Widget SparePartsListUi(Size size) {
     return Expanded(
       child: BlocBuilder<SparePartListBloc, SparePartListState>(
           builder: (context, state) {
@@ -395,7 +422,6 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
               },
             );
           } else {
-
             return GridView.builder(
               itemCount: sparepartslistsearch.length,
               shrinkWrap: true,
@@ -565,6 +591,8 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
               },
             );
           }
+        } else if(state is SparePartListErrorState){
+          return productListEmptyWidget(size);
         } else {
           return Container();
         }
@@ -694,6 +722,83 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
   //       });
   // }
 
+  Widget productListEmptyWidget(Size size){
+    return Container(
+      margin: EdgeInsets.only(
+          top: size.height * 6 / 100,
+          left: size.width * 5 / 100,
+          right: size.width * 3 / 100
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text("Hi.."),
+              Text("${username}", style: TextStyle(
+                color: CustColors.materialBlue,
+              ),)
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 3),
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text("You have no products to show!")),
+          ),
+          Container(
+            margin: EdgeInsets.only(
+                top: size.height * 4 / 100,
+                left: size.width * 3 / 100,
+                right: size.width * 5 / 100
+            ),
+            child: Image.asset('assets/image/img_products_empty.png'),
+          ),
+          productListEmptyWarning(size)
+        ],
+      ),
+    );
+  }
+
+  Widget productListEmptyWarning(Size size) {
+    return Container(
+      decoration: boxDecorationStyle01,
+      margin: EdgeInsets.only(
+          top: size.height * 6 / 100,
+          right: size.width * 2 / 100
+      ),
+      padding: EdgeInsets.only(
+          right: size.width * 2 / 100,
+          top: size.width * 2 / 100,
+          bottom: size.width * 2 / 100
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.only(
+                top: size.width * 3 / 100, bottom: size.width * 3 / 100),
+            margin: EdgeInsets.only(
+                left: size.width * 2 / 100,
+                right: size.width * 2 / 100
+            ),
+            child: Image.asset(
+              "assets/image/ic_warning_blue_white.svg",
+              height: size.height * 3.7 / 100,
+              width: size.width * 3.7 / 100,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              "Product page is empty may be because of lack of vendor",
+              //overflow: TextOverflow.,
+              textAlign: TextAlign.justify,
+              style: warningTextStyle01,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   Widget _buildSearchField() {
     return TextField(
       controller: searchController,
@@ -729,6 +834,23 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
       ),
     );
   }
+
+  BoxDecoration boxDecorationStyle01 = BoxDecoration(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(8),
+      ),
+      border: Border.all(
+        color: CustColors.greyish,
+        width: 0.3,
+      ),
+      color: CustColors.white_03
+  );
+
+  TextStyle warningTextStyle01 = const TextStyle(
+      fontSize: 12,
+      fontFamily: "Samsung_SharpSans_Regular",
+      fontWeight: FontWeight.w600,
+      color: Colors.black);
 }
 
 class MyBehavior extends ScrollBehavior {

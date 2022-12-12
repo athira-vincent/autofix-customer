@@ -29,7 +29,7 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
   String selectedState = "";
   bool isloading = false;
   bool _isLoadingPage = true;
-
+  int itemCount = 0;
 
   @override
   void initState() {
@@ -67,6 +67,7 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
           _isLoadingPage = false;
           _cityDataAll = value.data!.citiesList!;
           _countryData = value.data!.citiesList!;
+          itemCount = _countryData.length;
         });
       }
     });
@@ -155,13 +156,19 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
                             textAlignVertical: TextAlignVertical.center,
                             onChanged: (text) {
                               if(text.isNotEmpty){
-                                _countryData = _countryData
-                                    .where((element) => element.cityName
-                                    .toLowerCase()
-                                    .contains(text.toLowerCase()))
-                                    .toList();
+                                setState((){
+                                  _countryData = _countryData
+                                      .where((element) => element.cityName
+                                      .toLowerCase()
+                                      .contains(text.toLowerCase()))
+                                      .toList();
+                                  itemCount = _countryData.length;
+                                });
                               }else{
-                                _countryData = _cityDataAll;
+                                setState((){
+                                  _countryData = _cityDataAll;
+                                  itemCount = _countryData.length;
+                                });
                               }
                          },
                             textAlign: TextAlign.left,
@@ -189,7 +196,7 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
                       ? ListView.separated(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
-                      itemCount: _countryData.length,
+                      itemCount: itemCount,
                       itemBuilder: (context, index) {
                         return InkWell(
                             onTap: () {

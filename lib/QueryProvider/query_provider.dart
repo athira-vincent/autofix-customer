@@ -4107,7 +4107,6 @@ class QueryProvider {
   cartList(customerId: $custId, page: 0, size: 100) {
     totalItems
     data {
-      
       id
       customerId
       productId
