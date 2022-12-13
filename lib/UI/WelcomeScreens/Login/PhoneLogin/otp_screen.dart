@@ -424,7 +424,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                   //color: Colors.red,
                                   child: Text(
                                     //AppLocalizations.of(context)!.text_otp_screen_desc,
-                                    "Please enter the verification code sent to your phone number. ",
+                                    AppLocalizations.of(context)!.text_Please_enter_verification_code,
                                     /*"Enter your code number to verify your phone \n"
                                       "Enter the 4 digit code .",*/
                                     textAlign: TextAlign.left,
