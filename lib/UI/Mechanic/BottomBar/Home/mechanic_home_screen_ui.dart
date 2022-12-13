@@ -984,10 +984,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> with Widget
           } else if (firebaseScreen == "M3") {
             /// storing start time and end time in shared pref
             ///
-            String remaintime = "";
-
-
-
+            /*String remaintime = "";
 
             if(DateFormat("HH:mm:ss").format(DateTime.now())==totalstarttimecurrenttimevalue){
               print("work finished");
@@ -1024,16 +1021,13 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> with Widget
                     })
                   }
               });
-            }
+            }*/
 
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => CustomerApprovedSecondScreen(
-            //           remaintime: remaintime,
-            //           starttime: "",
-            //           endtime: "",
-            //         )));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CustomerApprovedScreen(
+                    )));
           } else if (firebaseScreen == "M4") {
             Navigator.push(
                 context,

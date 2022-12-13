@@ -73,50 +73,52 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
       updateToCloudFirestoreMechanicCurrentScreenDB();
     });
     await  _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
-      setState(() {
-        mechanicName = event.get('mechanicName');
-        customerName = event.get('customerName');
-        updatedServiceTime = event.get('updatedServiceTime');
-        customerDiagonsisApproval = event.get('customerDiagonsisApproval');
-        mechanicDiagonsisState = event.get('mechanicDiagonsisState');
-        serviceStartWorldTime = event.get("serviceStartWorldTime");
-        if(listenToFirestoreTime == "0")
-        {
-          if(serviceStartWorldTime != "" || serviceStartWorldTime > 0){
-            levelClock = int.parse('${updatedServiceTime.split(":").first}');
-            int sec = GetCurrentWorldTime().getDurationDifference(serviceStartWorldTime, updatedServiceTime);
-            levelClock = sec;
-          }else{
-            levelClock = int.parse('${updatedServiceTime.split(":").first}');
-            int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;
-            levelClock = sec;
-          }
-
-          _controller = AnimationController(
-              vsync: this,
-              duration: Duration(
-                  seconds: levelClock)
-          );
-          listenToFirestoreTime = "1";
-          if(mechanicDiagonsisState=="2")
+      if(mounted){
+        setState(() {
+          mechanicName = event.get('mechanicName');
+          customerName = event.get('customerName');
+          updatedServiceTime = event.get('updatedServiceTime');
+          customerDiagonsisApproval = event.get('customerDiagonsisApproval');
+          mechanicDiagonsisState = event.get('mechanicDiagonsisState');
+          serviceStartWorldTime = int.parse(event.get("serviceStartWorldTime") ?? 0) ;
+          if(listenToFirestoreTime == "0")
           {
-            setState(() {
-              print("updateToCloudFirestoreDB isStartedWork $isStartedWork");
-              print("updateToCloudFirestoreDB extendedTime $extendedTime");
-              print("levelClock $levelClock");
-              updateToCloudFirestoreDB("1", "0", "0","0");
-              updateToCloudWorkStartedFirestoreDB();
-              updateToCloudFirestoreCustomerCurrentScreenDB();
-            });
-            _controller.forward();
-            _totalTimeCounter();
-            _updateTimerListener(int.parse(updatedServiceTime));
-            isStartedWork = true;
-            _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-                authToken, bookingId, "5");
+            if(serviceStartWorldTime != "" || serviceStartWorldTime > 0){
+              levelClock = int.parse('${updatedServiceTime.split(":").first}');
+              int sec = GetCurrentWorldTime().getDurationDifference(serviceStartWorldTime, updatedServiceTime);
+              levelClock = sec;
+            }else{
+              levelClock = int.parse('${updatedServiceTime.split(":").first}');
+              int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;
+              levelClock = sec;
+            }
+
+            _controller = AnimationController(
+                vsync: this,
+                duration: Duration(
+                    seconds: levelClock)
+            );
+            listenToFirestoreTime = "1";
+            if(mechanicDiagonsisState=="2")
+            {
+              setState(() {
+                print("updateToCloudFirestoreDB isStartedWork $isStartedWork");
+                print("updateToCloudFirestoreDB extendedTime $extendedTime");
+                print("levelClock $levelClock");
+                updateToCloudFirestoreDB("1", "0", "0","0");
+                updateToCloudWorkStartedFirestoreDB();
+                updateToCloudFirestoreCustomerCurrentScreenDB();
+              });
+              _controller.forward();
+              _totalTimeCounter();
+              _updateTimerListener(int.parse(updatedServiceTime));
+              isStartedWork = true;
+              _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+                  authToken, bookingId, "5");
+            }
           }
-        }
-      });
+        });
+      }
     });
   }
 
