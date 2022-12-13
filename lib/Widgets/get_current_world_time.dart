@@ -17,7 +17,7 @@ class GetCurrentWorldTime {
     return currentDateTime;
   }
 
-  int setMaterialSnackBar(startTime, totalTime){
+  int getDurationDifference(startTime, totalTime){
 
     Duration timeBalance;
     String currentDateTime;
@@ -41,6 +41,5 @@ class GetCurrentWorldTime {
     print("remaining Time >>> $remainingTime");
    return remainingTime;
   }
-
 
 }
