@@ -184,10 +184,7 @@ class _MechanicWorkProgressArrivedScreenState extends State<MechanicWorkProgress
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MechanicWorkProgressScreen(workStatus: "2",bookingId: widget.bookingId,isFromHome: false,
-                      remaintime: "0",
-                      starttime: "",
-                      endtime: "",)));
+                    builder: (context) => MechanicWorkProgressScreen(workStatus: "2",bookingId: widget.bookingId,)));
           }
 
       }
@@ -198,10 +195,7 @@ class _MechanicWorkProgressArrivedScreenState extends State<MechanicWorkProgress
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: widget.bookingId,isFromHome: false,
-                    remaintime: "0",
-                    starttime: "",
-                    endtime: "",))
+                  builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: widget.bookingId))
           ).then((value){
           });
         }
@@ -237,10 +231,7 @@ class _MechanicWorkProgressArrivedScreenState extends State<MechanicWorkProgress
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: widget.bookingId,isFromHome: true,
-                remaintime: "0",
-                starttime: "",
-                endtime: "",)));
+              builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: widget.bookingId,)));
     }else if(workStatus == "3"){
       Navigator.pushReplacement(
           context,

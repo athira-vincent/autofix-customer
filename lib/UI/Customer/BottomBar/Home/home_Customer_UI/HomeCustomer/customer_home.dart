@@ -423,10 +423,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen>
                 context,
                 MaterialPageRoute(
                     builder: (context) =>  MechanicWorkProgressScreen(
-                      isFromHome: true,
-                        endtime: "",
-                        remaintime: "",
-                        starttime: "",
                         bookingId: bookingIdEmergency,
                         workStatus: "1")
                 )).then((value){
