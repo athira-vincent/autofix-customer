@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PaymentFailedScreen extends StatefulWidget {
   String firebaseCollection;
@@ -80,7 +81,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
         // bottom: size.height * 1 /100,
         top: size.height * 3.4 / 100,
       ),
-      child: Text("Payment failed !",
+      child: Text(AppLocalizations.of(context)!.text_Payment_failed,
         style: TextStyle(
           fontSize: 16,
           fontFamily: "Samsung_SharpSans_Medium",
@@ -114,7 +115,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
           ),
           Text(
             //"Something went wrong! Payment failed! \nTry another method like direct payment etc.. \nOr you can try after some time",
-            "Something went wrong! Payment failed! \nTry again or choose another payment\n method ",
+            AppLocalizations.of(context)!.text_Something_wrong_Payment_failed,
             style: warningTextStyle01,
           )
         ],
@@ -184,7 +185,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
           SizedBox(
             width: size.width * 1.5 / 100,
           ),
-          Expanded(child: Text("Other Payment Options", style: buttonTextStyle,))
+          Expanded(child: Text(AppLocalizations.of(context)!.text_Other_Payment_Options, style: buttonTextStyle,))
         ],
       ),
     );
@@ -209,7 +210,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
           SizedBox(
             width: size.width * 1.5 / 100,
           ),
-          Expanded(child: Text("Direct payment", style: buttonTextStyle,))
+          Expanded(child: Text(AppLocalizations.of(context)!.text_Direct_payment, style: buttonTextStyle,))
         ],
       ),
     );
@@ -234,7 +235,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
                 return Wrap(children: <Widget>[
                   SizedBox(height: 10,),
                   Container(
-                    child: ListTile(leading: Text("Total Payable ",style: TextStyle(
+                    child: ListTile(leading: Text(AppLocalizations.of(context)!.text_Total_Payable,style: TextStyle(
                       fontSize: 14.3,
                       fontWeight: FontWeight.w600,
                       fontFamily: "Samsung_SharpSans_Medium",
@@ -251,7 +252,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
                     child: ListTile(
                       leading:  Image.asset("assets/image/img_payment_cash.png",height: 20,width: 20,),
                       title: const Text(
-                          'Direct Payment',
+                          AppLocalizations.of(context)!.text_Direct_payment,
                           style: TextStyle(
                             fontSize: 14.3,
                             fontWeight: FontWeight.w600,
@@ -305,7 +306,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
 
                         child: Center(
                           child: Text(
-                            "Click To Continue",
+                            AppLocalizations.of(context)!.text_Click_Continue,
                             style: TextStyle(
                               fontSize: 14.3,
                               fontWeight: FontWeight.w600,
