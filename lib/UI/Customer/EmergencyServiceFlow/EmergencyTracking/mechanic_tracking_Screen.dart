@@ -133,8 +133,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
              Navigator.pushReplacement(
                  context,
                  MaterialPageRoute(
-                     builder: (context) =>  MechanicWorkProgressArrivedScreen(
-                       workStatus: "1",bookingId: widget.bookingId,)
+                     builder: (context) =>  MechanicWorkProgressArrivedScreen(bookingId: widget.bookingId,) // Work status - 1
                  ));
            }
          });

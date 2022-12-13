@@ -418,15 +418,20 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen>
               _homeCustomerBloc.postCustomerActiveServiceRequest(
                   "$authToken", userID);
             });
-          } else if ( firebaseScreen == "C4" || firebaseScreen == "C5") {
+          } else if (firebaseScreen == "C2" ) {     ///-----MechanicWorkProgressArrivedScreen
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MechanicWorkProgressArrivedScreen(
+                      bookingId: bookingIdEmergency,)
+                )).then((value){
+              _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
+            });
+          }else if ( firebaseScreen == "C4" || firebaseScreen == "C5") {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) =>  MechanicWorkProgressScreen(
-                      isFromHome: true,
-                        endtime: "",
-                        remaintime: "",
-                        starttime: "",
                         bookingId: bookingIdEmergency,
                         workStatus: "1")
                 )).then((value){
@@ -437,20 +442,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen>
                 context,
                 MaterialPageRoute(
                     builder: (context) =>  MechanicWorkProgressWorkingScreen(
-                        isFromHome: true,
-                        endtime: "",
-                        remaintime: "",
-                        starttime: "",
-                        bookingId: bookingIdEmergency,
-                        workStatus: "1")
-                )).then((value){
-              _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
-            });
-          }else if (firebaseScreen == "C2" ) {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MechanicWorkProgressArrivedScreen(
                         bookingId: bookingIdEmergency,
                         workStatus: "1")
                 )).then((value){

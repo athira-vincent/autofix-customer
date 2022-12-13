@@ -1044,13 +1044,14 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   _showMechanicAcceptanceDialog(BuildContext context) async {
     Future.delayed(const Duration(seconds: 40), () {
 
-      setState(() {
-        print('_showMechanicAcceptanceDialog');
+      if(mounted){
+        setState(() {
+          print('_showMechanicAcceptanceDialog');
 
-        Navigator.of(context, rootNavigator: true).pop();
-        Navigator.of(context).pop();
-
-      });
+          Navigator.of(context, rootNavigator: true).pop();
+          Navigator.of(context).pop();
+        });
+      }
 
     });
     await showDialog(
