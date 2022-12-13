@@ -101,6 +101,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         .doc('${bookingId}')
         .update({
       "mechanicFromPage" : "M2",
+      "customerFromPage" : "C2",
     })
         .then((value) => print("Location Added"))
         .catchError((error) =>
@@ -118,7 +119,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           print('customerDiagonsisApproval ++++ $customerDiagonsisApproval');
           print('oldSelectedServiceId ++++ $oldSelectedServiceId');
 
-
           if(customerDiagonsisApproval =="1")
           {
             isWaiting = "1";
@@ -127,6 +127,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             if(startOrUpdateState == "0")
             {
               isWaiting = "-2";
+///------------- update start time to firebase----------
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -162,7 +163,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           .catchError((error) =>
           print("Failed to add updatedServiceList: $error"));
 
-      if (startOrUpdateState == "0") {
+      if (startOrUpdateState == "0") {                                          /// --------- Work Started
         _firestore
             .collection("ResolMech")
             .doc('${bookingId}')
@@ -178,7 +179,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             .catchError((error) =>
             print("Failed to add updatedServiceList: $error"));
       }
-      else {
+      else {                                                                    /// ----------- Add / Change Additional Services - Waiting 4 Approve
         _firestore
             .collection("ResolMech")
             .doc('${bookingId}')
@@ -575,7 +576,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   Widget mechanicStartServiceButton(Size size){
     return InkWell(
       onTap: (){
-        //getWorldTime();
         updateToCloudFirestoreDB();
         if (startOrUpdateState == "0")
         {
@@ -627,35 +627,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
       ),
     );
   }
-
-  // void getWorldTime(){
-  //   //currentWorldDateTime = GetCurrentWorldTime().getCurrentWorldTime();
-  //   Repository().getCurrentWorldTime("Nairobi").then((value01) => {
-  //
-  //     setState(() {
-  //       currentWorldDateTime = value01.datetime!.millisecondsSinceEpoch.toString();
-  //     }),
-  //
-  //     print("dateConverter(timeNow!) >>> ${currentWorldDateTime}"),
-  //     updateWorldTimeToCloudFirestoreDB()
-  //
-  //   });
-  // }
-  //
-  // void updateWorldTimeToCloudFirestoreDB() {
-  //   print("updateToCloudFirestoreDB totalTimeTaken clock2222222222 >>>> " + '$currentWorldDateTime');
-  //   _firestore
-  //       .collection("ResolMech")
-  //       .doc('${bookingId}')
-  //       .update({
-  //     "worldServiceStartTime" : "$currentWorldDateTime",
-  //
-  //   })
-  //       .then((value) => print("Location Added"))
-  //       .catchError((error) =>
-  //       print("Failed to add Location: $error"));
-  //
-  // }
 
   void _awaitReturnValueFromSecondScreenOnAdd(BuildContext context) async {
 
@@ -970,12 +941,12 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         child: InkWell(
           onTap: (){
             //Navigator.of(context, rootNavigator: true).pop();
+/// -------------------start time update to Firebase ---------------------------------------
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) =>  CustomerApprovedScreen()
-                )).then((value){
-            });
+                ));
           },
           child: Text(
             "Continue",

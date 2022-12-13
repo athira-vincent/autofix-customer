@@ -136,7 +136,7 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
             time = DateTime.fromMillisecondsSinceEpoch( int.parse(notificationPayloadMdl.customerCurrentTime)).
             difference(DateTime.fromMillisecondsSinceEpoch(int.parse(value01.datetime.millisecondsSinceEpoch.toString()))),
 
-            if(time.inSeconds > -30){
+            if(time.inSeconds > -28){
 
               notificationNavigatorKey.currentState.pushNamed('/IncomingJobRequestScreen',arguments: notificationPayloadMdl)
 

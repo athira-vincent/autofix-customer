@@ -6,6 +6,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/CityList/city_list_mdl.d
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class SelectCityScreen extends StatefulWidget {
@@ -102,7 +103,7 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
               )
             ],
             title: Text(
-              'Select your City',
+              AppLocalizations.of(context)!.text_Select_your_City,
               style: Styles.titleTextSelectStateStyle,
             ),
           ),
@@ -174,7 +175,7 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
                             textAlign: TextAlign.left,
                             style: Styles.textLabelSubTitle10,
                             decoration: InputDecoration(
-                              hintText: "Search Your City",
+                              hintText: AppLocalizations.of(context)!.text_Search_Your_City,
                               border: InputBorder.none,
                               contentPadding: new EdgeInsets.only(bottom: 15),
                               hintStyle: Styles.textLabelSubTitle10,
@@ -236,7 +237,7 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
                     },
                   )
                       : Center(
-                    child: Text('No Results found.'),
+                    child: Text(AppLocalizations.of(context)!.error_not_found),
                   ),
                 ),
               ),

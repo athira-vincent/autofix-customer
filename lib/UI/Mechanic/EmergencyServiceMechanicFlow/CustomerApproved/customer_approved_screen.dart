@@ -6,6 +6,7 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/additional_time_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
+import 'package:auto_fix/Widgets/get_current_world_time.dart';
 import 'package:auto_fix/Widgets/mechanicWorkTimer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   Timer? timerObjVar;
   int timeCounter = 0;
   Timer? totalTimerObj;
-  int totalTimeTaken = 0;
+  int totalTimeTaken = 0;int serviceStartWorldTime = 0;
 
 
   @override
@@ -78,11 +79,19 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         updatedServiceTime = event.get('updatedServiceTime');
         customerDiagonsisApproval = event.get('customerDiagonsisApproval');
         mechanicDiagonsisState = event.get('mechanicDiagonsisState');
+        serviceStartWorldTime = event.get("serviceStartWorldTime");
         if(listenToFirestoreTime == "0")
         {
-          levelClock = int.parse('${updatedServiceTime.split(":").first}') ;
-          int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;
-          levelClock = sec;
+          if(serviceStartWorldTime != "" || serviceStartWorldTime > 0){
+            levelClock = int.parse('${updatedServiceTime.split(":").first}');
+            int sec = GetCurrentWorldTime().getDurationDifference(serviceStartWorldTime, updatedServiceTime);
+            levelClock = sec;
+          }else{
+            levelClock = int.parse('${updatedServiceTime.split(":").first}');
+            int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;
+            levelClock = sec;
+          }
+
           _controller = AnimationController(
               vsync: this,
               duration: Duration(
@@ -96,6 +105,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
               print("updateToCloudFirestoreDB extendedTime $extendedTime");
               print("levelClock $levelClock");
               updateToCloudFirestoreDB("1", "0", "0","0");
+              updateToCloudWorkStartedFirestoreDB();
+              updateToCloudFirestoreCustomerCurrentScreenDB();
             });
             _controller.forward();
             _totalTimeCounter();
@@ -107,6 +118,21 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         }
       });
     });
+  }
+
+  void updateToCloudWorkStartedFirestoreDB() {
+    print("updateToCloudWorkStartedFirestoreDB >>>> " );
+      _firestore
+          .collection("ResolMech")
+          .doc('${bookingId}')
+          .update({
+        'isWorkStarted': "1",
+        'serviceStartWorldTime' : "${GetCurrentWorldTime().getCurrentWorldTime()}"
+      })
+          .then((value) => print("Location Added"))
+          .catchError((error) =>
+          print("Failed to add Location: $error"));
+
   }
 
   void updateToCloudFirestoreDB(String isWorkStarted, String isWorkCompleted, String time,String currentUpdatedTime ) {
@@ -156,6 +182,18 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         print("Failed to add Location: $error"));
   }
 
+  void updateToCloudFirestoreCustomerCurrentScreenDB() {
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingId}')
+        .update({
+      "customerFromPage" : "C4",
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -165,32 +203,34 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
           Navigator.pushNamed(context, '/mechanicHomeScreen').then((_) => setState(() {}));
           return true;
         },
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              customerApprovedScreenTitle(size),
+        child: Scaffold(
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                customerApprovedScreenTitle(size),
 
-              customerApprovedScreenSubTitle(size),
+                customerApprovedScreenSubTitle(size),
 
-              customerApprovedScreenTitleImage(size),
+                customerApprovedScreenTitleImage(size),
 
-              customerApprovedScreenStartWorkText(size),
+                customerApprovedScreenStartWorkText(size),
 
-              customerApprovedScreenWarningText(size),
+                customerApprovedScreenWarningText(size),
 
-              customerApprovedScreenTimer(size),
+                customerApprovedScreenTimer(size),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  isEnableAddMoreBtnFirstTym
-                      ? Container()
-                      : isEnableAddMoreBtn ? mechanicAddMoreTimeButton(size) : Container(),
-                  mechanicStartServiceButton(size),
-                ],
-              )
-            ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    isEnableAddMoreBtnFirstTym
+                        ? Container()
+                        : isEnableAddMoreBtn ? mechanicAddMoreTimeButton(size) : Container(),
+                    mechanicStartServiceButton(size),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -518,7 +558,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
       print("totalTimeTaken >>>>>> " + totalTimeTaken.toString());
     });
   }
-
 
   Widget mechanicAddMoreTimeButton(Size size){
     return Align(

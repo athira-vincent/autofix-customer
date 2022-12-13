@@ -355,7 +355,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "mechanicArrivalState": "0",
       "mechanicDiagonsisState": "0",
       "customerDiagonsisApproval": "0",
-      "totalstarttimecurrenttimevalue" : "",
+      "serviceStartWorldTime" : ""
     })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>

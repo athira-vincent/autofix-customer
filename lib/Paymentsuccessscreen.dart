@@ -4,6 +4,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_UI/HomeCustome
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Payment_Success_Screen extends StatefulWidget {
   const Payment_Success_Screen({Key? key}) : super(key: key);
@@ -52,7 +53,7 @@ class _Payment_Success_ScreenState extends State<Payment_Success_Screen> {
       ),
       child: const Text(
 
-             "Direct payment ",
+             AppLocalizations.of(context)!.text_Direct_payment,
         style:  TextStyle(
           fontSize: 16,
           fontFamily: "Samsung_SharpSans_Medium",
@@ -92,7 +93,7 @@ class _Payment_Success_ScreenState extends State<Payment_Success_Screen> {
           const Expanded(
             child:  Text(
 
-              "Your customer has chosen direct payment method. Click the ‘payment received button’ upon payment. ",
+              AppLocalizations.of(context)!.text_customer_chosen_direct_payment,
 
                 style:   TextStyle(
                   fontSize: 14,
@@ -155,7 +156,7 @@ class _Payment_Success_ScreenState extends State<Payment_Success_Screen> {
           ),
           child: const Text(
 
-                 "Go home",
+                 AppLocalizations.of(context)!.text_Go_home,
 
             style: TextStyle(
               fontSize: 14.3,

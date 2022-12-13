@@ -98,7 +98,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   String callPhoneNumber = "";
   String mechanicCurrentLat = "", mechanicCurrentLng = "";
 
-  Timer? loctimer;
+  Timer? locationTimer;
 
   @override
   void initState() {
@@ -180,7 +180,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
           ));
         });
       } else {
-        loctimer!.cancel();
+        locationTimer!.cancel();
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -320,14 +320,16 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         ),
         icon: mechanicIcon, //Icon for Marker
       ));
-      setState(() {
-        print("markers ${markers.length}");
-        setPolyline(
-          LatLng(double.parse(widget.latitude.toString()),
-              double.parse(widget.longitude.toString())),
-          latLng,
-        );
-      });
+      if(mounted){
+        setState(() {
+          print("markers ${markers.length}");
+          setPolyline(
+            LatLng(double.parse(widget.latitude.toString()),
+                double.parse(widget.longitude.toString())),
+            latLng,
+          );
+        });
+      }
     });
     /*Fluttertoast.showToast(
       msg: 'Mech latitude ${latLng.latitude}  Mech longitude ${latLng.longitude}',
@@ -488,9 +490,12 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    loctimer = Timer.periodic(Duration(seconds: 10), (timer) {
+    locationTimer = Timer(const Duration(seconds: 10),(){
       _getCurrentLocation();
     });
+    /*locationTimer = Timer.periodic(Duration(seconds: 10), (timer) {
+      _getCurrentLocation();
+    });*/
     return SafeArea(
       child: WillPopScope(
         onWillPop: () async {
@@ -908,7 +913,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   @override
   void dispose() {
     super.dispose();
-    loctimer!.cancel();
+    locationTimer!.cancel();
 
     _mechanicOrderStatusUpdateBloc.dispose();
   }
