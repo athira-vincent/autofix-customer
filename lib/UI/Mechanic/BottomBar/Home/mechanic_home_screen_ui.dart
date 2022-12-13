@@ -12,7 +12,7 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
-import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_second_screen.dart';
+import 'package:auto_fix/AA/customer_approved_second_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicStartService/mechanic_start_service_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
@@ -995,12 +995,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> with Widget
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CustomerApprovedScreen(
-                        isFromHome: true,
-                        remaintime: "0",
-                        starttime: "",
-                        endtime: "",
-                      ))).then((value){
+                      builder: (context) => CustomerApprovedScreen())).then((value){
                 _mechanicHomeBloc.postMechanicActiveServiceRequest(
                     "$authToken", mechanicId);
               });
@@ -1025,12 +1020,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> with Widget
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CustomerApprovedScreen(
-                                isFromHome: true,
-                                remaintime: remaintime,
-                                starttime: "",
-                                endtime: "",
-                              )));
+                              builder: (context) => CustomerApprovedScreen()));
                     })
                   }
               });
