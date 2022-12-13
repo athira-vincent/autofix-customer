@@ -6,6 +6,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StatesList/states_list_m
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class SelectStatesScreen extends StatefulWidget {
@@ -105,7 +106,7 @@ class _SelectStatesScreenState extends State<SelectStatesScreen> {
               )
             ],
             title: Text(
-              'Select your State',
+              AppLocalizations.of(context)!.text_hint_state,
               style: Styles.titleTextSelectStateStyle,
             ),
           ),
@@ -171,7 +172,7 @@ class _SelectStatesScreenState extends State<SelectStatesScreen> {
                             textAlign: TextAlign.left,
                             style: Styles.textLabelSubTitle10,
                             decoration: InputDecoration(
-                              hintText: "Search Your State",
+                              hintText: AppLocalizations.of(context)!.text_Search_Your_State,
                               border: InputBorder.none,
                               contentPadding: new EdgeInsets.only(bottom: 15),
                               hintStyle: Styles.textLabelSubTitle10,
@@ -233,7 +234,7 @@ class _SelectStatesScreenState extends State<SelectStatesScreen> {
                     },
                   )
                       : Center(
-                    child: Text('No Results found.'),
+                    child: Text(AppLocalizations.of(context)!.error_not_found),
                   ),
                 ),
               ),
