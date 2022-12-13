@@ -92,7 +92,6 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
               MaterialPageRoute(
                   builder: (context) =>  DirectPaymentScreen(isMechanicApp: true, isPaymentFailed: true,)
               )).then((value){
-
           });
         }
       });

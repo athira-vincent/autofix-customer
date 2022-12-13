@@ -7,8 +7,6 @@ import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/ExtraDiagnosisScreen/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/mechanic_waiting_payment.dart';
-import 'package:auto_fix/Widgets/Countdown.dart';
-import 'package:auto_fix/AA/count_down_widget.dart';
 import 'package:auto_fix/Widgets/mechanicWorkTimer.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -220,10 +218,7 @@ class _MechanicWorkProgressWorkingScreenState extends State<MechanicWorkProgress
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: widget.bookingId,isFromHome: false,
-                    remaintime: "0",
-                    starttime: "",
-                    endtime: "",))
+                  builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: widget.bookingId))
           ).then((value){
           });
         }
@@ -254,10 +249,7 @@ class _MechanicWorkProgressWorkingScreenState extends State<MechanicWorkProgress
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: widget.bookingId,isFromHome: true,
-                remaintime: "0",
-                starttime: "",
-                endtime: "",)));
+              builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: widget.bookingId)));
     }else if(workStatus == "3"){
       Navigator.pushReplacement(
           context,

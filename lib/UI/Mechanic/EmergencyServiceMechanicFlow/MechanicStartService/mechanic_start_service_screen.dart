@@ -7,6 +7,7 @@ import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/add_more_service_list_screen.dart';
+import 'package:auto_fix/Widgets/get_current_world_time.dart';
 import 'package:auto_fix/Widgets/mechanicWorkTimer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -40,7 +41,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   List allData = [];
   String selectedServiceName = "", additionalServiceNames = "", customerName = "", mechanicName = "" ;
   String serviceTotalCostForFirebase = "", serviceTotalTimeForFirebase = "";
-  String currentWorldDateTime = "";
   late AnimationController _controller;
   int levelClock = 0;
   int  selectedServiceTime = 0, timeInMinutes = 0;
@@ -575,7 +575,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   Widget mechanicStartServiceButton(Size size){
     return InkWell(
       onTap: (){
-        getWorldTime();
+        //getWorldTime();
         updateToCloudFirestoreDB();
         if (startOrUpdateState == "0")
         {
@@ -628,33 +628,34 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     );
   }
 
-  void getWorldTime(){
-    Repository().getCurrentWorldTime("Nairobi").then((value01) => {
-
-      setState(() {
-        currentWorldDateTime = value01.datetime!.millisecondsSinceEpoch.toString();
-      }),
-
-      print("dateConverter(timeNow!) >>> ${currentWorldDateTime}"),
-      updateWorldTimeToCloudFirestoreDB()
-
-    });
-  }
-
-  void updateWorldTimeToCloudFirestoreDB() {
-    print("updateToCloudFirestoreDB totalTimeTaken clock2222222222 >>>> " + '$currentWorldDateTime');
-    _firestore
-        .collection("ResolMech")
-        .doc('${bookingId}')
-        .update({
-      "worldServiceStartTime" : "$currentWorldDateTime",
-
-    })
-        .then((value) => print("Location Added"))
-        .catchError((error) =>
-        print("Failed to add Location: $error"));
-
-  }
+  // void getWorldTime(){
+  //   //currentWorldDateTime = GetCurrentWorldTime().getCurrentWorldTime();
+  //   Repository().getCurrentWorldTime("Nairobi").then((value01) => {
+  //
+  //     setState(() {
+  //       currentWorldDateTime = value01.datetime!.millisecondsSinceEpoch.toString();
+  //     }),
+  //
+  //     print("dateConverter(timeNow!) >>> ${currentWorldDateTime}"),
+  //     updateWorldTimeToCloudFirestoreDB()
+  //
+  //   });
+  // }
+  //
+  // void updateWorldTimeToCloudFirestoreDB() {
+  //   print("updateToCloudFirestoreDB totalTimeTaken clock2222222222 >>>> " + '$currentWorldDateTime');
+  //   _firestore
+  //       .collection("ResolMech")
+  //       .doc('${bookingId}')
+  //       .update({
+  //     "worldServiceStartTime" : "$currentWorldDateTime",
+  //
+  //   })
+  //       .then((value) => print("Location Added"))
+  //       .catchError((error) =>
+  //       print("Failed to add Location: $error"));
+  //
+  // }
 
   void _awaitReturnValueFromSecondScreenOnAdd(BuildContext context) async {
 
