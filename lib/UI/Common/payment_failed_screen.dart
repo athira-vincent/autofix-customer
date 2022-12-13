@@ -81,7 +81,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
         // bottom: size.height * 1 /100,
         top: size.height * 3.4 / 100,
       ),
-      child: Text(AppLocalizations.of(context)!.text_Payment_failed,
+      child: Text("Payment failed !",
         style: TextStyle(
           fontSize: 16,
           fontFamily: "Samsung_SharpSans_Medium",
@@ -114,8 +114,8 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
               height: size.height * 3 / 100,width: size.width * 3 / 100,),
           ),
           Text(
-            //"Something went wrong! Payment failed! \nTry another method like direct payment etc.. \nOr you can try after some time",
-            AppLocalizations.of(context)!.text_Something_wrong_Payment_failed,
+            "Something went wrong! Payment failed! \nTry another method like direct payment etc.. \nOr you can try after some time",
+            //AppLocalizations.of(context)!.text_Something_wrong_Payment_failed,
             style: warningTextStyle01,
           )
         ],
@@ -185,7 +185,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
           SizedBox(
             width: size.width * 1.5 / 100,
           ),
-          Expanded(child: Text(AppLocalizations.of(context)!.text_Other_Payment_Options, style: buttonTextStyle,))
+          Expanded(child: Text("Other Payment Options", style: buttonTextStyle,))
         ],
       ),
     );
@@ -235,7 +235,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
                 return Wrap(children: <Widget>[
                   SizedBox(height: 10,),
                   Container(
-                    child: ListTile(leading: Text(AppLocalizations.of(context)!.text_Total_Payable,style: TextStyle(
+                    child: ListTile(leading: Text("Total Payable ",style: TextStyle(
                       fontSize: 14.3,
                       fontWeight: FontWeight.w600,
                       fontFamily: "Samsung_SharpSans_Medium",
@@ -251,7 +251,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
                     ),
                     child: ListTile(
                       leading:  Image.asset("assets/image/img_payment_cash.png",height: 20,width: 20,),
-                      title: const Text(
+                      title: Text(
                           AppLocalizations.of(context)!.text_Direct_payment,
                           style: TextStyle(
                             fontSize: 14.3,
@@ -306,7 +306,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
 
                         child: Center(
                           child: Text(
-                            AppLocalizations.of(context)!.text_Click_Continue,
+                            "Click To Continue",
                             style: TextStyle(
                               fontSize: 14.3,
                               fontWeight: FontWeight.w600,

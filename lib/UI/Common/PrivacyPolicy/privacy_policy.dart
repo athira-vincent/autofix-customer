@@ -34,7 +34,7 @@ class _Privacypolicy extends State<Privacypolicy>{
         toolbarHeight: 60,
         elevation: 0,
         title: Container(
-          child: Text(AppLocalizations.of(context)!.text_Privacy_policy,
+          child: Text('Privacy policy',
             style: TextStyle(
               fontFamily: 'SamsungSharpSans-Medium',
               fontSize: 16.7,

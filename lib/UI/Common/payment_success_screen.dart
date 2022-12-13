@@ -58,7 +58,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
         // bottom: size.height * 1 /100,
         top: size.height * 3.4 / 100,
       ),
-      child: Text(AppLocalizations.of(context)!.text_Payment_Successful,
+      child: Text("Payment Successful !",
         style: TextStyle(
           fontSize: 16,
           fontFamily: "Samsung_SharpSans_Medium",
@@ -92,7 +92,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
           ),
           Text(
             //"Congratulations your payment was successful \nPlease review your mechanic!"
-            AppLocalizations.of(context)!.text_received_payment,
+            "Your Mechanic has received the\n payment of the service rendered.\n The service cycle is completed from\n the mechanic’s end. Thank you for\n choosing Resol mech.",
             style: warningTextStyle01,
           )
         ],
@@ -159,7 +159,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
         children: [
           SvgPicture.asset("assets/image/ic_star_blue.svg",
               height: size.height * 4 / 100, width: size.width * 4 / 100),
-          Text(AppLocalizations.of(context)!.text_Review_later, style: buttonTextStyle,)
+          Text("Review later", style: buttonTextStyle,)
         ],
       ),
     );
@@ -180,7 +180,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
         children: [
           SvgPicture.asset("assets/image/ic_star_yellow.svg",
               height: size.height * 4 / 100, width: size.width * 4 / 100),
-          Text(AppLocalizations.of(context)!.text_Review_Now, style: buttonTextStyle,)
+          Text("Review Now", style: buttonTextStyle,)
         ],
       ),
     );
