@@ -1,3 +1,4 @@
+/*
 import 'dart:async';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
@@ -12,12 +13,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomerApprovedSecondScreen extends StatefulWidget {
-  final String remaintime, starttime, endtime;
+  final String bookingId;
 
   CustomerApprovedSecondScreen({
-    required this.remaintime,
-    required this.starttime,
-    required this.endtime,
+    required this.bookingId,
   });
 
   @override
@@ -79,12 +78,10 @@ class _CustomerApprovedSecondScreenState extends State<CustomerApprovedSecondScr
     super.initState();
     print("widgetstarttime");
     print("widgetendtime");
-    print(widget.starttime);
-    print(widget.endtime);
 
-    int remtime = int.parse(widget.remaintime);
+    //int remtime = int.parse(widget.remaintime);
 
-    levelClock = remtime;
+    //levelClock = remtime;
     print("levelclock");
     print(levelClock);
     //storetime(widget.starttime, widget.endtime);
@@ -228,14 +225,16 @@ class _CustomerApprovedSecondScreenState extends State<CustomerApprovedSecondScr
               "Go ahead with requested service.",
               style: warningTextStyle01,
             ),
-            /*Text(
+            */
+/*Text(
               customerDiagonsisApproval == "-1"
               ? "Customer disagree with the diagnostic test report and estimated cost. Go ahead with requested service."
               : mechanicDiagonsisState == "2"
                   ? "Go ahead with requested service."
                   : "Customer agree with the diagnostic test report and estimated cost . So you can start repair ",
               style: warningTextStyle01
-            ),*/
+            ),*//*
+
           )
         ],
       ),
@@ -480,3 +479,4 @@ class _CustomerApprovedSecondScreenState extends State<CustomerApprovedSecondScr
     preferences.setString("endtime", endtime);
   }
 }
+*/

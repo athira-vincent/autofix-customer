@@ -116,31 +116,31 @@ class _MechanicWorkProgressWorkingScreenState extends State<MechanicWorkProgress
     });
 
     await _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
-      setState(() {
-        extendedTime= event.get("extendedTime");
-        currentUpdatedTime = event.get("currentUpdatedTime");
-        isPaymentRequested = event.get("isPaymentRequested");
-        isWorkCompleted = event.get("isWorkCompleted");
-        mechanicDiagonsisState = event.get("mechanicDiagonsisState");
-        totalEstimatedTime = event.get('timerCounter');
-        mechanicName = event.get('mechanicName');
-        serviceStartWorldTime = event.get("serviceStartWorldTime");
+      if(mounted){
+        setState(() {
+          extendedTime= event.get("extendedTime");
+          currentUpdatedTime = event.get("currentUpdatedTime");
+          isPaymentRequested = event.get("isPaymentRequested");
+          isWorkCompleted = event.get("isWorkCompleted");
+          mechanicDiagonsisState = event.get("mechanicDiagonsisState");
+          totalEstimatedTime = event.get('timerCounter');
+          mechanicName = event.get('mechanicName');
+          serviceStartWorldTime = int.parse(event.get("serviceStartWorldTime") ?? 0);
 
+          //int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
+          int sec = GetCurrentWorldTime().getDurationDifference(serviceStartWorldTime, totalEstimatedTime);
+          levelClock = sec;
+          _controller = AnimationController(
+              vsync: this,
+              duration: Duration(
+                  seconds:
+                  levelClock)
+          );
+          _controller.forward();
+          _updateTimerListener();
 
-
-        //int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
-        int sec = GetCurrentWorldTime().getDurationDifference(serviceStartWorldTime, totalEstimatedTime);
-        levelClock = sec;
-        _controller = AnimationController(
-            vsync: this,
-            duration: Duration(
-                seconds:
-                levelClock)
-        );
-        _controller.forward();
-        _updateTimerListener();
-
-      });
+        });
+      }
     });
   }
 
