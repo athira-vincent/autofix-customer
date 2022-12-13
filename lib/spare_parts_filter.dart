@@ -241,7 +241,7 @@ class _Search_Spare_Parts_FilterState extends State<Search_Spare_Parts_Filter> {
                                               color: CustColors.greyText3),
                                           borderRadius:
                                               BorderRadius.circular(4)),
-                                      child: const Text(
+                                      child: Text(
                                         AppLocalizations.of(context)!.text_Add_cart,
                                         style: Styles.homeActiveTextStyle,
                                       ),
@@ -328,7 +328,7 @@ class _Search_Spare_Parts_FilterState extends State<Search_Spare_Parts_Filter> {
                   ],
                 ),
                 const Spacer(),
-                const Text(
+                Text(
                   AppLocalizations.of(context)!.text_View_Cart,
                   style: Styles.addToCartText02,
                 ),

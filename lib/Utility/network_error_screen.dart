@@ -135,7 +135,7 @@ class _NetworkErrorScreenState extends State<NetworkErrorScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text(
+                         Text(
                           AppLocalizations.of(context)!.text_Try_Again,
                           textAlign: TextAlign.center,
                           style: Styles.textButtonLabelSubTitle12,

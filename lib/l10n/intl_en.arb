@@ -176,7 +176,7 @@
   "text_Create_new_password":"Create new password.Your new password must be different from previous used passwords.",
   "text_Reset_password": "Reset password",
   "text_Account_not_exist": "Account doesn't exist",
-  "text_Otp_Verification_failed":""Otp Verification failed,
+  "text_Otp_Verification_failed":"Otp Verification failed",
   "text_Verification_failed": "Verification failed. Try again.",
   "text_Please_enter_verification_code": "Please enter the verification code sent to your phone number",
   "text_Select_your_City":"Select your City",
