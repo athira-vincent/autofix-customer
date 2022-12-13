@@ -37,7 +37,7 @@ class _MechanicSelectionScreenState extends State<MechanicSelectionScreen> {
                     right: size.width * 0.181,
                     left: size.width * 0.172
                 ),
-                child: Text('Customer',
+                child: Text(AppLocalizations.of(context)!.text_customer,
                     style: Styles.hiddenTextBlack
                 ),
                 //child: Text("Select ! What type of user are you ?"),
@@ -62,7 +62,7 @@ class _MechanicSelectionScreenState extends State<MechanicSelectionScreen> {
                             right: size.width * 0.181,
                             left: size.width * 0.172
                         ),
-                        child: Text('Mechanic',
+                        child: Text(AppLocalizations.of(context)!.text_mechanic,
                             style: Styles.TitleTextBlack
                         ),
                       ),
@@ -71,7 +71,7 @@ class _MechanicSelectionScreenState extends State<MechanicSelectionScreen> {
                         onTap: () async {
                           setUserCategory(TextStrings.user_category_individual);
                         },
-                        child: UserCategorySelectionWidget(titleText: 'Individual',
+                        child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_individual,
                           imagePath: "assets/image/MechanicType/img_individual.png",),
                       ),
 
@@ -79,7 +79,7 @@ class _MechanicSelectionScreenState extends State<MechanicSelectionScreen> {
                         onTap: () async {
                           setUserCategory(TextStrings.user_category_corporate);
                         },
-                        child: UserCategorySelectionWidget(titleText: 'Corporate',
+                        child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_corporate,
                           imagePath: "assets/image/MechanicType/img_corporate.png",),
                       ),
                     ],
