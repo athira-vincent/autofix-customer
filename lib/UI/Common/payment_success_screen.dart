@@ -4,6 +4,7 @@ import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landi
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularRateMechanic/regular_rate_mechanic_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PaymentSuccessScreen extends StatefulWidget {
 
@@ -57,7 +58,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
         // bottom: size.height * 1 /100,
         top: size.height * 3.4 / 100,
       ),
-      child: Text("Payment Successful !",
+      child: Text(AppLocalizations.of(context)!.text_Payment_Successful,
         style: TextStyle(
           fontSize: 16,
           fontFamily: "Samsung_SharpSans_Medium",
@@ -91,7 +92,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
           ),
           Text(
             //"Congratulations your payment was successful \nPlease review your mechanic!"
-            "Your Mechanic has received the\n payment of the service rendered.\n The service cycle is completed from\n the mechanic’s end. Thank you for\n choosing Resol mech.",
+            AppLocalizations.of(context)!.text_received_payment,
             style: warningTextStyle01,
           )
         ],
@@ -158,7 +159,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
         children: [
           SvgPicture.asset("assets/image/ic_star_blue.svg",
               height: size.height * 4 / 100, width: size.width * 4 / 100),
-          Text("Review later", style: buttonTextStyle,)
+          Text(AppLocalizations.of(context)!.text_Review_later, style: buttonTextStyle,)
         ],
       ),
     );
@@ -179,7 +180,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
         children: [
           SvgPicture.asset("assets/image/ic_star_yellow.svg",
               height: size.height * 4 / 100, width: size.width * 4 / 100),
-          Text("Review Now", style: buttonTextStyle,)
+          Text(AppLocalizations.of(context)!.text_Review_Now, style: buttonTextStyle,)
         ],
       ),
     );

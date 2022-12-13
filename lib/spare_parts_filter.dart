@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Search_Spare_Parts_Filter extends StatefulWidget {
   final  String modelname,fromcost,tocost,sorting;
@@ -50,7 +51,7 @@ class _Search_Spare_Parts_FilterState extends State<Search_Spare_Parts_Filter> {
               if (state is AddCartLoadedState) {
                 if (state.addCartModel.data!.addCart.msg.status == "Success") {
                   Fluttertoast.showToast(
-                    msg: "successfully added to cart!!",
+                    msg:AppLocalizations.of(context)!.text_successfully_added_cart,
                     timeInSecForIosWeb: 1,
                   );
 
@@ -241,7 +242,7 @@ class _Search_Spare_Parts_FilterState extends State<Search_Spare_Parts_Filter> {
                                           borderRadius:
                                               BorderRadius.circular(4)),
                                       child: const Text(
-                                        "+ Add to cart",
+                                        AppLocalizations.of(context)!.text_Add_cart,
                                         style: Styles.homeActiveTextStyle,
                                       ),
                                     ),
@@ -314,7 +315,7 @@ class _Search_Spare_Parts_FilterState extends State<Search_Spare_Parts_Filter> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      itemcount + " items",
+                      itemcount + AppLocalizations.of(context)!.text_items,
                       style: Styles.addToCartItemText02,
                     ),
                     Padding(
@@ -328,7 +329,7 @@ class _Search_Spare_Parts_FilterState extends State<Search_Spare_Parts_Filter> {
                 ),
                 const Spacer(),
                 const Text(
-                  "View Cart >",
+                  AppLocalizations.of(context)!.text_View_Cart,
                   style: Styles.addToCartText02,
                 ),
               ],

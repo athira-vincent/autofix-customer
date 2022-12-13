@@ -3,6 +3,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Utility/check_network.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NetworkErrorScreen extends StatefulWidget {
 
@@ -80,9 +81,9 @@ class _NetworkErrorScreenState extends State<NetworkErrorScreen> {
       child: Container(
         child: Column(
           children: [
-            Text("Connection Failed !"),
-            Text("You have no internet connection"),
-            Text("Please check your connection and try again later")
+            Text(AppLocalizations.of(context)!.text_Connection_Failed),
+            Text(AppLocalizations.of(context)!.text_no_internet_connection),
+            Text(AppLocalizations.of(context)!.text_check_onnection_try_again)
           ],
         ),
       ),
@@ -135,7 +136,7 @@ class _NetworkErrorScreenState extends State<NetworkErrorScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Text(
-                          'Try Again',
+                          AppLocalizations.of(context)!.text_Try_Again,
                           textAlign: TextAlign.center,
                           style: Styles.textButtonLabelSubTitle12,
                         ),

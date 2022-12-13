@@ -5,7 +5,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_models/phone_signi
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_models/signin_mdl.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'login_models/customerSocialLogin_Mdl.dart';
 
 class SigninBloc {

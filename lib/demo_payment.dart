@@ -3,6 +3,7 @@ import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landi
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:isw_mobile_sdk/isw_mobile_sdk.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'Constants/styles.dart';
 
@@ -159,10 +160,10 @@ class _DemoPaymentState extends State<DemoPayment> {
                 })
               });
     } else {
-      message = "You cancelled the transaction pls try again";
+      message = AppLocalizations.of(context)!.text_cancelled_transaction;
     }
 
-    message = "You completed txn using: " +
+    message = AppLocalizations.of(context)!.text_ompleted_using +
         result.value.channel.name +
         result.value.channel.index.toString() +
         result.value.amount.toString() +

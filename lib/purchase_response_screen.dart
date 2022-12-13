@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 
@@ -191,7 +192,7 @@ class _PurchaseResponseScreenState extends State<PurchaseResponseScreen> {
         width: size.width * 92 / 100,
         child: Center(
           child: Text(
-            "DONE" ,
+            AppLocalizations.of(context)!.text_DONE ,
             style: TextStyle(
               fontSize: 14.3,
               fontWeight: FontWeight.w600,
