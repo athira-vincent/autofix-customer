@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Privacypolicy extends StatefulWidget {
   @override
@@ -33,7 +34,7 @@ class _Privacypolicy extends State<Privacypolicy>{
         toolbarHeight: 60,
         elevation: 0,
         title: Container(
-          child: Text('Privacy policy',
+          child: Text(AppLocalizations.of(context)!.text_Privacy_policy,
             style: TextStyle(
               fontFamily: 'SamsungSharpSans-Medium',
               fontSize: 16.7,
