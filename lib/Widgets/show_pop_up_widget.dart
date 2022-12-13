@@ -15,14 +15,14 @@ class ShowPopUpWidget {
         context: context,
         builder: (context) {
           return CupertinoAlertDialog(
-            title: Text(AppLocalizations.of(context)!.text_Confirm_Exit,
+            title: Text("Confirm Exit",
                 style: TextStyle(
                   fontFamily: 'Formular',
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                   color: CustColors.materialBlue,
                 )),
-            content: Text(AppLocalizations.of(context)!.text_sure_exit),
+            content: Text("Are you sure you want to exit?"),
             actions: <Widget>[
               CupertinoDialogAction(
                   textStyle: TextStyle(
@@ -33,7 +33,7 @@ class ShowPopUpWidget {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text(AppLocalizations.of(context)!.text_No)),
+                  child: Text("No")),
               CupertinoDialogAction(
                   textStyle: TextStyle(
                     color: CustColors.rusty_red,
@@ -43,7 +43,7 @@ class ShowPopUpWidget {
                   onPressed: () async {
                     SystemNavigator.pop();
                   },
-                  child: Text(AppLocalizations.of(context)!.text_Yes)),
+                  child: Text("Yes")),
             ],
           );
         });
@@ -54,14 +54,14 @@ class ShowPopUpWidget {
         context: context,
         builder: (context) {
           return CupertinoAlertDialog(
-            title: const Text(AppLocalizations.of(context)!.text_Confirm,
+            title: const Text("Confirm",
                 style: TextStyle(
                   fontFamily: 'Formular',
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                   color: CustColors.materialBlue,
                 )),
-            content: const Text(AppLocalizations.of(context)!.text_sure_delete),
+            content: const Text("Are you sure you want to delete?"),
             actions: <Widget>[
               CupertinoDialogAction(
                   textStyle: const TextStyle(
@@ -72,7 +72,7 @@ class ShowPopUpWidget {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text(AppLocalizations.of(context)!.text_No)),
+                  child: Text("No")),
               CupertinoDialogAction(
                   textStyle: const TextStyle(
                     color: CustColors.rusty_red,
@@ -82,7 +82,7 @@ class ShowPopUpWidget {
                   onPressed: () async {
 
                   },
-                  child: const Text(AppLocalizations.of(context)!.text_Yes)),
+                  child: const Text("Yes")),
             ],
           );
         });

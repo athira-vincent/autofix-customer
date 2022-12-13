@@ -51,7 +51,7 @@ class _Payment_Success_ScreenState extends State<Payment_Success_Screen> {
         // bottom: size.height * 1 /100,
         top: size.height * 3.4 / 100,
       ),
-      child: const Text(
+      child: Text(
 
              AppLocalizations.of(context)!.text_Direct_payment,
         style:  TextStyle(
@@ -90,11 +90,10 @@ class _Payment_Success_ScreenState extends State<Payment_Success_Screen> {
               height: size.height * 3 / 100,width: size.width * 3 / 100,),
           ),
 
-          const Expanded(
+           Expanded(
             child:  Text(
 
               AppLocalizations.of(context)!.text_customer_chosen_direct_payment,
-
                 style:   TextStyle(
                   fontSize: 14,
                   fontFamily: "Samsung_SharpSans_Medium",
@@ -154,10 +153,9 @@ class _Payment_Success_ScreenState extends State<Payment_Success_Screen> {
             top: size.height * 1 / 100,
             bottom: size.height * 1 / 100,
           ),
-          child: const Text(
+          child: Text(
 
                  AppLocalizations.of(context)!.text_Go_home,
-
             style: TextStyle(
               fontSize: 14.3,
               fontWeight: FontWeight.w600,
