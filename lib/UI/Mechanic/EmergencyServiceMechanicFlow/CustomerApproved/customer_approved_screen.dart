@@ -74,9 +74,9 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
       print('CustomerApprovedScreen bookingId >>>> $bookingId');
       updateToCloudFirestoreMechanicCurrentScreenDB();
     });
-    await  _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
+    _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
       if(mounted){
-        setState(() {
+        setState(()  {
           mechanicName = event.get('mechanicName');
           customerName = event.get('customerName');
           updatedServiceTime = event.get('updatedServiceTime');
@@ -88,8 +88,16 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
             if(serviceStartWorldTime != "" || serviceStartWorldTime.isNotEmpty){
               levelClock = int.parse('${updatedServiceTime.split(":").first}');
               int sec = Duration(minutes: int.parse('$updatedServiceTime')).inSeconds;
-              int time = GetCurrentWorldTime().getDurationDifference(int.parse(serviceStartWorldTime), sec);
-              levelClock = time;
+
+              int time;
+              GetCurrentWorldTime().getDurationDifference(int.parse(serviceStartWorldTime), sec).then((value) => {
+                time = value,
+                print("time >>>>>> $value"),
+              setState(() {
+                levelClock = time;
+              }),
+           });
+
             }else{
               levelClock = int.parse('${updatedServiceTime.split(":").first}');
               int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;
@@ -144,53 +152,47 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     print("updateToCloudFirestoreDB totalTimeTaken clock2222222222 >>>> " + totalTimeTaken.toString());
 
     String currentDateTime = "";
-    Repository().getCurrentWorldTime("Nairobi").then((value01) => {
 
-      currentDateTime = value01.datetime!.millisecondsSinceEpoch.toString(),
 
-      print("dateConverter(timeNow!) >>>  >>> customer approved screen11: ${currentDateTime}"),
 
     if(currentUpdatedTime == "0")
     {
-        print("dateConverter(timeNow!) >>> customer approved screen22: ++++++++++++ $currentDateTime"),
+      print("dateConverter(timeNow!) >>> customer approved screen22: ++++++++++++ $currentDateTime");
 
-
-      _firestore
-          .collection("ResolMech")
-          .doc('${bookingId}')
-          .update({
-        'isWorkStarted': "$isWorkStarted",
-        'isWorkCompleted': "$isWorkCompleted",
-        "extendedTime": "$time",
-        "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
-        'serviceStartWorldTime' : "${currentDateTime}"
-      })
-          .then((value) => print("Location Added"))
-          .catchError((error) =>
-          print("Failed to add Location: $error")),
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingId}')
+        .update({
+    'isWorkStarted': "$isWorkStarted",
+    'isWorkCompleted': "$isWorkCompleted",
+    "extendedTime": "$time",
+    "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+    'serviceStartWorldTime' : "${currentDateTime}"
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+    print("Failed to add Location: $error"));
     }
     else
     {
 
-        print("dateConverter(timeNow!) >>> customer approved screen33: ++++++++++++ $currentDateTime"),
+    print("dateConverter(timeNow!) >>> customer approved screen33: ++++++++++++ $currentDateTime");
 
-        _firestore
-            .collection("ResolMech")
-            .doc('${bookingId}')
-            .update({
-        'isWorkStarted': "$isWorkStarted",
-        'isWorkCompleted': "$isWorkCompleted",
-        "extendedTime": "$time",
-        "timerCounter": "$currentUpdatedTime",
-        "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
-        'serviceStartWorldTime' : "${currentDateTime}"
-        })
-            .then((value) => print("Location Added"))
-            .catchError((error) =>
-        print("Failed to add Location: $error")),
-        }
-
-    });
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingId}')
+        .update({
+    'isWorkStarted': "$isWorkStarted",
+    'isWorkCompleted': "$isWorkCompleted",
+    "extendedTime": "$time",
+    "timerCounter": "$currentUpdatedTime",
+    "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+    'serviceStartWorldTime' : "${currentDateTime}"
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+    print("Failed to add Location: $error"));
+    }
 
   }
 

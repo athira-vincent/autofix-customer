@@ -74,6 +74,7 @@ class _MechanicWorkProgressFinishedScreenState extends State<MechanicWorkProgres
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
+    bookingIdEmergency = widget.bookingId;
     workStatus = widget.workStatus.toString();
   }
 
@@ -93,7 +94,6 @@ class _MechanicWorkProgressFinishedScreenState extends State<MechanicWorkProgres
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
-      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       updateToCloudFirestoreMechanicCurrentScreenDB();
       listenToCloudFirestoreDB();
       print('MechanicWorkProgressScreen bookingIdEmergency ++++ ${bookingIdEmergency} ');
@@ -159,65 +159,11 @@ class _MechanicWorkProgressFinishedScreenState extends State<MechanicWorkProgres
   void listenToCloudFirestoreDB() {
     DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("$bookingIdEmergency");
     reference.snapshots().listen((querySnapshot) {
-      if(widget.workStatus =="1") {
-        mechanicDiagonsisState = querySnapshot.get("mechanicDiagonsisState");
-        print('mechanicDiagonsisState ++++ $mechanicDiagonsisState');
-      }
-      else if(widget.workStatus =="2") {
-        isWorkCompleted = querySnapshot.get("isWorkCompleted");
-        extendedTime = querySnapshot.get("extendedTime");
-        currentUpdatedTime = querySnapshot.get("timerCounter");
-        print('isWorkCompleted ++++ $isWorkCompleted');
-        print('extendedTime ++++ $extendedTime');
-        print('currentUpdatedTime ++++ $currentUpdatedTime');
-
-        if(extendedTime.toString() != "0")
-        {
-          if(extendedTimeFirstTymCall == "0")
-          {
-            SnackBarWidget().setMaterialSnackBar( "Mechanic added extra time for work completion.", _scaffoldKey);
-            extendedTimeFirstTymCall = "1";
-          }
-        }
-      }
-      else if(widget.workStatus =="3") {
+       if(widget.workStatus =="3") {
         isPaymentRequested = querySnapshot.get("isPaymentRequested");
         print('isPaymentRequested ++++ $isPaymentRequested');
       }
-
-      if(widget.workStatus =="1")
-      {
-        if(mechanicDiagonsisState =="1")
-        {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: true,bookingId: widget.bookingId,)
-              )).then((value){
-          });
-        }
-        else if(mechanicDiagonsisState =="2")
-        {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MechanicWorkProgressWorkingScreen(workStatus: "2",bookingId: widget.bookingId,)));
-        }
-
-      }
-      else if(widget.workStatus =="2")
-      {
-        if(isWorkCompleted =="1")
-        {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MechanicWorkProgressFinishedScreen(workStatus: "3",bookingId: widget.bookingId,))
-          ).then((value){
-          });
-        }
-      }
-      else if(widget.workStatus =="3")
+       if(widget.workStatus =="3")
       {
         if(isPaymentRequested =="1")
         {
@@ -229,38 +175,6 @@ class _MechanicWorkProgressFinishedScreenState extends State<MechanicWorkProgres
         }
       }
     });
-  }
-
-
-  void changeScreen(){
-    if(workStatus == "1"){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: true,bookingId: widget.bookingId,)));
-    }else if(workStatus == "2"){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MechanicWorkProgressFinishedScreen(workStatus: "3",bookingId: widget.bookingId,)));
-    }else if(workStatus == "3"){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MechanicWaitingPaymentScreen()));
-    }
-    else if(workStatus == "4"){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: false, bookingId: widget.bookingId,)));
-    }
-    else if(workStatus == "5"){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: false,bookingId: widget.bookingId,)));
-    }
   }
 
   @override
