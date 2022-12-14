@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/additional_time_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
@@ -139,10 +140,21 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
   }
 
-  void updateToCloudFirestoreDB(String isWorkStarted, String isWorkCompleted, String time,String currentUpdatedTime ) {
+  Future<void> updateToCloudFirestoreDB(String isWorkStarted, String isWorkCompleted, String time,String currentUpdatedTime ) async {
     print("updateToCloudFirestoreDB totalTimeTaken clock2222222222 >>>> " + totalTimeTaken.toString());
+
+    String currentDateTime = "";
+    Repository().getCurrentWorldTime("Nairobi").then((value01) => {
+
+      currentDateTime = value01.datetime!.millisecondsSinceEpoch.toString(),
+
+      print("dateConverter(timeNow!) >>>  >>> customer approved screen11: ${currentDateTime}"),
+
     if(currentUpdatedTime == "0")
     {
+        print("dateConverter(timeNow!) >>> customer approved screen22: ++++++++++++ $currentDateTime"),
+
+
       _firestore
           .collection("ResolMech")
           .doc('${bookingId}')
@@ -151,27 +163,35 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         'isWorkCompleted': "$isWorkCompleted",
         "extendedTime": "$time",
         "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+        'serviceStartWorldTime' : "${currentDateTime}"
       })
           .then((value) => print("Location Added"))
           .catchError((error) =>
-          print("Failed to add Location: $error"));
+          print("Failed to add Location: $error")),
     }
     else
     {
-      _firestore
-          .collection("ResolMech")
-          .doc('${bookingId}')
-          .update({
+
+        print("dateConverter(timeNow!) >>> customer approved screen33: ++++++++++++ $currentDateTime"),
+
+        _firestore
+            .collection("ResolMech")
+            .doc('${bookingId}')
+            .update({
         'isWorkStarted': "$isWorkStarted",
         'isWorkCompleted': "$isWorkCompleted",
         "extendedTime": "$time",
         "timerCounter": "$currentUpdatedTime",
         "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
-      })
-          .then((value) => print("Location Added"))
-          .catchError((error) =>
-          print("Failed to add Location: $error"));
-    }
+        'serviceStartWorldTime' : "${currentDateTime}"
+        })
+            .then((value) => print("Location Added"))
+            .catchError((error) =>
+        print("Failed to add Location: $error")),
+        }
+
+    });
+
   }
 
   void updateToCloudFirestoreMechanicCurrentScreenDB() {
