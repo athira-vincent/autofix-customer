@@ -47,7 +47,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   Timer? timerObjVar;
   int timeCounter = 0;
   Timer? totalTimerObj;
-  int totalTimeTaken = 0;int serviceStartWorldTime = 0;
+  int totalTimeTaken = 0;
+  String serviceStartWorldTime = "";
 
 
   @override
@@ -80,13 +81,14 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
           updatedServiceTime = event.get('updatedServiceTime');
           customerDiagonsisApproval = event.get('customerDiagonsisApproval');
           mechanicDiagonsisState = event.get('mechanicDiagonsisState');
-          serviceStartWorldTime = int.parse(event.get("serviceStartWorldTime") ?? 0) ;
+          serviceStartWorldTime = event.get("serviceStartWorldTime");
           if(listenToFirestoreTime == "0")
           {
-            if(serviceStartWorldTime != "" || serviceStartWorldTime > 0){
+            if(serviceStartWorldTime != "" || serviceStartWorldTime.isNotEmpty){
               levelClock = int.parse('${updatedServiceTime.split(":").first}');
-              int sec = GetCurrentWorldTime().getDurationDifference(serviceStartWorldTime, updatedServiceTime);
-              levelClock = sec;
+              int sec = Duration(minutes: int.parse('$updatedServiceTime')).inSeconds;
+              int time = GetCurrentWorldTime().getDurationDifference(int.parse(serviceStartWorldTime), sec);
+              levelClock = time;
             }else{
               levelClock = int.parse('${updatedServiceTime.split(":").first}');
               int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;

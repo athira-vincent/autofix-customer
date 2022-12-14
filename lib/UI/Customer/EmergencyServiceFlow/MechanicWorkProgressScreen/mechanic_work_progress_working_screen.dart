@@ -75,7 +75,7 @@ class _MechanicWorkProgressWorkingScreenState extends State<MechanicWorkProgress
 
   Timer? timerForCouterTime;
   Timer? timerCouterTime;
-  int serviceStartWorldTime = 0;
+  String serviceStartWorldTime = "";
 
 
   @override
@@ -125,11 +125,11 @@ class _MechanicWorkProgressWorkingScreenState extends State<MechanicWorkProgress
           mechanicDiagonsisState = event.get("mechanicDiagonsisState");
           totalEstimatedTime = event.get('timerCounter');
           mechanicName = event.get('mechanicName');
-          serviceStartWorldTime = int.parse(event.get("serviceStartWorldTime") ?? 0);
+          serviceStartWorldTime = event.get("serviceStartWorldTime") ?? "";
 
-          //int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
-          int sec = GetCurrentWorldTime().getDurationDifference(serviceStartWorldTime, totalEstimatedTime);
-          levelClock = sec;
+          int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
+          int time = GetCurrentWorldTime().getDurationDifference(int.parse(serviceStartWorldTime), sec);
+          levelClock = time;
           _controller = AnimationController(
               vsync: this,
               duration: Duration(

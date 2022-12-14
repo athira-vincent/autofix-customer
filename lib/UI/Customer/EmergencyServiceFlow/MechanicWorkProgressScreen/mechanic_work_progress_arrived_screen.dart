@@ -156,7 +156,6 @@ class _MechanicWorkProgressArrivedScreenState extends State<MechanicWorkProgress
                     builder: (context) => MechanicWorkProgressWorkingScreen(workStatus: "2",bookingId: widget.bookingId,)));
           }
 
-
         Timer(const Duration(seconds: 2), () {
           if(mounted){
             setState(() {

@@ -17,7 +17,7 @@ class GetCurrentWorldTime {
     return currentDateTime;
   }
 
-  int getDurationDifference(startTime, totalTime){
+  int getDurationDifference(int startTime, int totalTime){
 
     Duration timeBalance;
     String currentDateTime;
@@ -27,7 +27,7 @@ class GetCurrentWorldTime {
       currentDateTime = value01.datetime!.millisecondsSinceEpoch.toString(),
       print(">>>> customerCurrentTime currentDateTime : $currentDateTime"),
 
-      timeBalance = DateTime.fromMillisecondsSinceEpoch( int.parse(startTime)).
+      timeBalance = DateTime.fromMillisecondsSinceEpoch(startTime).
       difference(DateTime.fromMillisecondsSinceEpoch(int.parse(currentDateTime))),
       print( "time difference >>> ${timeBalance.inSeconds}"),
 
