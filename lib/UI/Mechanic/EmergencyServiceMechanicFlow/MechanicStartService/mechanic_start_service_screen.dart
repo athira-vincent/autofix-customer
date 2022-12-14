@@ -163,8 +163,10 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           .catchError((error) =>
           print("Failed to add updatedServiceList: $error"));
 
-      if (startOrUpdateState == "0") {                                          /// --------- Work Started
+      if (startOrUpdateState == "0") {
+        /// --------- Work Started
         String time = await GetCurrentWorldTime().getCurrentWorldTime();
+        print("time: ++++++++++++ $time");
 
         _firestore
             .collection("ResolMech")
@@ -182,7 +184,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             .catchError((error) =>
             print("Failed to add updatedServiceList: $error"));
       }
-      else {                                                                    /// ----------- Add / Change Additional Services - Waiting 4 Approve
+      else {
+        /// ----------- Add / Change Additional Services - Waiting 4 Approve
         _firestore
             .collection("ResolMech")
             .doc('${bookingId}')
