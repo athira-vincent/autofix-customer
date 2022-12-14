@@ -147,7 +147,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     });
   }
 
-  void updateToCloudFirestoreDB() {
+  Future<void> updateToCloudFirestoreDB() async {
 
     print("allData 11111 >>>>>" + allData.toString());
     print("serviceTotalTimeForFirebase  >>>>>>>>>> " + serviceTotalTimeForFirebase);
@@ -164,6 +164,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           print("Failed to add updatedServiceList: $error"));
 
       if (startOrUpdateState == "0") {                                          /// --------- Work Started
+        String time = await GetCurrentWorldTime().getCurrentWorldTime();
+
         _firestore
             .collection("ResolMech")
             .doc('${bookingId}')
@@ -174,8 +176,9 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           'updatedServiceCost': "$serviceTotalCostForFirebase",
           'updatedServiceTime': "$serviceTotalTimeForFirebase",
           'timerCounter': "$serviceTotalTimeForFirebase",
+          'serviceStartWorldTime' : "${time}"
         })
-            .then((value) => print("updatedServiceList Added"))
+            .then((value) => print("updatedServiceList01 Added"))
             .catchError((error) =>
             print("Failed to add updatedServiceList: $error"));
       }
@@ -190,7 +193,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           'updatedServiceTime': "$serviceTotalTimeForFirebase",
           'timerCounter': "$serviceTotalTimeForFirebase",
         })
-            .then((value) => print("updatedServiceList Added"))
+            .then((value) => print("updatedServiceList02 Added"))
             .catchError((error) =>
             print("Failed to add updatedServiceList: $error"));
       }
