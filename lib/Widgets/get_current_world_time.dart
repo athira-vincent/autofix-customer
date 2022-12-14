@@ -27,8 +27,7 @@ class GetCurrentWorldTime {
       currentDateTime = value01.datetime!.millisecondsSinceEpoch.toString(),
       print(">>>> customerCurrentTime currentDateTime : $currentDateTime"),
 
-      timeBalance = DateTime.fromMillisecondsSinceEpoch(startTime).
-      difference(DateTime.fromMillisecondsSinceEpoch(int.parse(currentDateTime))),
+      timeBalance = DateTime.fromMillisecondsSinceEpoch(startTime).difference(DateTime.fromMillisecondsSinceEpoch(int.parse(currentDateTime))),
       print( "time difference >>> ${timeBalance.inSeconds}"),
 
         if(timeBalance.inSeconds > -totalTime){
@@ -37,6 +36,8 @@ class GetCurrentWorldTime {
         else{
             remainingTime = 0,
         }
+
+
     });
     print("remaining Time >>> $remainingTime");
    return remainingTime;

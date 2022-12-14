@@ -108,7 +108,9 @@ class _MechanicWorkProgressWorkingScreenState extends State<MechanicWorkProgress
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
-      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      bookingIdEmergency = widget.bookingId;
+
+      // bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       updateToCloudFirestoreMechanicCurrentScreenDB();
       listenToCloudFirestoreDB();
       print('MechanicWorkProgressScreen bookingIdEmergency ++++ ${bookingIdEmergency} ');
