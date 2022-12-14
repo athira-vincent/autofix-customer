@@ -876,7 +876,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     color: Colors.black,
   );
 
-
   @override
   void dispose() {
     // TODO: implement dispose
