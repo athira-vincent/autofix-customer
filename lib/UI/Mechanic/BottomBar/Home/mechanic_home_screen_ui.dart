@@ -248,7 +248,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> with Widget
         firebaseScreen = event.get('mechanicFromPage');
         firebaseCustomerLatitude = event.get('customerLatitude');
         firebaseCustomerLongitude = event.get('customerLongitude');
-        totalstarttimecurrenttimevalue = event.get("totalstarttimecurrenttimevalue");
       });
     });
   }

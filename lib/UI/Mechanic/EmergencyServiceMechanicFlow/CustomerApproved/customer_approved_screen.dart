@@ -74,9 +74,9 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
       print('CustomerApprovedScreen bookingId >>>> $bookingId');
       updateToCloudFirestoreMechanicCurrentScreenDB();
     });
-    await  _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
+    _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
       if(mounted){
-        setState(() {
+        setState(()  {
           mechanicName = event.get('mechanicName');
           customerName = event.get('customerName');
           updatedServiceTime = event.get('updatedServiceTime');
@@ -196,15 +196,12 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     print("updateToCloudFirestoreDB totalTimeTaken clock2222222222 >>>> " + totalTimeTaken.toString());
 
     String currentDateTime = "";
-    Repository().getCurrentWorldTime("Nairobi").then((value01) => {
 
-      currentDateTime = value01.datetime!.millisecondsSinceEpoch.toString(),
 
-      print("dateConverter(timeNow!) >>>  >>> customer approved screen11: ${currentDateTime}"),
 
     if(currentUpdatedTime == "0")
     {
-        print("dateConverter(timeNow!) >>> customer approved screen22: ++++++++++++ $currentDateTime"),
+      print("dateConverter(timeNow!) >>> customer approved screen22: ++++++++++++ $currentDateTime");
 
       if(isStartedWork == false)
         {
@@ -258,7 +255,21 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         print("Failed to add Location: $error")),
         }
 
-    });
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingId}')
+        .update({
+    'isWorkStarted': "$isWorkStarted",
+    'isWorkCompleted': "$isWorkCompleted",
+    "extendedTime": "$time",
+    "timerCounter": "$currentUpdatedTime",
+    "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+    'serviceStartWorldTime' : "${currentDateTime}"
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+    print("Failed to add Location: $error"));
+    }
 
   }
 
