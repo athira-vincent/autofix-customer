@@ -645,13 +645,10 @@ bool  addressstatus=false;
                                                       );
                                                     });
                                               },
-                                              child: Visibility(
-                                                visible: false,
-                                                child: SvgPicture.asset(
-                                                  'assets/image/home_customer/deleteMyCart.svg',
-                                                  height: 20,
-                                                  width: 20,
-                                                ),
+                                              child: SvgPicture.asset(
+                                                'assets/image/home_customer/deleteMyCart.svg',
+                                                height: 20,
+                                                width: 20,
                                               ),
                                             ),
                                           ),
