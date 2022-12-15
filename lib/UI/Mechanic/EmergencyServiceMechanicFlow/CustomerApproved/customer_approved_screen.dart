@@ -217,7 +217,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
           })
               .then((value) => print("Location Added"))
               .catchError((error) =>
-              print("Failed to add Location: $error")),
+              print("Failed to add Location: $error"));
         }
       else
         {
@@ -232,13 +232,13 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
           })
               .then((value) => print("Location Added"))
               .catchError((error) =>
-              print("Failed to add Location: $error")),
+              print("Failed to add Location: $error"));
         }
     }
     else
     {
 
-        print("dateConverter(timeNow!) >>> customer approved screen33: ++++++++++++ $currentDateTime"),
+        print("dateConverter(timeNow!) >>> customer approved screen33: ++++++++++++ $currentDateTime");
 
         _firestore
             .collection("ResolMech")
@@ -252,7 +252,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         })
             .then((value) => print("Location Added"))
             .catchError((error) =>
-        print("Failed to add Location: $error")),
+        print("Failed to add Location: $error"));
         }
 
     _firestore
@@ -271,7 +271,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     print("Failed to add Location: $error"));
     }
 
-  }
+
 
   void updateToCloudFirestoreMechanicCurrentScreenDB() {
     _firestore
