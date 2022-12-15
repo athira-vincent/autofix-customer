@@ -841,40 +841,40 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
               ),
             )
                 : MaterialButton(
-              onPressed: () async {
-                int newTime;
-                int newTimeSec;
-                setState(() {
-                  _controller.stop();
-                  print("level extendedTimeVal clock1 >>>> " + extendedTimeVal.toString());
-                  print("level extendedTime clock1 >>>> " + extendedTime.toString());
-                  print("level levelClock clock1 >>>> " + levelClock.toString());
-                  print("level timeCounter clock1 >>>> " + timeCounter.toString());
-                  newTime = int.parse('$extendedTime') +  int.parse('${extendedTimeVal.toString()}');
-                  extendedTime = newTime.toString();
-                  newTimeSec = Duration(minutes: int.parse('$extendedTimeVal') + int.parse('$timeCounter')).inSeconds;
-                  levelClock = newTimeSec;
-                  _controller = AnimationController(
-                      vsync: this,
-                      duration: Duration(
-                          seconds: newTimeSec) // gameData.levelClock is a user entered number elsewhere in the applciation
-                  );
-                  print("level extendedTimeVal clock2 >>>> " + extendedTimeVal.toString());
-                  print("level extendedTime clock2 >>>> " + extendedTime.toString());
-                  print("level newTimeSec clock2 >>>> " + newTimeSec.toString());
-                  print("level levelClock clock2 >>>> " + levelClock.toString());
-                  print("level timeCounter clock2 >>>> " + timeCounter.toString());
-                  print("clock2 _controller ${_controller.status}");
-                  print("clock2 _controller.duration!.inMinutes ${_controller.duration!.inMinutes}");
-                  isEnableAddMoreBtn = false;
-                  _controller.forward();
-                  _updateTimerListener(int.parse((int.parse(levelClock.toString())/60).toInt().toString()));
-                  updateToCloudFirestoreDB("1","0", extendedTimeVal.toString(),"${_controller.duration!.inMinutes}");
-                  _addMoreTimeBloc.postMechanicSetAddTimeRequest(authToken, extendedTimeVal.toString() + ":00", bookingId);
-                });
-                Navigator.of(context).pop();
-              },
-              child: Container(
+                  onPressed: () async {
+                    int newTime;
+                    int newTimeSec;
+                    setState(() {
+                      _controller.stop();
+                      print("level extendedTimeVal clock1 >>>> " + extendedTimeVal.toString());
+                      print("level extendedTime clock1 >>>> " + extendedTime.toString());
+                      print("level levelClock clock1 >>>> " + levelClock.toString());
+                      print("level timeCounter clock1 >>>> " + timeCounter.toString());
+                      newTime = int.parse('$extendedTime') +  int.parse('${extendedTimeVal.toString()}');
+                      extendedTime = newTime.toString();
+                      newTimeSec = Duration(minutes: int.parse('$extendedTimeVal') + int.parse('$timeCounter')).inSeconds;
+                      levelClock = newTimeSec;
+                      _controller = AnimationController(
+                          vsync: this,
+                          duration: Duration(
+                              seconds: newTimeSec) // gameData.levelClock is a user entered number elsewhere in the applciation
+                      );
+                      print("level extendedTimeVal clock2 >>>> " + extendedTimeVal.toString());
+                      print("level extendedTime clock2 >>>> " + extendedTime.toString());
+                      print("level newTimeSec clock2 >>>> " + newTimeSec.toString());
+                      print("level levelClock clock2 >>>> " + levelClock.toString());
+                      print("level timeCounter clock2 >>>> " + timeCounter.toString());
+                      print("clock2 _controller ${_controller.status}");
+                      print("clock2 _controller.duration!.inMinutes ${_controller.duration!.inMinutes}");
+                      isEnableAddMoreBtn = false;
+                      _controller.forward();
+                      _updateTimerListener(int.parse((int.parse(levelClock.toString())/60).toInt().toString()));
+                      updateToCloudFirestoreDB("1","0", extendedTimeVal.toString(),"${_controller.duration!.inMinutes}");
+                      _addMoreTimeBloc.postMechanicSetAddTimeRequest(authToken, extendedTimeVal.toString() + ":00", bookingId);
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
                 width: double.infinity,
                 padding: EdgeInsets.only(
                     left: size.width * 2.5 / 100,
