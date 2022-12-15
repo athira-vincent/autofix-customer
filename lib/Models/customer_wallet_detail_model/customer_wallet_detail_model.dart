@@ -23,13 +23,13 @@ class CustomerWalletDetailModel {
   factory CustomerWalletDetailModel.fromMap(Map<String, dynamic> json) => CustomerWalletDetailModel(
     status: json["status"] == null ? null : json["status"],
     message: json["message"] == null ? null : json["message"],
-    data: Data.fromMap(json["data"]) == null ? null : Data.fromMap(json["data"]),
+    data: Data.fromMap(json["data"]),
   );
 
   Map<String, dynamic> toMap() => {
     "status": status == null ? null : status,
     "message": message == null ? null : message,
-    "data": data!.toMap() == null ? null : data!.toMap(),
+    "data": data!.toMap(),
   };
 }
 
@@ -38,14 +38,14 @@ class Data {
     required this.walletDetails,
   });
 
-  WalletDetails walletDetails;
+  WalletDetails? walletDetails;
 
   factory Data.fromMap(Map<String, dynamic> json) => Data(
-    walletDetails: WalletDetails.fromMap(json["walletDetails"]),
+    walletDetails: json["walletDetails"] == null ? null : WalletDetails.fromMap(json["walletDetails"]),
   );
 
   Map<String, dynamic> toMap() => {
-    "walletDetails": walletDetails.toMap() == null ? null : walletDetails.toMap(),
+    "walletDetails": walletDetails == null ? null : walletDetails!.toMap(),
   };
 }
 
@@ -53,19 +53,23 @@ class WalletDetails {
   WalletDetails({
     required this.walletData,
     required this.totalBalance,
+    required this.totalSpent,
   });
 
   WalletData? walletData;
   int totalBalance;
+  int totalSpent;
 
   factory WalletDetails.fromMap(Map<String, dynamic> json) => WalletDetails(
     walletData: json["walletData"] == null ? null : WalletData.fromMap(json["walletData"]),
     totalBalance: json["totalBalance"] == null ? null : json["totalBalance"],
+    totalSpent: json["totalSpent"] == null ? null : json["totalSpent"],
   );
 
   Map<String, dynamic> toMap() => {
     "walletData": walletData == null ? null : walletData!.toMap(),
     "totalBalance": totalBalance == null ? null : totalBalance,
+    "totalSpent": totalSpent == null ? null : totalSpent,
   };
 }
 
@@ -88,7 +92,7 @@ class WalletData {
   int amount;
   int balance;
   DateTime? recordDate;
-  dynamic reference;
+  String reference;
   int paymentMode;
   int status;
   int customerId;
@@ -100,7 +104,7 @@ class WalletData {
     amount: json["amount"] == null ? null : json["amount"],
     balance: json["balance"] == null ? null : json["balance"],
     recordDate: json["recordDate"] == null ? null : DateTime.parse(json["recordDate"]),
-    reference: json["reference"],
+    reference: json["reference"] == null ? null : json["reference"],
     paymentMode: json["paymentMode"] == null ? null : json["paymentMode"],
     status: json["status"] == null ? null : json["status"],
     customerId: json["customerId"] == null ? null : json["customerId"],
@@ -113,7 +117,7 @@ class WalletData {
     "amount": amount == null ? null : amount,
     "balance": balance == null ? null : balance,
     "recordDate": recordDate == null ? null : recordDate!.toIso8601String(),
-    "reference": reference,
+    "reference": reference == null ? null : reference,
     "paymentMode": paymentMode == null ? null : paymentMode,
     "status": status == null ? null : status,
     "customerId": customerId == null ? null : customerId,
@@ -136,9 +140,6 @@ class Customer {
     required this.otpCode,
     required this.isProfile,
     required this.otpVerified,
-    required this.customer,
-    required this.mechanic,
-    required this.vendor,
   });
 
   int id;
@@ -151,12 +152,9 @@ class Customer {
   int userTypeId;
   String jwtToken;
   String fcmToken;
-  String otpCode;
+  dynamic otpCode;
   int isProfile;
   int otpVerified;
-  dynamic customer;
-  dynamic mechanic;
-  dynamic vendor;
 
   factory Customer.fromMap(Map<String, dynamic> json) => Customer(
     id: json["id"] == null ? null : json["id"],
@@ -169,12 +167,9 @@ class Customer {
     userTypeId: json["userTypeId"] == null ? null : json["userTypeId"],
     jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
     fcmToken: json["fcmToken"] == null ? null : json["fcmToken"],
-    otpCode: json["otpCode"] == null ? null : json["otpCode"],
+    otpCode: json["otpCode"],
     isProfile: json["isProfile"] == null ? null : json["isProfile"],
     otpVerified: json["otpVerified"] == null ? null : json["otpVerified"],
-    customer: json["customer"],
-    mechanic: json["mechanic"],
-    vendor: json["vendor"],
   );
 
   Map<String, dynamic> toMap() => {
@@ -188,12 +183,8 @@ class Customer {
     "userTypeId": userTypeId == null ? null : userTypeId,
     "jwtToken": jwtToken == null ? null : jwtToken,
     "fcmToken": fcmToken == null ? null : fcmToken,
-    "otpCode": otpCode == null ? null : otpCode,
+    "otpCode": otpCode,
     "isProfile": isProfile == null ? null : isProfile,
     "otpVerified": otpVerified == null ? null : otpVerified,
-    "customer": customer,
-    "mechanic": mechanic,
-    "vendor": vendor,
   };
 }
-

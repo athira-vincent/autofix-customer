@@ -4655,7 +4655,7 @@ class QueryProvider {
     String userID = shdPre.getString(SharedPrefKeys.userID).toString();
 
     String _query = """
-      {
+  {
     walletDetails(customerId: $userID) {
       walletData {
         id
@@ -4681,18 +4681,10 @@ class QueryProvider {
           otpCode
           isProfile
           otpVerified
-          customer{
-            id
-          }
-          mechanic{
-            id
-          }
-          vendor{
-            id
-          }
         }
       }
       totalBalance
+      totalSpent
     }
   }
     """;
