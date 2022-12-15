@@ -10,7 +10,7 @@ class TextStrings {
   static const errIncorrectMail = "Incorrect mail format";
   //* Password weak
   static const weakPassword =
-      "Password must contain atleast 8 characters, one uppercase, one digit, one symbol";
+      "Password must contain atleast 8 characters, one uppercase, one lowercase, one digit and one symbol";
   //* mobile invalid
   static const invalidMobile = "Invalid phone number";
 
