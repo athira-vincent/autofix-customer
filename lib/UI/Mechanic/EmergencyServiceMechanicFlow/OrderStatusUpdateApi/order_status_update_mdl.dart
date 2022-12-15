@@ -107,7 +107,7 @@ class BookingData {
   int reqType;
   int bookStatus;
   int totalPrice;
-  int tax;
+  dynamic tax;
   int commission;
   int serviceCharge;
   dynamic totalTime;
