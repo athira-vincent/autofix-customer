@@ -167,22 +167,31 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         /// --------- Work Started
         String time = await GetCurrentWorldTime().getCurrentWorldTime();
         print("time: ++++++++++++ $time");
+        String currentDateTime = "";
 
+        Repository().getCurrentWorldTime("Nairobi").then((value01) => {
+
+          currentDateTime = value01.datetime!.millisecondsSinceEpoch.toString(),
+
+          print("dateConverter(timeNow!) >>> ${currentDateTime}"),
         _firestore
             .collection("ResolMech")
             .doc('${bookingId}')
             .update({
-          'mechanicDiagonsisState': "2",
-          'customerDiagonsisApproval' : "-1",
-          'updatedServiceList': FieldValue.arrayUnion(allData),
-          'updatedServiceCost': "$serviceTotalCostForFirebase",
-          'updatedServiceTime': "$serviceTotalTimeForFirebase",
-          'timerCounter': "$serviceTotalTimeForFirebase",
-          'serviceStartWorldTime' : "${time}"
-        })
+              'mechanicDiagonsisState': "2",
+              'customerDiagonsisApproval' : "-1",
+              'updatedServiceList': FieldValue.arrayUnion(allData),
+              'updatedServiceCost': "$serviceTotalCostForFirebase",
+              'updatedServiceTime': "$serviceTotalTimeForFirebase",
+              'timerCounter': "$serviceTotalTimeForFirebase",
+              'serviceStartWorldTime' : "${currentDateTime}"
+              })
             .then((value) => print("updatedServiceList01 Added"))
             .catchError((error) =>
-            print("Failed to add updatedServiceList: $error"));
+        print("Failed to add updatedServiceList: $error")),
+
+        });
+
       }
       else {
         /// ----------- Add / Change Additional Services - Waiting 4 Approve
