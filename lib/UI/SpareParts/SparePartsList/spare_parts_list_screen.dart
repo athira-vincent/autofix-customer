@@ -604,7 +604,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
     return InkWell(
       onTap: () {
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => MyCartScreen(isFromHome: false, addressid: '', addresstext: '',)));
+            MaterialPageRoute(builder: (context) => const MyCartScreen(isFromHome: true, addressid: '', addresstext: '',)));
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
