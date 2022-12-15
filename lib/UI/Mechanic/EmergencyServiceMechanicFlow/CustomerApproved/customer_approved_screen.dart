@@ -334,8 +334,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                   children: [
                     isEnableAddMoreBtnFirstTym
                         ? Container()
-                    :mechanicAddMoreTimeButton(size),
-                        // : isEnableAddMoreBtn ? mechanicAddMoreTimeButton(size) : Container(),
+                    // :mechanicAddMoreTimeButton(size),
+                        : isEnableAddMoreBtn ? mechanicAddMoreTimeButton(size) : Container(),
                     mechanicStartServiceButton(size),
                   ],
                 )
