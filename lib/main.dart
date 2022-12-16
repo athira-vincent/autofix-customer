@@ -291,7 +291,6 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
                     primarySwatch: CustColors.materialBlue,
                   ),
                   home: SplashScreen(),
-
             ),
           );
         },
