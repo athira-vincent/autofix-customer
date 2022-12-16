@@ -47,6 +47,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   Timer? timerObj;
   Timer? timerObjVar;
   int timeCounter = 0;
+  String timerCounterFromFirebase = "0";
+  String extendedTimeFromFirebase = "0";
+
+
   Timer? totalTimerObj;
   int totalTimeTaken = 0;
   String serviceStartWorldTime = "";
@@ -74,86 +78,102 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
       print('CustomerApprovedScreen bookingId >>>> $bookingId');
       updateToCloudFirestoreMechanicCurrentScreenDB();
     });
-    _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
+    await  _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
       if(mounted){
-        setState(()  {
+        setState(() {
           mechanicName = event.get('mechanicName');
           customerName = event.get('customerName');
           updatedServiceTime = event.get('updatedServiceTime');
+          extendedTimeFromFirebase = event.get('extendedTime');
           customerDiagonsisApproval = event.get('customerDiagonsisApproval');
           mechanicDiagonsisState = event.get('mechanicDiagonsisState');
           serviceStartWorldTime = event.get("serviceStartWorldTime");
-          print(">>>> customerCurrentTime 001  currentDateTime : 00");
+          timerCounterFromFirebase = event.get('timerCounter');
 
           int currentDateTime;
           Duration timeBalance;
           int sec;
           int remainingTime;
           Repository().getCurrentWorldTime("Nairobi").then((value01) => {
-          print(">>>> customerCurrentTime 001  currentDateTime : 11"),
-
-              if(listenToFirestoreTime == "0")
-                {
-                  if(serviceStartWorldTime != "" || serviceStartWorldTime.isNotEmpty)
+            if(listenToFirestoreTime == "0")
+              {
+                if(serviceStartWorldTime != "" || serviceStartWorldTime.isNotEmpty)
                   {
 
-                      currentDateTime = value01.datetime!.millisecondsSinceEpoch,
-                      sec = Duration(minutes: int.parse('$updatedServiceTime')).inSeconds,
-                      timeBalance = DateTime.fromMillisecondsSinceEpoch(int.parse(currentDateTime.toString())).difference(DateTime.fromMillisecondsSinceEpoch(int.parse(serviceStartWorldTime))),
-                      print(">>>> customerCurrentTime 001  currentDateTime : $currentDateTime"),
-                      print(">>>> customerCurrentTime  002 serviceStartWorldTime : $serviceStartWorldTime"),
-                      print(">>>> customerCurrentTime  004 updatedServiceTime : $sec"),
-                      print( "time difference >>> ${timeBalance.inSeconds}"),
+                    currentDateTime = value01.datetime!.millisecondsSinceEpoch,
+                    sec = Duration(minutes: int.parse('$updatedServiceTime') + int.parse('$extendedTimeFromFirebase')).inSeconds,
+                    timeBalance = DateTime.fromMillisecondsSinceEpoch(int.parse(currentDateTime.toString())).difference(DateTime.fromMillisecondsSinceEpoch(int.parse(serviceStartWorldTime))),
+                    print(">>>> customerCurrentTime 001  currentDateTime : $currentDateTime"),
+                    print(">>>> customerCurrentTime  002 serviceStartWorldTime : $serviceStartWorldTime"),
+                    print(">>>> customerCurrentTime  004 updatedServiceTime : $sec"),
+                    print( "time difference >>> ${timeBalance.inSeconds}"),
 
 
-                    if(sec < timeBalance.inSeconds)
+                    if(timerCounterFromFirebase == updatedServiceTime)
                       {
-                        remainingTime = 0,
-
+                        if(sec < timeBalance.inSeconds)
+                          {
+                            print( "time difference >>> 00 ${timeBalance.inSeconds}"),
+                            remainingTime = 0,
+                          }
+                        else
+                          {
+                            print( "time difference >>> 11 ${timeBalance.inSeconds}"),
+                            remainingTime = sec - timeBalance.inSeconds,
+                          },
                       }
                     else
                       {
-                        remainingTime = sec - timeBalance.inSeconds,
-
+                        if(sec < timeBalance.inSeconds)
+                          {
+                            print( "time difference >>> 00 ${timeBalance.inSeconds}"),
+                            remainingTime = 0,
+                          }
+                        else
+                          {
+                            print( "time difference >>> 11 ${timeBalance.inSeconds}"),
+                            remainingTime = sec - timeBalance.inSeconds,
+                          },
                       },
-                     //  if(timeBalance.inSeconds <  sec){
-                     //    print("remaining Time  00>>> $remainingTime"),
-                     //    remainingTime = remainingTime + timeBalance.inSeconds,
-                     //    print("remaining Time  addition 00>>> $remainingTime"),
-                     //
-                     //  }
-                     //  else{
-                     //    print("remaining Time  11>>> $remainingTime"),
-                     //    remainingTime = 0,
-                     //  },
-                      setState(() {
-                        levelClock = remainingTime;
-                      }),
+
+                    //  if(timeBalance.inSeconds <  sec){
+                    //    print("remaining Time  00>>> $remainingTime"),
+                    //    remainingTime = remainingTime + timeBalance.inSeconds,
+                    //    print("remaining Time  addition 00>>> $remainingTime"),
+                    //
+                    //  }
+                    //  else{
+                    //    print("remaining Time  11>>> $remainingTime"),
+                    //    remainingTime = 0,
+                    //  },
+                    setState(() {
+                      levelClock = remainingTime;
+                    }),
                     // print("dateConverter(timeNow!) >>>  >>> customer approved screen levelClock11: ${serviceStartWorldTime}");
-                //
-                // //levelClock = int.parse('${updatedServiceTime.split(":").first}');
-                // int sec = Duration(minutes: int.parse('$updatedServiceTime')).inSeconds;
-                // int time = GetCurrentWorldTime().getDurationDifference(int.parse(serviceStartWorldTime), sec);
-                // levelClock = time;
-                // print("dateConverter(timeNow!) >>>  >>> customer approved screen levelClock111 11time: ${time}");
-                // print("dateConverter(timeNow!) >>>  >>> customer approved screen levelClock111 time: ${GetCurrentWorldTime().getDurationDifference(int.parse(serviceStartWorldTime), sec)}");
+                    //
+                    // //levelClock = int.parse('${updatedServiceTime.split(":").first}');
+                    // int sec = Duration(minutes: int.parse('$updatedServiceTime')).inSeconds;
+                    // int time = GetCurrentWorldTime().getDurationDifference(int.parse(serviceStartWorldTime), sec);
+                    // levelClock = time;
+                    // print("dateConverter(timeNow!) >>>  >>> customer approved screen levelClock111 11time: ${time}");
+                    // print("dateConverter(timeNow!) >>>  >>> customer approved screen levelClock111 time: ${GetCurrentWorldTime().getDurationDifference(int.parse(serviceStartWorldTime), sec)}");
                   }
-                  else
+                else
                   {
-                print("dateConverter(timeNow!) >>>  >>> customer approved levelClock22: ${levelClock}"),
+                    print("dateConverter(timeNow!) >>>  >>> customer approved levelClock22: ${levelClock}"),
                     levelClock = int.parse('${updatedServiceTime.split(":").first}'),
                     sec = Duration(minutes: int.parse('$levelClock')).inSeconds,
                     levelClock = sec
                   },
-                  print("dateConverter(timeNow!) >>>  >>> customer approved levelClock2211: ${levelClock}"),
+                print("dateConverter(timeNow!) >>>  >>> customer approved levelClock2211: ${levelClock}"),
 
-                  _controller = AnimationController(
-                      vsync: this,
-                      duration: Duration(
-                          seconds: levelClock)
-                  ),
-                  listenToFirestoreTime = "1",
-                  if(mechanicDiagonsisState=="2")
+                _controller = AnimationController(
+                    vsync: this,
+                    duration: Duration(
+                        seconds: levelClock)
+                ),
+                listenToFirestoreTime = "1",
+                if(mechanicDiagonsisState=="2")
                   {
                     setState(() {
                       print("updateToCloudFirestoreDB isStartedWork $isStartedWork");
@@ -170,8 +190,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                     _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
                         authToken, bookingId, "5"),
                   }
-                }
-            });
+              }
+          });
         });
       }
     });
@@ -179,16 +199,16 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
   void updateToCloudWorkStartedFirestoreDB() {
     print("updateToCloudWorkStartedFirestoreDB >>>> " );
-      _firestore
-          .collection("ResolMech")
-          .doc('${bookingId}')
-          .update({
-        'isWorkStarted': "1",
-        'serviceStartWorldTime' : "${GetCurrentWorldTime().getCurrentWorldTime()}"
-      })
-          .then((value) => print("Location Added"))
-          .catchError((error) =>
-          print("Failed to add Location: $error"));
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingId}')
+        .update({
+      'isWorkStarted': "1",
+      'serviceStartWorldTime' : "${GetCurrentWorldTime().getCurrentWorldTime()}"
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
 
   }
 
@@ -196,82 +216,68 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     print("updateToCloudFirestoreDB totalTimeTaken clock2222222222 >>>> " + totalTimeTaken.toString());
 
     String currentDateTime = "";
+    Repository().getCurrentWorldTime("Nairobi").then((value01) => {
 
+      currentDateTime = value01.datetime!.millisecondsSinceEpoch.toString(),
 
-
-    if(currentUpdatedTime == "0")
-    {
-      print("dateConverter(timeNow!) >>> customer approved screen22: ++++++++++++ $currentDateTime");
-
-      if(isStartedWork == false)
+      if(currentUpdatedTime == "0")
         {
-          _firestore
-              .collection("ResolMech")
-              .doc('${bookingId}')
-              .update({
-            'isWorkStarted': "$isWorkStarted",
-            'isWorkCompleted': "$isWorkCompleted",
-            "extendedTime": "$time",
-            "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
-            'serviceStartWorldTime' : "${currentDateTime}"
-          })
-              .then((value) => print("Location Added"))
-              .catchError((error) =>
-              print("Failed to add Location: $error"));
+
+          if(isStartedWork == false)
+            {
+              _firestore
+                  .collection("ResolMech")
+                  .doc('${bookingId}')
+                  .update({
+                    'isWorkStarted': "$isWorkStarted",
+                    'isWorkCompleted': "$isWorkCompleted",
+                    "extendedTime": "$time",
+                    "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+                    'serviceStartWorldTime' : "${currentDateTime}"
+                  })
+                  .then((value) => print("Location Added"))
+                  .catchError((error) =>
+                  print("Failed to add Location: $error")),
+            }
+          else
+            {
+              _firestore
+                  .collection("ResolMech")
+                  .doc('${bookingId}')
+                  .update({
+                    'isWorkStarted': "$isWorkStarted",
+                    'isWorkCompleted': "$isWorkCompleted",
+                    "extendedTime": "$time",
+                    "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+                  })
+                  .then((value) => print("Location Added"))
+                  .catchError((error) =>
+                  print("Failed to add Location: $error")),
+            }
         }
       else
         {
+
+          print("dateConverter(timeNow!) >>> customer approved screen33: ++++++++++++ $currentDateTime"),
+
           _firestore
               .collection("ResolMech")
               .doc('${bookingId}')
               .update({
-            'isWorkStarted': "$isWorkStarted",
-            'isWorkCompleted': "$isWorkCompleted",
-            "extendedTime": "$time",
-            "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
-          })
+                'isWorkStarted': "$isWorkStarted",
+                'isWorkCompleted': "$isWorkCompleted",
+                "extendedTime": "$time",
+                "timerCounter": "$currentUpdatedTime",
+                "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+              })
               .then((value) => print("Location Added"))
               .catchError((error) =>
-              print("Failed to add Location: $error"));
-        }
-    }
-    else
-    {
-
-        print("dateConverter(timeNow!) >>> customer approved screen33: ++++++++++++ $currentDateTime");
-
-        _firestore
-            .collection("ResolMech")
-            .doc('${bookingId}')
-            .update({
-        'isWorkStarted': "$isWorkStarted",
-        'isWorkCompleted': "$isWorkCompleted",
-        "extendedTime": "$time",
-        "timerCounter": "$currentUpdatedTime",
-        "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
-        })
-            .then((value) => print("Location Added"))
-            .catchError((error) =>
-        print("Failed to add Location: $error"));
+              print("Failed to add Location: $error")),
         }
 
-    _firestore
-        .collection("ResolMech")
-        .doc('${bookingId}')
-        .update({
-    'isWorkStarted': "$isWorkStarted",
-    'isWorkCompleted': "$isWorkCompleted",
-    "extendedTime": "$time",
-    "timerCounter": "$currentUpdatedTime",
-    "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
-    'serviceStartWorldTime' : "${currentDateTime}"
-    })
-        .then((value) => print("Location Added"))
-        .catchError((error) =>
-    print("Failed to add Location: $error"));
-    }
+    });
 
-
+  }
 
   void updateToCloudFirestoreMechanicCurrentScreenDB() {
     _firestore
@@ -328,6 +334,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                   children: [
                     isEnableAddMoreBtnFirstTym
                         ? Container()
+                    // :mechanicAddMoreTimeButton(size),
                         : isEnableAddMoreBtn ? mechanicAddMoreTimeButton(size) : Container(),
                     mechanicStartServiceButton(size),
                   ],
@@ -861,27 +868,24 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                   print("level extendedTime clock1 >>>> " + extendedTime.toString());
                   print("level levelClock clock1 >>>> " + levelClock.toString());
                   print("level timeCounter clock1 >>>> " + timeCounter.toString());
-                  newTime = int.parse('$extendedTime') +  int.parse('${extendedTimeVal.toString()}');
+                  newTime = int.parse('${levelClock.toString()}') +  (int.parse('${extendedTimeVal.toString()}')*60);
                   extendedTime = newTime.toString();
                   newTimeSec = Duration(minutes: int.parse('$extendedTimeVal') + int.parse('$timeCounter')).inSeconds;
-                  levelClock = newTimeSec;
+                  levelClock = newTime;
+
+
+
                   _controller = AnimationController(
                       vsync: this,
                       duration: Duration(
-                          seconds: newTimeSec) // gameData.levelClock is a user entered number elsewhere in the applciation
+                          seconds: levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
                   );
-                  print("level extendedTimeVal clock2 >>>> " + extendedTimeVal.toString());
-                  print("level extendedTime clock2 >>>> " + extendedTime.toString());
-                  print("level newTimeSec clock2 >>>> " + newTimeSec.toString());
-                  print("level levelClock clock2 >>>> " + levelClock.toString());
-                  print("level timeCounter clock2 >>>> " + timeCounter.toString());
-                  print("clock2 _controller ${_controller.status}");
-                  print("clock2 _controller.duration!.inMinutes ${_controller.duration!.inMinutes}");
                   isEnableAddMoreBtn = false;
                   _controller.forward();
                   _updateTimerListener(int.parse((int.parse(levelClock.toString())/60).toInt().toString()));
                   updateToCloudFirestoreDB("1","0", extendedTimeVal.toString(),"${_controller.duration!.inMinutes}");
                   _addMoreTimeBloc.postMechanicSetAddTimeRequest(authToken, extendedTimeVal.toString() + ":00", bookingId);
+
                 });
                 Navigator.of(context).pop();
               },

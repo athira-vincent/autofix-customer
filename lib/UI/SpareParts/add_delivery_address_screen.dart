@@ -564,7 +564,7 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
                 SizedBox(
                   width: size.width * 8 / 100,
                 ),
-                useMyLocationButton(size),
+                //useMyLocationButton(size),
               ],
             ),
           ),

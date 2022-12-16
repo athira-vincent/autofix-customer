@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/ExtraDiagnosisScreen/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_finished_screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/mechanic_waiting_payment.dart';
@@ -77,6 +78,10 @@ class _MechanicWorkProgressWorkingScreenState extends State<MechanicWorkProgress
   Timer? timerCouterTime;
   String serviceStartWorldTime = "";
 
+  String timerCounterFromFirebase = "0";
+  String extendedTimeFromFirebase = "0",updatedServiceTime = "00.00";
+
+
 
   @override
   void initState() {
@@ -113,7 +118,7 @@ class _MechanicWorkProgressWorkingScreenState extends State<MechanicWorkProgress
       // bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       updateToCloudFirestoreMechanicCurrentScreenDB();
       listenToCloudFirestoreDB();
-      print('MechanicWorkProgressScreen bookingIdEmergency ++++ ${bookingIdEmergency} ');
+      print('MechanicWorkProgressScreen bookingIdEmergency ++++ 123456 ${bookingIdEmergency} ');
 
     });
 
@@ -128,24 +133,86 @@ class _MechanicWorkProgressWorkingScreenState extends State<MechanicWorkProgress
           totalEstimatedTime = event.get('timerCounter');
           mechanicName = event.get('mechanicName');
           serviceStartWorldTime = event.get("serviceStartWorldTime") ?? "";
+          timerCounterFromFirebase = event.get('timerCounter');
+          updatedServiceTime = event.get('updatedServiceTime');
+          extendedTimeFromFirebase = event.get('extendedTime');
 
           _controller.stop(canceled: true);
 
-          int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
-          int time ;
-          GetCurrentWorldTime().getDurationDifference(int.parse(serviceStartWorldTime), sec).then((value) => {
-            time = value,
-            levelClock = time
+          print('MechanicWorkProgressScreen bookingIdEmergency ++++ 123456 ${bookingIdEmergency} ');
+
+
+
+          int currentDateTime;
+          Duration timeBalance;
+          int sec;
+          int remainingTime;
+
+          Repository().getCurrentWorldTime("Nairobi").then((value01) => {
+
+            print(">>>> customerCurrentTime 001  currentDateTime : 000000"),
+
+
+            if(serviceStartWorldTime != "" || serviceStartWorldTime.isNotEmpty)
+              {
+
+                currentDateTime = value01.datetime!.millisecondsSinceEpoch,
+                sec = Duration(minutes: int.parse('$updatedServiceTime') + int.parse('$extendedTimeFromFirebase')).inSeconds,
+                timeBalance = DateTime.fromMillisecondsSinceEpoch(int.parse(currentDateTime.toString())).difference(DateTime.fromMillisecondsSinceEpoch(int.parse(serviceStartWorldTime))),
+                print(">>>> customerCurrentTime 001  currentDateTime : $currentDateTime"),
+                print(">>>> customerCurrentTime  002 serviceStartWorldTime : $serviceStartWorldTime"),
+                print(">>>> customerCurrentTime  004 updatedServiceTime : $sec"),
+                print( "time difference >>> ${timeBalance.inSeconds}"),
+
+
+
+                remainingTime = sec - timeBalance.inSeconds,
+
+                setState(() {
+                  levelClock = remainingTime;
+                }),
+              }
+            else
+              {
+                print("dateConverter(timeNow!) >>>  >>> customer approved levelClock22: ${levelClock}"),
+                levelClock = int.parse('${updatedServiceTime.split(":").first}'),
+                sec = Duration(minutes: int.parse('$levelClock')).inSeconds,
+                levelClock = sec
+              },
+
+            print("dateConverter(timeNow!) >>>  >>> customer approved levelClock22 456: ${levelClock}"),
+
+
+            _controller = AnimationController(
+                vsync: this,
+                duration: Duration(
+                    seconds:
+                    levelClock)
+            ),
+            _controller.forward(),
+            _updateTimerListener(),
+
           });
 
-          _controller = AnimationController(
-              vsync: this,
-              duration: Duration(
-                  seconds:
-                  levelClock)
-          );
-          _controller.forward();
-          _updateTimerListener();
+          // int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
+          // int time ;
+          // GetCurrentWorldTime().getDurationDifference(int.parse(serviceStartWorldTime), sec).then((value) => {
+          //   time = value,
+          //   levelClock = time,
+          // print('MechanicWorkProgressScreen bookingIdEmergency ++++ 123456 ${time.toString()} '),
+          //
+          // });
+          //
+          // // print('MechanicWorkProgressScreen bookingIdEmergency ++++ 123456 ${time.toString()} ');
+          //
+          // _controller = AnimationController(
+          //     vsync: this,
+          //     duration: Duration(
+          //         seconds:
+          //         levelClock)
+          // );
+          // _controller.forward();
+          // _updateTimerListener();
 
         });
       }
@@ -200,8 +267,45 @@ class _MechanicWorkProgressWorkingScreenState extends State<MechanicWorkProgress
             SnackBarWidget().setMaterialSnackBar( "Mechanic added extra time for work completion.", _scaffoldKey);
             extendedTimeFirstTymCall = "1";
             setState(() {
-              int sec = Duration(minutes: int.parse('${currentUpdatedTime.split(":").first}')).inSeconds;
-              levelClock = sec;
+              // int sec = Duration(minutes: int.parse('${currentUpdatedTime.split(":").first}')).inSeconds;
+              // levelClock = sec;
+
+              int currentDateTime;
+              Duration timeBalance;
+              int sec;
+              int remainingTime;
+
+              Repository().getCurrentWorldTime("Nairobi").then((value01) => {
+
+                print(">>>> customerCurrentTime 001  currentDateTime : 000000"),
+
+
+                if(serviceStartWorldTime != "" || serviceStartWorldTime.isNotEmpty)
+                  {
+
+                    currentDateTime = value01.datetime!.millisecondsSinceEpoch,
+                    sec = Duration(minutes: int.parse('$updatedServiceTime') + int.parse('$extendedTimeFromFirebase')).inSeconds,
+                    timeBalance = DateTime.fromMillisecondsSinceEpoch(int.parse(currentDateTime.toString())).difference(DateTime.fromMillisecondsSinceEpoch(int.parse(serviceStartWorldTime))),
+                    print(">>>> customerCurrentTime 001  currentDateTime : $currentDateTime"),
+                    print(">>>> customerCurrentTime  002 serviceStartWorldTime : $serviceStartWorldTime"),
+                    print(">>>> customerCurrentTime  004 updatedServiceTime : $sec"),
+                    print( "time difference >>> ${timeBalance.inSeconds}"),
+
+                    remainingTime = sec - timeBalance.inSeconds,
+
+                    setState(() {
+                      levelClock = remainingTime;
+                    }),
+                  }
+                else
+                  {
+                    print("dateConverter(timeNow!) >>>  >>> customer approved levelClock22: ${levelClock}"),
+                    levelClock = int.parse('${updatedServiceTime.split(":").first}'),
+                    sec = Duration(minutes: int.parse('$levelClock')).inSeconds,
+                    levelClock = sec
+                  },
+
+              });
             });
           }
         }
