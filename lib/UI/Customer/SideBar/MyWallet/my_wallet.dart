@@ -210,8 +210,7 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                                             "null"
                                     ? "0"
                                     : walletistoryModel
-                                        .data!.walletDetails.totalBalance
-                                        .toString(),
+                                        .data!.walletDetails!.walletData!.balance.toString(),
                                 style: Styles.myWalletCardText01,
                               )
                             ]),
@@ -270,28 +269,28 @@ class _CustomerWalletScreenState extends State<CustomerWalletScreen> {
                             "Total spent",
                             walletistoryModel == null ||
                                     walletistoryModel
-                                            .data!.walletDetails.walletData ==
+                                            .data!.walletDetails!.walletData ==
                                         "null" ||
                                     walletistoryModel
-                                            .data!.walletDetails.walletData ==
+                                            .data!.walletDetails!.walletData ==
                                         null
                                 ? "0"
                                 : walletistoryModel
-                                    .data!.walletDetails.walletData!.amount
+                                    .data!.walletDetails!.walletData!.amount
                                     .toString()),
                         SubTitleTextRound(
                             size,
                             "Total balance",
                             walletistoryModel == null ||
                                     walletistoryModel
-                                            .data!.walletDetails.walletData ==
+                                            .data!.walletDetails!.walletData ==
                                         "null" ||
                                     walletistoryModel
-                                            .data!.walletDetails.walletData ==
+                                            .data!.walletDetails!.walletData ==
                                         null
                                 ? "0"
                                 : walletistoryModel
-                                    .data!.walletDetails.walletData!.balance
+                                    .data!.walletDetails!.walletData!.balance
                                     .toString()),
                       ],
                     ),

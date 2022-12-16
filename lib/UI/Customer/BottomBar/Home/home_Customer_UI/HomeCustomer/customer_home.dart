@@ -1167,7 +1167,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen>
             if (state is SparePartLoadingState) {
               return const CircularProgressIndicator();
             } else if (state is SparePartLoadedState) {
-              return Container(
+              return
+                state.sparePartsModel.data!.custVehicleList!.length != 0
+                ? Container(
                 height: 200,
                 margin: const EdgeInsets.all(0),
                 child: ListView.builder(
@@ -1238,22 +1240,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen>
                     );
                   },
                 ),
-              );
+              )
+                : SparePartErrorStateUI();
             } else if (state is SparePartErrorState) {
-              return Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: Column(
-                  children: const [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "We couldn't connect to the page you are looking for.",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
-              );
+              return SparePartErrorStateUI();
             } else {
               return Container();
             }
@@ -1263,6 +1253,22 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen>
     );
   }
 
+  Widget SparePartErrorStateUI(){
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Column(
+        children: const [
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            "We couldn't connect to the page you are looking for.",
+            style: TextStyle(color: Colors.black),
+          ),
+        ],
+      ),
+    );
+  }
   Widget upcomingServicesList(
       Size size,
       AsyncSnapshot<
