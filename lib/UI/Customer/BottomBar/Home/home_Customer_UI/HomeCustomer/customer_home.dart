@@ -431,9 +431,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen>
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>  MechanicWorkProgressScreen(
+                    builder: (context) =>  MechanicWorkProgressWorkingScreen(
                         bookingId: bookingIdEmergency,
-                        workStatus: "1")
+                        workStatus: "2")
                 )).then((value){
               _homeCustomerBloc.postCustomerActiveServiceRequest("$authToken",userID);
             });
