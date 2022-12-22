@@ -834,4 +834,17 @@ class Styles {
       ),*/
       color: CustColors.white_02
   );
+
+  static const noDataTextStyle = TextStyle(
+      fontFamily: 'Samsung_SharpSans_Medium',
+      fontSize: 13,
+      fontWeight: FontWeight.w500,
+      color: CustColors.materialBlue);
+
+  static const sparePartNameSubTextWhite = TextStyle(
+      fontSize: 10,
+      color:  CustColors.white_02,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
 }

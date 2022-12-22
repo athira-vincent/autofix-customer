@@ -48,7 +48,7 @@
 
   "text_already_have_account": "Already have an account ? ",
   "text_sign_in": "Sign in",
-
+  "text_only_track": "Track",
   "text_organization_name": "Name of Organization",
   "text_hint_organization_name": "Your Organization Name",
   "text_organization_type": "Type of Organization",
@@ -93,7 +93,7 @@
   "text_error_ministry_empty": "Select Ministry",
   "text_camera": "Camera",
   "text_gallery": "Gallery",
-
+  "text_no_order_yet": "You have no orders yet!",
   "error_201" : "This email already exists",
   "error_200" : "codeSuccess",
   "error_404" : "codeError",

@@ -140,11 +140,14 @@ class _ChangeDeliveryAddressScreenState
                           ),
                           InkWell(
                               onTap: () {
-                                Navigator.pushReplacement(
+                                Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            AddDeliveryAddressScreen()));
+                                            AddDeliveryAddressScreen())).then((value) {
+                                  final addcartsBloc = BlocProvider.of<AddressBloc>(context);
+                                  addcartsBloc.add(FetchAddressEvent());
+                                });
                               },
                               child: addNewAddressButton(size)),
 
@@ -544,7 +547,7 @@ class _ChangeDeliveryAddressScreenState
                                               ),
                                               InkWell(
                                                 onTap: () {
-                                                  Navigator.pushReplacement(
+                                                  Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
@@ -604,7 +607,10 @@ class _ChangeDeliveryAddressScreenState
                                                                         index]
                                                                     .id,
                                                                   isDefault:state.addressModel.data!.selectAddress[index].isDefault
-                                                              )));
+                                                              ))).then((value){
+                                                    final addcartsBloc = BlocProvider.of<AddressBloc>(context);
+                                                    addcartsBloc.add(FetchAddressEvent());
+                                                  });
                                                 },
                                                 child: CircleAvatar(
                                                   radius: 18,

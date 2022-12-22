@@ -922,13 +922,17 @@ bool  addressstatus=false;
                             onTap: (){
                               //
 
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => ChangeDeliveryAddressScreen(
+                              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ChangeDeliveryAddressScreen(
                                 allitems: false,
                                 customerid: '',
                                 customeremail: '',
                                 customerphone: '',
                                 customername: '',
-                              )));
+                              ))).then((value){
+                                final addcartsBloc =
+                                BlocProvider.of<ShowCartPopBloc>(context);
+                                addcartsBloc.add(FetchShowCartPopEvent());
+                              });
 
                             },
                             child: addressstatus==false?Container(

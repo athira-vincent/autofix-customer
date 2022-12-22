@@ -148,6 +148,7 @@ flutter:
     - assets/image/phoneLogin/
     - assets/image/SignUp/
     - assets/image/mechanicProfileView/
+    - assets/image/TrackServiceIcons/
     - assets/image/mechanicProfileView/curvedGray.png
     - assets/fonts/
     - assets/json/
