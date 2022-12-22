@@ -4,6 +4,7 @@ import 'package:auto_fix/Models/customer_models/order_list_model/order_list_mode
 import 'package:auto_fix/UI/Customer/SideBar/MyOrders/cacncel_order_bloc/cacncel_order_bloc.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyOrders/cacncel_order_bloc/cacncel_order_state.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyOrders/cacncel_order_bloc/cancel_order_event.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyOrders/order_tracking_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/cust_rating_bloc/cust_rating_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/cust_rating_bloc/cust_rating_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/cust_rating_bloc/cust_rating_state.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class My_Orders_Display extends StatefulWidget {
   final OrderList modeldetails;
@@ -249,6 +251,49 @@ class _My_Orders_DisplayState extends State<My_Orders_Display> {
                                   const Divider(color: Colors.grey), //
                                   const SizedBox(
                                     height: 20,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                        EdgeInsets.fromLTRB(0, 8, 0, 0),
+                                        child: const SizedBox(
+                                          height: 20,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      InkWell(
+                                        onTap: (){
+                                          /// ==== navigate to track screen
+
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => OrderTrackingScreen(
+                                                      modeldetails:widget.modeldetails   )));
+
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color:
+                                              CustColors.materialBlue,
+                                              borderRadius:
+                                              BorderRadius.circular(5)),
+                                          child: Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                8,8,8,8),
+                                            child: Text(
+                                              AppLocalizations.of(context)!.text_only_track,
+                                              style: Styles.sparePartNameSubTextWhite,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                   Row(
                                     children: [

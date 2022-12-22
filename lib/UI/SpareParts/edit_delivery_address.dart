@@ -1,6 +1,8 @@
 import 'package:auto_fix/UI/SpareParts/MyCart/edit_address_bloc/edit_address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/edit_address_bloc/edit_address_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/edit_address_bloc/edit_address_state.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/CityList/city_list_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StatesList/states_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
@@ -62,7 +64,12 @@ class _Edit_Delivery_AddressState extends State<Edit_Delivery_Address> {
   TextEditingController phonecontroller = TextEditingController();
   TextEditingController pincontroller = TextEditingController();
   TextEditingController localitycontroller = TextEditingController();
+  TextEditingController _stateController = TextEditingController();
+  TextEditingController _cityController = TextEditingController();
+  FocusNode _localityFocusNode = FocusNode();
+
   bool value = false;
+  String selectedState = "", selectedCity = "" ;
   int isDefault = 0;
 
   @override
@@ -70,6 +77,8 @@ class _Edit_Delivery_AddressState extends State<Edit_Delivery_Address> {
     namecontroller.text = widget.fullname;
     phonecontroller.text = widget.phone;
     pincontroller.text = widget.pincode;
+    _stateController.text = widget.state;
+    _cityController.text = widget.city;
     isDefault = widget.isDefault;
     print("isdefault");
     print(isDefault);
@@ -115,46 +124,42 @@ class _Edit_Delivery_AddressState extends State<Edit_Delivery_Address> {
           ),
         ],
         child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: SizedBox(
-            width: size.width,
-            height: size.height,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                appBarCustomUi(size),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(
-                      left: size.width * 5 / 100,
-                      right: size.width * 5 / 100,
-                      top: size.height * 2 / 100,
-                      bottom: size.height * 2 / 100,
-                    ),
-                    child: locationForm(size),
+          //resizeToAvoidBottomInset: false,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              appBarCustomUi(size),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(
+                    left: size.width * 5 / 100,
+                    right: size.width * 5 / 100,
+                    top: size.height * 2 / 100,
+                    bottom: size.height * 2 / 100,
                   ),
+                  child: locationForm(size),
                 ),
-                InkWell(
-                    onTap: () async {
-                      print("on tap saveAddress");
+              ),
+              InkWell(
+                  onTap: () async {
+                    print("on tap saveAddress");
 
-                      final editaddressBloc =
-                          BlocProvider.of<EditAddressBloc>(context);
-                      editaddressBloc.add(FetchEditAddressEvent(
-                          namecontroller.text,
-                          phonecontroller.text,
-                          pincontroller.text,
-                          localitycontroller.text,
-                          states,
-                          addressline1,
-                          addressline2,
-                          type,
-                          isDefault.toString(),
-                          widget.addressid));
-                    },
-                    child: saveAddressButton(size))
-              ],
-            ),
+                    final editaddressBloc =
+                        BlocProvider.of<EditAddressBloc>(context);
+                    editaddressBloc.add(FetchEditAddressEvent(
+                        namecontroller.text,
+                        phonecontroller.text,
+                        pincontroller.text,
+                        localitycontroller.text,
+                        states,
+                        addressline1,
+                        addressline2,
+                        type,
+                        isDefault.toString(),
+                        widget.addressid));
+                  },
+                  child: saveAddressButton(size))
+            ],
           ),
         ),
       ),
@@ -263,344 +268,469 @@ class _Edit_Delivery_AddressState extends State<Edit_Delivery_Address> {
   }
 
   Widget locationForm(Size size) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Name",
-          style: hintTextStyle,
-        ),
-        Container(
-          margin: EdgeInsets.only(
-            top: size.height * 1.7 / 100,
-            bottom: size.height * 1.7 / 100,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Name",
+            style: hintTextStyle,
           ),
-          decoration: boxDecorationStyle,
-          child: TextFormField(
-            controller: namecontroller,
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            style: Styles.textLabelSubTitle,
-            // focusNode: _nameFocusNode,
-            keyboardType: TextInputType.name,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp('[a-zA-Z ]')),
-            ],
-            validator: InputValidator(ch: "Name").nameChecking,
-            //controller: _nameController,
-            cursorColor: CustColors.whiteBlueish,
-            decoration: const InputDecoration(
-              isDense: true,
-              //hintText:  "name",
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
-                ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
-                ),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
-                ),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 12.8,
-                horizontal: 0.0,
-              ),
-              hintStyle: Styles.textLabelSubTitle,
-            ),
-          ),
-        ),
-        Text(
-          "Phone number",
-          style: hintTextStyle,
-        ),
-        Container(
-          margin: EdgeInsets.only(
-            top: size.height * 1.7 / 100,
-            bottom: size.height * 1.7 / 100,
-          ),
-          decoration: boxDecorationStyle,
-          child: TextFormField(
-            controller: phonecontroller,
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            style: Styles.textLabelSubTitle,
-            // focusNode: _nameFocusNode,
-            keyboardType: TextInputType.phone,
-
-            validator: InputValidator(ch: "Phone").phoneNumChecking,
-            //controller: _nameController,
-            cursorColor: CustColors.whiteBlueish,
-            decoration: const InputDecoration(
-              isDense: true,
-              // hintText:  "phone",
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
-                ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
-                ),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
-                ),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 12.8,
-                horizontal: 0.0,
-              ),
-              hintStyle: Styles.textLabelSubTitle,
-            ),
-          ),
-        ),
-        Text(
-          "Pincode ",
-          style: hintTextStyle,
-        ),
-        Container(
-          margin: EdgeInsets.only(
-            top: size.height * 1.7 / 100,
-            bottom: size.height * 1.7 / 100,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                child: Container(
-                  decoration: boxDecorationStyle,
-                  child: TextFormField(
-                    controller: pincontroller,
-                    textAlignVertical: TextAlignVertical.center,
-                    maxLines: 1,
-                    style: Styles.textLabelSubTitle,
-                    // focusNode: _nameFocusNode,
-                    keyboardType: TextInputType.phone,
-                    validator: InputValidator(ch: "Pincode").phoneNumChecking,
-                    //controller: _nameController,
-                    cursorColor: CustColors.whiteBlueish,
-                    decoration: const InputDecoration(
-                      isDense: true,
-                      // hintText:  "PinCode",
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: CustColors.greyish,
-                          width: .5,
-                        ),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: CustColors.greyish,
-                          width: .5,
-                        ),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: CustColors.greyish,
-                          width: .5,
-                        ),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 12.8,
-                        horizontal: 0.0,
-                      ),
-                      hintStyle: Styles.textLabelSubTitle,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: size.width * 8 / 100,
-              ),
-              useMyLocationButton(size),
-            ],
-          ),
-        ),
-        Text(
-          "Locality",
-          style: hintTextStyle,
-        ),
-        Container(
-          margin: EdgeInsets.only(
-            top: size.height * 1.7 / 100,
-            bottom: size.height * 1.7 / 100,
-          ),
-          decoration: boxDecorationStyle,
-          child: TextFormField(
-            controller: localitycontroller,
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            style: Styles.textLabelSubTitle,
-            // focusNode: _nameFocusNode,
-            keyboardType: TextInputType.name,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp('[a-zA-Z ]')),
-            ],
-            validator: InputValidator(ch: "Phone").phoneNumChecking,
-            //controller: _nameController,
-            cursorColor: CustColors.whiteBlueish,
-            decoration: const InputDecoration(
-              isDense: true,
-              // hintText:  "phone",
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
-                ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
-                ),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
-                ),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 12.8,
-                horizontal: 0.0,
-              ),
-              hintStyle: Styles.textLabelSubTitle,
-            ),
-          ),
-        ),
-        Text(
-          "Type of address",
-          style: hintTextStyle,
-        ),
-        Container(
+          Container(
             margin: EdgeInsets.only(
               top: size.height * 1.7 / 100,
               bottom: size.height * 1.7 / 100,
             ),
-            child:
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     Flexible(
-                //         child: addressTypeOptions(
-                //             size, "Home", "assets/image/ic_home_outline.svg")),
-                //     SizedBox(
-                //       width: size.width * 1.5 / 100,
-                //     ),
-                //     Flexible(
-                //         child: addressTypeOptions(
-                //             size, "Work", "assets/image/ic_work_outline.svg")),
-                //     SizedBox(
-                //       width: size.width * 1.5 / 100,
-                //     ),
-                //     Flexible(
-                //         child: addressTypeOptions(
-                //             size, "Other", "assets/image/ic_location_outline.svg")),
-                //   ],
-                // ),
+            decoration: boxDecorationStyle,
+            child: TextFormField(
+              controller: namecontroller,
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              // focusNode: _nameFocusNode,
+              keyboardType: TextInputType.name,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp('[a-zA-Z ]')),
+              ],
+              validator: InputValidator(ch: "Name").nameChecking,
+              //controller: _nameController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: const InputDecoration(
+                isDense: true,
+                //hintText:  "name",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                hintStyle: Styles.textLabelSubTitle,
+              ),
+            ),
+          ),
 
-                SizedBox(
-              height: 30,
-              child: GridView.builder(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemCount: TypeAddressModel.items.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      mainAxisSpacing: 8,
-                      childAspectRatio: 1 / 3,
-                      crossAxisCount: 1),
-                  itemBuilder: (BuildContext context1, index) {
-                    return InkWell(
-                      onTap: () {
-                        setState(() {
-                          selectedIndex = index++;
-                          if (selectedIndex == 0) {
-                            type = "Home";
-                          } else if (selectedIndex == 1) {
-                            type = "Work";
-                          } else {
-                            type = "Other";
-                          }
-                        });
-                      },
-                      child: Container(
-                        padding: EdgeInsets.only(
-                          left: size.width * 3 / 100,
-                          right: size.width * 3 / 100,
-                          top: size.height * 1 / 100,
-                          bottom: size.height * 1 / 100,
+          Text(
+            "Phone number",
+            style: hintTextStyle,
+          ),
+          Container(
+            margin: EdgeInsets.only(
+              top: size.height * 1.7 / 100,
+              bottom: size.height * 1.7 / 100,
+            ),
+            decoration: boxDecorationStyle,
+            child: TextFormField(
+              controller: phonecontroller,
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              // focusNode: _nameFocusNode,
+              keyboardType: TextInputType.phone,
+
+              validator: InputValidator(ch: "Phone").phoneNumChecking,
+              //controller: _nameController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: const InputDecoration(
+                isDense: true,
+                // hintText:  "phone",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                hintStyle: Styles.textLabelSubTitle,
+              ),
+            ),
+          ),
+
+          Text(
+            "Locality", //Locality
+            style: hintTextStyle,
+          ),
+          Container(
+            margin: EdgeInsets.only(
+              top: size.height * 1.7 / 100,
+              bottom: size.height * 1.7 / 100,
+            ),
+            decoration: boxDecorationStyle,
+            child: TextFormField(
+              controller: localitycontroller,
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _localityFocusNode,
+              keyboardType: TextInputType.name,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp('[a-zA-Z ]')),
+              ],
+              validator: InputValidator(ch: "Locality").phoneNumChecking, //Phone
+              cursorColor: CustColors.materialBlue,
+              decoration: const InputDecoration(
+                isDense: true,
+                // hintText:  "phone",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 5.0,
+                ),
+                hintStyle: Styles.textLabelSubTitle,
+              ),
+            ),
+          ),
+
+          Text(
+            "City", //"City"
+            style: hintTextStyle,
+          ),
+          InkWell(
+            onTap: (){
+              _localityFocusNode.unfocus();
+              _awaitCityReturnValueFromSecondScreen(context);
+            },
+            child: Container(
+              margin: EdgeInsets.only(
+                top: size.height * 1.7 / 100,
+                bottom: size.height * 1.7 / 100,
+              ),
+              decoration: boxDecorationStyle,
+              child: TextFormField(
+                enabled: false,
+                readOnly: true,
+                controller: _cityController,
+                textAlignVertical: TextAlignVertical.center,
+                maxLines: 1,
+                style: Styles.textLabelSubTitle,
+                // focusNode: _nameFocusNode,
+                keyboardType: TextInputType.name,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp('[a-zA-Z ]')),
+                ],
+
+                validator: InputValidator(ch: "State").emptyChecking, //"State"
+                cursorColor: CustColors.whiteBlueish,
+                decoration: const InputDecoration(
+                  isDense: true,
+                  border: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: CustColors.greyish,
+                      width: .5,
+                    ),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: CustColors.greyish,
+                      width: .5,
+                    ),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: CustColors.greyish,
+                      width: .5,
+                    ),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 12.8,
+                    horizontal: 0.0,
+                  ),
+                  hintStyle: Styles.textLabelSubTitle,
+                ),
+              ),
+            ),
+          ),
+
+          Text(
+            "State",
+            style: hintTextStyle,
+          ),
+          InkWell(
+            onTap: (){
+              _awaitStateReturnValueFromSecondScreen(context);
+            },
+            child: Container(
+              margin: EdgeInsets.only(
+                top: size.height * 1.7 / 100,
+                bottom: size.height * 1.7 / 100,
+              ),
+              decoration: boxDecorationStyle,
+              child: TextFormField(
+                enabled: false,
+                readOnly: true,
+                controller: _stateController,
+                textAlignVertical: TextAlignVertical.center,
+                maxLines: 1,
+                style: Styles.textLabelSubTitle,
+                // focusNode: _nameFocusNode,
+                keyboardType: TextInputType.name,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp('[a-zA-Z ]')),
+                ],
+
+                validator: InputValidator(ch: "State").emptyChecking, //"State"
+                cursorColor: CustColors.whiteBlueish,
+                decoration: const InputDecoration(
+                  isDense: true,
+                  border: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: CustColors.greyish,
+                      width: .5,
+                    ),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: CustColors.greyish,
+                      width: .5,
+                    ),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: CustColors.greyish,
+                      width: .5,
+                    ),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 12.8,
+                    horizontal: 0.0,
+                  ),
+                  hintStyle: Styles.textLabelSubTitle,
+                ),
+              ),
+            ),
+          ),
+
+          Text(
+            "Pincode ",
+            style: hintTextStyle,
+          ),
+          Container(
+            margin: EdgeInsets.only(
+              top: size.height * 1.7 / 100,
+              bottom: size.height * 1.7 / 100,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Container(
+                    decoration: boxDecorationStyle,
+                    child: TextFormField(
+                      controller: pincontroller,
+                      textAlignVertical: TextAlignVertical.center,
+                      maxLines: 1,
+                      style: Styles.textLabelSubTitle,
+                      // focusNode: _nameFocusNode,
+                      keyboardType: TextInputType.phone,
+                      validator: InputValidator(ch: "Pincode").phoneNumChecking,
+                      //controller: _nameController,
+                      cursorColor: CustColors.whiteBlueish,
+                      decoration: const InputDecoration(
+                        isDense: true,
+                        // hintText:  "PinCode",
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: CustColors.greyish,
+                            width: .5,
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                            color: selectedIndex == index
-                                ? CustColors.light_navy
-                                : Colors.white,
-                            border: Border.all(color: CustColors.light_navy),
-                            borderRadius: BorderRadius.circular(4)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              margin:
-                                  EdgeInsets.only(right: size.width * 1 / 100),
-                              child: SvgPicture.asset(
-                                TypeAddressModel.items[index].image,
-                                height: size.height * 2.3 / 100,
-                                width: size.width * 2.3 / 100,
-                                color: selectedIndex == index
-                                    ? Colors.white
-                                    : null,
-                              ),
-                            ),
-                            Text(
-                              TypeAddressModel.items[index].name,
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  fontFamily: "Samsung_SharpSans_Regular",
-                                  fontWeight: FontWeight.w400,
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: CustColors.greyish,
+                            width: .5,
+                          ),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: CustColors.greyish,
+                            width: .5,
+                          ),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 12.8,
+                          horizontal: 0.0,
+                        ),
+                        hintStyle: Styles.textLabelSubTitle,
+                      ),
+                    ),
+                  ),
+                ),
+                // SizedBox(
+                //   width: size.width * 8 / 100,
+                // ),
+                // useMyLocationButton(size),
+              ],
+            ),
+          ),
+
+          Text(
+            "Type of address",
+            style: hintTextStyle,
+          ),
+          Container(
+              margin: EdgeInsets.only(
+                top: size.height * 1.7 / 100,
+                bottom: size.height * 1.7 / 100,
+              ),
+              child:
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Flexible(
+                  //         child: addressTypeOptions(
+                  //             size, "Home", "assets/image/ic_home_outline.svg")),
+                  //     SizedBox(
+                  //       width: size.width * 1.5 / 100,
+                  //     ),
+                  //     Flexible(
+                  //         child: addressTypeOptions(
+                  //             size, "Work", "assets/image/ic_work_outline.svg")),
+                  //     SizedBox(
+                  //       width: size.width * 1.5 / 100,
+                  //     ),
+                  //     Flexible(
+                  //         child: addressTypeOptions(
+                  //             size, "Other", "assets/image/ic_location_outline.svg")),
+                  //   ],
+                  // ),
+
+                  SizedBox(
+                height: 30,
+                child: GridView.builder(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: TypeAddressModel.items.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        mainAxisSpacing: 8,
+                        childAspectRatio: 1 / 3,
+                        crossAxisCount: 1),
+                    itemBuilder: (BuildContext context1, index) {
+                      return InkWell(
+                        onTap: () {
+                          setState(() {
+                            selectedIndex = index++;
+                            if (selectedIndex == 0) {
+                              type = "Home";
+                            } else if (selectedIndex == 1) {
+                              type = "Work";
+                            } else {
+                              type = "Other";
+                            }
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(
+                            left: size.width * 3 / 100,
+                            right: size.width * 3 / 100,
+                            top: size.height * 1 / 100,
+                            bottom: size.height * 1 / 100,
+                          ),
+                          decoration: BoxDecoration(
+                              color: selectedIndex == index
+                                  ? CustColors.light_navy
+                                  : Colors.white,
+                              border: Border.all(color: CustColors.light_navy),
+                              borderRadius: BorderRadius.circular(4)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Container(
+                                margin:
+                                    EdgeInsets.only(right: size.width * 1 / 100),
+                                child: SvgPicture.asset(
+                                  TypeAddressModel.items[index].image,
+                                  height: size.height * 2.3 / 100,
+                                  width: size.width * 2.3 / 100,
                                   color: selectedIndex == index
                                       ? Colors.white
-                                      : Colors.black),
-                            )
-                          ],
+                                      : null,
+                                ),
+                              ),
+                              Text(
+                                TypeAddressModel.items[index].name,
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    fontFamily: "Samsung_SharpSans_Regular",
+                                    fontWeight: FontWeight.w400,
+                                    color: selectedIndex == index
+                                        ? Colors.white
+                                        : Colors.black),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  }),
-            )),
-        Row(
-          children: [
-            Text("Make this as default address : ", style: hintTextStyle),
-            Checkbox(
-              value: value == true || isDefault == 1 ? true : false,
-              onChanged: (value) {
-                setState(() {
-                  this.value = value!;
+                      );
+                    }),
+              )),
 
-                  if (value == true) {
-                    isDefault = 1;
-                  } else {
-                    isDefault = 2;
-                  }
-                });
-              },
-            )
-          ],
-        ),
-      ],
+          Row(
+            children: [
+              Text("Make this as default address : ", style: hintTextStyle),
+              Checkbox(
+                value: value == true || isDefault == 1 ? true : false,
+                onChanged: (value) {
+                  setState(() {
+                    this.value = value!;
+
+                    if (value == true) {
+                      isDefault = 1;
+                    } else {
+                      isDefault = 2;
+                    }
+                  });
+                },
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -692,4 +822,33 @@ class _Edit_Delivery_AddressState extends State<Edit_Delivery_Address> {
       addressline2 = place.street.toString();
     });
   }
+
+  void _awaitCityReturnValueFromSecondScreen(BuildContext context) async {
+    // start the SecondScreen and wait for it to finish with a result
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SelectCityScreen(),
+        ));
+    setState(() {
+      selectedCity = result;
+      _cityController.text = selectedCity;
+      print("Selected state @ sign up: " + selectedCity);
+    });
+  }
+
+  void _awaitStateReturnValueFromSecondScreen(BuildContext context) async {
+    // start the SecondScreen and wait for it to finish with a result
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SelectStatesScreen(),
+        ));
+    setState(() {
+      selectedState = result;
+      _stateController.text = selectedState;
+      print("Selected state @ sign up: " + selectedState);
+    });
+  }
+
 }

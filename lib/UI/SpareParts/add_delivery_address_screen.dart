@@ -41,6 +41,7 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
   TextEditingController localitycontroller = TextEditingController();
   TextEditingController _stateController = TextEditingController();
   TextEditingController _cityController = TextEditingController();
+  FocusNode _localityFocusNode = FocusNode();
 
   String selectedState = "", selectedCity = "" ;
 
@@ -65,59 +66,55 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
           ),
         ],
         child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: SizedBox(
-            width: size.width,
-            height: size.height,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                appBarCustomUi(size),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(
-                      left: size.width * 5 / 100,
-                      right: size.width * 5 / 100,
-                      top: size.height * 2 / 100,
-                      bottom: size.height * 2 / 100,
-                    ),
-                    child: locationForm(size),
+          //resizeToAvoidBottomInset: false,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              appBarCustomUi(size),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(
+                    left: size.width * 5 / 100,
+                    right: size.width * 5 / 100,
+                    top: size.height * 2 / 100,
+                    bottom: size.height * 2 / 100,
                   ),
+                  child: locationForm(size),
                 ),
-                InkWell(
-                    onTap: () {
-                      if (namecontroller.text.isEmpty) {
-                        Fluttertoast.showToast(msg: "Please enter name");
-                      } else if (phonecontroller.text.isEmpty) {
-                        Fluttertoast.showToast(msg: "Please enter phone");
-                      } else if (pincontroller.text.isEmpty) {
-                        Fluttertoast.showToast(msg: "Please enter pincode");
-                      } else if (_cityController.text.isEmpty) {
-                        Fluttertoast.showToast(msg: "Please select city");
-                      } else if (_stateController.text.isEmpty) {
-                        Fluttertoast.showToast(msg: "Please select state");
-                      }else if (localitycontroller.text.isEmpty) {
-                        Fluttertoast.showToast(msg: "Please enter locality");
-                      } else if (type.isEmpty) {
-                        Fluttertoast.showToast(msg: "select address type");
-                      } else {
-                        print("on tap saveAddress");
-                        final addaddressBloc =
-                            BlocProvider.of<AddAddressBloc>(context);
-                        addaddressBloc.add(FetchAddAddressEvent(
-                            namecontroller.text,
-                            phonecontroller.text,
-                            pincontroller.text,
-                            _cityController.text,
-                            _stateController.text,
-                            localitycontroller.text,
-                            addressline1,
-                            type));
-                      }
-                    },
-                    child: saveAddressButton(size))
-              ],
-            ),
+              ),
+              InkWell(
+                  onTap: () {
+                    if (namecontroller.text.isEmpty) {
+                      Fluttertoast.showToast(msg: "Please enter name");
+                    } else if (phonecontroller.text.isEmpty) {
+                      Fluttertoast.showToast(msg: "Please enter phone");
+                    } else if (pincontroller.text.isEmpty) {
+                      Fluttertoast.showToast(msg: "Please enter pincode");
+                    } else if (_cityController.text.isEmpty) {
+                      Fluttertoast.showToast(msg: "Please select city");
+                    } else if (_stateController.text.isEmpty) {
+                      Fluttertoast.showToast(msg: "Please select state");
+                    }else if (localitycontroller.text.isEmpty) {
+                      Fluttertoast.showToast(msg: "Please enter locality");
+                    } else if (type.isEmpty) {
+                      Fluttertoast.showToast(msg: "select address type");
+                    } else {
+                      print("on tap saveAddress");
+                      final addaddressBloc =
+                          BlocProvider.of<AddAddressBloc>(context);
+                      addaddressBloc.add(FetchAddAddressEvent(
+                          namecontroller.text,
+                          phonecontroller.text,
+                          pincontroller.text,
+                          _cityController.text,
+                          _stateController.text,
+                          localitycontroller.text,
+                          addressline1,
+                          type));
+                    }
+                  },
+                  child: saveAddressButton(size))
+            ],
           ),
         ),
       ),
@@ -252,7 +249,7 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
               ],
               validator: InputValidator(ch: "Name").nameChecking,
               //controller: _nameController,
-              cursorColor: CustColors.whiteBlueish,
+              cursorColor: CustColors.materialBlue,
               decoration: const InputDecoration(
                 isDense: true,
                 //hintText:  "name",
@@ -303,7 +300,7 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
 
               validator: InputValidator(ch: "Phone").phoneNumChecking,
               //controller: _nameController,
-              cursorColor: CustColors.whiteBlueish,
+              cursorColor: CustColors.materialBlue,
               decoration: const InputDecoration(
                 isDense: true,
                 // hintText:  "phone",
@@ -349,15 +346,13 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
               textAlignVertical: TextAlignVertical.center,
               maxLines: 1,
               style: Styles.textLabelSubTitle,
-              // focusNode: _nameFocusNode,
+               focusNode: _localityFocusNode,
               keyboardType: TextInputType.name,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp('[a-zA-Z ]')),
               ],
-
-              validator: InputValidator(ch: "Phone").phoneNumChecking,
-              //controller: _nameController,
-              cursorColor: CustColors.whiteBlueish,
+              validator: InputValidator(ch: "Locality").phoneNumChecking,
+              cursorColor: CustColors.materialBlue,
               decoration: const InputDecoration(
                 isDense: true,
                 // hintText:  "phone",
@@ -394,6 +389,7 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
           ),
           InkWell(
             onTap: (){
+              _localityFocusNode.unfocus();
               _awaitCityReturnValueFromSecondScreen(context);
             },
             child: Container(
@@ -409,14 +405,14 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
                 textAlignVertical: TextAlignVertical.center,
                 maxLines: 1,
                 style: Styles.textLabelSubTitle,
-                // focusNode: _nameFocusNode,
+
                 keyboardType: TextInputType.name,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp('[a-zA-Z ]')),
                 ],
 
                 validator: InputValidator(ch: "State").emptyChecking,
-                cursorColor: CustColors.whiteBlueish,
+                cursorColor: CustColors.materialBlue,
                 decoration: const InputDecoration(
                   isDense: true,
                   border: UnderlineInputBorder(
@@ -475,7 +471,7 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
                 ],
 
                 validator: InputValidator(ch: "State").emptyChecking,
-                cursorColor: CustColors.whiteBlueish,
+                cursorColor: CustColors.materialBlue,
                 decoration: const InputDecoration(
                   isDense: true,
                   border: UnderlineInputBorder(
@@ -530,7 +526,7 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
                       keyboardType: TextInputType.phone,
                       validator: InputValidator(ch: "Pincode").phoneNumChecking,
                       //controller: _nameController,
-                      cursorColor: CustColors.whiteBlueish,
+                      cursorColor: CustColors.materialBlue,
                       decoration: const InputDecoration(
                         isDense: true,
                         // hintText:  "PinCode",
@@ -561,9 +557,9 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: size.width * 8 / 100,
-                ),
+                // SizedBox(
+                //   width: size.width * 8 / 100,
+                // ),
                 //useMyLocationButton(size),
               ],
             ),

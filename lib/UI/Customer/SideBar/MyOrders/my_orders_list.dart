@@ -7,6 +7,8 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/order_list_bloc/order_list_s
 import 'package:auto_fix/UI/Customer/SideBar/MyOrders/my_orders_display_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyOrdersListScreen extends StatefulWidget {
   const MyOrdersListScreen({Key? key}) : super(key: key);
@@ -80,7 +82,7 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
               height: 35,
               child: TextField(
                 controller: searchController,
-                autofocus: true,
+                //autofocus: true,
                 decoration: InputDecoration(
                   hintText: 'Search your order',
                   contentPadding:
@@ -130,9 +132,13 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
   Widget myOrdersListUi() {
     return BlocBuilder<OrderListBloc, OrderListState>(
         builder: (context, state) {
-      if (state is OrderListLoadedState) {
+          if(state is OrderListLoadingState){
+            return progressBarDarkBlue();
+          } else if (state is OrderListLoadedState) {
         if (searchController.text.isEmpty) {
-          return ListView.builder(
+          return state.orderDetailsmodel.data!.orderList.length != 0
+              ?
+          ListView.builder(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -353,9 +359,13 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
                     )),
               );
             },
-          );
+          )
+              :
+          myOrdersErrorScreen();
         } else {
-          return ListView.builder(
+          return orderlistsearch.length != 0
+              ?
+          ListView.builder(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -379,8 +389,6 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
               }
               return InkWell(
                 onTap: () {
-
-
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -560,11 +568,60 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
                     )),
               );
             },
-          );
+          )
+              :
+          myOrdersErrorScreen();
         }
-      } else {
+      } else if(state is OrderListErrorState){
+        return myOrdersErrorScreen();
+      }else {
         return Container();
       }
     });
+  }
+
+  Widget myOrdersErrorScreen(){
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Container(
+        width: double.infinity,
+        height: 170,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
+          boxShadow: const [
+            BoxShadow(
+                color:CustColors.materialBlue, spreadRadius: 1),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+                height:100,
+                width: 100,
+                child: SvgPicture.asset('assets/images/nodata.svg')
+            ),
+            Text(
+              AppLocalizations.of(context)!.text_no_order_yet, //You have no orders yet!
+              textAlign: TextAlign.left,
+              style: Styles.noDataTextStyle,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget progressBarDarkBlue() {
+    return Container(
+      height: 60.0,
+      child: new Center(
+          child: CircularProgressIndicator(
+            valueColor: new AlwaysStoppedAnimation<Color>(CustColors.materialBlue),
+          )),
+    );
   }
 }

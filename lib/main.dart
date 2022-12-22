@@ -88,7 +88,10 @@ void main() async {
       DeviceOrientation.portraitDown,
     ]);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    langCode = prefs.getString(SharedPrefKeys.userLanguageCode) ?? 'en';
+    //langCode = prefs.getString(SharedPrefKeys.userLanguageCode) ?? 'en';
+    langCode = prefs.getString(SharedPrefKeys.userLanguageCode).toString() != 'null' &&
+        prefs.getString(SharedPrefKeys.userLanguageCode).toString().isNotEmpty
+        ? prefs.getString(SharedPrefKeys.userLanguageCode).toString() : 'en';
     HttpOverrides.global = new MyHttpOverrides();
 
     runApp(MyApp());

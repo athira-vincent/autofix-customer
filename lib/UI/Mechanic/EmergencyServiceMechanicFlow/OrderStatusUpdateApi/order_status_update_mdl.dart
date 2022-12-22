@@ -109,7 +109,7 @@ class BookingData {
   int totalPrice;
   dynamic tax;
   int commission;
-  int serviceCharge;
+  dynamic serviceCharge;
   dynamic totalTime;
   String serviceTime;
   double latitude;
