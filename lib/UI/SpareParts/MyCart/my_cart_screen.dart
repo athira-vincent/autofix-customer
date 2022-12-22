@@ -150,633 +150,631 @@ bool  addressstatus=false;
           ),
         );
       } else if (state is ShowCartPopLoadedState) {
-        return state.cartlistmodel.data!.cartList.data.isNotEmpty
-            ? Column(
-                children: [
-                  ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount:
-                        state.cartlistmodel.data?.cartList.data.length ?? 0,
-                    itemBuilder: (context, index) {
-                      image = state.cartlistmodel.data!.cartList.data[index]
-                          .product.productImage
-                          .replaceAll("[", "")
-                          .replaceAll("]", "")
-                          .split(",");
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        print("WidgetsBinding");
-                        states = state.cartlistmodel.data!.cartList.data[index]
-                            .customer.address.first.state;
-                        city = state.cartlistmodel.data!.cartList.data[index]
-                            .customer.address.first.city;
-                        pincode = state.cartlistmodel.data!.cartList.data[index]
-                            .customer.address.first.pincode;
+        return Column(
+          children: [
+            ListView.builder(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount:
+              state.cartlistmodel.data?.cartList.data.length ?? 0,
+              itemBuilder: (context, index) {
+                image = state.cartlistmodel.data!.cartList.data[index]
+                    .product.productImage
+                    .replaceAll("[", "")
+                    .replaceAll("]", "")
+                    .split(",");
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  print("WidgetsBinding");
+                  states = state.cartlistmodel.data!.cartList.data[index]
+                      .customer.address.first.state;
+                  city = state.cartlistmodel.data!.cartList.data[index]
+                      .customer.address.first.city;
+                  pincode = state.cartlistmodel.data!.cartList.data[index]
+                      .customer.address.first.pincode;
 
-                        id = state.cartlistmodel.data!.cartList.data[index]
-                            .customer.id
-                            .toString();
-                        name = state.cartlistmodel.data!.cartList.data[index]
-                            .customer.firstName;
-                        email = state.cartlistmodel.data!.cartList.data[index]
-                            .customer.emailId;
-                        phone = state.cartlistmodel.data!.cartList.data[index]
-                            .customer.phoneNo;
+                  id = state.cartlistmodel.data!.cartList.data[index]
+                      .customer.id
+                      .toString();
+                  name = state.cartlistmodel.data!.cartList.data[index]
+                      .customer.firstName;
+                  email = state.cartlistmodel.data!.cartList.data[index]
+                      .customer.emailId;
+                  phone = state.cartlistmodel.data!.cartList.data[index]
+                      .customer.phoneNo;
 
-                        addressstatus=state.cartlistmodel.data!.cartList.data[index]
-                            .customer.address.isEmpty;
-                       print("adddressheck");
-                       print(addressstatus);
-                      });
+                  addressstatus=state.cartlistmodel.data!.cartList.data[index]
+                      .customer.address.isEmpty;
+                  print("adddressheck");
+                  print(addressstatus);
+                });
 
-                      int sum = 0;
-                      state.cartlistmodel.data!.cartList.data
-                          .forEach((element) {
-                        sum = sum + element.product.price * element.quantity;
-                      });
+                int sum = 0;
+                state.cartlistmodel.data!.cartList.data
+                    .forEach((element) {
+                  sum = sum + element.product.price * element.quantity;
+                });
 
-                      newamount = sum.toString();
+                newamount = sum.toString();
 
-                      print("nocunter");
-                      print(states);
-                      print(city);
-                      print(pincode);
-                      return Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: SizedBox(
-                                width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                                      child: SizedBox(
-                                        height: 60,
-                                        width: 90,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          child: state
+                print("nocunter");
+                print(states);
+                print(city);
+                print(pincode);
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: SizedBox(
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                                child: SizedBox(
+                                  height: 60,
+                                  width: 90,
+                                  child: ClipRRect(
+                                    borderRadius:
+                                    BorderRadius.circular(5),
+                                    child: state
+                                        .cartlistmodel
+                                        .data!
+                                        .cartList
+                                        .data[index]
+                                        .product
+                                        .productImage ==
+                                        "null" ||
+                                        state
+                                            .cartlistmodel
+                                            .data!
+                                            .cartList
+                                            .data[index]
+                                            .product
+                                            .productImage
+                                            .isEmpty
+                                        ? Container(
+                                      color: Colors.white,
+                                      child: Padding(
+                                        padding:
+                                        const EdgeInsets.all(
+                                            25),
+                                        child: SvgPicture.asset(
+                                          'assets/image/CustomerType/dummyCar00.svg',
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    )
+                                        : Image.network(
+                                      image[0],
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.fromLTRB(
+                                            0, 8, 0, 0),
+                                        child: Text(
+                                          state
+                                              .cartlistmodel
+                                              .data!
+                                              .cartList
+                                              .data[index]
+                                              .product
+                                              .vehicleModel
+                                              .brandName,
+                                          style: Styles
+                                              .sparePartNameSubTextBlack,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.fromLTRB(
+                                            0, 8, 0, 0),
+                                        child: Text(
+                                          state
+                                              .cartlistmodel
+                                              .data!
+                                              .cartList
+                                              .data[index]
+                                              .product
+                                              .productName,
+                                          style: Styles
+                                              .sparePartNameTextBlack17,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.fromLTRB(
+                                            0, 8, 0, 10),
+                                        child: Text(
+                                          state
+                                              .cartlistmodel
+                                              .data!
+                                              .cartList
+                                              .data[index]
+                                              .product
+                                              .vehicleModel
+                                              .modelName,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Styles
+                                              .sparePartNameSubTextBlack,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.fromLTRB(
+                                            0, 0, 5, 0),
+                                        child: InkWell(
+                                          onTap: () {},
+                                          child: Container(
+                                            height: 20,
+                                            width: 70,
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                border: Border.all(
+                                                    color: CustColors
+                                                        .greyText3),
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                    4)),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment
+                                                  .center,
+                                              mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .center,
+                                              children: [
+                                                InkWell(
+                                                  onTap: () {
+                                                    if (state
+                                                        .cartlistmodel
+                                                        .data!
+                                                        .cartList
+                                                        .data[index]
+                                                        .quantity >
+                                                        1) {
+                                                      setState(() {
+                                                        state
+                                                            .cartlistmodel
+                                                            .data!
+                                                            .cartList
+                                                            .data[index]
+                                                            .quantity--;
+                                                      });
+
+                                                      final deletcartBloc =
+                                                      BlocProvider.of<
+                                                          DeleteCartBloc>(
+                                                          context);
+                                                      deletcartBloc.add(FetchDeleteCartEvent(
+                                                          state
+                                                              .cartlistmodel
+                                                              .data!
+                                                              .cartList
+                                                              .data[index]
+                                                              .product
+                                                              .id
+                                                              .toString(),
+                                                          state
+                                                              .cartlistmodel
+                                                              .data!
+                                                              .cartList
+                                                              .data[index]
+                                                              .quantity
+                                                              .toString(),
+                                                          "1"));
+                                                    } else {
+                                                      showDialog(
+                                                          context:
+                                                          context,
+                                                          builder:
+                                                              (context) {
+                                                            return CupertinoAlertDialog(
+                                                              title: const Text(
+                                                                  "Confirm",
+                                                                  style:
+                                                                  TextStyle(
+                                                                    fontFamily:
+                                                                    'Formular',
+                                                                    fontWeight:
+                                                                    FontWeight.bold,
+                                                                    fontSize:
+                                                                    18,
+                                                                    color:
+                                                                    CustColors.materialBlue,
+                                                                  )),
+                                                              content:
+                                                              const Text(
+                                                                  "Are you sure you want to delete?"),
+                                                              actions: <
+                                                                  Widget>[
+                                                                CupertinoDialogAction(
+                                                                    textStyle:
+                                                                    const TextStyle(
+                                                                      color:
+                                                                      CustColors.rusty_red,
+                                                                      fontWeight:
+                                                                      FontWeight.normal,
+                                                                    ),
+                                                                    isDefaultAction:
+                                                                    true,
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.pop(context);
+                                                                    },
+                                                                    child:
+                                                                    const Text("No")),
+                                                                CupertinoDialogAction(
+                                                                    textStyle:
+                                                                    const TextStyle(
+                                                                      color:
+                                                                      CustColors.rusty_red,
+                                                                      fontWeight:
+                                                                      FontWeight.normal,
+                                                                    ),
+                                                                    isDefaultAction:
+                                                                    true,
+                                                                    onPressed:
+                                                                        () async {
+                                                                      final deletcartBloc =
+                                                                      BlocProvider.of<DeleteCartBloc>(context);
+                                                                      deletcartBloc.add(FetchDeleteCartEvent(
+                                                                          state.cartlistmodel.data!.cartList.data[index].product.id.toString(),
+                                                                          "1",
+                                                                          "0"));
+                                                                      Navigator.pop(context);
+                                                                      Fluttertoast.showToast(
+                                                                        msg: "Removed from cart successfully!!",
+                                                                        timeInSecForIosWeb: 1,
+                                                                      );
+                                                                    },
+                                                                    child:
+                                                                    const Text("Yes")),
+                                                              ],
+                                                            );
+                                                          });
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    height: 20,
+                                                    width: 25,
+                                                    color: Colors
+                                                        .transparent,
+                                                    padding:
+                                                    const EdgeInsets
+                                                        .fromLTRB(
+                                                        0, 0, 0, 0),
+                                                    alignment: Alignment
+                                                        .topCenter,
+                                                    child: const Text(
+                                                      "-",
+                                                      textAlign:
+                                                      TextAlign.start,
+                                                      style: Styles
+                                                          .homeNameTextStyle,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Container(
+                                                    alignment:
+                                                    Alignment.center,
+                                                    child: Text(
+                                                      state
                                                           .cartlistmodel
                                                           .data!
                                                           .cartList
                                                           .data[index]
-                                                          .product
-                                                          .productImage ==
-                                                      "null" ||
-                                                  state
-                                                      .cartlistmodel
-                                                      .data!
-                                                      .cartList
-                                                      .data[index]
-                                                      .product
-                                                      .productImage
-                                                      .isEmpty
-                                              ? Container(
-                                                  color: Colors.white,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            25),
-                                                    child: SvgPicture.asset(
-                                                      'assets/image/CustomerType/dummyCar00.svg',
-                                                      fit: BoxFit.contain,
+                                                          .quantity
+                                                          .toString(),
+                                                      textAlign: TextAlign
+                                                          .center,
+                                                      style: Styles
+                                                          .homeActiveTextStyle,
                                                     ),
                                                   ),
-                                                )
-                                              : Image.network(
-                                                  image[0],
-                                                  fit: BoxFit.cover,
                                                 ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      state
+                                                          .cartlistmodel
+                                                          .data!
+                                                          .cartList
+                                                          .data[index]
+                                                          .quantity++;
+                                                    });
+                                                    final deletcartBloc =
+                                                    BlocProvider.of<
+                                                        DeleteCartBloc>(
+                                                        context);
+                                                    deletcartBloc.add(
+                                                        FetchDeleteCartEvent(
+                                                            state
+                                                                .cartlistmodel
+                                                                .data!
+                                                                .cartList
+                                                                .data[
+                                                            index]
+                                                                .product
+                                                                .id
+                                                                .toString(),
+                                                            state
+                                                                .cartlistmodel
+                                                                .data!
+                                                                .cartList
+                                                                .data[
+                                                            index]
+                                                                .quantity
+                                                                .toString(),
+                                                            "1"));
+                                                  },
+                                                  child: Container(
+                                                    height: 20,
+                                                    width: 25,
+                                                    color: Colors
+                                                        .transparent,
+                                                    alignment:
+                                                    Alignment.center,
+                                                    child: const Text(
+                                                      "+",
+                                                      style: Styles
+                                                          .homeNameTextStyle,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 8, 0, 0),
-                                              child: Text(
-                                                state
-                                                    .cartlistmodel
-                                                    .data!
-                                                    .cartList
-                                                    .data[index]
-                                                    .product
-                                                    .vehicleModel
-                                                    .brandName,
-                                                style: Styles
-                                                    .sparePartNameSubTextBlack,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 8, 0, 0),
-                                              child: Text(
-                                                state
-                                                    .cartlistmodel
-                                                    .data!
-                                                    .cartList
-                                                    .data[index]
-                                                    .product
-                                                    .productName,
-                                                style: Styles
-                                                    .sparePartNameTextBlack17,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 8, 0, 10),
-                                              child: Text(
-                                                state
-                                                    .cartlistmodel
-                                                    .data!
-                                                    .cartList
-                                                    .data[index]
-                                                    .product
-                                                    .vehicleModel
-                                                    .modelName,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: Styles
-                                                    .sparePartNameSubTextBlack,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 5, 0),
-                                              child: InkWell(
-                                                onTap: () {},
-                                                child: Container(
-                                                  height: 20,
-                                                  width: 70,
-                                                  alignment: Alignment.center,
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      border: Border.all(
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Column(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.end,
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.end,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 8, 0, 0),
+                                      child: InkWell(
+                                        onTap: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return CupertinoAlertDialog(
+                                                  title: const Text(
+                                                      "Confirm",
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                        'Formular',
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .bold,
+                                                        fontSize: 18,
+                                                        color: CustColors
+                                                            .materialBlue,
+                                                      )),
+                                                  content: const Text(
+                                                      "Are you sure you want to delete?"),
+                                                  actions: <Widget>[
+                                                    CupertinoDialogAction(
+                                                        textStyle:
+                                                        const TextStyle(
                                                           color: CustColors
-                                                              .greyText3),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              4)),
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      InkWell(
-                                                        onTap: () {
-                                                          if (state
-                                                                  .cartlistmodel
-                                                                  .data!
-                                                                  .cartList
-                                                                  .data[index]
-                                                                  .quantity >
-                                                              1) {
-                                                            setState(() {
+                                                              .rusty_red,
+                                                          fontWeight:
+                                                          FontWeight
+                                                              .normal,
+                                                        ),
+                                                        isDefaultAction:
+                                                        true,
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: const Text(
+                                                            "No")),
+                                                    CupertinoDialogAction(
+                                                        textStyle:
+                                                        const TextStyle(
+                                                          color: CustColors
+                                                              .rusty_red,
+                                                          fontWeight:
+                                                          FontWeight
+                                                              .normal,
+                                                        ),
+                                                        isDefaultAction:
+                                                        true,
+                                                        onPressed:
+                                                            () async {
+                                                          final deletcartBloc =
+                                                          BlocProvider.of<
+                                                              DeleteCartBloc>(
+                                                              context);
+                                                          deletcartBloc.add(FetchDeleteCartEvent(
                                                               state
                                                                   .cartlistmodel
                                                                   .data!
                                                                   .cartList
-                                                                  .data[index]
-                                                                  .quantity--;
-                                                            });
-
-                                                            final deletcartBloc =
-                                                                BlocProvider.of<
-                                                                        DeleteCartBloc>(
-                                                                    context);
-                                                            deletcartBloc.add(FetchDeleteCartEvent(
-                                                                state
-                                                                    .cartlistmodel
-                                                                    .data!
-                                                                    .cartList
-                                                                    .data[index]
-                                                                    .product
-                                                                    .id
-                                                                    .toString(),
-                                                                state
-                                                                    .cartlistmodel
-                                                                    .data!
-                                                                    .cartList
-                                                                    .data[index]
-                                                                    .quantity
-                                                                    .toString(),
-                                                                "1"));
-                                                          } else {
-                                                            showDialog(
-                                                                context:
-                                                                    context,
-                                                                builder:
-                                                                    (context) {
-                                                                  return CupertinoAlertDialog(
-                                                                    title: const Text(
-                                                                        "Confirm",
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontFamily:
-                                                                              'Formular',
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                          fontSize:
-                                                                              18,
-                                                                          color:
-                                                                              CustColors.materialBlue,
-                                                                        )),
-                                                                    content:
-                                                                        const Text(
-                                                                            "Are you sure you want to delete?"),
-                                                                    actions: <
-                                                                        Widget>[
-                                                                      CupertinoDialogAction(
-                                                                          textStyle:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                CustColors.rusty_red,
-                                                                            fontWeight:
-                                                                                FontWeight.normal,
-                                                                          ),
-                                                                          isDefaultAction:
-                                                                              true,
-                                                                          onPressed:
-                                                                              () {
-                                                                            Navigator.pop(context);
-                                                                          },
-                                                                          child:
-                                                                              const Text("No")),
-                                                                      CupertinoDialogAction(
-                                                                          textStyle:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                CustColors.rusty_red,
-                                                                            fontWeight:
-                                                                                FontWeight.normal,
-                                                                          ),
-                                                                          isDefaultAction:
-                                                                              true,
-                                                                          onPressed:
-                                                                              () async {
-                                                                            final deletcartBloc =
-                                                                                BlocProvider.of<DeleteCartBloc>(context);
-                                                                            deletcartBloc.add(FetchDeleteCartEvent(
-                                                                                state.cartlistmodel.data!.cartList.data[index].product.id.toString(),
-                                                                                "1",
-                                                                                "0"));
-                                                                            Navigator.pop(context);
-                                                                            Fluttertoast.showToast(
-                                                                              msg: "Removed from cart successfully!!",
-                                                                              timeInSecForIosWeb: 1,
-                                                                            );
-                                                                          },
-                                                                          child:
-                                                                              const Text("Yes")),
-                                                                    ],
-                                                                  );
-                                                                });
-                                                          }
+                                                                  .data[
+                                                              index]
+                                                                  .product
+                                                                  .id
+                                                                  .toString(),
+                                                              "1",
+                                                              "0"));
+                                                          Navigator.pop(
+                                                              context);
+                                                          Fluttertoast
+                                                              .showToast(
+                                                            msg:
+                                                            "Removed from cart successfully!!",
+                                                            timeInSecForIosWeb:
+                                                            1,
+                                                          );
                                                         },
-                                                        child: Container(
-                                                          height: 20,
-                                                          width: 25,
-                                                          color: Colors
-                                                              .transparent,
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .fromLTRB(
-                                                                  0, 0, 0, 0),
-                                                          alignment: Alignment
-                                                              .topCenter,
-                                                          child: const Text(
-                                                            "-",
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            style: Styles
-                                                                .homeNameTextStyle,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        child: Container(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: Text(
-                                                            state
-                                                                .cartlistmodel
-                                                                .data!
-                                                                .cartList
-                                                                .data[index]
-                                                                .quantity
-                                                                .toString(),
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: Styles
-                                                                .homeActiveTextStyle,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      InkWell(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            state
-                                                                .cartlistmodel
-                                                                .data!
-                                                                .cartList
-                                                                .data[index]
-                                                                .quantity++;
-                                                          });
-                                                          final deletcartBloc =
-                                                              BlocProvider.of<
-                                                                      DeleteCartBloc>(
-                                                                  context);
-                                                          deletcartBloc.add(
-                                                              FetchDeleteCartEvent(
-                                                                  state
-                                                                      .cartlistmodel
-                                                                      .data!
-                                                                      .cartList
-                                                                      .data[
-                                                                          index]
-                                                                      .product
-                                                                      .id
-                                                                      .toString(),
-                                                                  state
-                                                                      .cartlistmodel
-                                                                      .data!
-                                                                      .cartList
-                                                                      .data[
-                                                                          index]
-                                                                      .quantity
-                                                                      .toString(),
-                                                                  "1"));
-                                                        },
-                                                        child: Container(
-                                                          height: 20,
-                                                          width: 25,
-                                                          color: Colors
-                                                              .transparent,
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: const Text(
-                                                            "+",
-                                                            style: Styles
-                                                                .homeNameTextStyle,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
+                                                        child: const Text(
+                                                            "Yes")),
+                                                  ],
+                                                );
+                                              });
+                                        },
+                                        child: SvgPicture.asset(
+                                          'assets/image/home_customer/deleteMyCart.svg',
+                                          height: 20,
+                                          width: 20,
                                         ),
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 8, 0, 0),
-                                            child: InkWell(
-                                              onTap: () {
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return CupertinoAlertDialog(
-                                                        title: const Text(
-                                                            "Confirm",
-                                                            style: TextStyle(
-                                                              fontFamily:
-                                                                  'Formular',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 18,
-                                                              color: CustColors
-                                                                  .materialBlue,
-                                                            )),
-                                                        content: const Text(
-                                                            "Are you sure you want to delete?"),
-                                                        actions: <Widget>[
-                                                          CupertinoDialogAction(
-                                                              textStyle:
-                                                                  const TextStyle(
-                                                                color: CustColors
-                                                                    .rusty_red,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                              ),
-                                                              isDefaultAction:
-                                                                  true,
-                                                              onPressed: () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                              child: const Text(
-                                                                  "No")),
-                                                          CupertinoDialogAction(
-                                                              textStyle:
-                                                                  const TextStyle(
-                                                                color: CustColors
-                                                                    .rusty_red,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                              ),
-                                                              isDefaultAction:
-                                                                  true,
-                                                              onPressed:
-                                                                  () async {
-                                                                final deletcartBloc =
-                                                                    BlocProvider.of<
-                                                                            DeleteCartBloc>(
-                                                                        context);
-                                                                deletcartBloc.add(FetchDeleteCartEvent(
-                                                                    state
-                                                                        .cartlistmodel
-                                                                        .data!
-                                                                        .cartList
-                                                                        .data[
-                                                                            index]
-                                                                        .product
-                                                                        .id
-                                                                        .toString(),
-                                                                    "1",
-                                                                    "0"));
-                                                                Navigator.pop(
-                                                                    context);
-                                                                Fluttertoast
-                                                                    .showToast(
-                                                                  msg:
-                                                                      "Removed from cart successfully!!",
-                                                                  timeInSecForIosWeb:
-                                                                      1,
-                                                                );
-                                                              },
-                                                              child: const Text(
-                                                                  "Yes")),
-                                                        ],
-                                                      );
-                                                    });
-                                              },
-                                              child: SvgPicture.asset(
-                                                'assets/image/home_customer/deleteMyCart.svg',
-                                                height: 20,
-                                                width: 20,
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 8, 0, 0),
-                                            child: Text(
-                                              " ₦" +
-                                                  state
-                                                      .cartlistmodel
-                                                      .data!
-                                                      .cartList
-                                                      .data[index]
-                                                      .product
-                                                      .price
-                                                      .toString(),
-                                              style: Styles
-                                                  .sparePartNameTextBlack17,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 8, 0, 0),
-                                            child: InkWell(
-                                              onTap: () {
-                                                int totalprice = state
-                                                        .cartlistmodel
-                                                        .data!
-                                                        .cartList
-                                                        .data[index]
-                                                        .quantity *
-                                                    state
-                                                        .cartlistmodel
-                                                        .data!
-                                                        .cartList
-                                                        .data[index]
-                                                        .product
-                                                        .price;
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 8, 0, 0),
+                                      child: Text(
+                                        " ₦" +
+                                            state
+                                                .cartlistmodel
+                                                .data!
+                                                .cartList
+                                                .data[index]
+                                                .product
+                                                .price
+                                                .toString(),
+                                        style: Styles
+                                            .sparePartNameTextBlack17,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 8, 0, 0),
+                                      child: InkWell(
+                                        onTap: () {
+                                          int totalprice = state
+                                              .cartlistmodel
+                                              .data!
+                                              .cartList
+                                              .data[index]
+                                              .quantity *
+                                              state
+                                                  .cartlistmodel
+                                                  .data!
+                                                  .cartList
+                                                  .data[index]
+                                                  .product
+                                                  .price;
 
-                                                // Navigator.push(
-                                                //     context,
-                                                //     MaterialPageRoute(
-                                                //         builder: (context) => ChangeDeliveryAddressScreen(
-                                                //             quantity: state
-                                                //                 .cartlistmodel
-                                                //                 .data!
-                                                //                 .cartList
-                                                //                 .data[index]
-                                                //                 .quantity
-                                                //                 .toString(),
-                                                //             productprice: totalprice
-                                                //                 .toString(),
-                                                //             productid: state
-                                                //                 .cartlistmodel
-                                                //                 .data!
-                                                //                 .cartList
-                                                //                 .data[index]
-                                                //                 .product
-                                                //                 .id
-                                                //                 .toString(),
-                                                //             allitems: false,
-                                                //             customerid: state
-                                                //                 .cartlistmodel
-                                                //                 .data!
-                                                //                 .cartList
-                                                //                 .data[index]
-                                                //                 .customer
-                                                //                 .id
-                                                //                 .toString(),
-                                                //             customername: state
-                                                //                 .cartlistmodel
-                                                //                 .data!
-                                                //                 .cartList
-                                                //                 .data[index]
-                                                //                 .customer
-                                                //                 .firstName,
-                                                //             customeremail: state
-                                                //                 .cartlistmodel
-                                                //                 .data!
-                                                //                 .cartList
-                                                //                 .data[index]
-                                                //                 .customer
-                                                //                 .emailId,
-                                                //             customerphone: state.cartlistmodel.data!.cartList.data[index].customer.phoneNo)));
-                                              },
-                                              child: Container(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.03,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.23,
-                                                alignment: Alignment.center,
-                                                color: CustColors.light_navy,
-                                                child: const Text(
-                                                  "Place order",
-                                                  style: Styles.badgeTextStyle1,
-                                                ),
-                                              ),
-                                            ),
+                                          // Navigator.push(
+                                          //     context,
+                                          //     MaterialPageRoute(
+                                          //         builder: (context) => ChangeDeliveryAddressScreen(
+                                          //             quantity: state
+                                          //                 .cartlistmodel
+                                          //                 .data!
+                                          //                 .cartList
+                                          //                 .data[index]
+                                          //                 .quantity
+                                          //                 .toString(),
+                                          //             productprice: totalprice
+                                          //                 .toString(),
+                                          //             productid: state
+                                          //                 .cartlistmodel
+                                          //                 .data!
+                                          //                 .cartList
+                                          //                 .data[index]
+                                          //                 .product
+                                          //                 .id
+                                          //                 .toString(),
+                                          //             allitems: false,
+                                          //             customerid: state
+                                          //                 .cartlistmodel
+                                          //                 .data!
+                                          //                 .cartList
+                                          //                 .data[index]
+                                          //                 .customer
+                                          //                 .id
+                                          //                 .toString(),
+                                          //             customername: state
+                                          //                 .cartlistmodel
+                                          //                 .data!
+                                          //                 .cartList
+                                          //                 .data[index]
+                                          //                 .customer
+                                          //                 .firstName,
+                                          //             customeremail: state
+                                          //                 .cartlistmodel
+                                          //                 .data!
+                                          //                 .cartList
+                                          //                 .data[index]
+                                          //                 .customer
+                                          //                 .emailId,
+                                          //             customerphone: state.cartlistmodel.data!.cartList.data[index].customer.phoneNo)));
+                                        },
+                                        child: Container(
+                                          height: MediaQuery.of(context)
+                                              .size
+                                              .height *
+                                              0.03,
+                                          width: MediaQuery.of(context)
+                                              .size
+                                              .width *
+                                              0.23,
+                                          alignment: Alignment.center,
+                                          color: CustColors.light_navy,
+                                          child: const Text(
+                                            "Place order",
+                                            style: Styles.badgeTextStyle1,
                                           ),
-                                        ],
+                                        ),
                                       ),
                                     ),
                                   ],
-                                )),
-                          ),
-                          const Divider(),
-                        ],
-                      );
-                    },
-                  ),
-                  //placeOrderUi(state.cartlistmodel.data!.cartList.totalPrice),
-                  const Divider(),
-                  changeAddressUi(),
-                  const Divider(),
-                  // selectedBillDetailsUi(
-                  //     state.cartlistmodel.data!.cartList.totalPrice,
-                  //     state.cartlistmodel.data!.cartList.totalItems,
-                  //     state.cartlistmodel.data!.cartList.deliveryCharge),
-                  const Divider(),
-                  continueButtonUi(state.cartlistmodel.data!.cartList.data,
-                      state.cartlistmodel.data!.cartList.totalItems.toString()),
-                ],
-              )
-            : pageErrorUI();
+                                ),
+                              ),
+                            ],
+                          )),
+                    ),
+                    const Divider(),
+                  ],
+                );
+              },
+            ),
+            //placeOrderUi(state.cartlistmodel.data!.cartList.totalPrice),
+            const Divider(),
+            changeAddressUi(),
+            const Divider(),
+            // selectedBillDetailsUi(
+            //     state.cartlistmodel.data!.cartList.totalPrice,
+            //     state.cartlistmodel.data!.cartList.totalItems,
+            //     state.cartlistmodel.data!.cartList.deliveryCharge),
+            const Divider(),
+            state.cartlistmodel.data!.cartList.data.isEmpty?Container():  continueButtonUi(state.cartlistmodel.data!.cartList.data,
+                state.cartlistmodel.data?.cartList.totalItems.toString()??""),
+          ],
+        );
       } else if(state is ShowCartPopErrorState){
         print("cart message>>>" );
         print(state.message);
