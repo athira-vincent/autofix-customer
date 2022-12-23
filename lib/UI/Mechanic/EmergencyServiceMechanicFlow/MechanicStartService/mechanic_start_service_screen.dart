@@ -956,6 +956,23 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         child: InkWell(
           onTap: (){
             //Navigator.of(context, rootNavigator: true).pop();
+
+            String currentDateTime = "";
+            Repository().getCurrentWorldTime("Nairobi").then((value01) => {
+
+              currentDateTime = value01.datetime!.millisecondsSinceEpoch.toString(),
+               _firestore
+                          .collection("ResolMech")
+                          .doc('${bookingId}')
+                          .update({
+                        'serviceStartWorldTime' : "${currentDateTime}"
+                      })
+                          .then((value) => print("Location Added"))
+                          .catchError((error) =>
+                          print("Failed to add Location: $error")),
+
+
+            });
 /// -------------------start time update to Firebase ---------------------------------------
             Navigator.pushReplacement(
                 context,
