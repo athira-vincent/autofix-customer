@@ -72,8 +72,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen>
   String bookingIdEmergency = "";
   String addressLocationText = "";
 
-  bool isEmergencyService = false;
-  bool isRegularService = true;
+  bool isEmergencyService = true;
+  bool isRegularService = false;
 
   String CurrentLatitude = "";
   String CurrentLongitude = "";
@@ -93,8 +93,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen>
   String firebaseCustomerLatitude = "",
       firebaseScreen = "",
       firebaseCustomerLongitude = "",
-      remaintime = "",
-      totalstarttimecurrenttimevalue = "";
+      remaintime = "";
+     // totalstarttimecurrenttimevalue = "";
 
   double _setValue(double value) {
     return value * per + value;
@@ -280,8 +280,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen>
           bookingIdEmergency = bookedId01!;
           firebaseCustomerLatitude = event.get('customerLatitude');
           firebaseCustomerLongitude = event.get('customerLongitude');
-          totalstarttimecurrenttimevalue =
-              event.get("totalstarttimecurrenttimevalue");
+          //totalstarttimecurrenttimevalue = event.get("totalstarttimecurrenttimevalue");
         });
       }
     });
@@ -699,12 +698,14 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen>
                             CustColors.light_navy),
                       );
                     default:
+                      int listItemCount = snapshot.data?.data?.categoryList?[0].service?.length ?? 0;
+                      listItemCount = listItemCount >= 12 ? 12 : listItemCount;
+                      print("Emergency listItemCount >>> $listItemCount");
                       return snapshot.data?.data?.categoryList?[0].service
-                                  ?.length !=
-                              null
+                                  ?.length != null
                           ? GridView.builder(
-                              itemCount: snapshot
-                                  .data?.data?.categoryList?[0].service?.length,
+                              itemCount: listItemCount,
+                              //snapshot.data?.data?.categoryList?[0].service?.length,
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               gridDelegate:
@@ -718,7 +719,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen>
                                 context,
                                 index,
                               ) {
-                                return GestureDetector(
+                                return index <= 10
+                                    ?
+                                GestureDetector(
                                   onTap: () {
                                     setState(() {
                                       _getCurrentCustomerLocation(false);
@@ -806,6 +809,61 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen>
                                         padding: const EdgeInsets.all(2),
                                         child: Text(
                                           '${snapshot.data?.data?.categoryList?[0].service?[index].serviceName}',
+                                          style: Styles
+                                              .textLabelTitleEmergencyServiceName,
+                                          maxLines: 2,
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.visible,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                                    :
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _getCurrentCustomerLocation(false);
+
+                                      if (CurrentLatitude.isNotEmpty &&
+                                          CurrentLongitude.isNotEmpty) {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => SearchServiceScreen()));
+                                      } else {
+                                        _getCurrentCustomerLocation(false);
+                                        Fluttertoast.showToast(
+                                          msg: "Fetching Location..",
+                                          backgroundColor:
+                                          CustColors.light_navy,
+                                          timeInSecForIosWeb: 1,
+                                        );
+                                      }
+                                    });
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color: CustColors.whiteBlueish,
+                                            borderRadius:
+                                            BorderRadius.circular(11.0)),
+                                        child: Padding(
+                                            padding: const EdgeInsets.all(15),
+                                            child: SvgPicture.asset(
+                                              "assets/image/ic_more.svg",
+                                              width: 28,
+                                              height: 18,
+                                              fit: BoxFit.contain,
+                                            )
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(2),
+                                        child: Text(
+                                          'more',
                                           style: Styles
                                               .textLabelTitleEmergencyServiceName,
                                           maxLines: 2,

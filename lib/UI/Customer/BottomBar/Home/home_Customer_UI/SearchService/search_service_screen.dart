@@ -236,7 +236,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
               height: 35,
               child:  TextField(
                 controller: searchController,
-                autofocus: true,
+                //autofocus: true,
                 cursorColor: CustColors.light_navy,
                 decoration: InputDecoration(
                   hintText: 'Search your Services',
