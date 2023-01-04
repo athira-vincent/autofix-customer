@@ -5,6 +5,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddSer
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
   final ServiceListBloc _serviceListBloc = ServiceListBloc();
   final MechanicAddServiceListBloc _addServiceListBloc = MechanicAddServiceListBloc();
-
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<CategoryList> allList = [];
   List<CategoryList> emergencyCategoryList = [];
@@ -147,6 +148,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
           //_isLoading = false;
+          SnackBarWidget().setMaterialSnackBar("${value.message.toString().split(":").last}", _scaffoldKey);
         });
 
       } else {
@@ -198,6 +200,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      key: _scaffoldKey,
       body: SafeArea(
         child: Container(
           height: size.height,
