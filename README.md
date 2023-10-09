@@ -14,3 +14,15 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+2 type user - customer, Mechanic
+customer - Individual, corporate, govt. bodies
+mechanic - individual, corporate
+SMS - Twilio at backend
+Chat - one to one at time of service booking - firebase
+payment gateway - interswitch
+bloc
+Service booking, spare-parts purchase
+GraphQL API
+Flutter - 3.0.5
+gradle-7.4
